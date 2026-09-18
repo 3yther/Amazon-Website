@@ -1,0 +1,15 @@
+# Python 3.11. Django 5.2 is the LTS release (supported to April 2028) and the
+# newest line that runs on 3.11; Django 6 needs Python 3.12+.
+Django==5.2.17
+djangorestframework==3.18.1
+django-cors-headers==4.9.0
+python-dotenv==1.2.3
+
+# Pulled in by Django, pinned so every machine installs the same thing.
+asgiref==3.12.1
+sqlparse==0.6.0
+
+# Production additions (not needed locally):
+# psycopg[binary]      PostgreSQL driver for AWS RDS
+# django-storages[s3]  store ContentItem files in S3
+# gunicorn             app server on EC2

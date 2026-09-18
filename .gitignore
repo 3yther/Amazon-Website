@@ -1,0 +1,24 @@
+# Secrets: never commit these
+*.pem
+.env
+.env.*
+!.env.example
+
+# Python / Django
+__pycache__/
+*.py[cod]
+db.sqlite3
+/backend/venv/
+/backend/.venv/
+/backend/media/
+/backend/staticfiles/
+
+# Front end
+/frontend/node_modules/
+/frontend/dist/
+
+# OS and editors
+.DS_Store
+.vscode/
+.idea/
+.claude/
