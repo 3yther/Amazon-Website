@@ -1,0 +1,52 @@
+[
+  {
+    "model": "content.pathway",
+    "pk": 1,
+    "fields": {
+      "name": "Digital",
+      "slug": "digital",
+      "summary": "Build, run and support technology.",
+      "description": "Covers the Digital T Levels: Digital Production, Design and Development; Digital Support and Services; Digital Business Services."
+    }
+  },
+  {
+    "model": "content.pathway",
+    "pk": 2,
+    "fields": {
+      "name": "Business",
+      "slug": "business",
+      "summary": "Keep teams and operations running.",
+      "description": "Covers the Management and Administration T Level."
+    }
+  },
+  {
+    "model": "content.pathway",
+    "pk": 3,
+    "fields": {
+      "name": "Media",
+      "slug": "media",
+      "summary": "Plan, make and publish content.",
+      "description": "Covers the Media, Broadcast and Production T Level."
+    }
+  },
+  {
+    "model": "content.pathway",
+    "pk": 4,
+    "fields": {
+      "name": "Finance",
+      "slug": "finance",
+      "summary": "Work with the numbers behind decisions.",
+      "description": "Covers the Finance and Accounting T Levels."
+    }
+  },
+  {
+    "model": "content.pathway",
+    "pk": 5,
+    "fields": {
+      "name": "Engineering",
+      "slug": "engineering",
+      "summary": "Design, build and maintain systems.",
+      "description": "Covers the Engineering and Manufacturing T Levels."
+    }
+  }
+]
