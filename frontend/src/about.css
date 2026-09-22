@@ -1,0 +1,622 @@
+/* Styles for the three information pages: About T-Level, T-Levels at Amazon
+   and Help. Kept in its own file so it does not collide with anyone else's
+   work in styles.css. Imported by each of those three pages.
+
+   The file is still called about.css because that is where it started and the
+   About page is the biggest user of it.
+
+   No new colours are defined here. Everything below reuses the tokens from
+   styles.css (--orange, --blue, --paper, --surface, --ink-muted, --line,
+   --radius, --control-h), so a change there still changes this page. */
+
+/* ---------- Page rhythm ---------- */
+
+/* One gap between every band on the page, so the sections read as a stack. */
+.about-section {
+  padding-top: clamp(40px, 7vw, 72px);
+}
+
+.about-section + .about-section {
+  margin-top: clamp(40px, 7vw, 72px);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Opening band ---------- */
+
+.about-hero {
+  display: grid;
+  gap: 16px;
+  max-width: 46rem;
+  padding-bottom: clamp(32px, 6vw, 56px);
+  border-bottom: 3px solid var(--orange);
+}
+
+.about-hero h1 {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+}
+
+.about-hero__lead {
+  font-size: 1.125rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- The three steps (design doc: numbers descending) ---------- */
+
+.route {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+  list-style: none;
+}
+
+/* Each step is a number in the left column and the text in the right, with a
+   hairline between rows. The numbers run down the page in a straight line,
+   which is the descending route from the design doc. */
+.route__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px 24px;
+  align-items: start;
+  padding-block: 24px;
+  padding-left: 16px;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid var(--orange);
+}
+
+.route__step:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.route__number {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  /* Dark blue, not orange: orange on the page colour is about 1.9:1, which
+     fails WCAG AA for text. The orange stays as the rule down the left. */
+  color: var(--blue);
+}
+
+.route__title {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+}
+
+.route__text {
+  max-width: 44rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Shared card grid (placement facts, Amazon, benefits) ---------- */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.info-card {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+.info-card h3 {
+  font-size: 1.125rem;
+}
+
+.info-card p {
+  color: var(--ink-muted);
+}
+
+/* ---------- Who it is for ---------- */
+
+.audience {
+  display: grid;
+  gap: 12px;
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audience li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+/* A small square marker, squared like the buttons rather than a round bullet. */
+.audience li::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  margin-top: 0.45em;
+  background: var(--orange);
+}
+
+/* ---------- Pathway switcher (tabs) ---------- */
+
+.pathways__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: -1px; /* the selected tab sits on the panel's top edge */
+}
+
+.pathways__tab {
+  min-height: var(--control-h);
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-bottom: 3px solid transparent;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pathways__tab:hover {
+  background: var(--surface);
+}
+
+/* Selected state is unmistakable without relying on a colour difference
+   alone: the tab fills with dark blue and its label flips to the page colour
+   (13:1), with an orange underline on top and aria-selected for screen
+   readers. An orange underline on its own would only be 2:1 against the page,
+   which fails the WCAG 1.4.11 rule for interface parts. */
+.pathways__tab[aria-selected="true"] {
+  background: var(--blue);
+  border-color: var(--blue);
+  border-bottom-color: var(--orange);
+  color: var(--paper);
+}
+
+/* display: grid would beat the hidden attribute's own display: none, so the
+   closed panels need saying again here. */
+.pathways__panel[hidden] {
+  display: none;
+}
+
+.pathways__panel {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  padding: clamp(20px, 4vw, 32px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+}
+
+.pathways__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.pathways__detail {
+  display: grid;
+  gap: 6px;
+  max-width: 46rem;
+}
+
+.pathways__detail p {
+  color: var(--ink-muted);
+}
+
+.pathways__list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+.pathways__action {
+  margin-top: 8px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pathways__tab {
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+}
+
+/* ---------- FAQ ---------- */
+
+.faq {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+  max-width: 52rem;
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__heading {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* The whole row is the button, so the target is far bigger than 44px. */
+.faq__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 4px;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq__trigger:hover span {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.faq__chevron {
+  flex: none;
+  color: var(--blue);
+}
+
+/* The chevron points down when closed and up when open. It only repeats what
+   aria-expanded already says, so nothing is lost if it is not seen. */
+.faq__trigger[aria-expanded="true"] .faq__chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq__chevron {
+    transition: transform 150ms ease;
+  }
+}
+
+.faq__answer {
+  max-width: 44rem;
+  padding: 0 4px 20px;
+  color: var(--ink-muted);
+}
+
+/* ---------- Quiz ---------- */
+
+.quiz {
+  display: grid;
+  gap: 24px;
+  max-width: 44rem;
+}
+
+.quiz__questions {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quiz__question {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 20px 24px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.quiz__legend {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.quiz__number {
+  color: var(--ink-muted);
+}
+
+.quiz__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--control-h);
+}
+
+/* Native radios, sized up and tinted. accent-color keeps the browser's own
+   control, so the keyboard behaviour and Windows high contrast mode still
+   work. Dark blue rather than orange: the filled dot has to reach 3:1 against
+   the white behind it (WCAG 1.4.11) and orange only manages 2:1. */
+.quiz__option input[type="radio"] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--blue);
+}
+
+.quiz__option label {
+  cursor: pointer;
+}
+
+.quiz__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.quiz__result {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  max-width: 44rem;
+  margin-top: 24px;
+  padding: clamp(20px, 4vw, 32px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+.quiz__result:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.quiz__result-heading {
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+}
+
+.quiz__result-note {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.quiz__result-action {
+  margin-top: 4px;
+}
+
+/* ---------- Pathway panel: Amazon status line ---------- */
+
+/* A short, factual line about where Amazon is with that pathway. The dark
+   blue rule marks it out without adding a colour that carries meaning. */
+.pathways__status {
+  padding-left: 12px;
+  border-left: 3px solid var(--blue);
+  font-weight: 600;
+}
+
+/* ---------- Grades table ---------- */
+
+/* Lets the table scroll sideways on a narrow phone instead of breaking the
+   page layout. tabindex in the markup makes it keyboard scrollable too. */
+.grades__scroll {
+  max-width: 34rem;
+  overflow-x: auto;
+}
+
+.grades {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.grades th,
+.grades td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.grades thead th {
+  background: var(--blue);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.grades tbody th {
+  font-weight: 600;
+}
+
+/* The points column is the number you came for, so it gets the weight. */
+.grades td {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.grades tbody tr:last-child th,
+.grades tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.grades__note {
+  max-width: 44rem;
+  margin-top: 16px;
+  color: var(--ink-muted);
+}
+
+/* ---------- Sources ---------- */
+
+.about-sources {
+  max-width: 48rem;
+  margin-top: clamp(40px, 7vw, 72px);
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+.about-sources ol {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding-left: 20px;
+}
+
+.about-sources a {
+  font-weight: 600;
+}
+
+/* ---------- Route call to action (T-Levels at Amazon) ---------- */
+
+.route__action {
+  margin-top: 24px;
+}
+
+/* ---------- Pathway summary list (T-Levels at Amazon) ---------- */
+
+/* All five pathways side by side, for comparing rather than exploring. A
+   description list, because that is what a name and its description are. */
+.pathway-summary {
+  max-width: 52rem;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.pathway-summary__row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr;
+  gap: 8px 24px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.pathway-summary dt {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.pathway-summary dd {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+/* The sourced line about Amazon, in full-strength text so it reads as the
+   confirmed part rather than more description. */
+.pathway-summary__status {
+  color: var(--blue);
+}
+
+/* One column on narrow screens, name above description. */
+@media (max-width: 600px) {
+  .pathway-summary__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Growth figures (T-Levels at Amazon) ---------- */
+
+.growth {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.growth__item {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+/* Big, but dark blue rather than orange: orange type on this background is
+   about 2:1 and would fail WCAG AA even at this size. */
+.growth__value {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 7vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--blue);
+}
+
+.growth__caption {
+  color: var(--ink-muted);
+}
+
+/* ---------- Signposts (Help) ---------- */
+
+.signpost {
+  display: grid;
+  gap: 8px;
+  max-width: 52rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The whole row is the link, so the target is large and the whole sentence is
+   the link text, which reads properly out of context in a screen reader's
+   list of links. */
+.signpost a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 24px;
+  min-height: var(--control-h);
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.signpost a:hover {
+  border-left-color: var(--orange);
+}
+
+.signpost a:hover .signpost__label {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.signpost__label {
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .signpost a {
+    transition: border-color 150ms ease;
+  }
+}
