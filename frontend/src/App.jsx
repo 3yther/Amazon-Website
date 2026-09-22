@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import amazonLogo from "./assets/amazon-logo.png";
+import amazonLogo from "./assets/amazon-wordmark.png";
 import Footer from "./components/Footer.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
@@ -8,6 +8,7 @@ import About from "./pages/About.jsx";
 import Accessibility from "./pages/Accessibility.jsx";
 import ContentLibrary from "./pages/ContentLibrary.jsx";
 import Help from "./pages/Help.jsx";
+import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import NearYou from "./pages/NearYou.jsx";
 import Privacy from "./pages/Privacy.jsx";
@@ -39,8 +40,8 @@ export default function App() {
           <SiteNav />
 
           <div className="site-header__brand">
-            {/* Approved logo file, used unaltered. Its own white background
-                gives it the clear space it needs on the dark header. */}
+            {/* Approved logo file, used unaltered: transparent, sitting
+                straight on the dark header. */}
             <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
             <Link className="wordmark" to="/">
               T-<span className="wordmark__accent">SMILE</span>
@@ -51,10 +52,10 @@ export default function App() {
 
       <main id="main" className="container" tabIndex={-1}>
         <Routes>
-          <Route path="/" element={<PageTitle title="Home"><ContentLibrary /></PageTitle>} />
+          <Route path="/" element={<PageTitle title="Home"><Home /></PageTitle>} />
           <Route path="/about" element={<PageTitle title="About T-Level"><About /></PageTitle>} />
           <Route path="/t-levels-at-amazon" element={<PageTitle title="T-Levels at Amazon"><TLevelsAtAmazon /></PageTitle>} />
-          <Route path="/resources" element={<PageTitle title="T-Level Resources"><ResourcesPage /></PageTitle>} />
+          <Route path="/resources" element={<PageTitle title="T-Level Resources"><ContentLibrary /></PageTitle>} />
           <Route path="/t-level-near-you" element={<PageTitle title="T-Level Near you"><NearYou /></PageTitle>} />
           <Route path="/help" element={<PageTitle title="Help"><Help /></PageTitle>} />
           <Route path="/register" element={<PageTitle title="Sign up"><Register /></PageTitle>} />
@@ -75,25 +76,13 @@ export default function App() {
   );
 }
 
-/**
- * The resources library. For now it is the homepage's library section, so
- * this opens the same page scrolled to it rather than keeping a second copy.
- */
-function ResourcesPage() {
-  useEffect(() => {
-    document.getElementById("library")?.scrollIntoView();
-  }, []);
-
-  return <ContentLibrary />;
-}
-
 function NotFound() {
   return (
     <section className="intro" aria-labelledby="page-title">
       <p className="label">Error 404</p>
       <h1 id="page-title">Page not found</h1>
       <p className="lead">
-        <Link to="/">Go to the content library</Link>
+        <Link to="/resources">Go to the content library</Link>
       </p>
     </section>
   );

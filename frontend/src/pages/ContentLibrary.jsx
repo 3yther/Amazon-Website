@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { getContent, getPathways } from "../api.js";
 import { ACCESS_LEVELS, AUDIENCES, CONTENT_TYPES } from "../labels.js";
 import { AlertIcon, ArrowIcon, LockIcon } from "../components/Icons.jsx";
-import RisingSubjects from "../components/RisingSubjects.jsx";
 
 const NO_FILTERS = { pathway: "", audience: "", access_level: "" };
 
 /**
- * The homepage: a hero introducing T-SMILE, then the content library, which
- * loads pathways for the filter and lists content from /api/content/ with
- * server-side filtering.
+ * The resources page (/resources): the content library, which loads pathways
+ * for the filter and lists content from /api/content/ with server-side
+ * filtering. /resources?pathway=<slug> (used by the homepage pathway tiles)
+ * opens it with that pathway already chosen.
  */
 export default function ContentLibrary() {
+  const [searchParams] = useSearchParams();
   const [pathways, setPathways] = useState([]);
-  const [filters, setFilters] = useState(NO_FILTERS);
+  const [filters, setFilters] = useState(() => ({
+    ...NO_FILTERS,
+    pathway: searchParams.get("pathway") ?? "",
+  }));
   const [page, setPage] = useState(1);
   const [items, setItems] = useState([]);
   const [count, setCount] = useState(0);
@@ -25,7 +29,16 @@ export default function ContentLibrary() {
   useEffect(() => {
     const controller = new AbortController();
     getPathways({ signal: controller.signal })
-      .then(setPathways)
+      .then((list) => {
+        setPathways(list);
+        // Drop a pathway from the address that does not exist, which the API
+        // would otherwise reject.
+        setFilters((current) =>
+          current.pathway && !list.some((pathway) => pathway.slug === current.pathway)
+            ? { ...current, pathway: "" }
+            : current,
+        );
+      })
       .catch(() => {}); // a dead API is reported by the content request below
     return () => controller.abort();
   }, [attempt]);
@@ -61,13 +74,11 @@ export default function ContentLibrary() {
 
   return (
     <>
-      <Hero />
-
-      <section id="library" className="library" aria-labelledby="library-title">
-        <div className="section-intro">
-          <p className="label">Resources</p>
-          <h2 id="library-title">Content library</h2>
-          <p className="section-intro__lead">Filter by pathway, audience or access.</p>
+      <section aria-labelledby="page-title">
+        <div className="intro">
+          <p className="label">Content library</p>
+          <h1 id="page-title">T-Level Resources</h1>
+          <p className="lead">Filter by pathway, audience or access.</p>
         </div>
 
         <form className="filters" aria-label="Filter content" onSubmit={(e) => e.preventDefault()}>
@@ -166,29 +177,6 @@ export default function ContentLibrary() {
   );
 }
 
-/**
- * Opening band: the page's h1 and one line on what the site offers. The
- * rising subjects drift behind it only, so the library below stays calm.
- */
-function Hero() {
-  return (
-    <section className="hero" aria-labelledby="page-title">
-      <RisingSubjects />
-      <div className="hero__content">
-        <p className="label">Amazon Emerging Talent</p>
-        <h1 id="page-title" className="hero__title">
-          T-Levels, with a smile.
-        </h1>
-        <p className="hero__subhead">Guides, packs and videos for students, parents and schools.</p>
-        <a className="button button--primary" href="#library">
-          Browse resources
-          <ArrowIcon />
-        </a>
-      </div>
-    </section>
-  );
-}
-
 function ContentCard({ item }) {
   const signupOnly = item.access_level === "signup";
 
@@ -201,7 +189,8 @@ function ContentCard({ item }) {
         </span>
       </div>
 
-      <h3 className="card__title">{item.title}</h3>
+      {/* h2: the cards sit straight under the page's h1. */}
+      <h2 className="card__title">{item.title}</h2>
       <p className="card__text">{item.description}</p>
 
       <dl className="card__meta">
