@@ -1,0 +1,71 @@
+# Railway preview web server for the React app. See DEPLOYMENT.md.
+#
+# Serves the built site, and passes /api and /media on to the Django service,
+# just as the Vite dev server does locally. The browser therefore talks to one
+# origin, which keeps the login and CSRF cookies first-party. That matters on
+# Railway: up.railway.app is a public suffix, so two railway.app subdomains
+# count as different sites, and Safari blocks cookies between them.
+#
+# Railpack (Railway's builder) uses this file instead of its default one. It
+# reads the file as a Go template and fills in the build folder (DIST_DIR), so
+# double curly braces must not appear anywhere else in it, comments included.
+# Not used locally.
+#
+# API_ORIGIN (required) is a variable on the frontend service: the Django
+# service's public https:// URL (DEPLOYMENT.md shows how to set it). PORT is
+# set by Railway.
+
+{
+	admin off
+	persist_config off
+	auto_https off
+
+	log {
+		format json
+	}
+
+	# Trust Railway's edge proxy, so its X-Forwarded-* headers (HTTPS, the
+	# visitor's address) are passed on to Django rather than replaced.
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:{$PORT:80} {
+	log {
+		format json
+	}
+
+	handle /health {
+		respond 200
+	}
+
+	# The API and uploaded files come from Django. Host is set to the Django
+	# service's own domain so Railway routes the request to it.
+	handle /api/* {
+		reverse_proxy {$API_ORIGIN} {
+			header_up Host {http.reverse_proxy.upstream.host}
+		}
+	}
+
+	handle /media/* {
+		reverse_proxy {$API_ORIGIN} {
+			header_up Host {http.reverse_proxy.upstream.host}
+		}
+	}
+
+	# Everything else is the React app. Unknown paths get index.html, so
+	# React Router can show the right page (or its own "Page not found").
+	handle {
+		header {
+			X-Content-Type-Options "nosniff"
+			Referrer-Policy "strict-origin-when-cross-origin"
+			-Server
+		}
+
+		root * {{.DIST_DIR}}
+		encode gzip zstd
+		try_files {path} /index.html
+		file_server
+	}
+}

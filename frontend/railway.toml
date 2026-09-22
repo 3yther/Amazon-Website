@@ -1,0 +1,16 @@
+# Railway preview deploy for the React app. See DEPLOYMENT.md.
+#
+# In this repo Railway does not find this file on its own: in the frontend
+# service's settings, set Root Directory to /frontend and Config File Path to
+# /frontend/railway.toml.
+#
+# Railpack sees a Vite app, runs "npm run build" and serves dist/ with Caddy,
+# using the Caddyfile in this folder (which also passes /api to Django).
+# There is deliberately no startCommand: setting one would switch that off.
+
+[build]
+builder = "RAILPACK"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
