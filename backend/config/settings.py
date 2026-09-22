@@ -196,6 +196,9 @@ REST_FRAMEWORK = {
     # (e.g. Redis) and set NUM_PROXIES when running behind a load balancer.
     "DEFAULT_THROTTLE_RATES": {
         "interest": "10/hour",
+        # Every chat message costs us an AI call, so this caps what one visitor
+        # can spend. Generous enough for a real conversation.
+        "chat": "60/hour",
     },
 }
 
@@ -204,6 +207,22 @@ if DEBUG:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
         "rest_framework.renderers.BrowsableAPIRenderer"
     )
+
+
+# ---------------------------------------------------------------------------
+# AI assistant (the chatbot, Task 4)
+# ---------------------------------------------------------------------------
+
+# The key for Anthropic's API, which the chatbot app calls. It stays on the
+# server: the browser never sees it, because React talks to /api/chat/ and
+# Django makes the call. Without a key the site still works and the widget
+# shows its fallback message, so nobody needs one to run the rest of T-SMILE.
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+
+# Lets Anthropic retry a declined message on another model inside the same
+# call. Set ANTHROPIC_SERVER_SIDE_FALLBACK=false if the account does not have
+# the feature and the API rejects the option.
+ANTHROPIC_SERVER_SIDE_FALLBACK = env_bool("ANTHROPIC_SERVER_SIDE_FALLBACK", default=True)
 
 
 # ---------------------------------------------------------------------------

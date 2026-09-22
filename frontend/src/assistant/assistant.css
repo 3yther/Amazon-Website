@@ -1,0 +1,213 @@
+/* The assistant widget.
+ *
+ * Kept in its own file rather than added to styles.css, because two other
+ * branches are editing that file right now and this way nothing collides. It
+ * uses the same colour variables as everything else: no new colours, and no
+ * hardcoded hex.
+ *
+ * Sizes are in rem so that text scaling to 200% grows the widget with it
+ * instead of spilling out of it. */
+
+.assistant {
+  position: fixed;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+/* --- the button ---------------------------------------------------------- */
+
+.assistant__toggle {
+  /* 3.5rem is 56px at the default text size, comfortably over the 44px
+     minimum target size, and it grows if the visitor scales text up. */
+  width: 3.5rem;
+  height: 3.5rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid var(--blue);
+  border-radius: var(--radius);
+  /* Dark blue on Amazon Orange: 6.3:1, so the face stays clear. */
+  background: var(--orange);
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.assistant__toggle:hover {
+  background: var(--blue);
+  color: var(--orange);
+}
+
+.assistant__toggle:hover .assistant-mascot rect[fill="var(--blue)"] {
+  fill: var(--surface);
+}
+
+.assistant-mascot {
+  display: block;
+}
+
+/* --- the panel ----------------------------------------------------------- */
+
+.assistant__panel {
+  display: flex;
+  flex-direction: column;
+  width: 22rem;
+  /* Never wider than the screen, however far text is scaled up. */
+  max-width: calc(100vw - (var(--gutter) * 2));
+  max-height: min(32rem, calc(100vh - 8rem));
+  border: 2px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgb(35 47 62 / 0.18);
+}
+
+.assistant__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.assistant__close {
+  width: 2.75rem; /* 44px minimum target */
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.assistant__close:hover {
+  border-color: var(--line);
+  background: var(--paper);
+}
+
+.assistant__disclosure {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-muted); /* 5.4:1 on this background */
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* --- the conversation ---------------------------------------------------- */
+
+.assistant__log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.assistant__message {
+  max-width: 85%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere; /* a long pasted word cannot widen the panel */
+}
+
+.assistant__message--assistant {
+  align-self: flex-start;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--blue); /* 12:1 */
+}
+
+.assistant__message--user {
+  align-self: flex-end;
+  background: var(--blue);
+  color: var(--surface); /* 13.6:1 */
+}
+
+.assistant__message--assistant a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.assistant__status {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  /* Holds its line whether or not it says anything, so the conversation does
+     not jump as it appears and disappears. */
+  min-height: 1rem;
+}
+
+/* --- asking a question --------------------------------------------------- */
+
+.assistant__form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.assistant__input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--control-h);
+  padding: 0 0.75rem;
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  font-size: 1rem; /* 16px, so iOS does not zoom when it is focused */
+}
+
+.assistant__send {
+  min-height: var(--control-h);
+  min-width: var(--control-h);
+}
+
+/* --- motion -------------------------------------------------------------- */
+
+/* The panel appears gently when it opens itself, so a nudge is noticed without
+   being startling. Off for anyone who has asked for less motion, through
+   either the system setting or the site's own: .assistant--still comes from
+   useReducedMotion, and the media query below is a second line of defence. */
+@media (prefers-reduced-motion: no-preference) {
+  .assistant:not(.assistant--still) .assistant__panel {
+    animation: assistant-appear 160ms ease-out;
+  }
+}
+
+@keyframes assistant-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- small screens ------------------------------------------------------- */
+
+@media (max-width: 30rem) {
+  .assistant {
+    /* Span the screen so the panel can use the full width, but keep the
+       button in the corner. */
+    left: var(--gutter);
+  }
+
+  .assistant__panel {
+    width: 100%;
+  }
+}
