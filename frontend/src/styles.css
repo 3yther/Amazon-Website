@@ -456,17 +456,323 @@ main {
   font-size: clamp(1.125rem, 2.2vw, 1.375rem);
   line-height: 1.45;
   color: var(--ink-muted);
+  /* Invisible until an audience card is picked: then Home.jsx fades it to
+     orange and back, to show which line just changed. */
+  outline: 2px solid transparent;
+  outline-offset: 8px;
 }
 
 .hero__content .button {
   margin-top: 12px;
 }
 
-/* ---------- Library section ---------- */
+/* ---------- Homepage sections (below the hero) ---------- */
 
-.library {
+.home-section {
   padding-top: clamp(40px, 7vw, 72px);
 }
+
+/* Stats: big numbers over small mono labels, closed off by a hairline like
+   the hero above. Two by two on phones, one row from tablet up. */
+.stats {
+  padding-block: clamp(32px, 5vw, 48px);
+  border-bottom: 1px solid var(--line);
+}
+
+.stats__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stats__item {
+  display: grid;
+  gap: 6px;
+}
+
+.stats__value {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums; /* digits keep one width while counting */
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+@media (min-width: 720px) {
+  .stats__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Audience cards: the photo fills the card and the text sits on a flat dark
+   panel (--overlay, as on the sign-up page) so it stays readable over any
+   part of the photo. Dark blue shows while a photo loads. Each card is also
+   a toggle for the hero subhead (see AudienceCards in HomeSections.jsx). */
+.audience-grid {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audience-card {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 22rem;
+  overflow: hidden;
+  /* Always 3px, so choosing a card changes its colour, not its size. The
+     dark loading colour stops at the border, so an unchosen edge is clear. */
+  border: 3px solid transparent;
+  border-radius: var(--radius);
+  background: var(--blue) padding-box;
+  color: var(--paper);
+}
+
+.audience-card:hover {
+  border-color: var(--blue);
+}
+
+.audience-card--selected,
+.audience-card--selected:hover {
+  border-color: var(--orange);
+}
+
+/* "Selected" tag in the top corner, as well as the border, so the choice
+   never rests on colour alone. Dark blue on orange, like the sign-up tag. */
+.audience-card__selected {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  background: var(--orange);
+  color: var(--blue);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The headline is the toggle button. It looks like the headline, and its
+   click area stretches over the whole card. */
+.audience-card__button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.audience-card__button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Focus shows on the whole card, outside it, where the blue ring always has
+   the page colour behind it. Browsers without :has() keep the button's own
+   focus ring instead. */
+@supports selector(:has(*)) {
+  .audience-card__button:focus-visible {
+    outline: none;
+  }
+
+  .audience-card:has(.audience-card__button:focus-visible) {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+  }
+}
+
+.audience-card__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.audience-card__body {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  background: var(--overlay);
+}
+
+.audience-card__body .label {
+  color: var(--paper);
+}
+
+.audience-card__body h3 {
+  font-size: 1.375rem;
+}
+
+@media (min-width: 860px) {
+  .audience-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .audience-card {
+    min-height: auto;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* Pathway tiles: calmer than the cards above. White, hairline edge, line
+   icon, no photos. */
+.pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pathway-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.pathway-tile > .icon:first-child {
+  width: 28px;
+  height: 28px;
+}
+
+/* The arrow sits at the foot of every tile, so they line up across the row. */
+.pathway-tile > .icon:last-child {
+  margin-top: auto;
+}
+
+.pathway-tile__name {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.pathway-tile__summary {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.pathway-tile:hover {
+  border-color: var(--blue);
+}
+
+.pathway-tile:hover .pathway-tile__name {
+  text-decoration: underline;
+}
+
+/* How it works: "Level" cards. On desktop they climb left to right like a
+   staircase, each one step (--rise) higher than the last, joined along
+   their top edges by a hairline. Below that they stack in order, joined by
+   a short line down the left. Plain bordered boxes: no shadows, no fills. */
+.steps {
+  --rise: 28px;
+  --gap: 24px;
+  display: grid;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* Stacked: a short line from each card down to the next. */
+.step + .step::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 28px;
+  height: calc(var(--gap) + 1px);
+  border-left: 1px solid var(--line);
+}
+
+/* "LEVEL 01": the number in orange, on a dark blue chip because orange on
+   the page colour alone is 2.05:1 and fails contrast (on blue it is 6.34:1). */
+.step__number {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  border-radius: var(--radius);
+  background: var(--blue);
+  color: var(--orange);
+}
+
+.step__title {
+  font-size: 1.25rem;
+}
+
+.step__text {
+  color: var(--ink-muted);
+}
+
+@media (min-width: 960px) {
+  /* Bottoms line up and each card starts one step higher than the one
+     before (--drop is how many steps below the top card it starts, set in
+     HomeSections.jsx). Every top is exactly --rise apart, whatever the text
+     length, so the connecting line always meets them. */
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .step {
+    margin-top: calc(var(--drop) * var(--rise));
+  }
+
+  /* The staircase line: from each card's top right corner across half the
+     gap, up one step, then on to the next card's top left corner. */
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 100%;
+    width: calc(var(--gap) / 2 + 1px);
+    border-top: 1px solid var(--line);
+  }
+
+  .step + .step::before {
+    top: -1px;
+    bottom: auto;
+    left: auto;
+    right: 100%;
+    width: calc(var(--gap) / 2 + 1px);
+    height: calc(var(--rise) + 1px);
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* ---------- Library section ---------- */
 
 .section-intro {
   display: grid;
@@ -873,6 +1179,40 @@ main:has(.register-page)::before {
 @media (max-width: 768px) {
   .hero .rising-subjects__item {
     font-size: min(var(--size), 1.375rem);
+  }
+}
+
+/* Cursor spotlight (useSpotlight in Home.jsx). In the hero the name's own
+   animation only fades it in and out (0 to 1), and its text carries the
+   strength (--opacity), so the two multiply to exactly the usual look. The
+   spotlight then raises just the text, through --lit, without fighting the
+   animation. */
+.hero .rising-subjects__item {
+  animation-name: rise-up-envelope;
+}
+
+.hero .rising-subjects__item::before {
+  opacity: var(--lit, var(--opacity));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero .rising-subjects__item::before {
+    transition: opacity 200ms ease-out;
+  }
+}
+
+@keyframes rise-up-envelope {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, calc(-100vh - 100%), 0);
   }
 }
 
