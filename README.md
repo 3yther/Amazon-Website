@@ -49,6 +49,8 @@ npm install
 npm run dev
 ```
 
+To put a preview online for the team, see [DEPLOYMENT.md](DEPLOYMENT.md) (Railway).
+
 Open http://localhost:5173. The Vite dev server forwards `/api` and `/media` to
 Django on port 8000. Add content at http://localhost:8000/admin/.
 
