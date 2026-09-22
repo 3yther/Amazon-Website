@@ -59,6 +59,28 @@ export function SelectField({ id, label, error, children, ...selectProps }) {
   );
 }
 
+/**
+ * A single tick box with its label beside it. The label takes markup as well
+ * as text, so it can hold a link, and clicking any of it ticks the box.
+ */
+export function CheckboxField({ id, label, error, ...inputProps }) {
+  return (
+    <div className="field">
+      <div className="checkbox">
+        <input
+          id={id}
+          type="checkbox"
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy(id, null, error)}
+          {...inputProps}
+        />
+        <label htmlFor={id}>{label}</label>
+      </div>
+      {error && <FieldError id={`${id}-error`} message={error} />}
+    </div>
+  );
+}
+
 /** An error that belongs to the whole form, e.g. a wrong password. */
 export function FormError({ message }) {
   return (
