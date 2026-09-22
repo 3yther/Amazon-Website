@@ -19,3 +19,13 @@ export const ACCESS_LEVELS = {
   free: "Free",
   signup: "Sign-up",
 };
+
+// Account types offered at registration. Amazon staff accounts are made in
+// Django admin, so that choice is left out.
+export const USER_TYPES = {
+  student: "Student",
+  parent: "Parent or guardian",
+  teacher: "Teacher or school",
+};
+
+export const PATHWAY_NAMES = ["Digital", "Business", "Media", "Finance", "Engineering"];
