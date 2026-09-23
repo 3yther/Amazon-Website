@@ -4,6 +4,7 @@ import { register } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import { PATHWAY_NAMES, USER_TYPES } from "../labels.js";
+import AuthPanel from "../components/AuthPanel.jsx";
 import { CheckboxField, FormError, SelectField, TextField } from "../components/FormFields.jsx";
 
 // Exactly the fields RegisterSerializer accepts. Everything else on this form
@@ -95,15 +96,18 @@ export default function Register() {
     }
   }
 
-  // One centred card over the sign-up photo (see .register-page in styles.css).
+  // The branded panel beside the form (see .auth-layout in styles.css).
   return (
-    <section className="register-page" aria-labelledby="page-title">
-      <div className="account-card">
-        <div className="account-card__intro">
-          <p className="label">Account</p>
-          <h1 id="page-title">Sign up</h1>
-          <p className="lead">Create an account to open sign-up resources.</p>
-        </div>
+    <div className="auth-layout">
+      <AuthPanel />
+
+      <div className="auth-side">
+        <div className="auth-form" aria-labelledby="page-title">
+          <div className="auth-heading">
+            <p className="label">Account</p>
+            <h1 id="page-title">Create your account</h1>
+            <p className="lead">It takes a minute, and it is free.</p>
+          </div>
 
         <form className="account-form" onSubmit={handleSubmit} noValidate>
           {errors.form && <FormError message={errors.form} />}
@@ -219,17 +223,16 @@ export default function Register() {
             error={errors.terms}
           />
 
-          {/* Sign up first, so it also comes first in the keyboard order. */}
-          <div className="account-card__actions">
-            <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-              {status === "submitting" ? "Signing up" : "Sign up"}
-            </button>
-            <p>
-              Already registered? <Link to="/login">Log in</Link>
-            </p>
-          </div>
+          <button type="submit" className="button button--primary" disabled={status === "submitting"}>
+            {status === "submitting" ? "Signing up" : "Sign up"}
+          </button>
         </form>
+
+          <p className="account-switch">
+            Already registered? <Link to="/login">Log in</Link>
+          </p>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

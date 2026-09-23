@@ -4,7 +4,6 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { CloseIcon, MenuIcon } from "./Icons.jsx";
-import RisingSubjects from "./RisingSubjects.jsx";
 
 // Site navigation: at every screen width, a menu button in the header opens a
 // full-screen overlay. The overlay is a modal <dialog>, so the page behind is
@@ -44,11 +43,8 @@ export default function SiteNav() {
       if (dialog.classList.contains(closing)) {
         dialog.classList.remove(closing); // reopened before the close finished
       } else if (!dialog.open) {
-        // The opening animation grows out of the menu button (see styles.css).
-        const button = menuButton.current.getBoundingClientRect();
-        const x = button.left + button.width / 2;
-        const y = button.top + button.height / 2;
-        dialog.style.setProperty("--menu-origin", `${x}px ${y}px`);
+        // The drawer slides in from the edge it is anchored to (see
+        // styles.css), so the open position needs no measuring.
         dialog.showModal();
         document.documentElement.classList.add("menu-open");
       }
@@ -118,7 +114,9 @@ export default function SiteNav() {
           }}
           onClose={closeMenu}
         >
-          <RisingSubjects />
+          {/* No RisingSubjects here any more: its names are position: fixed,
+              so inside a part-width drawer they escaped the panel and drifted
+              across the blurred page behind it. */}
           <div className="container menu-overlay__top">
             <button
               type="button"

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
+import AuthPanel from "../components/AuthPanel.jsx";
 import { FormError, TextField } from "../components/FormFields.jsx";
 
 export default function Login() {
@@ -32,46 +33,52 @@ export default function Login() {
   }
 
   return (
-    <>
-      <section className="intro" aria-labelledby="page-title">
-        <p className="label">Account</p>
-        <h1 id="page-title">Log in</h1>
-        <p className="lead">Log in to open sign-up resources.</p>
-      </section>
+    <div className="auth-layout">
+      <AuthPanel />
 
-      <form className="account-form" onSubmit={handleSubmit} noValidate>
-        {errors.form && <FormError message={errors.form} />}
+      <div className="auth-side">
+        <div className="auth-form" aria-labelledby="page-title">
+          <div className="auth-heading">
+            <p className="label">Account</p>
+            <h1 id="page-title">Welcome back</h1>
+            <p className="lead">Log in to open sign-up resources.</p>
+          </div>
 
-        <TextField
-          id="login-username"
-          label="Username"
-          name="username"
-          value={fields.username}
-          onChange={updateField}
-          autoComplete="username"
-          required
-          error={errors.username}
-        />
-        <TextField
-          id="login-password"
-          label="Password"
-          name="password"
-          type="password"
-          value={fields.password}
-          onChange={updateField}
-          autoComplete="current-password"
-          required
-          error={errors.password}
-        />
+          <form className="account-form" onSubmit={handleSubmit} noValidate>
+            {errors.form && <FormError message={errors.form} />}
 
-        <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-          {status === "submitting" ? "Logging in" : "Log in"}
-        </button>
-      </form>
+            <TextField
+              id="login-username"
+              label="Username"
+              name="username"
+              value={fields.username}
+              onChange={updateField}
+              autoComplete="username"
+              required
+              error={errors.username}
+            />
+            <TextField
+              id="login-password"
+              label="Password"
+              name="password"
+              type="password"
+              value={fields.password}
+              onChange={updateField}
+              autoComplete="current-password"
+              required
+              error={errors.password}
+            />
 
-      <p className="account-switch">
-        No account yet? <Link to="/register">Register</Link>
-      </p>
-    </>
+            <button type="submit" className="button button--primary" disabled={status === "submitting"}>
+              {status === "submitting" ? "Logging in" : "Log in"}
+            </button>
+          </form>
+
+          <p className="account-switch">
+            No account yet? <Link to="/register">Register</Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

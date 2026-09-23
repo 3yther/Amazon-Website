@@ -7,7 +7,14 @@ import {
   FinanceIcon,
   MediaIcon,
 } from "../components/Icons.jsx";
+import warehousePhoto from "../assets/pexels-warehouse-operations.jpg";
 import { PATHWAYS } from "../aboutContent.js";
+
+// Photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
+// free to use, attribution not required. Credited here for the asset log.
+//   pexels-warehouse-operations.jpg: GB The Green Brand,
+//     https://www.pexels.com/photo/modern-warehouse-operations-with-employees-and-forklift-30824313/
+
 import {
   AMAZON_SOURCES,
   GROWTH,
@@ -63,6 +70,19 @@ export default function TLevelsAtAmazon() {
         </div>
 
         <IconCards items={PLACEMENT_SHAPE} />
+
+        {/* Illustrative stock photography, not a photograph of an Amazon
+            site, so it carries an empty alt and no caption that would imply
+            otherwise. */}
+        <img
+          className="about-figure"
+          src={warehousePhoto}
+          alt=""
+          width="900"
+          height="600"
+          loading="lazy"
+          decoding="async"
+        />
       </section>
 
       <section className="about-section" aria-labelledby="support-title">

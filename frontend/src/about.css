@@ -1023,3 +1023,72 @@
     transition: transform 150ms ease;
   }
 }
+
+/* ---------- Photo strip ---------- */
+
+/* A looping row of photographs. The container clips its own overflow, so a
+   track wider than the page never gives the page a horizontal scrollbar. */
+.photo-strip {
+  overflow: hidden;
+  margin-top: 32px;
+}
+
+.photo-strip__track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.photo-strip__item {
+  flex: none;
+  width: clamp(160px, 18vw, 220px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.photo-strip__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Reduced motion: no animation, and the visitor scrolls the row themselves. */
+.photo-strip--static {
+  overflow-x: auto;
+}
+
+/* The track holds the six photos twice, so sliding it exactly half its width
+   lands on the copy of the first photo and the loop is invisible. */
+@media (prefers-reduced-motion: no-preference) {
+  .photo-strip:not(.photo-strip--static) .photo-strip__track {
+    animation: photo-strip-scroll 70s linear infinite;
+  }
+
+  .photo-strip:hover .photo-strip__track,
+  .photo-strip:focus-within .photo-strip__track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes photo-strip-scroll {
+  to {
+    /* Half the track, plus half of one gap, is exactly one full set. */
+    transform: translateX(calc(-50% - 8px));
+  }
+}
+
+/* A wide illustrative photo inside a section, matching the cards' edge. */
+.about-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 32px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}

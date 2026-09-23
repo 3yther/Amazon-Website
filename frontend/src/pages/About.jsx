@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import AboutFaq from "../components/AboutFaq.jsx";
 import { IconCards, IconList, PageHero, RouteSteps, ShareBar } from "../components/InfoBlocks.jsx";
 import PathwaySwitcher from "../components/PathwaySwitcher.jsx";
+import PhotoStrip from "../components/PhotoStrip.jsx";
 import TLevelQuiz from "../components/TLevelQuiz.jsx";
 import {
   AUDIENCE_POINTS,
@@ -71,6 +72,8 @@ export default function About() {
 
       {/* Tabbed switcher for the five pathways. */}
       <PathwaySwitcher />
+
+      <PhotoStrip />
 
       <section className="about-section" aria-labelledby="grades-title">
         <div className="section-intro">

@@ -10,7 +10,7 @@
   /* Dark blue blended into paper. 5.4:1 on paper, passes WCAG AA for text. */
   --ink-muted: #5f6872;
   --line: rgb(35 47 62 / 0.16);
-  /* Dark blue laid flat over the sign-up photo (see .register-page). */
+  /* Dark blue laid flat over whatever is behind it (see .modal-overlay). */
   --overlay: rgb(35 47 62 / 0.7);
 
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -508,16 +508,22 @@ main {
 
 /* ---------- Menu overlay ---------- */
 
-/* A full-screen modal <dialog> on the page colour, with the homepage's rising
-   subjects drifting behind the links. */
+/* A modal <dialog> drawer: full height, part of the width, anchored to the
+   left edge because that is the corner the menu button sits in, so the panel
+   opens from where you pressed. The rest of the page stays visible (and
+   blurred) behind it.
+
+   A dialog opened with showModal() is centred by the UA's `margin: auto`;
+   `margin-right: auto` alone pins it to the left instead. */
 .menu-overlay {
-  width: 100%;
+  width: min(420px, 88vw);
   height: 100%;
   max-width: none;
   max-height: none;
-  margin: 0;
+  margin: 0 auto 0 0;
   padding: 0;
   border: 0;
+  border-right: 3px solid var(--orange);
   background: var(--paper);
   color: var(--blue);
   overflow-y: auto;
@@ -529,24 +535,41 @@ main {
   flex-direction: column;
 }
 
-/* Transparent, so the page shows through while the overlay fades in and out.
-   Once open, the overlay itself covers everything. */
+/* The page behind stays readable in outline but clearly out of focus: a blur
+   plus a tint dark enough to keep the drawer's own edge obvious. Tinted with
+   the fixed dark navy rather than --blue, which flips light in dark mode. */
 .menu-overlay::backdrop {
-  background: transparent;
+  background: rgb(35 47 62 / 0.45);
+  backdrop-filter: blur(8px);
 }
 
-/* Opening "maximizes" the overlay out of the menu button: a quick fade with a
-   slight scale anchored on the button (--menu-origin, set in SiteNav.jsx).
-   Closing plays the same motion in reverse. Only for visitors who have not
-   asked for reduced motion; everyone else gets an instant open and close. */
+/* The nav was sized for a full-screen surface: at the old size the longest
+   label wrapped inside a 420px drawer, so the type steps down. It stays
+   vertically centred, which still reads well at this width. */
+.menu-overlay__nav a,
+.menu-overlay__nav .nav-button {
+  font-size: clamp(1.125rem, 4vw, 1.5rem);
+}
+
+/* The drawer slides in from the edge it is anchored to, and the backdrop
+   fades its blur in behind it. Closing plays the same motion in reverse.
+   Only for visitors who have not asked for reduced motion; everyone else
+   gets an instant open and close. */
 @media (prefers-reduced-motion: no-preference) {
   .menu-overlay[open] {
-    transform-origin: var(--menu-origin, top left);
-    animation: menu-maximize 200ms cubic-bezier(0.2, 0, 0, 1);
+    animation: menu-slide-in 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .menu-overlay[open]::backdrop {
+    animation: menu-backdrop-in 220ms ease-out;
   }
 
   .menu-overlay.menu-overlay--closing {
-    animation: menu-minimize 200ms cubic-bezier(0.4, 0, 1, 1) forwards;
+    animation: menu-slide-out 200ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .menu-overlay.menu-overlay--closing::backdrop {
+    animation: menu-backdrop-in 200ms ease-in reverse forwards;
   }
 
   /* Then the links climb in one after another, top to bottom: each fades in
@@ -566,17 +589,23 @@ main {
   }
 }
 
-@keyframes menu-maximize {
+@keyframes menu-slide-in {
   from {
     opacity: 0;
-    transform: scale(0.96);
+    transform: translateX(-100%);
   }
 }
 
-@keyframes menu-minimize {
+@keyframes menu-slide-out {
   to {
     opacity: 0;
-    transform: scale(0.96);
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes menu-backdrop-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -1215,31 +1244,8 @@ textarea {
   margin-top: 24px;
 }
 
-/* Sign-up card: centred, on a white surface with a hairline edge like the
-   content cards. */
-.account-card {
-  max-width: 30rem;
-  margin-inline: auto;
-  padding: clamp(20px, 5vw, 40px);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-
-.account-card__intro {
-  display: grid;
-  gap: 12px;
-  padding-bottom: 24px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--line);
-}
-
-.account-card__intro h1 {
-  font-size: clamp(2rem, 5vw, 2.5rem);
-}
-
-/* Sign up on one side, the way to Log in on the other. Stacks when the card
-   is too narrow for both. */
+/* A pair of actions side by side, stacking when there is not room for both.
+   Used by the account settings forms. */
 .account-card__actions {
   display: flex;
   flex-wrap: wrap;
@@ -1250,23 +1256,128 @@ textarea {
   border-top: 1px solid var(--line);
 }
 
-/* Sign-up page only: the approved photo fills <main> edge to edge, between
-   the header and the footer, under a flat dark overlay. The card stays solid
-   white, so its text keeps the same contrast as every other page, and the
-   footer stays on the page colour. Dark blue shows while the photo loads. */
-main:has(.register-page) {
-  position: relative;
-  isolation: isolate;
+/* ---------- Log in and sign up ---------- */
+
+/* Both auth pages are a branded panel beside the form. <main> is normally a
+   padded container; these two pages run edge to edge instead so the panel
+   reaches the sides. */
+main:has(.auth-layout) {
   max-width: none;
-  background: var(--blue) url("./assets/register-background.avif") center / cover no-repeat;
+  padding: 0;
 }
 
-main:has(.register-page)::before {
+.auth-layout {
+  display: grid;
+  min-height: 100%;
+}
+
+/* Two columns from the same 1024px step the footer and the settings tabs
+   already use. Below it the panel collapses to a short banner above the
+   form, so a phone still gets the branding without losing the fold. */
+@media (min-width: 1024px) {
+  .auth-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.auth-panel {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: center;
+  padding: clamp(28px, 5vw, 72px);
+  overflow: hidden;
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+.auth-panel__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The same flat scrim the audience cards use, so the wordmark and the line
+   under it hold their contrast whatever part of the photo sits behind them. */
+.auth-panel__photo + .auth-panel__content::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--overlay);
+  background: var(--scrim);
+}
+
+.auth-panel__content {
+  display: grid;
+  gap: 12px;
+  max-width: 26rem;
+}
+
+.auth-panel__wordmark {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.auth-panel__line {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--ink-inverse);
+}
+
+.auth-side {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: clamp(32px, 6vw, 72px) var(--gutter);
+  background: var(--paper);
+}
+
+.auth-form {
+  display: grid;
+  gap: 32px;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.auth-heading {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-heading h1 {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+}
+
+/* Roomier than the settings forms: this is the whole page, not a panel in a
+   tab, so the fields get more space and the action is full width. */
+.auth-form .account-form {
+  gap: 24px;
+  max-width: none;
+}
+
+.auth-form .account-form > .button {
+  justify-self: stretch;
+  width: 100%;
+  min-height: 52px;
+}
+
+.auth-form input {
+  min-height: 52px;
+}
+
+.auth-form .account-switch {
+  margin-top: 0;
+}
+
+@media (max-width: 1023px) {
+  /* Collapsed to a banner strip: tall enough to read as branding, short
+     enough that the first field is still near the top of the screen. */
+  .auth-panel {
+    min-height: 8rem;
+    padding-block: 24px;
+  }
 }
 
 .results-status {
