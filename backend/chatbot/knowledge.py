@@ -29,8 +29,9 @@ from content.models import ContentItem, Pathway
 # X", short enough to keep the prompt small.
 CONTENT_LIMIT = 40
 
-# The file most facts are quoted from, relative to the repository root.
+# The files the facts are quoted from, relative to the repository root.
 ABOUT_COPY = "frontend/src/aboutContent.js"
+AMAZON_COPY = "frontend/src/amazonContent.js"
 
 
 @dataclass(frozen=True)
@@ -57,6 +58,27 @@ def quoted(topic, text):
     return Fact(
         topic=topic, text=text, source=ABOUT_COPY, quoted_from=ABOUT_COPY, quoted_parts=(text,)
     )
+
+
+def quoted_parts(topic, parts, source=ABOUT_COPY, joiner=" "):
+    """
+    A fact made of several exact pieces of the page copy, e.g. a card's heading
+    and its line of text. Each piece is checked separately by the test, so the
+    wording can be shortened on the page without Smiley drifting from it.
+    """
+    parts = tuple(parts)
+    return Fact(
+        topic=topic,
+        text=joiner.join(parts),
+        source=source,
+        quoted_from=source,
+        quoted_parts=parts,
+    )
+
+
+def quoted_card(topic, title, text, source=ABOUT_COPY):
+    """One picture card from the page: its heading, then its line of text."""
+    return quoted_parts(topic, (title, text), source=source, joiner=". ")
 
 
 def quoted_list(topic, items):
@@ -111,18 +133,16 @@ VERIFIED_FACTS = (
     # --- T Levels in general --------------------------------------------------
     quoted(
         "What a T Level is",
-        "Choose a T Level in the area you want to work in, from around 20 subjects. "
-        "It runs for two years, full time, at a school or college.",
+        "Around 20 to choose from. Two years, full time, at a school or college.",
     ),
     quoted(
         "How much of a T Level is classroom learning",
-        "Between 1,100 and 1,300 hours in the classroom across the two years: the core "
-        "knowledge for your industry, then a specialism you choose.",
+        "1,100 to 1,300 hours of lessons: the basics of your industry, then a specialism.",
     ),
-    quoted(
+    quoted_card(
         "How a T Level compares with A levels",
-        "A T Level is broadly the same size as three A levels and carries UCAS points, "
-        "so university stays open to you.",
+        "Same size as three A levels",
+        "It carries UCAS points, so university stays open.",
     ),
     quoted(
         "Whether a T Level is the same as an apprenticeship",
@@ -173,24 +193,26 @@ VERIFIED_FACTS = (
         "usually combined with much else. Some providers allow one extra qualification. "
         "Ask yours.",
     ),
-    quoted(
+    quoted_card(
         "Where a T Level can lead",
-        "Skilled work, a higher or degree apprenticeship, or university. Many employers keep "
-        "students on at the end.",
+        "Three ways on",
+        "A skilled job, a higher apprenticeship, or university.",
     ),
     # --- Money ------------------------------------------------------------------
-    quoted(
+    quoted_card(
         "What a T Level costs",
-        "The course itself is free if you are 16 to 18 and in full-time education.",
+        "The course is free",
+        "If you are 16 to 18 and in full-time education.",
     ),
     quoted(
         "Help with travel and equipment",
         "Yes, through the 16 to 19 Bursary Fund. It can cover travel, books, equipment and "
         "specialist clothing. Apply through your school or college.",
     ),
-    quoted(
+    quoted_card(
         "What bursaries cannot pay for",
-        "Bursaries cannot cover rent, bills or general living costs.",
+        "Ask your college",
+        "Anyone else can ask for a discretionary bursary. It cannot cover rent or bills.",
     ),
     # --- The industry placement -------------------------------------------------
     quoted(
@@ -198,10 +220,10 @@ VERIFIED_FACTS = (
         "At least 315 hours, roughly 45 days. It can be one or two days a week, a full-time "
         "block, or a mix. Amazon runs its placements as a nine week block.",
     ),
-    quoted(
+    quoted_card(
         "What placement work is like",
-        "The employer oversees the placement and sets the work. It has to be real work you "
-        "do for them, not shadowing or a project written for a classroom.",
+        "Real work",
+        "Tasks the employer needs doing. Not shadowing.",
     ),
     quoted(
         "Whether a placement is paid",
@@ -210,25 +232,55 @@ VERIFIED_FACTS = (
         "before you start.",
     ),
     # --- Amazon -----------------------------------------------------------------
-    quoted(
+    quoted_card(
         "What an Amazon placement is like",
-        "Amazon's T Level lead describes students as completely embedded: you learn the "
-        "tools, sit with the team and contribute to real work.",
+        "Nine weeks",
+        "You join a team, learn the tools and do real work.",
+        source=AMAZON_COPY,
     ),
-    quoted(
+    quoted_parts(
         "What the Amazon programme includes",
-        "The programme mixes 15 day stints in Amazon's skills hubs with group projects on "
-        "charitable causes and individual team challenges.",
+        (
+            "Part of it runs in Amazon's skills hubs, in blocks of 15 days.",
+            "Work with other students on projects for charities.",
+            "Tasks set by your team that use your T Level skills.",
+        ),
+        source=AMAZON_COPY,
     ),
-    quoted(
-        "Support during an Amazon placement",
-        "Every student gets a buddy, a mentor and a placement manager, so there is always "
-        "someone to ask.",
+    Fact(
+        topic="Support during an Amazon placement",
+        text=(
+            "A buddy: For the small questions. A mentor: Guides your work and shows you the "
+            "bigger picture. A placement manager: Keeps the placement on track with your "
+            "school or college."
+        ),
+        source=AMAZON_COPY,
+        quoted_from=AMAZON_COPY,
+        quoted_parts=(
+            "A buddy",
+            "For the small questions.",
+            "A mentor",
+            "Guides your work and shows you the bigger picture.",
+            "A placement manager",
+            "Keeps the placement on track with your school or college.",
+        ),
     ),
-    quoted(
-        "Which pathways Amazon offers placements in",
-        "Amazon started with Digital placements and has said it is widening the programme "
-        "into creative, business and engineering pathways.",
+    Fact(
+        topic="Which pathways Amazon offers placements in",
+        text=(
+            "Digital: Where Amazon's T Level programme started. Business: Named by Amazon as "
+            "a pathway it is expanding into. Media: Named by Amazon as a creative pathway it "
+            "is expanding into. Engineering: Named by Amazon as a pathway it is expanding into."
+        ),
+        source=ABOUT_COPY,
+        quoted_from=ABOUT_COPY,
+        # The pathway names are checked by the pathway facts below; these are
+        # each pathway's amazonStatus line.
+        quoted_parts=(
+            "Where Amazon's T Level programme started.",
+            "Named by Amazon as a pathway it is expanding into.",
+            "Named by Amazon as a creative pathway it is expanding into.",
+        ),
     ),
     # --- Each pathway -------------------------------------------------------------
     quoted_list(
