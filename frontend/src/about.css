@@ -2,13 +2,15 @@
    and Help. Kept in its own file so it does not collide with anyone else's
    work in styles.css. Imported by each of those three pages.
 
-   DESIGN IMPROVEMENTS (Sept 2026):
-   - Better visual rhythm and breathing room between sections (Refero pattern)
-   - Improved typography with better line-height for readability (1.5-1.6)
-   - Enhanced visual hierarchy through refined spacing and typography
-   - Polished interactive components (tabs, accordions) with better active states
-   - Consistent information grouping and visual separation
-   - Refined card styling with improved visual weight
+   Only classes that belong to these pages live here. Shared classes such as
+   .label and .section-intro are styled once in styles.css; redefining them
+   here would change every page on the site, because Vite bundles all CSS
+   together.
+
+   Focus rings are left to the site-wide :focus-visible rule in styles.css.
+   That keeps them dark blue (orange is only about 2:1 on the page colour, too
+   faint for WCAG 2.2) and keeps the thick and dashed outline options on the
+   Accessibility page working.
 
    No new colours are defined here. Everything below reuses the tokens from
    styles.css (--orange, --blue, --paper, --surface, --ink-muted, --line,
@@ -122,12 +124,6 @@
   border: 1px solid var(--line);
   border-top: 4px solid var(--orange);
   border-radius: var(--radius);
-  transition: box-shadow 150ms ease, border-color 150ms ease;
-}
-
-.info-card:hover {
-  box-shadow: 0 2px 8px rgba(35, 47, 62, 0.08);
-  border-top-color: var(--blue);
 }
 
 .info-card h3 {
@@ -188,9 +184,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: -1px;
-  margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: -1px; /* the selected tab sits on the panel's top edge */
 }
 
 .pathways__tab {
@@ -205,7 +199,6 @@
   font-size: 0.9375rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 150ms ease;
 }
 
 .pathways__tab:hover {
@@ -213,18 +206,15 @@
   border-bottom-color: var(--orange);
 }
 
-/* Selected state: unmistakable visual distinction with orange underline,
-   dark blue background, and high contrast text. */
+/* Selected state is unmistakable without relying on colour alone: the tab
+   fills with dark blue and its label flips to the page colour (13:1), with
+   aria-selected for screen readers. The orange underline is decoration on
+   top; on its own it would only be 2:1, which fails WCAG 1.4.11. */
 .pathways__tab[aria-selected="true"] {
   background: var(--blue);
   border-color: var(--blue);
   border-bottom-color: var(--orange);
   color: var(--paper);
-}
-
-.pathways__tab:focus-visible {
-  outline: 3px solid var(--orange);
-  outline-offset: 2px;
 }
 
 /* Hidden panels are completely removed from the layout. */
@@ -254,15 +244,6 @@
   gap: 10px;
   max-width: 46rem;
   width: 100%;
-}
-
-.pathways__detail h4 {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-muted);
-  margin: 0;
 }
 
 .pathways__detail p {
@@ -303,11 +284,6 @@
 
 .faq__item {
   border-bottom: 1px solid var(--line);
-  transition: background-color 150ms ease;
-}
-
-.faq__item:hover {
-  background-color: rgba(255, 153, 0, 0.02);
 }
 
 .faq__heading {
@@ -332,7 +308,6 @@
   font-weight: 700;
   text-align: left;
   cursor: pointer;
-  transition: color 150ms ease;
 }
 
 .faq__trigger:hover span {
@@ -341,20 +316,15 @@
   text-underline-offset: 0.25em;
 }
 
-.faq__trigger:focus-visible {
-  outline: 3px solid var(--orange);
-  outline-offset: -3px;
-}
-
 .faq__chevron {
   flex: none;
   width: 20px;
   height: 20px;
-  color: var(--orange);
-  transition: transform 150ms ease;
+  color: var(--blue);
 }
 
-/* The chevron points down when closed and up when open. */
+/* The chevron points down when closed and up when open. It only repeats what
+   aria-expanded already says, so nothing is lost if it is not seen. */
 .faq__trigger[aria-expanded="true"] .faq__chevron {
   transform: rotate(180deg);
 }
@@ -391,12 +361,11 @@
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  transition: box-shadow 150ms ease;
 }
 
+/* Marks the question being answered. Dark blue, so the border reaches 3:1. */
 .quiz__question:focus-within {
-  box-shadow: 0 2px 8px rgba(35, 47, 62, 0.08);
-  border-color: var(--orange);
+  border-color: var(--blue);
 }
 
 .quiz__legend {
@@ -590,7 +559,6 @@
   color: var(--blue);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 150ms ease;
 }
 
 .about-sources a:hover {
@@ -670,11 +638,6 @@
   border: 1px solid var(--line);
   border-left: 5px solid var(--orange);
   border-radius: var(--radius);
-  transition: box-shadow 150ms ease;
-}
-
-.growth__item:hover {
-  box-shadow: 0 2px 8px rgba(35, 47, 62, 0.08);
 }
 
 /* Large number in dark blue for high contrast and visual emphasis. */
@@ -721,22 +684,15 @@
   border-left: 4px solid var(--blue);
   border-radius: var(--radius);
   text-decoration: none;
-  transition: all 150ms ease;
 }
 
 .signpost a:hover {
   border-left-color: var(--orange);
-  box-shadow: 0 2px 8px rgba(35, 47, 62, 0.08);
 }
 
 .signpost a:hover .signpost__label {
   text-decoration: underline;
   text-decoration-thickness: 2px;
-}
-
-.signpost a:focus-visible {
-  outline: 3px solid var(--orange);
-  outline-offset: -3px;
 }
 
 .signpost__label {
@@ -751,49 +707,20 @@
   line-height: 1.5;
 }
 
-/* ---------- Section intro styling ---------- */
+/* ---------- Motion ---------- */
 
-/* Consistent opening for each major section with label, heading, and lead. */
-.section-intro {
-  display: grid;
-  gap: 12px;
-  margin-bottom: clamp(32px, 5vw, 48px);
-  padding-bottom: 0;
-}
+/* Every transition on these pages, in one place, and only for visitors who
+   have not asked their system for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .pathways__tab,
+  .signpost a,
+  .about-sources a {
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
 
-.section-intro .label {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-muted);
-  margin: 0;
-}
-
-.section-intro h2 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 0;
-  color: var(--blue);
-}
-
-.section-intro__lead {
-  font-size: 1.0625rem;
-  color: var(--ink-muted);
-  line-height: 1.6;
-  max-width: 48rem;
-  margin: 0;
-}
-
-/* Utility classes */
-
-.label {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-muted);
-  display: block;
-  margin-bottom: 4px;
+  .faq__chevron {
+    transition: transform 150ms ease;
+  }
 }

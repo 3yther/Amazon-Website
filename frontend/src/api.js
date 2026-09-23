@@ -186,6 +186,15 @@ export function submitInterest(fields) {
 }
 
 /**
+ * Send feedback about the site. Open to anyone: signed in or not.
+ * fields: category, message, email (optional; ignored server-side if signed in).
+ * Resolves to { success: true }.
+ */
+export function submitFeedback(fields) {
+  return postJson("/api/accounts/feedback/", fields);
+}
+
+/**
  * Send a message to Smiley, the AI assistant, and get its reply: { reply }.
  *
  * Both options are optional, and neither is stored (only the message is):

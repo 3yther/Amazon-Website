@@ -50,8 +50,7 @@ The site does three jobs:
 - **Accounts** with sign up and log in, so gated content unlocks for signed-in users.
 - **Expression of Interest** form, validated server side and rate limited.
 - **Find Near You** page to find T Level courses and placements nearby.
-- **Smiley, the AI guide**: answers T Level questions from the site's own checked copy, asks who you are and what interests you, offers help when a page goes quiet or a quiz answer goes wrong, and has a personality of its own (it blinks, watches your cursor, dozes off and wakes up). Every animation stops under reduced motion.
-- **Help, About and T Level at Amazon** information pages.
+- **Smiley, the AI guide**: answers T Level questions from the site's own checked copy, asks who you are and what interests you, offers help when a page goes quiet or a quiz answer goes wrong, and has a personality of its own (it blinks, watches your cursor, dozes off and wakes up). Every animation stops under reduced motion.- **Help, About and T Level at Amazon** information pages.
 - **Staff admin** where Amazon staff review submissions and manage content.
 
 ## Screenshots
@@ -88,8 +87,7 @@ backend/
   accounts/    Profile (extends Django's built-in User)
   content/     Pathway, ContentItem, content API
   interest/    ExpressionOfInterest, submission API
-  chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI provider
-frontend/
+  chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI providerfrontend/
   src/api.js                    all calls to the Django API
   src/assistant/                Smiley: the chat widget, its face, moods and script
   src/pages/ContentLibrary.jsx  example page: lists content from the API
@@ -145,6 +143,7 @@ Both `backend/` and `frontend/` ship an `.env.example` file. Copy each one and f
 | `DJANGO_ALLOWED_HOSTS` | Always | Comma-separated hostnames Django will serve. Defaults to `localhost,127.0.0.1`. |
 | `CORS_ALLOWED_ORIGINS` | If cross-origin | Only when the React app is served from a different origin than the API. The Vite proxy makes them the same origin locally, so you can leave the default. |
 | `CSRF_TRUSTED_ORIGINS` | If cross-origin | Same as above, for CSRF. |
+| `ANTHROPIC_API_KEY` | For the assistant | Key from console.anthropic.com. Without it the chat widget shows its fallback message. Never commit it. |
 | `DATABASE_URL` | Deployed only | A `postgres://` URL. When set, it replaces SQLite. Leave unset locally. |
 | `DJANGO_BEHIND_HTTPS_PROXY` | Deployed only | `true` when a proxy in front ends HTTPS (Railway does). |
 | `ANTHROPIC_API_KEY` | For Smiley | Lets Smiley answer questions. Without it the site works and Smiley shows a fallback message. Server side only, never sent to the browser. |
@@ -162,9 +161,21 @@ For preview and production variables, see [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## Running tests
 
+Backend (Django):
+
 ```bash
 cd backend && python manage.py test
 ```
+
+Frontend (Vitest and React Testing Library, with axe for automated WCAG 2.2 AA checks):
+
+```bash
+cd frontend && npm test
+```
+
+`npm run test:watch` re-runs the tests as you save. The frontend tests live in `frontend/src/tests/` and cover the About, Help and T-Levels at Amazon pages: the FAQ, the pathway tabs and the quiz by mouse and keyboard, an axe scan of each page, and checks that copy and styles follow the rules in `CONTEXT.md`. Colour contrast is not part of the automated scan (the test browser does not draw the page), so it is still checked by hand.
+
+CI runs both on every pull request and every push to `main`.
 
 ## Deployment
 

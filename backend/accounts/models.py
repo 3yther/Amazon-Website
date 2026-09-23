@@ -81,3 +81,34 @@ class UserPreference(models.Model):
 
     def __str__(self):
         return f"Preferences for {self.user}"
+
+
+class Feedback(models.Model):
+    """
+    Feedback submitted through the site's feedback form (see the /feedback
+    page). Anyone can submit; if they were signed in, the User is linked.
+    """
+
+    class Category(models.TextChoices):
+        BUG = "bug", "Bug report"
+        FEATURE = "feature", "Feature suggestion"
+        GENERAL = "general", "General feedback"
+        ACCESSIBILITY = "accessibility", "Accessibility issue"
+
+    category = models.CharField(max_length=20, choices=Category.choices, default=Category.GENERAL)
+    message = models.TextField()
+    email = models.EmailField(blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="feedback_submissions",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.get_category_display()} ({self.created_at:%Y-%m-%d})"

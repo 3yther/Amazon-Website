@@ -52,5 +52,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Component tests and automated WCAG 2.2 AA checks (see frontend/src/tests).
+      - name: Run tests
+        run: npm test
+
       - name: Build
         run: npm run build

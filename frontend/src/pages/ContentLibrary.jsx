@@ -136,7 +136,11 @@ export default function ContentLibrary() {
             <AlertIcon />
             <div>
               <p className="notice__title">Could not load content.</p>
-              <p>Check the Django API is running on port 8000, then try again.</p>
+              <p>
+                {import.meta.env.DEV
+                  ? "Check the Django API is running on port 8000, then try again."
+                  : "Something went wrong on our side. Please try again in a moment."}
+              </p>
               <button type="button" className="button" onClick={() => setAttempt((n) => n + 1)}>
                 Try again
               </button>
