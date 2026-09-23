@@ -123,7 +123,13 @@ Full rules in [`CONTEXT.md`](CONTEXT.md).
 
 ## Team
 
-Built by five T Level students: Amir, Aaron, Micha, Jakub and Lloyd.
+Built by five T Level students:
+
+- **Amir** - framework for the entire website
+- **Aaron** - AI chatbot
+- **Micha** - About, Help and T-Level at Amazon pages
+- **Jakub** - sign up and log in pages
+- **Lloyd** - Find Near You page
 
 ## Notes
 
