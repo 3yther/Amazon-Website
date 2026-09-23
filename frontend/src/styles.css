@@ -914,6 +914,28 @@ input[type="password"] {
   color: var(--ink-muted);
 }
 
+/* Tick box beside its label, both clickable. The box itself takes the page's
+   dark blue, and the shared focus ring and invalid ring apply to it as they
+   do to the other controls. */
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checkbox input[type="checkbox"] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+.checkbox label {
+  cursor: pointer;
+}
+
 .field__error {
   display: flex;
   align-items: flex-start;

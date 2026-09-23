@@ -18,9 +18,9 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# Claude Opus 5. Thinking is on by default on this model; "low" effort keeps it
+# Claude Opus 5.5. Thinking is on by default on this model; "low" effort keeps it
 # quick and cheap, which suits short grounded answers like ours.
-MODEL = "claude-opus-5"
+MODEL = "claude-opus-5-5"
 EFFORT = "low"
 
 # Room for a short answer plus the model's own thinking tokens. Our prompt asks

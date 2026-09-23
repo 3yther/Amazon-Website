@@ -12,7 +12,11 @@ anthropic==1.8.0
 asgiref==3.12.1
 sqlparse==0.6.0
 
-# Production additions (not needed locally):
-# psycopg[binary]      PostgreSQL driver for AWS RDS
+# Deployment (Railway preview now, AWS later). Not needed for local development,
+# which uses SQLite and the Django dev server.
+gunicorn==26.2.0                 # production app server; runserver is for development only
+psycopg[binary]==3.3.6           # PostgreSQL driver, used when DATABASE_URL is set
+typing-extensions==4.16.0        # pulled in by psycopg on Python 3.11, pinned like the above
+
+# Production additions still to come (AWS):
 # django-storages[s3]  store ContentItem files in S3
-# gunicorn             app server on EC2
