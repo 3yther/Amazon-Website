@@ -42,7 +42,7 @@ describe("Pathway switcher", () => {
   });
 
   it("moves the selection and the focus with the arrow keys", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderSwitcher();
 
     tab(first).focus();
@@ -57,7 +57,7 @@ describe("Pathway switcher", () => {
   });
 
   it("wraps round at both ends, and supports Home and End", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderSwitcher();
 
     tab(first).focus();
@@ -75,7 +75,7 @@ describe("Pathway switcher", () => {
   });
 
   it("selects a pathway when its tab is clicked", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderSwitcher();
 
     await user.click(tab(last));
@@ -96,7 +96,7 @@ describe("Pathway switcher", () => {
   });
 
   it("only shows the Amazon status line where Amazon has said something public", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderSwitcher();
 
     for (const pathway of PATHWAYS) {

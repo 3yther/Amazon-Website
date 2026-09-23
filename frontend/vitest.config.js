@@ -20,6 +20,14 @@ export default mergeConfig(
       // whole quiz or scan a page with axe can take longer than that on a
       // slower laptop, so they get 30.
       testTimeout: 30000,
+      // Speed. By default every test file gets its own fresh pretend browser,
+      // and starting jsdom five times was most of the run time on Windows.
+      // NEW CONCEPT: isolate: false lets the files share one jsdom instead.
+      // That is safe here because setup.js clears the page after every test
+      // and none of these components keep state outside React.
+      isolate: false,
+      // Worker threads start faster than separate Node processes (forks).
+      pool: "threads",
     },
   }),
 );

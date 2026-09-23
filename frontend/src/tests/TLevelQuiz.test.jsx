@@ -44,7 +44,7 @@ describe("Is a T Level right for me? quiz", () => {
   });
 
   it("will not give a result until every question is answered", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderQuiz();
 
     await user.click(seeResult());
@@ -56,7 +56,7 @@ describe("Is a T Level right for me? quiz", () => {
   });
 
   it("counts answers as they are given", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderQuiz();
 
     const firstGroup = screen.getAllByRole("group")[0];
@@ -78,7 +78,7 @@ describe("Is a T Level right for me? quiz", () => {
     [[1, 1, 1, 1, 0, 0], ANOTHER_ROUTE.heading], // 4, just below it
     [[0, 0, 0, 0, 0, 0], ANOTHER_ROUTE.heading],
   ])("scores %j as %s", async (scores, expectedHeading) => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderQuiz();
 
     await answerAll(user, scores);
@@ -88,7 +88,7 @@ describe("Is a T Level right for me? quiz", () => {
   });
 
   it("moves focus to the result, so keyboard users land on it", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderQuiz();
 
     await answerAll(user, [2, 2, 2, 2, 2, 2]);
@@ -99,7 +99,7 @@ describe("Is a T Level right for me? quiz", () => {
   });
 
   it("clears everything with Start again", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderQuiz();
 
     await answerAll(user, [2, 2, 2, 2, 2, 2]);
