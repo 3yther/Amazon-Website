@@ -26,8 +26,10 @@ describe("About page FAQ", () => {
 
   it("opens an answer when its question is clicked", async () => {
     // NEW CONCEPT: userEvent acts like a real person: it moves focus, presses
-    // keys and clicks, firing the same events a browser would.
-    const user = userEvent.setup();
+    // keys and clicks, firing the same events a browser would. delay: null
+    // skips the tiny pause it normally leaves between actions, which only
+    // slows tests down. The same setting is used in every test file.
+    const user = userEvent.setup({ delay: null });
     render(<AboutFaq />);
 
     await user.click(questionButton(FAQS[0]));
@@ -37,7 +39,7 @@ describe("About page FAQ", () => {
   });
 
   it("keeps only one answer open at a time", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     render(<AboutFaq />);
 
     await user.click(questionButton(FAQS[0]));
@@ -49,7 +51,7 @@ describe("About page FAQ", () => {
   });
 
   it("closes an open answer when its question is clicked again", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     render(<AboutFaq />);
 
     await user.click(questionButton(FAQS[0]));
@@ -59,7 +61,7 @@ describe("About page FAQ", () => {
   });
 
   it("works from the keyboard with Tab, Enter and Space", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     render(<AboutFaq />);
 
     await user.tab();

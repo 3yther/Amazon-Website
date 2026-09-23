@@ -40,7 +40,7 @@ describe("Accessibility of the information pages", () => {
 
   it("About still passes with an FAQ answer open and a quiz error showing", async () => {
     // The page changes as people use it, so check it in a used state too.
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     const { container } = renderPage(About);
 
     await user.click(screen.getByRole("button", { name: FAQS[0].question }));
