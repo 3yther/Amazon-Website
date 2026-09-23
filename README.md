@@ -2,6 +2,7 @@
 
 **Amazon Emerging Talent Digital T Level project** - information and advice about T Levels, free and gated digital content, and a way to register interest in Amazon's T Level opportunities, all in one place.
 
+[![CI](https://github.com/3yther/Amazon-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/3yther/Amazon-Website/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.11-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-REST_Framework-092E20?logo=django&logoColor=white)
 ![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)
@@ -30,6 +31,7 @@
 - [Design principles](#design-principles)
 - [Team](#team)
 - [Notes](#notes)
+- [Licence](#licence)
 
 ## About
 
@@ -220,3 +222,7 @@ Built by five T Level students:
 - The pathway summaries in `backend/content/fixtures/pathways.json` are draft copy. Check them against gov.uk before launch.
 - Production swaps SQLite for PostgreSQL on RDS and local files for S3. See the comments in `backend/config/settings.py`.
 - Never commit `.env` files or `*.pem` keys.
+
+## Licence
+
+This is a student project built for the Amazon Emerging Talent Digital T Level programme, published for viewing and assessment only. All rights reserved. See [`LICENSE`](LICENSE) for details. "Amazon" and related marks belong to Amazon.com, Inc. or its affiliates; this is not an official Amazon product.
