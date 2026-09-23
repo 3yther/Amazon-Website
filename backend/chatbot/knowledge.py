@@ -106,12 +106,16 @@ VERIFIED_FACTS = (
         topic="Which pages this site has",
         text=(
             "The site has: Home, About T Levels (/about), T Levels at Amazon "
-            "(/t-levels-at-amazon), Resources (/resources), T Level Near You "
-            "(/t-level-near-you), a knowledge quiz (/quiz), Help (/help), Contact us "
-            "(/contact), Sign up (/register) and Log in (/login). Signed-in visitors "
-            "also have My account (/account). Accessibility settings are at /accessibility."
+            "(/t-levels-at-amazon), Learning Pathways (/pathways), Resources (/resources), "
+            "T Level Near You (/t-level-near-you), a knowledge quiz (/quiz), FAQs (/faqs), "
+            "Help (/help), Register interest (/register-interest), Sign up (/register) and "
+            "Log in (/login). Support pages: Contact us (/contact), Report an issue "
+            "(/report-issue), Feedback (/feedback) and Accessibility help "
+            "(/accessibility-help). Accessibility settings and your profile are at "
+            "/accessibility. Legal pages: Terms of Service (/terms), Privacy Policy "
+            "(/privacy), Cookie Policy (/cookies) and GDPR and data rights (/data-rights)."
         ),
-        source="The routes in frontend/src/App.jsx, checked 2026-09-23.",
+        source="The routes in frontend/src/App.jsx, checked 2026-09-24.",
     ),
     Fact(
         topic="Getting an account, and what needs one",
@@ -127,8 +131,12 @@ VERIFIED_FACTS = (
     ),
     Fact(
         topic="How to register interest in an Amazon placement",
-        text="To register your interest with Amazon, use the Sign up page at /register.",
-        source='SITE_ROUTES in frontend/src/helpContent.js ("I want to register my interest with Amazon").',
+        text=(
+            "To register your interest with Amazon, use the Register interest form at "
+            "/register-interest. You do not need an account. It asks for your name, email, "
+            "whether you are a student, parent or teacher, and a pathway."
+        ),
+        source="frontend/src/pages/RegisterInterest.jsx and POST /api/interest/, checked 2026-09-24.",
     ),
     # --- T Levels in general --------------------------------------------------
     quoted(

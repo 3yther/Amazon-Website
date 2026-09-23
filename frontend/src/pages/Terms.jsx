@@ -1,10 +1,7 @@
-// Placeholder until the Terms and Conditions are written.
+import LegalPage from "../components/LegalPage.jsx";
+import { TERMS } from "../legalContent.js";
+
+/** Terms of Service. The wording lives in legalContent.js. */
 export default function Terms() {
-  return (
-    <section className="intro" aria-labelledby="page-title">
-      <p className="label">In progress</p>
-      <h1 id="page-title">Terms and Conditions</h1>
-      <p className="lead">Our terms and conditions are coming soon.</p>
-    </section>
-  );
+  return <LegalPage page={TERMS} />;
 }

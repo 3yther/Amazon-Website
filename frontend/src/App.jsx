@@ -8,16 +8,23 @@ import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
 import About from "./pages/About.jsx";
 import Accessibility from "./pages/Accessibility.jsx";
+import AccessibilityHelp from "./pages/AccessibilityHelp.jsx";
 import Contact from "./pages/Contact.jsx";
+import Cookies from "./pages/Cookies.jsx";
+import DataRights from "./pages/DataRights.jsx";
+import Faqs from "./pages/Faqs.jsx";
 import Feedback from "./pages/Feedback.jsx";
 import ContentLibrary from "./pages/ContentLibrary.jsx";
 import Help from "./pages/Help.jsx";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import NearYou from "./pages/NearYou.jsx";
+import Pathways from "./pages/Pathways.jsx";
 import Privacy from "./pages/Privacy.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import Register from "./pages/Register.jsx";
+import RegisterInterest from "./pages/RegisterInterest.jsx";
+import ReportIssue from "./pages/ReportIssue.jsx";
 import Terms from "./pages/Terms.jsx";
 import TLevelsAtAmazon from "./pages/TLevelsAtAmazon.jsx";
 
@@ -68,11 +75,18 @@ export default function App() {
           <Route path="/t-level-near-you" element={<PageTitle title="T-Level Near you"><NearYou /></PageTitle>} />
           <Route path="/quiz" element={<PageTitle title="Quiz"><Quiz /></PageTitle>} />
           <Route path="/help" element={<PageTitle title="Help"><Help /></PageTitle>} />
+          <Route path="/register-interest" element={<PageTitle title="Register interest"><RegisterInterest /></PageTitle>} />
+          <Route path="/pathways" element={<PageTitle title="Learning Pathways"><Pathways /></PageTitle>} />
+          <Route path="/faqs" element={<PageTitle title="FAQs"><Faqs /></PageTitle>} />
           <Route path="/register" element={<PageTitle title="Sign up"><Register /></PageTitle>} />
           <Route path="/login" element={<PageTitle title="Login"><Login /></PageTitle>} />
           {/* Linked from the footer. */}
-          <Route path="/terms" element={<PageTitle title="Terms and Conditions"><Terms /></PageTitle>} />
+          <Route path="/terms" element={<PageTitle title="Terms of Service"><Terms /></PageTitle>} />
           <Route path="/privacy" element={<PageTitle title="Privacy Policy"><Privacy /></PageTitle>} />
+          <Route path="/cookies" element={<PageTitle title="Cookie Policy"><Cookies /></PageTitle>} />
+          <Route path="/data-rights" element={<PageTitle title="GDPR and data rights"><DataRights /></PageTitle>} />
+          <Route path="/accessibility-help" element={<PageTitle title="Accessibility help"><AccessibilityHelp /></PageTitle>} />
+          <Route path="/report-issue" element={<PageTitle title="Report an issue"><ReportIssue /></PageTitle>} />
           <Route path="/accessibility" element={<PageTitle title="Accessibility"><Accessibility /></PageTitle>} />
           <Route path="/contact" element={<PageTitle title="Contact us"><Contact /></PageTitle>} />
           <Route path="/feedback" element={<PageTitle title="Feedback"><Feedback /></PageTitle>} />

@@ -118,7 +118,7 @@ export default function TLevelsAtAmazon() {
 
         <RouteSteps steps={ROUTE_IN} />
 
-        <Link className="button button--primary route__action" to="/register">
+        <Link className="button button--primary route__action" to="/register-interest">
           Register your interest
         </Link>
       </section>
