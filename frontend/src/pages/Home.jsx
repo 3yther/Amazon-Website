@@ -75,7 +75,6 @@ function Hero({ audience, subheadRef }) {
     <section ref={hero} className="hero" aria-labelledby="page-title">
       <RisingSubjects />
       <div className="hero__content">
-        <p className="label">Amazon Emerging Talent</p>
         <h1 id="page-title" className="hero__title">
           T-Levels, with a smile.
         </h1>

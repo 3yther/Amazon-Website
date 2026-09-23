@@ -211,10 +211,10 @@
    aria-selected for screen readers. The orange underline is decoration on
    top; on its own it would only be 2:1, which fails WCAG 1.4.11. */
 .pathways__tab[aria-selected="true"] {
-  background: var(--blue);
-  border-color: var(--blue);
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
   border-bottom-color: var(--orange);
-  color: var(--paper);
+  color: var(--ink-inverse);
 }
 
 /* Hidden panels are completely removed from the layout. */
@@ -491,8 +491,8 @@
 }
 
 .grades thead th {
-  background: var(--blue);
-  color: var(--paper);
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
