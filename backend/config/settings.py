@@ -228,6 +228,7 @@ REST_FRAMEWORK = {
     # (e.g. Redis) and set NUM_PROXIES when running behind a load balancer.
     "DEFAULT_THROTTLE_RATES": {
         "interest": "10/hour",
+        "feedback": "10/hour",
         # Every chat message costs us an AI call, so this caps what one visitor
         # can spend. Generous enough for a real conversation.
         "chat": "60/hour",

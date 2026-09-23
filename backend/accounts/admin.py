@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Profile, UserPreference
+from .models import Feedback, Profile, UserPreference
 
 
 class ProfileInline(admin.StackedInline):
@@ -38,3 +38,18 @@ class UserPreferenceAdmin(admin.ModelAdmin):
     search_fields = ["user__username"]
     list_select_related = ["user"]
     readonly_fields = ["created_at", "updated_at"]
+
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    """Read-only, like ExpressionOfInterest: what people sent is never changed."""
+
+    list_display = ["category", "user", "email", "created_at"]
+    list_filter = ["category", "created_at"]
+    search_fields = ["message", "email", "user__username"]
+    list_select_related = ["user"]
+    date_hierarchy = "created_at"
+    readonly_fields = ["category", "message", "email", "user", "created_at"]
+
+    def has_add_permission(self, request):
+        return False

@@ -13,9 +13,8 @@ const ROLE_LABELS = {
 };
 
 const MENU_ITEMS = [
-  { to: "/account", label: "My Account" },
+  { to: "/accessibility", label: "Profile & Settings" },
   { to: "/accessibility?tab=security", label: "Security Settings" },
-  { to: "/accessibility", label: "Accessibility Settings" },
   { to: "/contact", label: "Contact Us" },
 ];
 
