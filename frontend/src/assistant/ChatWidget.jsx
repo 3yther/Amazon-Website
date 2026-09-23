@@ -170,7 +170,12 @@ export default function ChatWidget() {
   const conversationStarted = messages.some((message) => message.role === "user");
 
   return (
-    <div className={`assistant${reducedMotion ? " assistant--still" : ""}`}>
+    // An aside, so the widget sits inside a landmark like the rest of the page.
+    // Named "Assistant" so it does not share a name with the dialog inside it.
+    <aside
+      className={`assistant${reducedMotion ? " assistant--still" : ""}`}
+      aria-label="Assistant"
+    >
       {open && (
         <div
           className="assistant__panel"
@@ -255,7 +260,7 @@ export default function ChatWidget() {
         <AssistantMascot reducedMotion={reducedMotion} />
         <span className="sr-only">{open ? "Close the assistant" : "Open the assistant"}</span>
       </button>
-    </div>
+    </aside>
   );
 }
 

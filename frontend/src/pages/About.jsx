@@ -117,8 +117,14 @@ export default function About() {
             screen readers, and scope tells them which heading owns each cell. */}
         {/* NEW CONCEPT: a container that can scroll must be reachable by
             keyboard, so it takes tabIndex 0. Anything focusable needs an
-            accessible name, which is why it is also a labelled region. */}
-        <div className="grades__scroll" tabIndex={0} role="region" aria-labelledby="grades-title">
+            accessible name, which is why it is also a labelled region. Its name
+            differs from the section's, so the two landmarks are not confused. */}
+        <div
+          className="grades__scroll"
+          tabIndex={0}
+          role="region"
+          aria-label="Grades and UCAS points table"
+        >
           <table className="grades">
             <caption className="sr-only">
               T Level overall grades and the UCAS Tariff points each one is worth
