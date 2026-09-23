@@ -50,7 +50,7 @@ The site does three jobs:
 - **Accounts** with sign up and log in, so gated content unlocks for signed-in users.
 - **Expression of Interest** form, validated server side and rate limited.
 - **Find Near You** page to find T Level courses and placements nearby.
-- **AI chatbot** to answer T Level questions (in progress).
+- **AI assistant** that answers T Level questions. It needs an `ANTHROPIC_API_KEY` on the backend; without one the widget shows a fallback message and the rest of the site still works.
 - **Help, About and T Level at Amazon** information pages.
 - **Staff admin** where Amazon staff review submissions and manage content.
 
@@ -88,7 +88,7 @@ backend/
   accounts/    Profile (extends Django's built-in User)
   content/     Pathway, ContentItem, content API
   interest/    ExpressionOfInterest, submission API
-  chatbot/     ChatMessage (model only for now)
+  chatbot/     ChatMessage, AI assistant API (/api/chat/)
 frontend/
   src/api.js                    all calls to the Django API
   src/pages/ContentLibrary.jsx  example page: lists content from the API
@@ -144,6 +144,7 @@ Both `backend/` and `frontend/` ship an `.env.example` file. Copy each one and f
 | `DJANGO_ALLOWED_HOSTS` | Always | Comma-separated hostnames Django will serve. Defaults to `localhost,127.0.0.1`. |
 | `CORS_ALLOWED_ORIGINS` | If cross-origin | Only when the React app is served from a different origin than the API. The Vite proxy makes them the same origin locally, so you can leave the default. |
 | `CSRF_TRUSTED_ORIGINS` | If cross-origin | Same as above, for CSRF. |
+| `ANTHROPIC_API_KEY` | For the assistant | Key from console.anthropic.com. Without it the chat widget shows its fallback message. Never commit it. |
 | `DATABASE_URL` | Deployed only | A `postgres://` URL. When set, it replaces SQLite. Leave unset locally. |
 | `DJANGO_BEHIND_HTTPS_PROXY` | Deployed only | `true` when a proxy in front ends HTTPS (Railway does). |
 
