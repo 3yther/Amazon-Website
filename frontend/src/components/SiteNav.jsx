@@ -84,7 +84,7 @@ export default function SiteNav() {
       <button
         ref={menuButton}
         type="button"
-        className="button menu-toggle sticky-hamburger"
+        className="button menu-toggle"
         aria-label="Menu"
         aria-expanded={menuOpen}
         aria-controls="menu-overlay"

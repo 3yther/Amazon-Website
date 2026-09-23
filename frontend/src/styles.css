@@ -30,9 +30,40 @@
   --text-primary: var(--blue);
   --text-secondary: var(--ink-muted);
   --border-light: var(--line);
-  --paper-dark: #232f3e;
+  --paper-dark: #1a2430;
   --text-dark: #fafaf7;
   --border-dark-mode: rgb(250 250 247 / 0.2);
+
+  /* Chrome that is dark in BOTH themes, and the ink that sits on it: the
+     header, the footer, the photo scrim on the audience cards, table heads.
+     These deliberately do NOT flip with the theme.
+     --blue/--paper are the page's ink and page's background, so dark mode
+     swaps them. Anything that used them to mean "dark panel with light text
+     on it" swapped too and came out dark-on-dark, which is what made the
+     audience-card text unreadable in dark mode. Use these instead whenever a
+     surface is meant to stay dark whatever the theme. */
+  --surface-inverse: #232f3e;
+  --ink-inverse: #fafaf7;
+
+  /* Orange is a light chip in both themes, so its ink is always the dark
+     navy. var(--blue) here would turn light in dark mode and drop the
+     contrast to about 2:1. */
+  --ink-on-orange: #232f3e;
+
+  /* The one sanctioned non-brand colour, for destructive actions only. The
+     light-mode red is too dark to read on the dark page, so it lightens. */
+  --danger: #b3261e;
+
+  /* A flat dark panel behind text laid over a photo. Stronger than
+     --overlay: it has to carry text contrast over whatever the photo does,
+     so it holds 6:1 for light text even over a white patch. Flat, not a
+     gradient (see the design rules in CONTEXT.md). */
+  --scrim: rgb(35 47 62 / 0.82);
+
+  /* How strongly the drifting subject names show through (RisingSubjects).
+     Light ink on a dark page needs more alpha than dark ink on a light one
+     to read as the same subtle watermark, so dark mode raises this. */
+  --subject-strength: 1;
 
   /* How far a preference has moved something, applied by
      useAccessibilityPreferences.js. Defaults are a no-op. */
@@ -50,6 +81,8 @@
     --blue: var(--text-dark);
     --ink-muted: #b7bfc9;
     --line: var(--border-dark-mode);
+    --danger: #f2857a;
+    --subject-strength: 2.6;
   }
 }
 
@@ -61,6 +94,8 @@ html.dark-mode {
   --blue: var(--text-dark);
   --ink-muted: #b7bfc9;
   --line: var(--border-dark-mode);
+  --danger: #f2857a;
+  --subject-strength: 2.6;
 }
 
 html {
@@ -181,13 +216,13 @@ main:focus {
 }
 
 .skip-link {
-  position: absolute;
+  position: fixed;
   top: -100px;
   left: var(--gutter);
-  z-index: 10;
+  z-index: 40;
   padding: 10px 14px;
   background: var(--orange);
-  color: var(--blue);
+  color: var(--ink-on-orange);
   font-weight: 700;
   border-radius: var(--radius);
 }
@@ -209,9 +244,22 @@ main:focus {
 
 /* ---------- Header and footer ---------- */
 
+/* Sticky at every width, so the menu, brand and account button are reachable
+   from any scroll position. The background is opaque (--surface-inverse, not
+   a translucent value) because page content now scrolls underneath it.
+
+   Stacking order, lowest first: page content, .account-dropdown (5, inside
+   this header's own stacking context), .site-header (20), .modal-overlay
+   (30, so a confirmation dialog still covers the header rather than leaving
+   it live above the dim), .skip-link (40, so focusing it is never hidden
+   behind the header). The menu overlay is a native <dialog> opened with
+   showModal(), which the browser puts in the top layer above all of these. */
 .site-header {
-  background: var(--blue);
-  color: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
   border-bottom: 3px solid var(--orange);
 }
 
@@ -248,21 +296,22 @@ main:focus {
   outline-color: var(--orange);
 }
 
-/* Header buttons sit on dark blue, so they invert to paper on hover. */
+/* Header buttons sit on dark blue in both themes, so they invert to the
+   light ink on hover. */
 .site-header .button {
-  border-color: var(--paper);
-  color: var(--paper);
+  border-color: var(--ink-inverse);
+  color: var(--ink-inverse);
 }
 
 .site-header .button--primary {
   border-color: var(--orange);
-  color: var(--blue);
+  color: var(--ink-on-orange);
 }
 
 .site-header .button:hover {
-  background: var(--paper);
-  border-color: var(--paper);
-  color: var(--blue);
+  background: var(--ink-inverse);
+  border-color: var(--ink-inverse);
+  color: var(--surface-inverse);
 }
 
 /* Menu button: shown at every width. It opens the full-screen menu overlay,
@@ -275,9 +324,9 @@ main:focus {
 }
 
 .site-header .menu-toggle[aria-expanded="true"] {
-  background: var(--paper);
-  border-color: var(--paper);
-  color: var(--blue);
+  background: var(--ink-inverse);
+  border-color: var(--ink-inverse);
+  color: var(--surface-inverse);
 }
 
 .menu-toggle .icon {
@@ -286,7 +335,7 @@ main:focus {
 }
 
 .wordmark {
-  color: var(--paper);
+  color: var(--ink-inverse);
   font-size: 1.375rem;
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -306,8 +355,8 @@ main {
    two site colours: orange for the small mono labels (6.34:1 on blue, see the
    step__number comment above) and paper for body text and links (>10:1). */
 .site-footer {
-  background: var(--blue);
-  color: var(--paper);
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
 }
 
 .site-footer :focus-visible {
@@ -344,7 +393,7 @@ main {
 }
 
 .footer-column p {
-  color: var(--paper);
+  color: var(--ink-inverse);
 }
 
 .footer-column ul {
@@ -374,7 +423,7 @@ main {
 }
 
 .footer-bottom .label {
-  color: var(--paper);
+  color: var(--ink-inverse);
 }
 
 /* ---------- Account menu ---------- */
@@ -396,14 +445,14 @@ main {
   border: 0;
   border-radius: 50%;
   background: var(--orange);
-  color: var(--blue);
+  color: var(--ink-on-orange);
   font-size: 1.0625rem;
   font-weight: 800;
   cursor: pointer;
 }
 
 .account-button[aria-expanded="true"] {
-  outline: 3px solid var(--paper);
+  outline: 3px solid var(--ink-inverse);
   outline-offset: 2px;
 }
 
@@ -725,8 +774,8 @@ main {
      dark loading colour stops at the border, so an unchosen edge is clear. */
   border: 3px solid transparent;
   border-radius: var(--radius);
-  background: var(--blue) padding-box;
-  color: var(--paper);
+  background: var(--surface-inverse) padding-box;
+  color: var(--ink-inverse);
 }
 
 .audience-card:hover {
@@ -747,7 +796,7 @@ main {
   padding: 3px 8px;
   border-radius: var(--radius);
   background: var(--orange);
-  color: var(--blue);
+  color: var(--ink-on-orange);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 700;
@@ -799,15 +848,18 @@ main {
   object-position: center 30%;
 }
 
+/* The scrim, not --overlay: this panel is the only thing guaranteeing the
+   text's contrast over an arbitrary photo, so it stays dark enough to hold
+   about 6:1 for the light text even where the photo underneath is white. */
 .audience-card__body {
   display: grid;
   gap: 8px;
   padding: 20px;
-  background: var(--overlay);
+  background: var(--scrim);
 }
 
 .audience-card__body .label {
-  color: var(--paper);
+  color: var(--ink-inverse);
 }
 
 .audience-card__body h3 {
@@ -919,7 +971,7 @@ main {
   margin-left: 4px;
   padding: 1px 5px;
   border-radius: var(--radius);
-  background: var(--blue);
+  background: var(--surface-inverse);
   color: var(--orange);
 }
 
@@ -1017,6 +1069,7 @@ main {
 .button--primary {
   background: var(--orange);
   border-color: var(--orange);
+  color: var(--ink-on-orange);
 }
 
 .button--primary:hover {
@@ -1266,6 +1319,7 @@ main:has(.register-page)::before {
 .tag--signup {
   background: var(--orange);
   border-color: var(--orange);
+  color: var(--ink-on-orange);
 }
 
 .card__title {
@@ -1427,8 +1481,10 @@ main:has(.register-page)::before {
   animation-name: rise-up-envelope;
 }
 
+/* Scaled by --subject-strength so the watermark reads the same in both
+   themes; the spotlight's --lit scales with it rather than being swamped. */
 .hero .rising-subjects__item::before {
-  opacity: var(--lit, var(--opacity));
+  opacity: calc(var(--lit, var(--opacity)) * var(--subject-strength));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1459,7 +1515,7 @@ main:has(.register-page)::before {
   }
   10%,
   85% {
-    opacity: var(--opacity);
+    opacity: calc(var(--opacity) * var(--subject-strength));
   }
   100% {
     opacity: 0;
@@ -1612,20 +1668,20 @@ input[type="range"] {
 }
 
 .button--danger {
-  border-color: #b3261e;
-  color: #b3261e;
+  border-color: var(--danger);
+  color: var(--danger);
 }
 
 .button--danger:hover {
-  background: #b3261e;
-  border-color: #b3261e;
-  color: var(--paper);
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--surface-inverse);
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10;
+  z-index: 30; /* above the sticky header, so the dim covers it too */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1645,77 +1701,4 @@ input[type="range"] {
 
 .modal .account-form {
   gap: 16px;
-}
-
-/* ---------- Sticky hamburger (tablet/mobile) ---------- */
-
-/* Below 1024px the same menu button (SiteNav.jsx) becomes a fixed floating
-   action button instead of sitting in the header, so it is reachable without
-   scrolling back up. Nothing above 1024px changes: the rules below only
-   apply inside the max-width query, and .menu-overlay itself is a native
-   <dialog> opened with showModal(), which the browser always renders in the
-   top layer above any z-index here, so this button never needs to compete
-   with it directly.
-
-   Bottom-LEFT, not bottom-right: the chat assistant (assistant.css, loaded
-   on every page) already fixes itself to bottom-right at the same 56px size
-   and the same --gutter offset, at z-index 50, and its panel opens upward
-   from that exact spot. Bottom-right here would either sit underneath the
-   assistant's button (it would win, being z-index 50) or get covered the
-   moment the assistant panel opens, so the hamburger takes the opposite
-   corner instead, where it can never collide with it.
-
-   z-index 51, above the assistant's 50: below 480px wide, assistant.css
-   stretches .assistant's own flex container to the full page width (so its
-   panel can go edge to edge there), which puts an invisible, click-catching
-   box over this corner too even though only its own button is painted. A
-   higher z-index here wins the hit-test at this button's own footprint
-   without touching assistant.css, which asks in its own header comment not
-   to be edited alongside other work. */
-@media (max-width: 1023px) {
-  .site-header .sticky-hamburger {
-    position: fixed;
-    left: calc(var(--gutter) + env(safe-area-inset-left));
-    bottom: calc(var(--gutter) + env(safe-area-inset-bottom));
-    z-index: 51;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    /* Blue icon on orange, not white: white-on-orange is ~2.1:1 and fails the
-       3:1 minimum for non-text UI components. Matches .account-button, which
-       uses the same blue-on-orange pairing for the same reason. */
-    background: var(--orange);
-    border-color: var(--orange);
-    color: var(--blue);
-    box-shadow: 0 4px 12px rgb(35 47 62 / 0.35);
-  }
-
-  .site-header .sticky-hamburger:hover {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: var(--paper);
-  }
-
-  .site-header .sticky-hamburger[aria-expanded="true"] {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: var(--paper);
-  }
-
-  /* Floats over arbitrary page content, so a single outline colour cannot
-     guarantee contrast against whatever is behind it. The paper ring gives a
-     light halo over dark backgrounds; the blue outline outside it covers
-     light ones (the site's default focus colour). */
-  .site-header .sticky-hamburger:focus-visible {
-    outline: 3px solid var(--blue);
-    outline-offset: 2px;
-    box-shadow:
-      0 0 0 5px var(--paper),
-      0 4px 12px rgb(35 47 62 / 0.35);
-  }
-
-  .site-header .sticky-hamburger .icon {
-    width: 28px;
-    height: 28px;
-  }
 }
