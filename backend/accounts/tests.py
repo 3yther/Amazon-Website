@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient, APITestCase
 
-from .models import Profile
+from .models import Profile, UserPreference
 
 CSRF_URL = "/api/accounts/csrf/"
 REGISTER_URL = "/api/accounts/register/"
 LOGIN_URL = "/api/accounts/login/"
 LOGOUT_URL = "/api/accounts/logout/"
 ME_URL = "/api/accounts/me/"
+PREFERENCES_URL = "/api/accounts/user-preferences/"
+CHANGE_PASSWORD_URL = "/api/accounts/change-password/"
+DEACTIVATE_URL = "/api/accounts/deactivate-account/"
 
 PASSWORD = "harbour-lantern-47"
 
@@ -159,10 +162,24 @@ class SessionApiTests(APITestCase):
         self.client.login(username="ada", password=PASSWORD)
         response = self.client.get(ME_URL)
         self.assertEqual(response.status_code, 200)
+        data = response.data
+        preferences = data.pop("preferences")
+        last_password_changed = data.pop("last_password_changed")
         self.assertEqual(
-            response.data,
-            {"id": self.user.id, "username": "ada", "user_type": "teacher", "pathway_interest": "Media"},
+            data,
+            {
+                "id": self.user.id,
+                "username": "ada",
+                "user_type": "teacher",
+                "pathway_interest": "Media",
+                "first_name": "",
+                "last_name": "",
+                "email": "",
+                "phone": "",
+            },
         )
+        self.assertIsNotNone(last_password_changed)
+        self.assertEqual(preferences["theme"], "system")
 
 
 class CsrfApiTests(APITestCase):
@@ -205,3 +222,182 @@ class CsrfApiTests(APITestCase):
         token = self.client.get(CSRF_URL).data["csrf_token"]  # a new token is issued on login
         response = self.client.post(LOGOUT_URL, HTTP_X_CSRFTOKEN=token)
         self.assertEqual(response.status_code, 204)
+
+
+class UserPreferenceApiTests(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user("ada", password=PASSWORD)
+        Profile.objects.create(user=cls.user, user_type="student")
+
+    def setUp(self):
+        self.client.login(username="ada", password=PASSWORD)
+
+    def test_signed_out_request_rejected(self):
+        self.client.logout()
+        self.assertEqual(self.client.get(PREFERENCES_URL).status_code, 401)
+
+    def test_get_creates_defaults_on_first_access(self):
+        self.assertFalse(UserPreference.objects.filter(user=self.user).exists())
+        response = self.client.get(PREFERENCES_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["font_size_scale"], 100)
+        self.assertEqual(response.data["theme"], "system")
+        self.assertTrue(UserPreference.objects.filter(user=self.user).exists())
+
+    def test_patch_updates_and_round_trips(self):
+        response = self.client.patch(
+            PREFERENCES_URL,
+            {"font_size_scale": 120, "high_contrast": True, "theme": "dark"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["font_size_scale"], 120)
+        self.assertTrue(response.data["high_contrast"])
+        self.assertEqual(response.data["theme"], "dark")
+
+        # And it is really saved, not just echoed back.
+        response = self.client.get(PREFERENCES_URL)
+        self.assertEqual(response.data["font_size_scale"], 120)
+        self.assertEqual(response.data["theme"], "dark")
+
+    def test_patch_leaves_other_fields_untouched(self):
+        self.client.patch(PREFERENCES_URL, {"language": "es"}, format="json")
+        response = self.client.patch(PREFERENCES_URL, {"font_size_scale": 90}, format="json")
+        self.assertEqual(response.data["language"], "es")
+        self.assertEqual(response.data["font_size_scale"], 90)
+
+    def test_font_size_scale_out_of_range_rejected(self):
+        response = self.client.patch(PREFERENCES_URL, {"font_size_scale": 200}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("font_size_scale", response.data)
+
+    def test_text_spacing_level_out_of_range_rejected(self):
+        response = self.client.patch(PREFERENCES_URL, {"text_spacing_level": 4}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("text_spacing_level", response.data)
+
+    def test_invalid_choice_rejected(self):
+        response = self.client.patch(PREFERENCES_URL, {"theme": "sepia"}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("theme", response.data)
+
+
+class ChangePasswordApiTests(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user("ada", password=PASSWORD)
+        Profile.objects.create(user=cls.user, user_type="student")
+
+    def setUp(self):
+        self.client.login(username="ada", password=PASSWORD)
+
+    def test_signed_out_request_rejected(self):
+        self.client.logout()
+        response = self.client.post(CHANGE_PASSWORD_URL, {}, format="json")
+        self.assertEqual(response.status_code, 401)
+
+    def test_successful_change(self):
+        new_password = "harbour-lantern-48"
+        response = self.client.post(
+            CHANGE_PASSWORD_URL,
+            {
+                "current_password": PASSWORD,
+                "new_password": new_password,
+                "confirm_password": new_password,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"success": True})
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(new_password))
+
+        # update_session_auth_hash kept this session signed in.
+        self.assertEqual(self.client.get(ME_URL).status_code, 200)
+
+        # And a new login with the new password works.
+        self.client.logout()
+        login_response = self.client.post(
+            LOGIN_URL, {"username": "ada", "password": new_password}, format="json"
+        )
+        self.assertEqual(login_response.status_code, 200)
+
+    def test_wrong_current_password_rejected(self):
+        response = self.client.post(
+            CHANGE_PASSWORD_URL,
+            {
+                "current_password": "not-the-password",
+                "new_password": "harbour-lantern-48",
+                "confirm_password": "harbour-lantern-48",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("current_password", response.data)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(PASSWORD))
+
+    def test_mismatched_confirm_password_rejected(self):
+        response = self.client.post(
+            CHANGE_PASSWORD_URL,
+            {
+                "current_password": PASSWORD,
+                "new_password": "harbour-lantern-48",
+                "confirm_password": "harbour-lantern-49",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("confirm_password", response.data)
+
+    def test_weak_new_password_rejected(self):
+        response = self.client.post(
+            CHANGE_PASSWORD_URL,
+            {"current_password": PASSWORD, "new_password": "123", "confirm_password": "123"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("new_password", response.data)
+
+
+class DeactivateAccountApiTests(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user("ada", password=PASSWORD)
+        Profile.objects.create(user=cls.user, user_type="student")
+
+    def setUp(self):
+        self.client.login(username="ada", password=PASSWORD)
+
+    def test_signed_out_request_rejected(self):
+        self.client.logout()
+        response = self.client.post(DEACTIVATE_URL, {"password": PASSWORD}, format="json")
+        self.assertEqual(response.status_code, 401)
+
+    def test_wrong_password_rejected(self):
+        response = self.client.post(DEACTIVATE_URL, {"password": "not-the-password"}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.is_active)
+        self.assertFalse(self.user.profile.is_deactivated)
+
+    def test_successful_deactivation_signs_out_and_blocks_login(self):
+        response = self.client.post(DEACTIVATE_URL, {"password": PASSWORD}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"success": True})
+
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_active)
+        self.assertTrue(self.user.profile.is_deactivated)
+        self.assertIsNotNone(self.user.profile.deactivated_at)
+
+        # The session ended...
+        self.assertEqual(self.client.get(ME_URL).status_code, 401)
+
+        # ...and a deactivated account cannot sign back in.
+        login_response = self.client.post(
+            LOGIN_URL, {"username": "ada", "password": PASSWORD}, format="json"
+        )
+        self.assertEqual(login_response.status_code, 400)

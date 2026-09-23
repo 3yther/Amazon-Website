@@ -40,16 +40,21 @@ export function TextField({ id, label, hint, error, type = "text", ...inputProps
   );
 }
 
-export function SelectField({ id, label, error, children, ...selectProps }) {
+export function SelectField({ id, label, hint, error, children, ...selectProps }) {
   return (
     <div className="field">
       <label className="label" htmlFor={id}>
         {label}
       </label>
+      {hint && (
+        <p className="field__hint" id={`${id}-hint`}>
+          {hint}
+        </p>
+      )}
       <select
         id={id}
         aria-invalid={error ? true : undefined}
-        aria-describedby={describedBy(id, null, error)}
+        aria-describedby={describedBy(id, hint, error)}
         {...selectProps}
       >
         {children}
@@ -63,7 +68,7 @@ export function SelectField({ id, label, error, children, ...selectProps }) {
  * A single tick box with its label beside it. The label takes markup as well
  * as text, so it can hold a link, and clicking any of it ticks the box.
  */
-export function CheckboxField({ id, label, error, ...inputProps }) {
+export function CheckboxField({ id, label, hint, error, ...inputProps }) {
   return (
     <div className="field">
       <div className="checkbox">
@@ -71,11 +76,16 @@ export function CheckboxField({ id, label, error, ...inputProps }) {
           id={id}
           type="checkbox"
           aria-invalid={error ? true : undefined}
-          aria-describedby={describedBy(id, null, error)}
+          aria-describedby={describedBy(id, hint, error)}
           {...inputProps}
         />
         <label htmlFor={id}>{label}</label>
       </div>
+      {hint && (
+        <p className="field__hint" id={`${id}-hint`}>
+          {hint}
+        </p>
+      )}
       {error && <FieldError id={`${id}-error`} message={error} />}
     </div>
   );

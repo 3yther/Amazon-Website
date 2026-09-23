@@ -54,10 +54,10 @@ export function getCsrfToken({ refresh = false } = {}) {
   return csrfToken;
 }
 
-async function postJson(path, body) {
+async function sendJson(method, path, body) {
   const send = (token) =>
     fetch(`${API_BASE}${path}`, {
-      method: "POST",
+      method,
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -75,6 +75,14 @@ async function postJson(path, body) {
   }
 
   return readResponse(response);
+}
+
+function postJson(path, body) {
+  return sendJson("POST", path, body);
+}
+
+function patchJson(path, body) {
+  return sendJson("PATCH", path, body);
 }
 
 /** All pathways, as a plain array. */
@@ -127,6 +135,45 @@ export async function login(username, password) {
 /** Sign out. Resolves to null. */
 export function logout() {
   return postJson("/api/accounts/logout/");
+}
+
+/**
+ * Update the signed-in user's name, email or phone.
+ * fields: any of first_name, last_name, email, phone.
+ * Resolves to the same shape as getCurrentUser().
+ */
+export function updateProfile(fields) {
+  return patchJson("/api/accounts/me/", fields);
+}
+
+/**
+ * The signed-in user's accessibility preferences, created with defaults on
+ * first request. See backend/accounts/models.py UserPreference for the fields.
+ */
+export function getPreferences(options) {
+  return request("/api/accounts/user-preferences/", options);
+}
+
+/** Partially update the signed-in user's accessibility preferences. */
+export function updatePreferences(fields) {
+  return patchJson("/api/accounts/user-preferences/", fields);
+}
+
+/**
+ * Change the signed-in user's password.
+ * fields: current_password, new_password, confirm_password.
+ * Resolves to { success: true }, or throws ApiError(400) with field errors.
+ */
+export function changePassword(fields) {
+  return postJson("/api/accounts/change-password/", fields);
+}
+
+/**
+ * Deactivate the signed-in user's account after confirming their password.
+ * Ends the session server-side, so call refresh() afterwards.
+ */
+export function deactivateAccount(password) {
+  return postJson("/api/accounts/deactivate-account/", { password });
 }
 
 /**

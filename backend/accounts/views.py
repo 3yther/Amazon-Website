@@ -1,4 +1,4 @@
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.middleware.csrf import get_token
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
@@ -6,11 +6,15 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import UserPreference
 from .serializers import (
     AccountSerializer,
+    ChangePasswordSerializer,
     CurrentUserSerializer,
+    DeactivateAccountSerializer,
     LoginSerializer,
     RegisterSerializer,
+    UserPreferenceSerializer,
 )
 
 # CSRF with session auth, and why these views do what they do:
@@ -124,15 +128,76 @@ class LogoutView(SignedInMixin, APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class MeView(SignedInMixin, generics.RetrieveAPIView):
+class MeView(SignedInMixin, generics.RetrieveUpdateAPIView):
     """
     GET /api/accounts/me/
 
-    Returns id, username, user_type and pathway_interest for the signed-in
+    Returns id, username, user_type, pathway_interest, first_name, last_name,
+    email, phone, last_password_changed and preferences for the signed-in
     user, or 401 when signed out. The front end calls this on page load.
+
+    PATCH /api/accounts/me/
+
+    Body: any of first_name, last_name, email, phone. Partial update, so only
+    fields present in the body are changed.
     """
 
     serializer_class = CurrentUserSerializer
 
     def get_object(self):
         return self.request.user
+
+
+class UserPreferenceView(SignedInMixin, generics.RetrieveUpdateAPIView):
+    """
+    GET /api/accounts/user-preferences/
+
+    Returns the signed-in user's accessibility preferences, creating them
+    with defaults on first request.
+
+    PATCH /api/accounts/user-preferences/
+
+    Partial update: only fields present in the body are changed. Each field
+    is validated against the ranges and choices in models.py.
+    """
+
+    serializer_class = UserPreferenceSerializer
+
+    def get_object(self):
+        preference, _ = UserPreference.objects.get_or_create(user=self.request.user)
+        return preference
+
+
+class ChangePasswordView(SignedInMixin, APIView):
+    """
+    POST /api/accounts/change-password/
+
+    Body: current_password, new_password, confirm_password.
+    Changing a password logs Django out of every other request carrying the
+    old session hash, so update_session_auth_hash keeps this one signed in.
+    Returns {"success": true}, or 400 with field errors.
+    """
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        update_session_auth_hash(request, user)
+        return Response({"success": True})
+
+
+class DeactivateAccountView(SignedInMixin, APIView):
+    """
+    POST /api/accounts/deactivate-account/
+
+    Body: password. Deactivates the account (so it can no longer sign in)
+    and ends the session. Returns {"success": true}, or 400 with a wrong
+    password.
+    """
+
+    def post(self, request):
+        serializer = DeactivateAccountSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        logout(request)
+        return Response({"success": True})

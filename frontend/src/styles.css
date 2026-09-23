@@ -20,6 +20,83 @@
   --container: 1120px;
   --gutter: clamp(16px, 4vw, 32px);
   --control-h: 44px;
+
+  /* Semantic tokens for dark mode: still only orange, blue and paper, just
+     with blue and paper swapping which one is "page" and which is "ink".
+     Written as literals matching --blue/--paper above, not var(--blue) /
+     var(--paper): html.dark-mode redefines --blue and --paper in the same
+     rule it uses these in, so a var() reference here would resolve back to
+     itself (a cycle), which CSS treats as invalid rather than swapped. */
+  --text-primary: var(--blue);
+  --text-secondary: var(--ink-muted);
+  --border-light: var(--line);
+  --paper-dark: #232f3e;
+  --text-dark: #fafaf7;
+  --border-dark-mode: rgb(250 250 247 / 0.2);
+
+  /* How far a preference has moved something, applied by
+     useAccessibilityPreferences.js. Defaults are a no-op. */
+  --font-scale: 1;
+  --text-spacing: normal;
+}
+
+/* Fallback for the "system" theme before useAccessibilityPreferences.js has
+   run (e.g. the first paint, or with JavaScript disabled). Once it runs it
+   sets .dark-mode or .light-mode explicitly and those win instead. */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) {
+    --paper: var(--paper-dark);
+    --surface: #2b3947;
+    --blue: var(--text-dark);
+    --ink-muted: #b7bfc9;
+    --line: var(--border-dark-mode);
+  }
+}
+
+/* An explicit choice of Dark in accessibility settings, or "Match system"
+   resolved to dark: same swap as above, forced regardless of the OS setting. */
+html.dark-mode {
+  --paper: var(--paper-dark);
+  --surface: #2b3947;
+  --blue: var(--text-dark);
+  --ink-muted: #b7bfc9;
+  --line: var(--border-dark-mode);
+}
+
+html {
+  font-size: calc(100% * var(--font-scale, 1));
+}
+
+body {
+  letter-spacing: var(--text-spacing, normal);
+}
+
+/* A stronger version of the same two colours: heavier borders and no muted
+   mid-tone text, so everything reads at full contrast. */
+body.high-contrast {
+  --ink-muted: var(--blue);
+  --line: rgb(35 47 62 / 0.5);
+}
+
+html.dark-mode body.high-contrast {
+  --ink-muted: var(--paper);
+  --line: rgb(250 250 247 / 0.5);
+}
+
+body[data-page-background="cream"] {
+  --paper: #f2ead9;
+}
+
+body[data-page-background="gray"] {
+  --paper: #e7e7e2;
+}
+
+body[data-outline-style="thick"] :focus-visible {
+  outline-width: 5px;
+}
+
+body[data-outline-style="dashed"] :focus-visible {
+  outline-style: dashed;
 }
 
 *,
@@ -225,32 +302,60 @@ main {
   padding-block: clamp(40px, 7vw, 80px);
 }
 
+/* Dark blue background so the footer reads as a distinct band, using only the
+   two site colours: orange for the small mono labels (6.34:1 on blue, see the
+   step__number comment above) and paper for body text and links (>10:1). */
 .site-footer {
-  border-top: 1px solid var(--line);
-  padding-block: 24px;
+  background: var(--blue);
+  color: var(--paper);
 }
 
-/* Links on one side, copyright on the other. Both wrap onto their own lines
-   on narrow screens. */
-.site-footer__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 32px;
+.site-footer :focus-visible {
+  outline-color: var(--orange);
 }
 
-.site-footer__links {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 24px;
+.site-footer .label {
+  color: var(--orange);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding-block: 48px 32px;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.footer-column {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.footer-column p {
+  color: var(--paper);
+}
+
+.footer-column ul {
+  display: grid;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 /* Full control height, so each link is an easy tap target. */
-.site-footer__links a {
+.footer-column a {
   display: inline-flex;
   align-items: center;
   min-height: var(--control-h);
@@ -258,9 +363,98 @@ main {
   font-weight: 600;
 }
 
-.site-footer__links a[aria-current="page"] {
+.footer-column a[aria-current="page"] {
   text-decoration-color: var(--orange);
   text-decoration-thickness: 3px;
+}
+
+.footer-bottom {
+  padding-block: 16px;
+  border-top: 1px solid rgb(250 250 247 / 0.2);
+}
+
+.footer-bottom .label {
+  color: var(--paper);
+}
+
+/* ---------- Account menu ---------- */
+
+.account-menu {
+  position: relative;
+  justify-self: end;
+}
+
+/* Circular initial button, on the same orange-background/blue-text chip
+   pattern used elsewhere (e.g. .tag--signup). */
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--blue);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.account-button[aria-expanded="true"] {
+  outline: 3px solid var(--paper);
+  outline-offset: 2px;
+}
+
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 5;
+  width: max-content;
+  max-width: 280px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--blue);
+}
+
+.dropdown-header {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dropdown-header p:first-child {
+  font-weight: 700;
+}
+
+.dropdown-links {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dropdown-links a,
+.dropdown-links .nav-button {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-h);
+  width: 100%;
+  font-weight: 600;
+  text-align: left;
+}
+
+.dropdown-links a:hover,
+.dropdown-links .nav-button:hover {
+  text-decoration: underline;
 }
 
 /* ---------- Menu overlay ---------- */
@@ -877,7 +1071,9 @@ select {
 /* ---------- Account forms ---------- */
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
   width: 100%;
   min-height: var(--control-h);
   padding: 0 12px;
@@ -1130,6 +1326,12 @@ main:has(.register-page)::before {
   font-weight: 800;
 }
 
+/* A save confirmation rather than an error: same shape, blue border instead
+   of orange, since orange on this site always means "needs your attention". */
+.notice--success {
+  border-color: var(--blue);
+}
+
 .load-more {
   display: flex;
   justify-content: center;
@@ -1251,4 +1453,184 @@ main:has(.register-page)::before {
     opacity: 0;
     transform: translate3d(0, calc(-100vh - 100%), 0);
   }
+}
+
+/* ---------- Accessibility settings ---------- */
+
+.tab-nav {
+  display: grid;
+  gap: 24px;
+}
+
+.tab-nav__list {
+  display: flex;
+  overflow-x: auto;
+  gap: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-nav__tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding: 0 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tab-nav__tab[aria-selected="true"] {
+  color: var(--blue);
+  border-bottom-color: var(--orange);
+}
+
+.tab-nav__panel {
+  display: grid;
+  gap: 24px;
+  max-width: 32rem;
+}
+
+@media (min-width: 1024px) {
+  .tab-nav {
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+  }
+
+  .tab-nav__list {
+    flex-direction: column;
+    overflow-x: visible;
+    padding-bottom: 0;
+    padding-right: 16px;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .tab-nav__tab {
+    justify-content: flex-start;
+    border-bottom: 0;
+    border-left: 3px solid transparent;
+    text-align: left;
+  }
+
+  .tab-nav__tab[aria-selected="true"] {
+    border-left-color: var(--orange);
+  }
+}
+
+/* Mobile: accordions instead of tabs, so nothing needs a sideways scroll. */
+.tab-nav--accordion details {
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-nav--accordion summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding-block: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab-nav--accordion .tab-nav__panel {
+  max-width: none;
+  padding-block: 4px 20px;
+}
+
+.settings-section {
+  display: grid;
+  gap: 20px;
+}
+
+.settings-section .account-form {
+  max-width: none;
+}
+
+.range-field__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.range-field__value {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.password-strength {
+  height: 4px;
+  margin-top: -8px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.password-strength__bar {
+  height: 100%;
+  width: calc(var(--strength, 0) * 100%);
+  background: var(--orange);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .password-strength__bar {
+    transition: width 150ms ease;
+  }
+}
+
+.danger-zone {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.button--danger {
+  border-color: #b3261e;
+  color: #b3261e;
+}
+
+.button--danger:hover {
+  background: #b3261e;
+  border-color: #b3261e;
+  color: var(--paper);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  background: var(--overlay);
+}
+
+.modal {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 26rem;
+  padding: clamp(20px, 5vw, 32px);
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.modal .account-form {
+  gap: 16px;
 }
