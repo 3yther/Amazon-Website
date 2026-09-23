@@ -1485,9 +1485,13 @@ main:has(.register-page)::before {
   cursor: pointer;
 }
 
+/* The indicator is dark blue, not orange: it is the only thing marking the
+   selected tab besides the text colour, so it needs 3:1 against the page
+   (WCAG 1.4.11). Orange is about 2:1 there. Dark blue flips to off-white in
+   dark mode, so it passes in both themes. */
 .tab-nav__tab[aria-selected="true"] {
   color: var(--blue);
-  border-bottom-color: var(--orange);
+  border-bottom-color: var(--blue);
 }
 
 .tab-nav__panel {
@@ -1519,7 +1523,7 @@ main:has(.register-page)::before {
   }
 
   .tab-nav__tab[aria-selected="true"] {
-    border-left-color: var(--orange);
+    border-left-color: var(--blue);
   }
 }
 

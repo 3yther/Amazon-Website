@@ -1,24 +1,27 @@
-# T-SMILE — Shared Project Context
+# T-SMILE: Shared Project Context
 
 > Paste this into Claude (or Claude Code) at the START of every coding session so
 > everyone's AI output stays consistent. Keep this file updated as decisions change.
 
 ## What we are building
 T-SMILE: a single responsive website for the Amazon Emerging Talent Digital T Level
-project. It informs people about T Levels (general + at Amazon), gives content
-(some free, some behind a sign-up), and captures Expressions of Interest.
+project. It informs people about T Levels (general and at Amazon), gives content
+(some free, some behind a sign-up), captures Expressions of Interest, and has an
+AI assistant that answers T Level questions.
 
 Audiences: students (16-18), parents/guardians, schools/teachers, Amazon staff (who
 receive interest submissions and manage content).
 
-## Tech stack (agreed — do not change without team agreement)
-- Backend: Python 3.11 + Django
-- Frontend: HTML, CSS, JavaScript, React
-- Database: PostgreSQL (SQLite locally for dev is fine)
-- Hosting: AWS (EC2 + RDS + S3), UK/EU region
-- Version control: GitHub, branch + pull-request workflow
+## Tech stack (agreed, do not change without team agreement)
+- Backend: Python 3.11, Django 5.2, Django REST Framework (JSON API under `/api/`)
+- Frontend: React 19 with React Router, built with Vite (a single-page app in `frontend/`)
+- AI assistant: Anthropic API, called only from the backend (`backend/chatbot/`)
+- Database: SQLite locally, PostgreSQL on the preview and in production
+- Hosting: Railway for the shared preview (see DEPLOYMENT.md); AWS (EC2 + RDS + S3),
+  UK/EU region, for the final deployment
+- Version control: GitHub, branch + pull-request workflow, CI runs on every PR
 
-## Design rules (STRICT — these define our look, do not break them)
+## Design rules (STRICT, these define our look, do not break them)
 - Colours: Amazon Orange #FF9900 and Amazon Dark Blue #232F3E only, on warm
   off-white #FAFAF7. No purple. No gradients.
 - No pill-shaped buttons (squared, small radius). No emoji icons (use SVG line icons).
@@ -27,22 +30,34 @@ receive interest submissions and manage content).
 - Bolder typography for headings; monospace for small labels.
 - Respect prefers-reduced-motion for any animation.
 - Accessibility target: WCAG 2.2 AA.
+- Orange fails contrast as text or as the only indicator of state (about 2:1 on
+  the page colour). Use it for decoration and fills; use dark blue for text,
+  focus rings and selected-state markers.
 
-## Conventions (so three people's code fits together)
-- Django app names: lowercase, singular where sensible (accounts, content, interest).
-- Templates: one base template all pages extend; shared header/footer as includes.
-- CSS: define colours once as variables; reuse, do not hardcode hex per page.
-- Branch names: feat/<area> (e.g. feat/auth, feat/resources, feat/eoi).
+## Conventions (so five people's code fits together)
+- Django app names: lowercase, singular where sensible (accounts, content, interest, chatbot).
+- React: pages in `frontend/src/pages/`, shared components in `frontend/src/components/`.
+  Page copy and data live in separate files (e.g. `aboutContent.js`) so wording can
+  change without touching components.
+- CSS: colours and shared classes (`.label`, `.section-intro`, `.button`) are defined
+  once in `styles.css`. A page's own CSS file only styles its own classes, never
+  redefines shared ones (Vite bundles all CSS together, so an override leaks site-wide).
+  Use the colour variables; never hardcode a hex or rgb value.
+- Branch names: `feat/<area>` for features (e.g. `feat/chatbot`), `fix/<area>` for fixes.
+  Nothing goes straight to `main`; open a PR and get it reviewed.
 - Never commit secrets, .env files, or *.pem keys. Check .gitignore first.
 - Write short docstrings/comments so a teammate (and a marker) can follow the code.
 
 ## Security (mentor stressed this)
-- Passwords hashed + salted (Django does this by default — use Django auth, do not roll your own).
+- Passwords hashed and salted (Django does this by default; use Django auth, do not roll your own).
 - Validate all user input server-side.
 - Database is never public; secrets live in environment variables, not in code.
+- The Anthropic API key stays on the backend. The browser never sees it.
 
 ## Who owns what (code)
-- Amir: auth + accounts + data models + integration + AI chatbot (Task 4)
-- Aaron: content library + resources + pages that display data
-- Micha: expression of interest + accessibility build
-(Adjust to match reality.)
+- Amir: framework for the whole site (routing, layout, nav, footer, accounts, data models,
+  settings), and the Railway preview
+- Aaron: AI assistant (`frontend/src/assistant/`, `backend/chatbot/`)
+- Micha: About, Help and T Levels at Amazon pages, plus accessibility across the site
+- Jakub: sign up and log in pages
+- Lloyd: Find Near You page
