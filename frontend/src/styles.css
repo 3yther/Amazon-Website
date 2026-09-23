@@ -1084,6 +1084,18 @@ input[type="tel"] {
   font: inherit;
 }
 
+textarea {
+  width: 100%;
+  min-height: 8rem;
+  padding: 10px 12px;
+  border: 1px solid var(--ink-muted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  resize: vertical;
+}
+
 /* Keep the dark border for contrast; the orange ring and the message below
    mark the error, so it never relies on colour alone. */
 [aria-invalid="true"] {
@@ -1637,4 +1649,77 @@ input[type="range"] {
 
 .modal .account-form {
   gap: 16px;
+}
+
+/* ---------- Sticky hamburger (tablet/mobile) ---------- */
+
+/* Below 1024px the same menu button (SiteNav.jsx) becomes a fixed floating
+   action button instead of sitting in the header, so it is reachable without
+   scrolling back up. Nothing above 1024px changes: the rules below only
+   apply inside the max-width query, and .menu-overlay itself is a native
+   <dialog> opened with showModal(), which the browser always renders in the
+   top layer above any z-index here, so this button never needs to compete
+   with it directly.
+
+   Bottom-LEFT, not bottom-right: the chat assistant (assistant.css, loaded
+   on every page) already fixes itself to bottom-right at the same 56px size
+   and the same --gutter offset, at z-index 50, and its panel opens upward
+   from that exact spot. Bottom-right here would either sit underneath the
+   assistant's button (it would win, being z-index 50) or get covered the
+   moment the assistant panel opens, so the hamburger takes the opposite
+   corner instead, where it can never collide with it.
+
+   z-index 51, above the assistant's 50: below 480px wide, assistant.css
+   stretches .assistant's own flex container to the full page width (so its
+   panel can go edge to edge there), which puts an invisible, click-catching
+   box over this corner too even though only its own button is painted. A
+   higher z-index here wins the hit-test at this button's own footprint
+   without touching assistant.css, which asks in its own header comment not
+   to be edited alongside other work. */
+@media (max-width: 1023px) {
+  .site-header .sticky-hamburger {
+    position: fixed;
+    left: calc(var(--gutter) + env(safe-area-inset-left));
+    bottom: calc(var(--gutter) + env(safe-area-inset-bottom));
+    z-index: 51;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    /* Blue icon on orange, not white: white-on-orange is ~2.1:1 and fails the
+       3:1 minimum for non-text UI components. Matches .account-button, which
+       uses the same blue-on-orange pairing for the same reason. */
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--blue);
+    box-shadow: 0 4px 12px rgb(35 47 62 / 0.35);
+  }
+
+  .site-header .sticky-hamburger:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+  }
+
+  .site-header .sticky-hamburger[aria-expanded="true"] {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--paper);
+  }
+
+  /* Floats over arbitrary page content, so a single outline colour cannot
+     guarantee contrast against whatever is behind it. The paper ring gives a
+     light halo over dark backgrounds; the blue outline outside it covers
+     light ones (the site's default focus colour). */
+  .site-header .sticky-hamburger:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+    box-shadow:
+      0 0 0 5px var(--paper),
+      0 4px 12px rgb(35 47 62 / 0.35);
+  }
+
+  .site-header .sticky-hamburger .icon {
+    width: 28px;
+    height: 28px;
+  }
 }

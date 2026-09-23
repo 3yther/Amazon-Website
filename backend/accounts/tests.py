@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient, APITestCase
 
-from .models import Profile, UserPreference
+from .models import Feedback, Profile, UserPreference
 
 CSRF_URL = "/api/accounts/csrf/"
 REGISTER_URL = "/api/accounts/register/"
@@ -11,6 +11,7 @@ ME_URL = "/api/accounts/me/"
 PREFERENCES_URL = "/api/accounts/user-preferences/"
 CHANGE_PASSWORD_URL = "/api/accounts/change-password/"
 DEACTIVATE_URL = "/api/accounts/deactivate-account/"
+FEEDBACK_URL = "/api/accounts/feedback/"
 
 PASSWORD = "harbour-lantern-47"
 
@@ -401,3 +402,66 @@ class DeactivateAccountApiTests(APITestCase):
             LOGIN_URL, {"username": "ada", "password": PASSWORD}, format="json"
         )
         self.assertEqual(login_response.status_code, 400)
+
+
+class FeedbackApiTests(APITestCase):
+    def test_anonymous_submission_with_email(self):
+        response = self.client.post(
+            FEEDBACK_URL,
+            {"category": "bug", "message": "The quiz page is blank on Safari.", "email": "ada@example.com"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data, {"success": True})
+
+        feedback = Feedback.objects.get()
+        self.assertEqual(feedback.category, "bug")
+        self.assertEqual(feedback.email, "ada@example.com")
+        self.assertIsNone(feedback.user)
+
+    def test_signed_in_submission_links_the_user(self):
+        user = User.objects.create_user("ada", password=PASSWORD)
+        Profile.objects.create(user=user, user_type="student")
+        self.client.login(username="ada", password=PASSWORD)
+
+        response = self.client.post(
+            FEEDBACK_URL,
+            {"category": "feature", "message": "Add a dark mode toggle to the homepage."},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+
+        feedback = Feedback.objects.get()
+        self.assertEqual(feedback.user, user)
+
+    def test_email_is_optional(self):
+        response = self.client.post(
+            FEEDBACK_URL, {"category": "general", "message": "Nice site."}, format="json"
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Feedback.objects.get().email, "")
+
+    def test_missing_message_rejected(self):
+        response = self.client.post(FEEDBACK_URL, {"category": "general"}, format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("message", response.data)
+        self.assertFalse(Feedback.objects.exists())
+
+    def test_invalid_category_rejected(self):
+        response = self.client.post(
+            FEEDBACK_URL,
+            {"category": "not-a-real-category", "message": "Something is wrong."},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("category", response.data)
+        self.assertFalse(Feedback.objects.exists())
+
+    def test_no_csrf_token_needed_when_signed_out(self):
+        # Unlike the signed-in-only endpoints above, this one has nothing to
+        # enforce CSRF on for an anonymous request (see the view's docstring).
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.post(
+            FEEDBACK_URL, {"category": "general", "message": "Works without a token."}, format="json"
+        )
+        self.assertEqual(response.status_code, 201)

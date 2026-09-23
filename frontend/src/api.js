@@ -186,6 +186,15 @@ export function submitInterest(fields) {
 }
 
 /**
+ * Send feedback about the site. Open to anyone: signed in or not.
+ * fields: category, message, email (optional; ignored server-side if signed in).
+ * Resolves to { success: true }.
+ */
+export function submitFeedback(fields) {
+  return postJson("/api/accounts/feedback/", fields);
+}
+
+/**
  * Send a message to the AI assistant and get its reply: { reply }.
  *
  * quiz is optional, and is set when a wrong quiz answer started the

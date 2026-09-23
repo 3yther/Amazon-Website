@@ -8,7 +8,7 @@ from rest_framework import serializers
 
 from content.models import PathwayName
 
-from .models import Profile, UserPreference
+from .models import Feedback, Profile, UserPreference
 
 # Staff accounts are created in Django admin only, never through sign-up.
 REGISTRATION_USER_TYPES = [
@@ -249,3 +249,16 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(INVALID_CREDENTIALS, code="authorization")
         attrs["user"] = user
         return attrs
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    """
+    Validates a feedback submission. category must be one of Feedback's
+    choices (ModelSerializer rejects anything else automatically); message is
+    required (the model field has no blank=True); email is optional.
+    """
+
+    class Meta:
+        model = Feedback
+        fields = ["id", "category", "message", "email", "created_at"]
+        read_only_fields = ["id", "created_at"]

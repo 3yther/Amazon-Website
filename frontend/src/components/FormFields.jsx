@@ -64,6 +64,28 @@ export function SelectField({ id, label, hint, error, children, ...selectProps }
   );
 }
 
+export function TextareaField({ id, label, hint, error, ...textareaProps }) {
+  return (
+    <div className="field">
+      <label className="label" htmlFor={id}>
+        {label}
+      </label>
+      {hint && (
+        <p className="field__hint" id={`${id}-hint`}>
+          {hint}
+        </p>
+      )}
+      <textarea
+        id={id}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={describedBy(id, hint, error)}
+        {...textareaProps}
+      />
+      {error && <FieldError id={`${id}-error`} message={error} />}
+    </div>
+  );
+}
+
 /**
  * A single tick box with its label beside it. The label takes markup as well
  * as text, so it can hold a link, and clicking any of it ticks the box.

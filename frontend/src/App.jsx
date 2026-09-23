@@ -8,8 +8,8 @@ import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
 import About from "./pages/About.jsx";
 import Accessibility from "./pages/Accessibility.jsx";
-import Account from "./pages/Account.jsx";
 import Contact from "./pages/Contact.jsx";
+import Feedback from "./pages/Feedback.jsx";
 import ContentLibrary from "./pages/ContentLibrary.jsx";
 import Help from "./pages/Help.jsx";
 import Home from "./pages/Home.jsx";
@@ -74,8 +74,10 @@ export default function App() {
           <Route path="/terms" element={<PageTitle title="Terms and Conditions"><Terms /></PageTitle>} />
           <Route path="/privacy" element={<PageTitle title="Privacy Policy"><Privacy /></PageTitle>} />
           <Route path="/accessibility" element={<PageTitle title="Accessibility"><Accessibility /></PageTitle>} />
-          <Route path="/account" element={<PageTitle title="My account"><Account /></PageTitle>} />
           <Route path="/contact" element={<PageTitle title="Contact us"><Contact /></PageTitle>} />
+          <Route path="/feedback" element={<PageTitle title="Feedback"><Feedback /></PageTitle>} />
+          {/* /account is gone: profile and accessibility settings live at /accessibility now. */}
+          <Route path="/account" element={<Navigate to="/accessibility" replace />} />
           {/* Earlier placeholder addresses, sent on to About. */}
           <Route path="/t-levels" element={<Navigate to="/about" replace />} />
           <Route path="/get-involved" element={<Navigate to="/about" replace />} />

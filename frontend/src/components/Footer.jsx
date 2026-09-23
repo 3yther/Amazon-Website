@@ -13,7 +13,7 @@ const LINK_COLUMNS = [
     links: [
       { to: "/", label: "Dashboard" },
       { to: "/t-levels-at-amazon", label: "Learning Pathways" },
-      { to: "/account", label: "Profile" },
+      { to: "/accessibility", label: "Profile" },
       { to: "/resources", label: "Resources" },
       { to: "/help", label: "FAQs" },
     ],
@@ -23,7 +23,7 @@ const LINK_COLUMNS = [
     links: [
       { to: "/contact", label: "Contact Us" },
       { to: "/contact", label: "Report an Issue" }, // TODO: point at a real issue tracker once one exists
-      { to: "/contact", label: "Feedback" }, // TODO: dedicated feedback form
+      { to: "/feedback", label: "Feedback" },
       { to: "/accessibility", label: "Accessibility Help" },
     ],
   },

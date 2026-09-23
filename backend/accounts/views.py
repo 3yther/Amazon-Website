@@ -4,6 +4,7 @@ from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from .models import UserPreference
@@ -12,6 +13,7 @@ from .serializers import (
     ChangePasswordSerializer,
     CurrentUserSerializer,
     DeactivateAccountSerializer,
+    FeedbackSerializer,
     LoginSerializer,
     RegisterSerializer,
     UserPreferenceSerializer,
@@ -201,3 +203,31 @@ class DeactivateAccountView(SignedInMixin, APIView):
         serializer.save()
         logout(request)
         return Response({"success": True})
+
+
+class FeedbackCreateView(generics.CreateAPIView):
+    """
+    POST /api/accounts/feedback/
+
+    Body: category, message, email (optional). Open to anyone, signed in or
+    not: unlike the views above, this does not require a session, so it has
+    no CSRF token to check either (see the module comment at the top of this
+    file - the check only ever applies to signed-in requests). If the
+    request is signed in, the account is linked automatically. Rate limited
+    per IP (see DEFAULT_THROTTLE_RATES in settings) to keep the form from
+    being spammed.
+
+    Returns {"success": true}, or 400 with field errors.
+    """
+
+    serializer_class = FeedbackSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "feedback"
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user if request.user.is_authenticated else None
+        serializer.save(user=user)
+        return Response({"success": True}, status=status.HTTP_201_CREATED)
