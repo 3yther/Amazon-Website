@@ -67,6 +67,7 @@ to match.
 | `DJANGO_ALLOWED_HOSTS` | `${{ RAILWAY_PUBLIC_DOMAIN }}` | The backend's own domain. Django refuses requests addressed to any other host. |
 | `CSRF_TRUSTED_ORIGINS` | `https://${{ frontend.RAILWAY_PUBLIC_DOMAIN }}` | Log in, sign up and log out are sent from the frontend's origin; Django only accepts them from origins listed here. |
 | `DJANGO_BEHIND_HTTPS_PROXY` | `true` | Railway ends HTTPS before Django. This lets Django trust Railway's `X-Forwarded-Proto` header instead of redirecting forever. |
+| `ANTHROPIC_API_KEY` | A key from console.anthropic.com. Never commit it. | The AI assistant. Without it the rest of the site works, but the chat widget only shows its fallback message. |
 
 Generate a secret key with:
 
@@ -98,6 +99,8 @@ Leave these unset on the frontend:
 
 - The frontend's URL shows the homepage, and the Resources page lists the five
   pathways in its filter (that confirms `/api` reaches Django and the database).
+- Asking the assistant a question gets a real answer, not the fallback message
+  (that confirms `ANTHROPIC_API_KEY` is set).
 - Signing up logs you in, and logging out works (that confirms the CSRF setup).
 - `https://<backend domain>/admin/` shows the Django admin login.
 - In the backend's deploy logs, the pre-deploy step shows the migrations, and
