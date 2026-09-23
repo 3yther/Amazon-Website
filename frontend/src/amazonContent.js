@@ -8,37 +8,24 @@
 
 /** The opening facts about the placement itself. */
 export const PLACEMENT_SHAPE = [
+  { icon: "clock", title: "Nine weeks", text: "You join a team, learn the tools and do real work." },
   {
-    title: "Nine weeks, embedded",
-    text: "You join a team for a nine week placement. Amazon's T Level lead describes students as completely embedded: you learn the tools, you understand how the place works, and you contribute.",
+    icon: "building",
+    title: "Skills hubs",
+    text: "Part of it runs in Amazon's skills hubs, in blocks of 15 days.",
   },
-  {
-    title: "Fifteen day stints in the skills hubs",
-    text: "Part of the programme runs from Amazon's skills hubs, in blocks of fifteen days, rather than all of it sitting at one desk.",
-  },
-  {
-    title: "Group projects for good causes",
-    text: "Alongside team work there are group projects built around charitable causes, so you work with the other students too.",
-  },
-  {
-    title: "Individual team challenges",
-    text: "You also take on challenges set by the team you are placed with, which is where the technical side of your T Level gets used.",
-  },
+  { icon: "heart", title: "Group projects", text: "Work with other students on projects for charities." },
+  { icon: "target", title: "Team challenges", text: "Tasks set by your team that use your T Level skills." },
 ];
 
 /** The support wrapped around each student. */
 export const SUPPORT = [
+  { icon: "chat", title: "A buddy", text: "For the small questions." },
+  { icon: "person", title: "A mentor", text: "Guides your work and shows you the bigger picture." },
   {
-    title: "A buddy",
-    text: "Someone close to your level to ask the small questions, the ones that feel too obvious to raise in a meeting.",
-  },
-  {
-    title: "A mentor",
-    text: "Someone more senior who guides the work and helps you see how the role fits the wider business.",
-  },
-  {
+    icon: "clipboard",
     title: "A placement manager",
-    text: "The person responsible for the placement itself, who keeps it on track with your school or college.",
+    text: "Keeps the placement on track with your school or college.",
   },
 ];
 
@@ -46,30 +33,33 @@ export const SUPPORT = [
 export const ROUTE_IN = [
   {
     number: "01",
-    title: "Be on a T Level",
-    text: "The programme is for 16 to 18 year old T Level students. You need to be enrolled on the course first, so the school or college comes before the placement.",
+    icon: "book",
+    title: "Start a T Level",
+    text: "For 16 to 18 year olds already on a T Level course.",
   },
   {
     number: "02",
-    title: "Your provider makes contact",
-    text: "Placements are arranged between Amazon and your school or college, not applied for directly. Amazon asks interested schools and colleges to get in touch.",
+    icon: "phone",
+    title: "Your college gets in touch",
+    text: "Amazon arranges placements with schools and colleges, not with students directly.",
   },
   {
     number: "03",
-    title: "Register your interest here",
-    text: "Tell us which pathway you are interested in and we will pass it to the Amazon Emerging Talent team. It is not an application, it is how they know you exist.",
+    icon: "pen",
+    title: "Register your interest",
+    text: "Tell us your pathway and we pass it to Amazon. It is not an application.",
   },
 ];
 
 /**
  * How the programme has grown, from the Department for Education case study.
  * Each figure is tied to its year on purpose, so the page never reads as a
- * claim about right now.
+ * claim about right now. The bars on the page are drawn from `value`.
  */
 export const GROWTH = [
-  { year: "2023", value: "6", caption: "students on placement in the first year" },
-  { year: "2024", value: "24", caption: "students, four times the first year" },
-  { year: "2025", value: "50", caption: "placements Amazon planned to offer" },
+  { year: "2023", value: 6, caption: "students in the first year" },
+  { year: "2024", value: 24, caption: "students, four times as many" },
+  { year: "2025", value: 50, caption: "placements planned" },
 ];
 
 /** Where the facts on this page came from. */

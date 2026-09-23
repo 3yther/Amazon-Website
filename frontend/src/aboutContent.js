@@ -12,62 +12,54 @@
 export const ROUTE_STEPS = [
   {
     number: "01",
-    title: "Pick your subject",
-    text: "Choose a T Level in the area you want to work in, from around 20 subjects. It runs for two years, full time, at a school or college.",
+    icon: "signpost",
+    title: "Pick a subject",
+    text: "Around 20 to choose from. Two years, full time, at a school or college.",
   },
   {
     number: "02",
-    title: "Learn the trade",
-    text: "Between 1,100 and 1,300 hours in the classroom across the two years: the core knowledge for your industry, then a specialism you choose.",
+    icon: "book",
+    title: "Learn it",
+    text: "1,100 to 1,300 hours of lessons: the basics of your industry, then a specialism.",
   },
   {
     number: "03",
-    title: "Do the placement",
-    text: "At least 315 hours with an employer, roughly 45 days. That is about 20 percent of the course, and it is where Amazon comes in.",
+    icon: "briefcase",
+    title: "Work",
+    text: "At least 315 hours with an employer, about 45 days. This is where Amazon comes in.",
   },
+];
+
+/**
+ * The split between learning and working, drawn as a bar on the About page.
+ * About 80 percent in lessons, about 20 percent on placement (DfE guidance).
+ */
+export const TIME_SPLIT = [
+  { icon: "book", share: 80, label: "Learning", detail: "about 80% of the course" },
+  { icon: "briefcase", share: 20, label: "Placement", detail: "at least 315 hours" },
 ];
 
 /** How the industry placement actually runs, from the DfE provider guidance. */
 export const PLACEMENT_FACTS = [
   {
-    title: "Real tasks, set by the employer",
-    text: "The employer oversees the placement and sets the work. It has to be real work you do for them, not shadowing or a project written for a classroom.",
+    icon: "tools",
+    title: "Real work",
+    text: "Tasks the employer needs doing. Not shadowing.",
   },
   {
-    title: "Three ways it can be arranged",
-    text: "One or two days a week alongside your lessons, a solid block of full-time weeks, or a mix of the two. Your provider and the employer agree which.",
+    icon: "calendar",
+    title: "Your timetable",
+    text: "A day or two a week, a block of weeks, or a mix.",
   },
   {
-    title: "Usually one employer, sometimes two",
-    text: "You can split the hours, though the guidance says no more than two employers unless there is a good reason.",
+    icon: "building",
+    title: "One or two employers",
+    text: "Usually one. No more than two without a good reason.",
   },
   {
-    title: "Pay is not guaranteed",
-    text: "There is no legal requirement for a placement to be paid. Some employers pay, some cover travel, meals or uniform. Agree it before you start.",
-  },
-];
-
-/**
- * What Amazon's own placement programme looks like. Sourced from Amazon's
- * T Level Placements page and the Department for Education employer case
- * study, both listed in SOURCES.
- */
-export const AMAZON_PROGRAMME = [
-  {
-    title: "Nine weeks inside a team",
-    text: "Amazon's T Level lead describes students as completely embedded: you learn the tools, sit with the team and contribute to real work.",
-  },
-  {
-    title: "Skills hubs and group projects",
-    text: "The programme mixes 15 day stints in Amazon's skills hubs with group projects on charitable causes and individual team challenges.",
-  },
-  {
-    title: "Three people looking after you",
-    text: "Every student gets a buddy, a mentor and a placement manager, so there is always someone to ask.",
-  },
-  {
-    title: "Growing year on year",
-    text: "Amazon started with Digital placements and has said it is widening the programme into creative, business and engineering pathways.",
+    icon: "coin",
+    title: "Pay varies",
+    text: "Not guaranteed. Some employers pay or cover travel. Ask first.",
   },
 ];
 
@@ -82,40 +74,50 @@ export const GRADES = [
 
 /** Who a T Level suits. Honest about the trade-offs. */
 export const AUDIENCE_POINTS = [
-  "You are 16 to 19 and finishing your GCSEs, or you are moving on from another course.",
-  "You have a rough idea of the industry you want to work in, even if not the exact job.",
-  "You learn better by doing than by revising.",
-  "You want a qualification employers recognise without giving up the option of university.",
-  "You are ready to give one subject area two years. If you want to keep five subjects open, A levels may suit you better.",
+  { icon: "person", text: "You are 16 to 19 and finishing your GCSEs, or changing course." },
+  { icon: "target", text: "You know roughly which industry you want to work in." },
+  { icon: "tools", text: "You learn best by doing." },
+  { icon: "gradcap", text: "You want a qualification employers trust, and university still open." },
+  {
+    icon: "split",
+    text: "You are happy to focus on one area for two years. Want to keep lots of subjects? A levels may suit you better.",
+  },
 ];
 
 /** Why people take one. Short, concrete, no filler. */
 export const BENEFITS = [
+  { icon: "briefcase", title: "Real work", text: "At least 315 hours inside a working team." },
   {
-    title: "Real work, not a mock-up",
-    text: "At least 315 hours inside a working team, roughly 45 days, doing tasks the employer actually needs done.",
+    icon: "gradcap",
+    title: "Same size as three A levels",
+    text: "It carries UCAS points, so university stays open.",
   },
+  { icon: "building", title: "Built with employers", text: "Employers helped write what you learn." },
   {
-    title: "Counts like three A levels",
-    text: "A T Level is broadly the same size as three A levels and carries UCAS points, so university stays open to you.",
-  },
-  {
-    title: "Built with employers",
-    text: "Employers helped write the content, so what you learn is what the industry uses.",
-  },
-  {
-    title: "Three ways out",
-    text: "Skilled work, a higher or degree apprenticeship, or university. Many employers keep students on at the end.",
+    icon: "arrows",
+    title: "Three ways on",
+    text: "A skilled job, a higher apprenticeship, or university.",
   },
 ];
 
-/** What it costs, and the help that exists. */
+/** What it costs, and the help that exists (16 to 19 Bursary Fund guide). */
 export const COST_POINTS = [
-  "The course itself is free if you are 16 to 18 and in full-time education.",
-  "The 16 to 19 Bursary Fund can help with travel, books, equipment and specialist clothing.",
-  "The vulnerable student bursary is worth up to 1,200 pounds a year for students in care, care leavers, and some students on Universal Credit, Income Support, DLA or PIP.",
-  "Everyone else can apply to their school or college for a discretionary bursary. There is no set amount, so ask what yours offers.",
-  "Bursaries cannot cover rent, bills or general living costs.",
+  { icon: "tag", title: "The course is free", text: "If you are 16 to 18 and in full-time education." },
+  {
+    icon: "bus",
+    title: "Help with costs",
+    text: "The 16 to 19 Bursary can cover travel, books, equipment and specialist clothing.",
+  },
+  {
+    icon: "coin",
+    title: "Up to £1,200 a year",
+    text: "For students in care, care leavers and some students on certain benefits.",
+  },
+  {
+    icon: "question",
+    title: "Ask your college",
+    text: "Anyone else can ask for a discretionary bursary. It cannot cover rent or bills.",
+  },
 ];
 
 /**
