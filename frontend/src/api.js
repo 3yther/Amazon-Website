@@ -195,22 +195,29 @@ export function submitFeedback(fields) {
 }
 
 /**
- * Send a message to the AI assistant and get its reply: { reply }.
+ * Send a message to Smiley, the AI assistant, and get its reply: { reply }.
  *
- * quiz is optional, and is set when a wrong quiz answer started the
- * conversation: { question, correctAnswer, explanation }. It grounds the reply
- * in that question. Nothing about how the visitor moved around the site is
- * sent: idle time and mouse movement stay in the browser.
+ * Both options are optional, and neither is stored (only the message is):
+ *   quiz      set when a wrong quiz answer started the conversation:
+ *             { question, correctAnswer, chosenAnswer, explanation }. It
+ *             grounds the reply in that question.
+ *   audience  "student", "parent" or "teacher", from the question Smiley asks
+ *             first, so the reply can be pitched for them.
+ *
+ * Nothing about how the visitor moved around the site is sent: idle time,
+ * scrolling and mouse movement stay in the browser.
  *
  * Throws ApiError with status 503 when the assistant itself is unavailable, so
  * the widget can show its fallback message.
  */
-export function sendChatMessage(message, quiz) {
+export function sendChatMessage(message, { quiz, audience } = {}) {
   return postJson("/api/chat/", {
     message,
+    ...(audience && { audience }),
     ...(quiz && {
       quiz_question: quiz.question,
       quiz_correct_answer: quiz.correctAnswer,
+      quiz_chosen_answer: quiz.chosenAnswer ?? "",
       quiz_explanation: quiz.explanation ?? "",
     }),
   });

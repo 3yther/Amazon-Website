@@ -3,6 +3,7 @@ import re
 from django.utils.html import strip_tags
 from rest_framework import serializers
 
+from .knowledge import AUDIENCES
 from .models import ChatMessage
 
 # Long enough for a real question, short enough to keep the prompt small and to
@@ -28,17 +29,23 @@ def sanitise(text):
 
 class ChatRequestSerializer(serializers.Serializer):
     """
-    One message from a visitor, plus the quiz question that prompted it.
+    One message from a visitor, plus context that shapes the answer.
 
     The quiz fields are only sent when the visitor got a question wrong and
-    asked for help, so the answer can be grounded in that question.
+    asked for help, so the answer can be grounded in that question. audience is
+    who the visitor told Smiley they are. None of these extra fields is stored:
+    only the message is.
     """
 
     message = serializers.CharField(max_length=MAX_MESSAGE_LENGTH, trim_whitespace=True)
+    audience = serializers.ChoiceField(
+        choices=sorted(AUDIENCES), required=False, allow_blank=True
+    )
     quiz_question = serializers.CharField(max_length=300, required=False, allow_blank=True)
     quiz_correct_answer = serializers.CharField(
         max_length=200, required=False, allow_blank=True
     )
+    quiz_chosen_answer = serializers.CharField(max_length=200, required=False, allow_blank=True)
     quiz_explanation = serializers.CharField(max_length=500, required=False, allow_blank=True)
 
     def validate_message(self, value):
@@ -51,6 +58,9 @@ class ChatRequestSerializer(serializers.Serializer):
         return sanitise(value)
 
     def validate_quiz_correct_answer(self, value):
+        return sanitise(value)
+
+    def validate_quiz_chosen_answer(self, value):
         return sanitise(value)
 
     def validate_quiz_explanation(self, value):

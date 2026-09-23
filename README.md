@@ -50,8 +50,7 @@ The site does three jobs:
 - **Accounts** with sign up and log in, so gated content unlocks for signed-in users.
 - **Expression of Interest** form, validated server side and rate limited.
 - **Find Near You** page to find T Level courses and placements nearby.
-- **AI assistant** that answers T Level questions. It needs an `ANTHROPIC_API_KEY` on the backend; without one the widget shows a fallback message and the rest of the site still works.
-- **Help, About and T Level at Amazon** information pages.
+- **Smiley, the AI guide**: answers T Level questions from the site's own checked copy, asks who you are and what interests you, offers help when a page goes quiet or a quiz answer goes wrong, and has a personality of its own (it blinks, watches your cursor, dozes off and wakes up). Every animation stops under reduced motion.- **Help, About and T Level at Amazon** information pages.
 - **Staff admin** where Amazon staff review submissions and manage content.
 
 ## Screenshots
@@ -88,9 +87,9 @@ backend/
   accounts/    Profile (extends Django's built-in User)
   content/     Pathway, ContentItem, content API
   interest/    ExpressionOfInterest, submission API
-  chatbot/     ChatMessage, AI assistant API (/api/chat/)
-frontend/
+  chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI providerfrontend/
   src/api.js                    all calls to the Django API
+  src/assistant/                Smiley: the chat widget, its face, moods and script
   src/pages/ContentLibrary.jsx  example page: lists content from the API
   src/styles.css                colour tokens and styles
 ```
@@ -147,6 +146,8 @@ Both `backend/` and `frontend/` ship an `.env.example` file. Copy each one and f
 | `ANTHROPIC_API_KEY` | For the assistant | Key from console.anthropic.com. Without it the chat widget shows its fallback message. Never commit it. |
 | `DATABASE_URL` | Deployed only | A `postgres://` URL. When set, it replaces SQLite. Leave unset locally. |
 | `DJANGO_BEHIND_HTTPS_PROXY` | Deployed only | `true` when a proxy in front ends HTTPS (Railway does). |
+| `ANTHROPIC_API_KEY` | For Smiley | Lets Smiley answer questions. Without it the site works and Smiley shows a fallback message. Server side only, never sent to the browser. |
+| `ANTHROPIC_SERVER_SIDE_FALLBACK` | Rarely | Set to `false` if the API rejects the server-side fallback option. |
 
 Production also has commented-out `POSTGRES_*` and `AWS_*` variables for RDS and S3. See the comments in `backend/config/settings.py`.
 
@@ -191,6 +192,8 @@ The Railway preview is temporary and has known limits: the Django admin is unsty
 | GET | `/api/content/` | Paginated. Filters: `pathway=<slug>`, `audience=student|parent|teacher`, `access_level=free|signup` |
 | GET | `/api/content/<slug>/` | One item |
 | POST | `/api/interest/` | Expression of Interest. Validated server side, rate limited |
+| GET | `/api/chat/` | The visitor's recent messages with Smiley |
+| POST | `/api/chat/` | Ask Smiley something. Rate limited. `503` when the AI is unavailable |
 
 Filtering by pathway also returns items for all pathways; filtering by audience also returns items for everyone. Sign-up content is listed for everyone, but its `file` link is only sent to signed-in users (`locked: true` otherwise).
 
@@ -235,6 +238,7 @@ Built by five T Level students:
 - The pathway summaries in `backend/content/fixtures/pathways.json` are draft copy. Check them against gov.uk before launch.
 - Production swaps SQLite for PostgreSQL on RDS and local files for S3. See the comments in `backend/config/settings.py`.
 - Never commit `.env` files or `*.pem` keys.
+- Smiley only answers from facts a person has checked, most quoted word for word from `frontend/src/aboutContent.js` (a test fails if the two drift apart). See what it still cannot answer with `cd backend && python manage.py check_chat_facts`.
 
 ## Licence
 

@@ -58,8 +58,10 @@ class ChatView(CsrfCheckedMixin, APIView):
     Open to everyone: guests chat without an account, and a signed-in visitor
     gets their conversation attached to their account so it keeps.
 
-    POST body: message, plus optional quiz_question, quiz_correct_answer and
-    quiz_explanation when a wrong quiz answer started the conversation.
+    POST body: message, plus optional audience (student | parent | teacher,
+    from the question Smiley opens with), and quiz_question,
+    quiz_correct_answer, quiz_chosen_answer and quiz_explanation when a wrong
+    quiz answer started the conversation. Only message is ever stored.
     Returns 200 with {"reply": "..."}, 400 with field errors, 429 when rate
     limited, or 503 when the assistant itself is unavailable.
     """
@@ -103,12 +105,15 @@ class ChatView(CsrfCheckedMixin, APIView):
                 data["quiz_question"],
                 data.get("quiz_correct_answer", ""),
                 data.get("quiz_explanation", ""),
+                data.get("quiz_chosen_answer", ""),
             )
 
         try:
             reply = get_ai_response(
                 prompt=data["message"],
-                context=build_system_prompt(quiz_context=quiz_context),
+                context=build_system_prompt(
+                    quiz_context=quiz_context, audience=data.get("audience") or None
+                ),
                 history=[
                     {"role": message.role, "content": message.message} for message in history
                 ],

@@ -1,5 +1,9 @@
 import { useId, useRef, useState } from "react";
-import { reportIncorrectAnswer } from "../assistant/assistantBus.js";
+import {
+  reportCorrectAnswer,
+  reportIncorrectAnswer,
+  reportQuizFinished,
+} from "../assistant/assistantBus.js";
 import { KNOWLEDGE_QUESTIONS } from "../knowledgeQuizQuestions.js";
 import "./knowledgeQuiz.css";
 
@@ -14,13 +18,16 @@ import "./knowledgeQuiz.css";
  * explanation, and the assistant offers to talk that question through using
  * the quiz's own wording rather than something it made up.
  *
- * onIncorrectAnswer can be passed in; by default it tells the assistant.
- * Nothing about a wrong answer is sent to the server. It goes to the widget in
- * this browser, and only travels if the visitor then types a message.
+ * It also tells Smiley about right answers and the final score, so Smiley
+ * can be pleased with them. All three callbacks can be passed in; by default
+ * they tell Smiley. None of it is sent to the server: it goes to the widget in
+ * this browser, and only travels if the visitor then asks Smiley something.
  */
 export default function KnowledgeQuiz({
   questions = KNOWLEDGE_QUESTIONS,
   onIncorrectAnswer = reportIncorrectAnswer,
+  onCorrectAnswer = reportCorrectAnswer,
+  onFinish = reportQuizFinished,
 }) {
   const groupId = useId();
   const [index, setIndex] = useState(0);
@@ -42,10 +49,12 @@ export default function KnowledgeQuiz({
 
     if (chosen === question.correctAnswer) {
       setScore((current) => current + 1);
+      onCorrectAnswer({ question: question.question });
     } else {
       onIncorrectAnswer({
         question: question.question,
         correctAnswer: question.correctAnswer,
+        chosenAnswer: chosen,
         explanation: question.explanation,
       });
     }
@@ -58,6 +67,7 @@ export default function KnowledgeQuiz({
   function nextQuestion() {
     if (isLast) {
       setDone(true);
+      onFinish({ score, total: questions.length });
       return;
     }
     setIndex((current) => current + 1);
@@ -79,8 +89,8 @@ export default function KnowledgeQuiz({
         <p className="label">Knowledge check</p>
         <h2 id="knowledge-quiz-title">You scored {score} out of {questions.length}</h2>
         <p className="knowledge-quiz__lead">
-          Anything you are not sure about, ask the assistant in the corner. It will tell
-          you if it does not know.
+          Anything you are not sure about, ask Smiley in the corner. It will tell you
+          if it does not know.
         </p>
         <button type="button" className="button" onClick={startAgain}>
           Start again
@@ -94,8 +104,8 @@ export default function KnowledgeQuiz({
       <p className="label">Knowledge check</p>
       <h2 id="knowledge-quiz-title">What do you know about T Levels?</h2>
       <p className="knowledge-quiz__lead">
-        {questions.length} questions, one at a time. Getting one wrong is useful: the
-        assistant will offer to talk it through.
+        {questions.length} questions, one at a time. Getting one wrong is useful: Smiley
+        will offer to talk it through.
       </p>
 
       <form onSubmit={checkAnswer}>
@@ -138,7 +148,7 @@ export default function KnowledgeQuiz({
               ref={feedbackRef}
             >
               <p className="knowledge-quiz__verdict">
-                {wasRight ? "That is right." : `Not quite. The answer is ${question.correctAnswer}.`}
+                {wasRight ? "That is right." : `Not quite. The right answer: ${question.correctAnswer}.`}
               </p>
               <p>{question.explanation}</p>
             </div>
