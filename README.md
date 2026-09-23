@@ -1,6 +1,6 @@
 # T-SMILE
 
-**Amazon Emerging Talent Digital T Level project** — information and advice about T Levels, free and gated digital content, and a way to register interest in Amazon's T Level opportunities, all in one place.
+**Amazon Emerging Talent Digital T Level project** - information and advice about T Levels, free and gated digital content, and a way to register interest in Amazon's T Level opportunities, all in one place.
 
 ![Python](https://img.shields.io/badge/python-3.11-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-REST_Framework-092E20?logo=django&logoColor=white)
@@ -27,12 +27,12 @@
 
 ## About
 
-T-SMILE is a Django REST API (`backend/`) with a React (Vite) front end (`frontend/`), built for four audiences: students (16–18), parents and guardians, schools and teachers, and Amazon staff, who manage content and review submissions.
+T-SMILE is a Django REST API (`backend/`) with a React (Vite) front end (`frontend/`), built for four audiences: students (16-18), parents and guardians, schools and teachers, and Amazon staff, who manage content and review submissions.
 
 The site does three jobs:
 
 - Explains T Levels in general, and at Amazon, by pathway (Digital, Business, Media, Finance, Engineering).
-- Hosts a content library of guides, documents, videos and prep packs — some free, some gated behind sign-up.
+- Hosts a content library of guides, documents, videos and prep packs - some free, some gated behind sign-up.
 - Captures Expressions of Interest from students, parents and teachers.
 
 ## Project layout
@@ -94,7 +94,7 @@ cd backend && python manage.py test
 
 ## Deployment
 
-A preview build runs on [Railway](https://railway.com) so the team and mentor can use the site at a public URL — see [`DEPLOYMENT.md`](DEPLOYMENT.md) for the full setup and environment variables. The final deployment target is AWS (EC2 + RDS + S3).
+A preview build runs on [Railway](https://railway.com) so the team and mentor can use the site at a public URL - see [`DEPLOYMENT.md`](DEPLOYMENT.md) for the full setup and environment variables. The final deployment target is AWS (EC2 + RDS + S3).
 
 ## API reference
 
@@ -123,11 +123,7 @@ Full rules in [`CONTEXT.md`](CONTEXT.md).
 
 ## Team
 
-Built by three T Level students:
-
-- **Amir** — auth, accounts, data models, integration, AI chatbot
-- **Aaron** — content library, resources, data-display pages
-- **Micha** — Expression of Interest flow, accessibility
+Built by five T Level students: Amir, Aaron, Micha, Jakub and Lloyd.
 
 ## Notes
 
