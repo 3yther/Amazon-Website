@@ -71,24 +71,4 @@ export function useIdleNudge({ enabled, onIdle, delayMs = IDLE_MS }) {
   }, [enabled, delayMs, pathname]);
 }
 
-// What the assistant opens with when somebody goes quiet. Specific to the page
-// they are on, because "Need any help?" on every page is just noise.
-const NUDGES = {
-  "/": "Not sure where to start? I can explain what a T Level is, or show you what Amazon does.",
-  "/about": "Anything on this page not making sense? Ask me and I will try to explain it.",
-  "/t-levels-at-amazon": "Want to know what a placement at Amazon actually involves? Ask away.",
-  "/resources": "Looking for something in particular? Tell me what you need and I will point you at it.",
-  "/t-level-near-you": "Trying to work out what is near you? I can help you narrow it down.",
-  "/quiz": "Stuck on one of these? Tell me which question and I will talk it through.",
-  "/help": "Cannot find the answer here? Ask me and I will have a go.",
-  "/register": "Not sure whether you need an account? I can tell you what it unlocks.",
-  "/login": "Trouble signing in? I can tell you what the Help page covers.",
-};
-
-const DEFAULT_NUDGE =
-  "Still looking? Ask me anything about T Levels and I will answer if I know it.";
-
-/** The opening line for a page, by route. */
-export function nudgeForPath(pathname) {
-  return NUDGES[pathname] ?? DEFAULT_NUDGE;
-}
+// What Smiley says when a page goes quiet lives in smileyScript.js (nudgeForPath).

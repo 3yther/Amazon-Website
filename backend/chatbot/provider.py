@@ -84,9 +84,11 @@ def get_ai_response(prompt, context, history=()):
 
     Raises AssistantUnavailable if there is no usable answer, for any reason.
     """
-    import anthropic
-
+    # First, so a missing key fails straight away, without paying the second
+    # or so it takes to import the SDK.
     client = _get_client()
+
+    import anthropic
 
     # The rules and facts are the same on every request, so they are marked
     # cacheable: Anthropic then charges much less to read them again. The

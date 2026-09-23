@@ -54,6 +54,14 @@ export function CloseIcon() {
   );
 }
 
+export function ChevronDownIcon() {
+  return (
+    <Icon>
+      <path d="M6 9l6 6 6-6" />
+    </Icon>
+  );
+}
+
 export function AlertIcon() {
   return (
     <Icon>
