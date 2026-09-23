@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import amazonLogo from "./assets/amazon-wordmark.png";
+import ChatWidget from "./assistant/ChatWidget.jsx";
 import Footer from "./components/Footer.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
@@ -12,6 +13,7 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import NearYou from "./pages/NearYou.jsx";
 import Privacy from "./pages/Privacy.jsx";
+import Quiz from "./pages/Quiz.jsx";
 import Register from "./pages/Register.jsx";
 import Terms from "./pages/Terms.jsx";
 import TLevelsAtAmazon from "./pages/TLevelsAtAmazon.jsx";
@@ -57,6 +59,7 @@ export default function App() {
           <Route path="/t-levels-at-amazon" element={<PageTitle title="T-Levels at Amazon"><TLevelsAtAmazon /></PageTitle>} />
           <Route path="/resources" element={<PageTitle title="T-Level Resources"><ContentLibrary /></PageTitle>} />
           <Route path="/t-level-near-you" element={<PageTitle title="T-Level Near you"><NearYou /></PageTitle>} />
+          <Route path="/quiz" element={<PageTitle title="Quiz"><Quiz /></PageTitle>} />
           <Route path="/help" element={<PageTitle title="Help"><Help /></PageTitle>} />
           <Route path="/register" element={<PageTitle title="Sign up"><Register /></PageTitle>} />
           <Route path="/login" element={<PageTitle title="Login"><Login /></PageTitle>} />
@@ -72,6 +75,10 @@ export default function App() {
       </main>
 
       <Footer />
+
+      {/* On every page, outside <main> so it is not part of the page
+          content and comes last in the keyboard order. */}
+      <ChatWidget />
     </>
   );
 }

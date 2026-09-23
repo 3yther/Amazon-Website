@@ -1,0 +1,100 @@
+/* The knowledge check at /quiz.
+ *
+ * Class names start with knowledge-quiz so they cannot clash with the .quiz
+ * styles arriving with the About page work on the other branches. Colours come
+ * from the variables in styles.css: no new ones. */
+
+.knowledge-quiz {
+  max-width: 40rem;
+  margin-block: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.knowledge-quiz__lead {
+  color: var(--ink-muted); /* 5.4:1 on the page background */
+  max-width: 34rem;
+}
+
+.knowledge-quiz__question {
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.knowledge-quiz__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.knowledge-quiz__number {
+  color: var(--ink-muted);
+}
+
+.knowledge-quiz__option {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+}
+
+.knowledge-quiz__option input {
+  /* Big enough to hit on a phone, and it grows with the text size. */
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+  accent-color: var(--blue);
+}
+
+.knowledge-quiz__option label {
+  /* 44px tall target: the whole row is clickable, not just the dot. */
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.knowledge-quiz__option input:disabled + label {
+  cursor: default;
+}
+
+.knowledge-quiz__feedback {
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--line);
+  /* The left edge carries the verdict in colour, and the words say it too, so
+     nobody has to see the colour to know the answer. */
+  border-left: 4px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.knowledge-quiz__feedback--right {
+  border-left-color: var(--blue);
+}
+
+.knowledge-quiz__feedback--wrong {
+  border-left-color: var(--orange);
+}
+
+.knowledge-quiz__verdict {
+  font-weight: 700;
+}
+
+.knowledge-quiz__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}

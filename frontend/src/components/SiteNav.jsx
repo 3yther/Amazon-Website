@@ -16,6 +16,7 @@ const PAGES = [
   { to: "/t-levels-at-amazon", label: "T-Levels at Amazon" },
   { to: "/resources", label: "T-Level Resources" },
   { to: "/t-level-near-you", label: "T-Level Near you" },
+  { to: "/quiz", label: "Quiz" },
   { to: "/help", label: "Help" },
 ];
 

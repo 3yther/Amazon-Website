@@ -137,3 +137,33 @@ export function logout() {
 export function submitInterest(fields) {
   return postJson("/api/interest/", fields);
 }
+
+/**
+ * Send a message to the AI assistant and get its reply: { reply }.
+ *
+ * quiz is optional, and is set when a wrong quiz answer started the
+ * conversation: { question, correctAnswer, explanation }. It grounds the reply
+ * in that question. Nothing about how the visitor moved around the site is
+ * sent: idle time and mouse movement stay in the browser.
+ *
+ * Throws ApiError with status 503 when the assistant itself is unavailable, so
+ * the widget can show its fallback message.
+ */
+export function sendChatMessage(message, quiz) {
+  return postJson("/api/chat/", {
+    message,
+    ...(quiz && {
+      quiz_question: quiz.question,
+      quiz_correct_answer: quiz.correctAnswer,
+      quiz_explanation: quiz.explanation ?? "",
+    }),
+  });
+}
+
+/**
+ * This visitor's recent chat messages: { messages: [{ role, message, created_at }] }.
+ * Empty for a visitor who has not chatted before.
+ */
+export function getChatHistory(options) {
+  return request("/api/chat/", options);
+}
