@@ -16,6 +16,7 @@ jobs:
       DJANGO_SECRET_KEY: test-secret-key-not-for-production
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_SECURE_SSL_REDIRECT: "false"
     steps:
       - uses: actions/checkout@v4
 
