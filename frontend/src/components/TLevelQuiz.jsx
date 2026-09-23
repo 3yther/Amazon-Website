@@ -143,10 +143,8 @@ export default function TLevelQuiz() {
               This is a guide to think with, not advice. Talk to a teacher or a careers adviser
               before you decide.
             </p>
-            {/* TEAM NOTE: points at sign-up for now. Swap the link to the
-                expression of interest page once that route exists. */}
-            <Link className="button button--primary quiz__result-action" to="/register">
-              Create an account
+            <Link className="button button--primary quiz__result-action" to="/register-interest">
+              Register your interest
             </Link>
           </article>
         )}

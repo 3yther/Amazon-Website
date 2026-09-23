@@ -1,30 +1,31 @@
 import { NavLink } from "react-router-dom";
 
 // Site footer, shown on every page by App.jsx: five link columns grouped by
-// purpose, then a copyright bar. Links marked TODO point somewhere sensible
-// for now (an existing page, or a placeholder) rather than nowhere, and are
-// meant to be revisited once the real page or address exists.
-
-const SUPPORT_EMAIL = "hello@t-smile.co.uk"; // TODO: confirm the team's real support address
+// purpose, then a copyright bar.
+//
+// One page per link: every link goes to its own real page, and its label
+// says what that page is. tests/footer.test.jsx checks that no two links
+// share a page and that every one goes to a route in App.jsx.
 
 const LINK_COLUMNS = [
   {
     heading: "Navigation",
     links: [
-      { to: "/", label: "Dashboard" },
-      { to: "/t-levels-at-amazon", label: "Learning Pathways" },
-      { to: "/accessibility", label: "Profile" },
+      { to: "/", label: "Home" },
+      { to: "/pathways", label: "Learning Pathways" },
+      // Profile is the Account tab of the settings page (see App.jsx).
+      { to: "/accessibility?tab=account", label: "Profile" },
       { to: "/resources", label: "Resources" },
-      { to: "/help", label: "FAQs" },
+      { to: "/faqs", label: "FAQs" },
     ],
   },
   {
     heading: "Support",
     links: [
       { to: "/contact", label: "Contact Us" },
-      { to: "/contact", label: "Report an Issue" }, // TODO: point at a real issue tracker once one exists
+      { to: "/report-issue", label: "Report an Issue" },
       { to: "/feedback", label: "Feedback" },
-      { to: "/accessibility", label: "Accessibility Help" },
+      { to: "/accessibility-help", label: "Accessibility Help" },
     ],
   },
   {
@@ -32,8 +33,16 @@ const LINK_COLUMNS = [
     links: [
       { to: "/terms", label: "Terms of Service" },
       { to: "/privacy", label: "Privacy Policy" },
-      { to: "/", label: "Cookie Policy" }, // TODO: no cookie policy page yet
-      { to: "/", label: "GDPR / Data Rights" }, // TODO: no data rights page yet
+      { to: "/cookies", label: "Cookie Policy" },
+      { to: "/data-rights", label: "GDPR / Data Rights" },
+    ],
+  },
+  {
+    heading: "Connect",
+    links: [
+      // The Expression of Interest form, the most important action on the site.
+      { to: "/register-interest", label: "Register your interest" },
+      { to: "/register", label: "Sign up" },
     ],
   },
 ];
@@ -67,14 +76,6 @@ export default function Footer() {
           </nav>
         ))}
 
-        <div className="footer-column">
-          <p className="label">Connect</p>
-          <ul>
-            <li>
-              <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
-            </li>
-          </ul>
-        </div>
       </div>
 
       <div className="container footer-bottom">

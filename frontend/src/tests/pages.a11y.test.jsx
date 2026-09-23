@@ -3,7 +3,17 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import About from "../pages/About.jsx";
+import AccessibilityHelp from "../pages/AccessibilityHelp.jsx";
+import Contact from "../pages/Contact.jsx";
+import Cookies from "../pages/Cookies.jsx";
+import DataRights from "../pages/DataRights.jsx";
+import Faqs from "../pages/Faqs.jsx";
 import Help from "../pages/Help.jsx";
+import Pathways from "../pages/Pathways.jsx";
+import Privacy from "../pages/Privacy.jsx";
+import RegisterInterest from "../pages/RegisterInterest.jsx";
+import ReportIssue from "../pages/ReportIssue.jsx";
+import Terms from "../pages/Terms.jsx";
 import TLevelsAtAmazon from "../pages/TLevelsAtAmazon.jsx";
 import { FAQS } from "../aboutContent.js";
 import { expectNoAxeViolations } from "./axe.js";
@@ -25,6 +35,16 @@ const PAGES = [
   ["About", About],
   ["T-Levels at Amazon", TLevelsAtAmazon],
   ["Help", Help],
+  ["Register interest", RegisterInterest],
+  ["Learning Pathways", Pathways],
+  ["FAQs", Faqs],
+  ["Contact us", Contact],
+  ["Report an issue", ReportIssue],
+  ["Accessibility help", AccessibilityHelp],
+  ["Terms of Service", Terms],
+  ["Privacy Policy", Privacy],
+  ["Cookie Policy", Cookies],
+  ["GDPR and data rights", DataRights],
 ];
 
 describe("Accessibility of the information pages", () => {

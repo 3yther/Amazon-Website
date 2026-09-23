@@ -1,10 +1,7 @@
-// Placeholder until the Privacy Policy is written.
+import LegalPage from "../components/LegalPage.jsx";
+import { PRIVACY } from "../legalContent.js";
+
+/** Privacy Policy. The wording lives in legalContent.js. */
 export default function Privacy() {
-  return (
-    <section className="intro" aria-labelledby="page-title">
-      <p className="label">In progress</p>
-      <h1 id="page-title">Privacy Policy</h1>
-      <p className="lead">Our privacy policy is coming soon.</p>
-    </section>
-  );
+  return <LegalPage page={PRIVACY} />;
 }

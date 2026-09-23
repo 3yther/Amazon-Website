@@ -43,7 +43,8 @@ describe("Content rules", () => {
     );
 
     const internalLinks = [...container.querySelectorAll('a[href^="/"]')].map((link) =>
-      link.getAttribute("href").split("#")[0],
+      // Drop any #section or ?query, e.g. /register-interest?pathway=digital.
+      link.getAttribute("href").split(/[?#]/)[0],
     );
 
     expect(internalLinks.length).toBeGreaterThan(0);

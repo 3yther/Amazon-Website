@@ -54,6 +54,11 @@ export const SITE_ROUTES = [
     detail: "T-Levels at Amazon",
   },
   { to: "/resources", icon: "folder", label: "I want guides and packs", detail: "T-Level Resources" },
-  { to: "/register", icon: "pen", label: "I want to register my interest", detail: "Sign up" },
+  {
+    to: "/register-interest",
+    icon: "pen",
+    label: "I want to register my interest",
+    detail: "Register interest",
+  },
   { to: "/login", icon: "key", label: "I already have an account", detail: "Login" },
 ];

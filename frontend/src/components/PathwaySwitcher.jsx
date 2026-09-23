@@ -136,12 +136,22 @@ export default function PathwaySwitcher() {
                 we cannot point at a source for. */}
             {pathway.amazonStatus && <p className="pathways__status">{pathway.amazonStatus}</p>}
 
-            {/* Goes to the content library, where the pathway filter lives. The
-                library does not read a pathway out of the URL yet, so this is a
-                plain link rather than a promise it cannot keep. */}
-            <Link className="button pathways__action" to="/resources">
-              Browse resources
-            </Link>
+            <div className="pathways__actions">
+              {/* The pathway is passed in the address, so the interest form
+                  opens with it already chosen. */}
+              <Link
+                className="button button--primary"
+                to={`/register-interest?pathway=${pathway.slug}`}
+              >
+                Register interest in {pathway.name}
+              </Link>
+              {/* The content library does not read a pathway out of the URL
+                  yet, so this is a plain link rather than a promise it cannot
+                  keep. */}
+              <Link className="button" to="/resources">
+                Browse resources
+              </Link>
+            </div>
           </div>
         ))}
 

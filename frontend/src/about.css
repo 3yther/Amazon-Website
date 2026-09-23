@@ -301,9 +301,11 @@
   font-size: 1rem;
 }
 
-.pathways__action {
+.pathways__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-top: 12px;
-  align-self: start;
 }
 
 /* ---------- FAQ (disclosure pattern) ---------- */
@@ -946,6 +948,62 @@
   gap: 16px;
   max-width: 48rem;
   font-size: 1.0625rem;
+}
+
+/* ---------- Register interest (RegisterInterest.jsx) ---------- */
+
+/* Form on the left, "what happens next" on the right; stacked on phones. */
+.interest {
+  display: grid;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .interest {
+    grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+  }
+}
+
+.interest__aside {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.interest__aside-title {
+  font-size: 1.25rem;
+}
+
+.interest__note {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+/* ---------- Legal pages (LegalPage.jsx) ---------- */
+
+.legal {
+  display: grid;
+  gap: 32px;
+  max-width: 48rem;
+}
+
+.legal .intro {
+  margin-bottom: 0;
+}
+
+.legal__section {
+  display: grid;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.legal__section h2 {
+  font-size: 1.375rem;
 }
 
 /* ---------- Motion ---------- */
