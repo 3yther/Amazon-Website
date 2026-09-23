@@ -160,9 +160,21 @@ For preview and production variables, see [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## Running tests
 
+Backend (Django):
+
 ```bash
 cd backend && python manage.py test
 ```
+
+Frontend (Vitest and React Testing Library, with axe for automated WCAG 2.2 AA checks):
+
+```bash
+cd frontend && npm test
+```
+
+`npm run test:watch` re-runs the tests as you save. The frontend tests live in `frontend/src/tests/` and cover the About, Help and T-Levels at Amazon pages: the FAQ, the pathway tabs and the quiz by mouse and keyboard, an axe scan of each page, and checks that copy and styles follow the rules in `CONTEXT.md`. Colour contrast is not part of the automated scan (the test browser does not draw the page), so it is still checked by hand.
+
+CI runs both on every pull request and every push to `main`.
 
 ## Deployment
 
