@@ -52,6 +52,37 @@
   max-width: 42rem;
 }
 
+/* Hero with a photo. Text first, photo under it on phones; side by side from
+   900px, with the orange rule running under both. */
+.about-hero--photo {
+  max-width: none;
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.about-hero__text {
+  display: grid;
+  gap: 20px;
+  max-width: 46rem;
+}
+
+.about-hero__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Every hero photo is cropped to the same shape, whatever its original. */
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+@media (min-width: 900px) {
+  .about-hero--photo {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
 /* ---------- The three steps (design doc: numbers descending) ---------- */
 
 .route {
@@ -188,6 +219,9 @@
 }
 
 .pathways__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   min-height: var(--control-h);
   padding: 0 20px;
   border: 1px solid var(--line);
@@ -705,6 +739,213 @@
   font-size: 0.9375rem;
   color: var(--ink-muted);
   line-height: 1.5;
+}
+
+/* ---------- Pictures (Pictogram.jsx and InfoBlocks.jsx) ---------- */
+
+/* A line drawing on an orange tile. The ink is --ink-on-orange, which stays
+   dark blue in both themes, so the drawing always reads against the orange. */
+.pictogram {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius);
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+.pictogram svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.pictogram--small {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.pictogram--small svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.info-card .pictogram {
+  margin-bottom: 4px;
+}
+
+/* On a card with a picture, the orange tile is the accent, so the card's
+   orange top edge goes back to a plain line to keep the orange from
+   shouting. */
+.info-card:has(.pictogram) {
+  border-top: 1px solid var(--line);
+}
+
+/* Room for four cards in a row on a laptop, so a set of four never leaves
+   one card on its own line. */
+.info-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+/* Route steps: number, picture, then the words. */
+.route__step {
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+}
+
+/* On a phone there is not room for number, picture and words side by side:
+   the number and picture share the top row, the words go underneath, and
+   cards put the picture beside the words instead of above them. */
+@media (max-width: 599px) {
+  .route__step {
+    grid-template-columns: auto 1fr;
+  }
+
+  .route__step > div {
+    grid-column: 1 / -1;
+  }
+
+  .info-card:has(.pictogram) {
+    grid-template-columns: auto 1fr;
+    column-gap: 16px;
+  }
+
+  .info-card:has(.pictogram) .pictogram {
+    grid-row: span 3;
+    margin-bottom: 0;
+  }
+
+  .info-card:has(.pictogram) > :not(.pictogram) {
+    grid-column: 2;
+  }
+}
+
+/* Short points with a small picture instead of a bullet. */
+.icon-list {
+  display: grid;
+  gap: 16px;
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--blue);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* The learning and placement split, drawn as one bar. The dark part uses the
+   inverse tokens, so it stays dark blue in dark mode too. */
+.share-bar {
+  display: grid;
+  gap: 12px;
+  max-width: 52rem;
+  margin: 32px 0 0;
+}
+
+.share-bar__bar {
+  display: flex;
+  gap: 4px;
+  height: 4rem;
+}
+
+.share-bar__part {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.5rem;
+  border-radius: var(--radius);
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+.share-bar__part--accent {
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+/* Inside the bar the picture sits straight on the colour, without a tile. */
+.share-bar__part .pictogram {
+  background: none;
+  color: inherit;
+}
+
+.share-bar__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  color: var(--ink-muted);
+}
+
+.share-bar__key strong {
+  color: var(--blue);
+}
+
+.share-bar__key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-bar__swatch {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radius);
+  background: var(--surface-inverse);
+}
+
+.share-bar__swatch--accent {
+  background: var(--orange);
+}
+
+/* Growth figures as bars, so the growth shows at a glance. */
+.growth__bar {
+  display: block;
+  height: 12px;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.growth__bar span {
+  display: block;
+  height: 100%;
+  background: var(--blue);
+}
+
+/* Pathway names on the Amazon page carry their homepage icon. */
+.pathway-summary dt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Signposts with a picture: picture, then the label taking the space. */
+.signpost a {
+  align-items: center;
+}
+
+.signpost a .pictogram + .signpost__label {
+  flex: 1 1 12rem;
+}
+
+.signpost--single {
+  margin-top: 24px;
+}
+
+/* "Ask a person" on the Help page. */
+.help-person {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 48rem;
+  font-size: 1.0625rem;
 }
 
 /* ---------- Motion ---------- */

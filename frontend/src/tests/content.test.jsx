@@ -5,6 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import About from "../pages/About.jsx";
 import Help from "../pages/Help.jsx";
 import TLevelsAtAmazon from "../pages/TLevelsAtAmazon.jsx";
+import { PICTOGRAM_NAMES } from "../components/Pictogram.jsx";
 
 // Checks on the copy and styles against the rules in CONTEXT.md. These are
 // quick to break by accident and hard to spot by eye.
@@ -48,6 +49,17 @@ describe("Content rules", () => {
     expect(internalLinks.length).toBeGreaterThan(0);
     for (const href of internalLinks) {
       expect(routes, `no route for ${href}`).toContain(href);
+    }
+  });
+});
+
+describe("Pictures", () => {
+  it.each(CONTENT_FILES)("%s only asks for pictures that exist", (file) => {
+    // A typo such as icon: "bok" would quietly show no picture, so check
+    // every name in the content against the list Pictogram.jsx can draw.
+    const names = [...read(`../${file}`).matchAll(/icon: "([^"]+)"/g)].map((match) => match[1]);
+    for (const name of names) {
+      expect(PICTOGRAM_NAMES, `no picture called "${name}"`).toContain(name);
     }
   });
 });

@@ -1,4 +1,12 @@
 import { Link } from "react-router-dom";
+import { IconCards, PageHero, RouteSteps } from "../components/InfoBlocks.jsx";
+import {
+  BusinessIcon,
+  DigitalIcon,
+  EngineeringIcon,
+  FinanceIcon,
+  MediaIcon,
+} from "../components/Icons.jsx";
 import { PATHWAYS } from "../aboutContent.js";
 import {
   AMAZON_SOURCES,
@@ -8,27 +16,45 @@ import {
   SUPPORT,
 } from "../amazonContent.js";
 import "../about.css";
+import amazonPhoto from "../assets/amazon-hero.jpg";
+
+// Hero photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
+// free to use, attribution not required. Credited here for the asset log.
+// Saved at 720px wide from Pexels' own image server. Not an Amazon photo, and
+// chosen with no visible brands, so it does not claim to show Amazon.
+//   amazon-hero.jpg: Mikhail Nilov,
+//     https://www.pexels.com/photo/young-professionals-working-with-computers-7988745/
+
+// The same pathway icons as the homepage tiles, so each subject always has
+// the same picture wherever it appears.
+const PATHWAY_ICONS = {
+  digital: DigitalIcon,
+  business: BusinessIcon,
+  media: MediaIcon,
+  finance: FinanceIcon,
+  engineering: EngineeringIcon,
+};
+
+// The biggest figure sets the full width of the growth bars.
+const MOST = Math.max(...GROWTH.map((point) => point.value));
 
 /**
- * T-Levels at Amazon: what Amazon's placement programme is, the support around
- * it, which pathways it covers, how a student ends up on one, and how the
- * programme has grown.
+ * T-Levels at Amazon: what the placement is, who looks after you, which
+ * pathways Amazon takes, how students get one, and how the programme has
+ * grown. Every point has a picture and one line.
  *
- * Shares about.css with the other information pages, and takes the pathway
- * list from aboutContent.js so the five pathways are described once on the
- * front end rather than twice.
+ * Takes the pathway list from aboutContent.js so the five pathways are
+ * described once on the front end rather than twice.
  */
 export default function TLevelsAtAmazon() {
   return (
     <>
-      <section className="about-hero" aria-labelledby="page-title">
-        <p className="label">Amazon Emerging Talent</p>
-        <h1 id="page-title">Nine weeks inside a team.</h1>
-        <p className="about-hero__lead">
-          Amazon hosts T Level students for their industry placement. Not shadowing, not a tour.
-          You join a team, learn the tools and do work the team needs doing.
-        </p>
-      </section>
+      <PageHero
+        label="Amazon Emerging Talent"
+        title="Nine weeks inside a team."
+        lead="Amazon takes T Level students on placement. You join a real team and do real work."
+        photo={amazonPhoto}
+      />
 
       <section className="about-section" aria-labelledby="shape-title">
         <div className="section-intro">
@@ -36,33 +62,16 @@ export default function TLevelsAtAmazon() {
           <h2 id="shape-title">What the nine weeks look like</h2>
         </div>
 
-        <ul className="info-grid">
-          {PLACEMENT_SHAPE.map((item) => (
-            <li className="info-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </li>
-          ))}
-        </ul>
+        <IconCards items={PLACEMENT_SHAPE} />
       </section>
 
       <section className="about-section" aria-labelledby="support-title">
         <div className="section-intro">
           <p className="label">Support</p>
           <h2 id="support-title">Three people looking after you</h2>
-          <p className="section-intro__lead">
-            Nobody is dropped in and left. Every student gets all three.
-          </p>
         </div>
 
-        <ul className="info-grid">
-          {SUPPORT.map((item) => (
-            <li className="info-card" key={item.title}>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </li>
-          ))}
-        </ul>
+        <IconCards items={SUPPORT} />
       </section>
 
       <section className="about-section" aria-labelledby="pathways-title">
@@ -70,49 +79,44 @@ export default function TLevelsAtAmazon() {
           <p className="label">Pathways</p>
           <h2 id="pathways-title">Which subjects Amazon takes</h2>
           <p className="section-intro__lead">
-            Amazon started with Digital and has said it is widening the programme. Full detail of
-            each pathway is on the <Link to="/about">About T-Levels</Link> page.
+            More on each one on the <Link to="/about">About T-Levels</Link> page.
           </p>
         </div>
 
         {/* A definition list rather than the tab switcher used on the About
             page: here the point is to compare all five at once. */}
         <dl className="pathway-summary">
-          {PATHWAYS.map((pathway) => (
-            <div className="pathway-summary__row" key={pathway.slug}>
-              <dt>{pathway.name}</dt>
-              <dd>
-                {pathway.summary}{" "}
-                {/* Only the pathways Amazon has named publicly carry a status
-                    line, so the page never invents a placement. */}
-                {pathway.amazonStatus && (
-                  <strong className="pathway-summary__status">{pathway.amazonStatus}</strong>
-                )}
-              </dd>
-            </div>
-          ))}
+          {PATHWAYS.map((pathway) => {
+            const PathwayIcon = PATHWAY_ICONS[pathway.slug];
+            return (
+              <div className="pathway-summary__row" key={pathway.slug}>
+                <dt>
+                  <span className="pictogram pictogram--small" aria-hidden="true">
+                    <PathwayIcon />
+                  </span>
+                  {pathway.name}
+                </dt>
+                <dd>
+                  {pathway.summary}{" "}
+                  {/* Only the pathways Amazon has named publicly carry a status
+                      line, so the page never invents a placement. */}
+                  {pathway.amazonStatus && (
+                    <strong className="pathway-summary__status">{pathway.amazonStatus}</strong>
+                  )}
+                </dd>
+              </div>
+            );
+          })}
         </dl>
       </section>
 
       <section className="about-section" aria-labelledby="route-title">
         <div className="section-intro">
           <p className="label">Getting one</p>
-          <h2 id="route-title">How students end up on a placement</h2>
+          <h2 id="route-title">How to get a placement</h2>
         </div>
 
-        <ol className="route">
-          {ROUTE_IN.map((step) => (
-            <li className="route__step" key={step.number}>
-              <span className="route__number" aria-hidden="true">
-                {step.number}
-              </span>
-              <div>
-                <h3 className="route__title">{step.title}</h3>
-                <p className="route__text">{step.text}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <RouteSteps steps={ROUTE_IN} />
 
         <Link className="button button--primary route__action" to="/register">
           Register your interest
@@ -123,9 +127,7 @@ export default function TLevelsAtAmazon() {
         <div className="section-intro">
           <p className="label">The programme</p>
           <h2 id="growth-title">It is growing</h2>
-          <p className="section-intro__lead">
-            Figures reported by the Department for Education. Each one is tied to its year.
-          </p>
+          <p className="section-intro__lead">Figures from the Department for Education.</p>
         </div>
 
         <ol className="growth">
@@ -134,6 +136,11 @@ export default function TLevelsAtAmazon() {
               <p className="label">{point.year}</p>
               <p className="growth__value">{point.value}</p>
               <p className="growth__caption">{point.caption}</p>
+              {/* The bar shows the number as a length, so the growth can be
+                  seen at a glance. The number above already says it in text. */}
+              <span className="growth__bar" aria-hidden="true">
+                <span style={{ width: `${(point.value / MOST) * 100}%` }} />
+              </span>
             </li>
           ))}
         </ol>

@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+import { IconCards, PageHero } from "../components/InfoBlocks.jsx";
+import Pictogram from "../components/Pictogram.jsx";
 import { PROVIDER_QUESTIONS, SERVICES, SITE_ROUTES } from "../helpContent.js";
 import "../about.css";
+import helpPhoto from "../assets/help-hero.jpg";
+
+// Hero photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
+// free to use, attribution not required. Credited here for the asset log.
+// Saved at 720px wide from Pexels' own image server.
+//   help-hero.jpg: RDNE Stock project,
+//     https://www.pexels.com/photo/a-teacher-talking-to-his-student-8419636/
 
 /**
  * Help: where to go next, by what the person is trying to do. Everything here
@@ -10,13 +19,12 @@ import "../about.css";
 export default function Help() {
   return (
     <>
-      <section className="about-hero" aria-labelledby="page-title">
-        <p className="label">Help</p>
-        <h1 id="page-title">Stuck? Start here.</h1>
-        <p className="about-hero__lead">
-          What you need depends on what you are trying to do. Pick the closest one.
-        </p>
-      </section>
+      <PageHero
+        label="Help"
+        title="Stuck? Start here."
+        lead="Pick what you are trying to do."
+        photo={helpPhoto}
+      />
 
       <section className="about-section" aria-labelledby="site-title">
         <div className="section-intro">
@@ -28,6 +36,7 @@ export default function Help() {
           {SITE_ROUTES.map((route) => (
             <li key={route.to}>
               <Link to={route.to}>
+                <Pictogram name={route.icon} size="small" />
                 <span className="signpost__label">{route.label}</span>
                 <span className="signpost__detail label">{route.detail}</span>
               </Link>
@@ -39,33 +48,23 @@ export default function Help() {
       <section className="about-section" aria-labelledby="services-title">
         <div className="section-intro">
           <p className="label">Elsewhere</p>
-          <h2 id="services-title">Free services worth knowing about</h2>
-          <p className="section-intro__lead">
-            These are run by the government, not by us, and they are all free.
-          </p>
+          <h2 id="services-title">Free services</h2>
+          <p className="section-intro__lead">Run by the government, not by us.</p>
         </div>
 
-        <ul className="info-grid">
-          {SERVICES.map((service) => (
-            <li className="info-card" key={service.title}>
-              <h3>{service.title}</h3>
-              <p>{service.text}</p>
-              <p>
-                <a href={service.href}>{service.linkText}</a>
-              </p>
-            </li>
-          ))}
-        </ul>
+        <IconCards items={SERVICES}>
+          {(service) => (
+            <p>
+              <a href={service.href}>{service.linkText}</a>
+            </p>
+          )}
+        </IconCards>
       </section>
 
       <section className="about-section" aria-labelledby="questions-title">
         <div className="section-intro">
           <p className="label">Before you choose</p>
-          <h2 id="questions-title">Questions to ask a school or college</h2>
-          <p className="section-intro__lead">
-            Two providers running the same T Level can feel very different. These are the questions
-            that show you which.
-          </p>
+          <h2 id="questions-title">Ask your school or college</h2>
         </div>
 
         <ul className="audience">
@@ -79,10 +78,13 @@ export default function Help() {
         <div className="section-intro">
           <p className="label">Still stuck</p>
           <h2 id="stuck-title">Ask a person</h2>
-          <p className="section-intro__lead">
-            Your teacher or careers adviser knows your situation and the providers near you, which
-            no website does. If you would rather ask someone outside school, the National Careers
-            Service is free on 0800 100 900 and open to anyone aged 13 and over.
+        </div>
+
+        <div className="help-person">
+          <Pictogram name="phone" />
+          <p>
+            Talk to your teacher or careers adviser. Or call the National Careers Service free on{" "}
+            <a href="tel:0800100900">0800 100 900</a>.
           </p>
         </div>
       </section>

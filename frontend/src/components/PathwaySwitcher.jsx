@@ -1,6 +1,23 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { PATHWAYS } from "../aboutContent.js";
+import {
+  BusinessIcon,
+  DigitalIcon,
+  EngineeringIcon,
+  FinanceIcon,
+  MediaIcon,
+} from "./Icons.jsx";
+
+// The same pathway icons as the homepage tiles, so each subject always has
+// the same picture wherever it appears.
+const PATHWAY_ICONS = {
+  digital: DigitalIcon,
+  business: BusinessIcon,
+  media: MediaIcon,
+  finance: FinanceIcon,
+  engineering: EngineeringIcon,
+};
 
 // Tabbed switcher for the five pathways Amazon offers.
 //
@@ -54,6 +71,7 @@ export default function PathwaySwitcher() {
         <div className="pathways__tabs" role="tablist" aria-label="Pathways" onKeyDown={handleKeyDown}>
           {PATHWAYS.map((pathway, index) => {
             const selected = pathway.slug === activeSlug;
+            const PathwayIcon = PATHWAY_ICONS[pathway.slug];
 
             return (
               <button
@@ -70,6 +88,7 @@ export default function PathwaySwitcher() {
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActiveSlug(pathway.slug)}
               >
+                <PathwayIcon />
                 {pathway.name}
               </button>
             );
