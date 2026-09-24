@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { QUIZ_QUESTIONS, QUIZ_RESULTS } from "../aboutContent.js";
 import { AlertIcon } from "./Icons.jsx";
 
-// "Is a T Level right for me?" quiz, six questions, one screen.
+// "Is a T-Level right for me?" quiz, six questions, one screen.
 //
 // NEW CONCEPT: a group of radio buttons needs a group label, and the way to
 // give it one is <fieldset> with a <legend>. A screen reader then reads the
@@ -66,7 +66,7 @@ export default function TLevelQuiz() {
     <section className="about-section" aria-labelledby="quiz-title">
       <div className="section-intro">
         <p className="label">Quiz</p>
-        <h2 id="quiz-title">Is a T Level right for me?</h2>
+        <h2 id="quiz-title">Is a T-Level right for me?</h2>
         <p className="section-intro__lead">
           Six questions. There are no wrong answers, and nothing is saved or sent anywhere.
         </p>

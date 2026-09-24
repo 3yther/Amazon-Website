@@ -1,18 +1,32 @@
 # Railway preview deploy for the Django API. See DEPLOYMENT.md.
 #
-# In this repo Railway does not find this file on its own: in the backend
-# service's settings, set Root Directory to /backend and Config File Path to
-# /backend/railway.toml.
+# !! CHECKED 24 September 2026: THIS FILE IS NOT IN USE ON THE PREVIEW. !!
+# The backend service has no Config File Path set (the API reports
+# railwayConfigFile: null), so Railway never reads it, and the settings that
+# actually run come from the Railway dashboard: Settings -> Deploy. You can
+# tell from the live service: its restart retries are 10, not the 3 below,
+# and its start command is empty rather than the gunicorn line below.
+#
+# So: CHANGING THIS FILE CHANGES NOTHING UNTIL config-as-code is switched on.
+# Either set Config File Path to /backend/railway.toml in the backend
+# service's settings (Settings -> Source), which makes this file
+# authoritative, or make the same change in Settings -> Deploy by hand.
+# DEPLOYMENT.md spells both out. It is kept correct and in the repo so that
+# switching it on is a one-click change rather than a rewrite.
 
 [build]
 builder = "RAILPACK"
 
 [deploy]
 # Runs before each deploy goes live: brings the database schema up to date,
-# then loads the five pathways and the starter resources (safe to repeat, it
-# rewrites the same rows; resources added in admin are left alone).
+# then loads the five pathways, the starter resources and the starter T Level
+# providers (safe to repeat, it rewrites the same rows; anything added in
+# admin is left alone), then fills in any provider that has no position yet.
 # If it fails, the deploy stops and the previous one keeps running.
-preDeployCommand = "sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources'"
+# geocode_providers is the one step that will not stop a deploy: it warns and
+# carries on if postcodes.io is unreachable, because the fixture already
+# carries correct coordinates and nothing is lost by trying again next time.
+preDeployCommand = "sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources providers && python manage.py geocode_providers'"
 
 # gunicorn rather than the Django dev server. Railway sets $PORT, and [::]
 # listens on both IPv4 and IPv6.

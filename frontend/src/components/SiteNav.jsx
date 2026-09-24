@@ -14,7 +14,7 @@ const PAGES = [
   { to: "/about", label: "About T-Level" },
   { to: "/t-levels-at-amazon", label: "T-Levels at Amazon" },
   { to: "/resources", label: "T-Level Resources" },
-  { to: "/t-level-near-you", label: "T-Level Near you" },
+  { to: "/t-level-near-you", label: "T-Level Near You" },
   { to: "/quiz", label: "Quiz" },
   { to: "/help", label: "Help" },
   // The Expression of Interest form, a core client requirement, so it is

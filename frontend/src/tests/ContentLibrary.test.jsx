@@ -12,7 +12,7 @@ const PATHWAYS = [
 
 const ITEMS = [
   {
-    title: "Find a T Level near you",
+    title: "Find a T-Level near you",
     slug: "find-a-t-level-near-you",
     description: "Official search.",
     content_type: "guide",

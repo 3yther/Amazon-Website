@@ -23,7 +23,7 @@ cookies between them, which would break log in and sign up.
 
 | File | Purpose |
 |---|---|
-| `backend/railway.toml` | Build with Railpack; before each deploy run migrations and load the five pathways and starter resources; start with gunicorn |
+| `backend/railway.toml` | Build with Railpack; before each deploy run migrations, load the five pathways, starter resources and starter providers, then geocode any provider with no position; start with gunicorn. **Not currently read by Railway, see below.** |
 | `backend/.python-version` | Python 3.11, to match local development |
 | `backend/requirements.txt` | Adds `gunicorn` and `psycopg[binary]` |
 | `backend/config/settings.py` | Uses `DATABASE_URL` when set (SQLite otherwise); `DJANGO_BEHIND_HTTPS_PROXY` |
@@ -42,7 +42,9 @@ to match.
 3. In the `backend` service's settings:
    - Root Directory: `/backend`
    - Config File Path: `/backend/railway.toml` (Railway does not find it by
-     itself when a Root Directory is set)
+     itself when a Root Directory is set). **On our preview this was never
+     actually set, so the toml is ignored: see "Where the deploy settings
+     really live" below before changing it.**
    - Networking: generate a public domain
 4. Add a second service from the same repo, name it `frontend`, and in its
    settings:
@@ -55,6 +57,41 @@ to match.
 7. To use the Django admin, create an admin account from a shell in the
    backend service, with the [Railway CLI](https://docs.railway.com/cli):
    `railway ssh --service backend`, then `python manage.py createsuperuser`.
+
+## Where the deploy settings really live
+
+Checked against the live project on 24 September 2026: **config-as-code is off
+for the `backend` service.** Its Config File Path is empty, so Railway never
+reads `backend/railway.toml`, and what actually runs is whatever is typed into
+the dashboard. Two things prove it rather than just suggest it: the live
+service restarts up to 10 times (Railway's default) where the toml asks for 3,
+and its start command is empty where the toml sets a gunicorn line.
+
+So **editing `backend/railway.toml` alone changes nothing on the preview.**
+Pick one of these and stick to it:
+
+**Either** switch config-as-code on, which is the better end state: backend
+service -> Settings -> Source -> Config-as-code -> Config File Path
+`/backend/railway.toml`, then redeploy. From then on the file in this repo is
+the single source of truth and the fields below are ignored.
+
+**Or** keep using the dashboard, in which case the Pre-deploy Command in
+backend -> Settings -> Deploy is the field that matters. It currently reads:
+
+```
+sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources'
+```
+
+and needs to become:
+
+```
+sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources providers && python manage.py geocode_providers'
+```
+
+Until that field is changed, a deployed preview has no providers in it and the
+T Level Near You page finds nothing, however green the tests are. `loaddata`
+and `geocode_providers` are both safe to repeat, so there is no harm in a
+redeploy running them again.
 
 ## Environment variables
 
@@ -102,9 +139,16 @@ Leave these unset on the frontend:
 - Asking the assistant a question gets a real answer, not the fallback message
   (that confirms `ANTHROPIC_API_KEY` is set).
 - Signing up logs you in, and logging out works (that confirms the CSRF setup).
+- The T-Level Near You page finds colleges for a postcode such as `W1D 3QU`
+  (that confirms the providers fixture loaded and `geocode_providers` ran; if
+  the page says nothing was found anywhere, check the pre-deploy command
+  above). It also confirms the server can reach `api.postcodes.io`.
 - `https://<backend domain>/admin/` shows the Django admin login.
 - In the backend's deploy logs, the pre-deploy step shows the migrations, and
   the service log shows gunicorn listening.
+- If an `/api` request answers 500, the traceback is in the backend's service
+  log (`railway logs`). `LOGGING` in `backend/config/settings.py` prints every
+  server error there, even with debug off.
 
 ## Known limits of the preview
 
@@ -114,10 +158,16 @@ Leave these unset on the frontend:
 - **Uploaded content files are not kept or served.** Railway's disk is reset
   on every deploy, and Django only serves `/media` in debug mode. Content items
   without a file are fine. Files belong in S3, planned for AWS.
-- **The five pathways and the starter resources are reloaded on every
-  deploy**, from `backend/content/fixtures/pathways.json` and `resources.json`.
-  Edits to them made in the admin are overwritten, so change the fixture
-  instead. Resources added in the admin are kept.
+- **The five pathways, the starter resources and the starter providers are
+  reloaded on every deploy**, from `backend/content/fixtures/pathways.json`,
+  `resources.json` and `backend/providers/fixtures/providers.json`. Edits to
+  them made in the admin are overwritten, so change the fixture instead.
+  Resources and providers added in the admin are kept.
+- **Provider positions come from postcodes.io**, a free service with no API
+  key. The deploy calls it only for providers that have no position yet, so a
+  normal redeploy makes no calls at all. If it is unreachable the step warns
+  and the deploy carries on, because the fixture already carries correct
+  coordinates.
 - **Its data is separate.** Users and content on the preview live in
   Railway's PostgreSQL, not in anyone's local `db.sqlite3`.
 - **No HSTS.** Deliberately left off for a temporary address. Worth adding on

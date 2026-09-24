@@ -241,16 +241,30 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
+// `link` goes to the page a step talks about. "Hear back" has none: it is
+// something we do, not somewhere to go.
 const STEPS = [
-  { title: "Browse resources", text: "Guides, packs and videos for all five pathways." },
-  { title: "Register interest", text: "Tell us which pathway you want to explore." },
+  {
+    title: "Browse resources",
+    text: "Guides, packs and videos for all five pathways.",
+    link: { to: "/resources", label: "Browse resources" },
+  },
+  {
+    title: "Register interest",
+    text: "Tell us which pathway you want to explore.",
+    link: { to: "/register-interest", label: "Register interest" },
+  },
   { title: "Hear back", text: "We review each submission and reply by email." },
-  { title: "Get involved", text: "Sign up to open more resources for your pathway." },
+  {
+    title: "Get involved",
+    text: "Sign up to open more resources for your pathway.",
+    link: { to: "/register", label: "Sign up" },
+  },
 ];
 
 /**
- * Four "Level" cards, a nod to T-Levels. On desktop they climb left to right
- * like a staircase (see .steps in styles.css); on smaller screens they stack.
+ * Four "Level" cards, a nod to T-Levels. On desktop they step down left to
+ * right like a staircase, Level 01 highest (see .steps in styles.css); on smaller screens they stack.
  */
 export function HowItWorks() {
   return (
@@ -263,12 +277,18 @@ export function HowItWorks() {
       <ol className="steps">
         {STEPS.map((step, index) => (
           // --drop: how many steps below the top card this one starts.
-          <li key={step.title} className="step" style={{ "--drop": STEPS.length - 1 - index }}>
+          <li key={step.title} className="step" style={{ "--drop": index }}>
             <p className="label">
               Level <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
             </p>
             <h3 className="step__title">{step.title}</h3>
             <p className="step__text">{step.text}</p>
+            {step.link && (
+              <Link className="step__link" to={step.link.to}>
+                {step.link.label}
+                <ArrowIcon />
+              </Link>
+            )}
           </li>
         ))}
       </ol>

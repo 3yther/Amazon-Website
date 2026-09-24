@@ -8,7 +8,7 @@ import { forwardRef, useId } from "react";
  *
  * DESIGN: inspired by the hooded, dark-faced, big-eyed style of TryHackMe's
  * Echo, but its own character. A round hood rather than a pointed one, a
- * T-shaped aerial for T Levels, and a mouth, which Echo does not have. Drawn in
+ * T-shaped aerial for T-Levels, and a mouth, which Echo does not have. Drawn in
  * Amazon Orange and Amazon Dark Blue only.
  *
  * BRAND: the smile is a plain symmetric curve with rounded ends, inside the
@@ -190,7 +190,7 @@ const SmileyFace = forwardRef(function SmileyFace(
       <g key={motionKey} className={motion && !still ? `smiley__move smiley__move--${motion}` : "smiley__move"}>
         <g className={`smiley__body${breathing ? " smiley__body--breathe" : ""}`}>
           <g className={`smiley__pose${pose ? ` smiley__pose--${pose}` : ""}`}>
-            {/* The T aerial, for T Levels. Drawn first so the hood covers its root. */}
+            {/* The T aerial, for T-Levels. Drawn first so the hood covers its root. */}
             <g
               key={antennaKey}
               className={`smiley__aerial${aerial && !still ? ` smiley__aerial--${aerial}` : ""}`}

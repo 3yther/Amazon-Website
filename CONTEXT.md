@@ -25,6 +25,9 @@ receive interest submissions and manage content).
 - Colours: Amazon Orange #FF9900 and Amazon Dark Blue #232F3E only, on warm
   off-white #FAFAF7. No purple. No gradients.
 - No pill-shaped buttons (squared, small radius). No emoji icons (use SVG line icons).
+- Write "T-Level" and "T-Levels", with a hyphen, everywhere in copy. The only
+  exception is the exact title of a published source we cite, e.g. "T Level
+  Placements, About Amazon UK".
 - No em dashes anywhere in copy. No vacuous filler text. No fake reviews/metrics/accounts.
 - Keep website copy minimal and punchy. Fewer words, said with more weight.
 - Bolder typography for headings; monospace for small labels.

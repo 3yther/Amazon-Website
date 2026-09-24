@@ -3,7 +3,7 @@
  * Kept in its own file so it never collides with styles.css. Colours come only
  * from the tokens in styles.css, in two kinds:
  *
- *   Fixed brand tokens  --orange, --paper-dark (#232f3e), --text-dark (#fafaf7).
+ *   Fixed brand tokens  --orange, --paper-dark (#1a2430), --text-dark (#fafaf7).
  *                       Used for Smiley itself and the chat header, which look
  *                       the same in light and dark mode.
  *   Theme tokens        --surface, --paper, --blue, --line, --ink-muted.
@@ -379,7 +379,7 @@
   border: 2px solid var(--blue);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: 0 8px 24px rgb(35 47 62 / 0.14);
+  box-shadow: var(--shadow-soft);
 }
 
 /* The tail, pointing down at Smiley. */
@@ -436,7 +436,7 @@
   border: 2px solid var(--blue);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: 0 10px 30px rgb(35 47 62 / 0.18);
+  box-shadow: var(--shadow-raised);
 }
 
 /* The header stays dark in both themes, like a name badge, so Smiley's

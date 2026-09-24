@@ -1,0 +1,270 @@
+[
+  {
+    "model": "providers.provider",
+    "pk": 1,
+    "fields": {
+      "name": "Barnet and Southgate College",
+      "address": "High Street, Southgate, London",
+      "postcode": "N14 6BS",
+      "latitude": "51.630410",
+      "longitude": "-0.129501",
+      "website_url": "https://www.barnetsouthgate.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 2,
+    "fields": {
+      "name": "Barking and Dagenham College",
+      "address": "Dagenham Road, Romford",
+      "postcode": "RM7 0XU",
+      "latitude": "51.560332",
+      "longitude": "0.174592",
+      "website_url": "https://www.bdc.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 3,
+    "fields": {
+      "name": "Croydon College",
+      "address": "College Road, Croydon",
+      "postcode": "CR9 1DX",
+      "latitude": "51.373414",
+      "longitude": "-0.095181",
+      "website_url": "https://www.croydon.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 4,
+    "fields": {
+      "name": "South Bank Colleges",
+      "address": "103 Borough Road, London",
+      "postcode": "SE1 0AA",
+      "latitude": "51.498709",
+      "longitude": "-0.101747",
+      "website_url": "https://www.southbank-colleges.ac.uk",
+      "pathways": [
+        1,
+        3,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 5,
+    "fields": {
+      "name": "Exeter College",
+      "address": "Hele Road, Exeter",
+      "postcode": "EX4 4JS",
+      "latitude": "50.728212",
+      "longitude": "-3.538406",
+      "website_url": "https://www.exe-coll.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 6,
+    "fields": {
+      "name": "Bolton College",
+      "address": "Deane Road, Bolton",
+      "postcode": "BL3 5BG",
+      "latitude": "53.574737",
+      "longitude": "-2.437095",
+      "website_url": "https://www.boltoncollege.ac.uk",
+      "pathways": [
+        1,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 7,
+    "fields": {
+      "name": "Leeds City College",
+      "address": "Park Lane Campus, Park Lane, Leeds",
+      "postcode": "LS3 1AA",
+      "latitude": "53.800463",
+      "longitude": "-1.559016",
+      "website_url": "https://www.leedscitycollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 8,
+    "fields": {
+      "name": "Nottingham College",
+      "address": "City Hub, Lower Parliament Street, Nottingham",
+      "postcode": "NG1 1GN",
+      "latitude": "52.951519",
+      "longitude": "-1.138106",
+      "website_url": "https://www.nottinghamcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 9,
+    "fields": {
+      "name": "Weston College",
+      "address": "Knightstone Road, Weston-super-Mare",
+      "postcode": "BS23 2AL",
+      "latitude": "51.350950",
+      "longitude": "-2.981531",
+      "website_url": "https://www.weston.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 10,
+    "fields": {
+      "name": "Blackpool and The Fylde College",
+      "address": "Ashfield Road, Bispham, Blackpool",
+      "postcode": "FY2 0HB",
+      "latitude": "53.859345",
+      "longitude": "-3.027626",
+      "website_url": "https://www.blackpool.ac.uk",
+      "pathways": [
+        1,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 11,
+    "fields": {
+      "name": "Scarborough TEC",
+      "address": "Lady Edith's Drive, Scarborough",
+      "postcode": "YO12 5RQ",
+      "latitude": "54.290864",
+      "longitude": "-0.447867",
+      "website_url": "https://www.scarboroughtec.ac.uk",
+      "pathways": [
+        1,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 12,
+    "fields": {
+      "name": "City College Norwich",
+      "address": "Ipswich Road, Norwich",
+      "postcode": "NR2 2LJ",
+      "latitude": "52.618169",
+      "longitude": "1.286348",
+      "website_url": "https://www.ccn.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 13,
+    "fields": {
+      "name": "Newcastle College",
+      "address": "Rye Hill Campus, Scotswood Road, Newcastle upon Tyne",
+      "postcode": "NE4 7SA",
+      "latitude": "54.966425",
+      "longitude": "-1.627198",
+      "website_url": "https://www.ncl-coll.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 14,
+    "fields": {
+      "name": "Solihull College and University Centre",
+      "address": "Blossomfield Road, Solihull",
+      "postcode": "B91 1SB",
+      "latitude": "52.409583",
+      "longitude": "-1.792141",
+      "website_url": "https://www.solihull.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 15,
+    "fields": {
+      "name": "Bath College",
+      "address": "Avon Street, Bath",
+      "postcode": "BA1 1UP",
+      "latitude": "51.379714",
+      "longitude": "-2.362651",
+      "website_url": "https://www.bathcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  }
+]

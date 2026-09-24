@@ -113,7 +113,7 @@ export default function PathwaySwitcher() {
             <h3 className="pathways__title">{pathway.name}</h3>
 
             <div className="pathways__detail">
-              <h4 className="label">T Levels in this pathway</h4>
+              <h4 className="label">T-Levels in this pathway</h4>
               <ul className="pathways__list">
                 {pathway.tLevels.map((name) => (
                   <li key={name}>{name}</li>

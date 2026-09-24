@@ -3,7 +3,7 @@
 > Agreed as a team before features were built. Everything depends on it.
 > Change a model only by team agreement, because it breaks other people's work,
 > and update this file in the same pull request.
-> This maps to the ERD in the proposal. Last checked against the code: 23 September 2026.
+> This maps to the ERD in the proposal. Last checked against the code: 24 September 2026.
 
 ## Core models (Django)
 
@@ -58,6 +58,22 @@ The starter resources (ContentItems linking to official pages) load from
 - link            -> web address of a resource on another site (optional); use this or file
 - created_at      -> datetime (auto)
 
+### Provider  (`providers` app, the "T Level near you" search)
+A school or college that offers T Levels, with the position the search measures from.
+- name            -> text
+- address         -> text (street and town, one line)
+- postcode        -> text (up to 10 characters)
+- latitude        -> decimal, 6 places
+- longitude       -> decimal, 6 places
+- website_url     -> web address of the provider's own site (optional)
+- pathways        -> ManyToMany(Pathway)  # the pathways this provider offers
+- created_at      -> datetime (auto)
+The starter providers load from `backend/providers/fixtures/providers.json`.
+Latitude and longitude are filled in ONCE by `python manage.py geocode_providers`,
+which looks each postcode up on postcodes.io. A provider still at 0, 0 has not been
+looked up yet and is left out of the search. A visitor's search geocodes only their
+own postcode, so it never costs one outside call per provider.
+
 ### ExpressionOfInterest  (`interest` app)
 - full_name       -> text
 - email           -> email
@@ -78,6 +94,7 @@ The starter resources (ContentItems linking to official pages) load from
 - One User has one Profile and one UserPreference.
 - One Pathway has many ContentItems.
 - One Pathway has many ExpressionsOfInterest.
+- A Provider offers many Pathways; a Pathway is offered by many Providers.
 - A User may submit many ExpressionsOfInterest (or submit anonymously).
 - ChatMessages belong to a session, and to a User when they are signed in.
 
@@ -85,6 +102,7 @@ The starter resources (ContentItems linking to official pages) load from
 - Deleting a User deletes their Profile, UserPreference and ChatMessages.
 - Deleting a User keeps their ExpressionsOfInterest but unlinks them (user set to null).
 - A Pathway cannot be deleted while any ContentItem or ExpressionOfInterest points at it.
+- Deleting a Provider only removes its links to Pathways, never the Pathways themselves.
 
 ## Notes
 - Store FILES in S3, store the LINK to them in ContentItem.file. Do not put files in the DB.

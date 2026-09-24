@@ -96,6 +96,20 @@ export function getContent(filters, options) {
 }
 
 /**
+ * Schools and colleges near a postcode, nearest first:
+ * { postcode, radius_miles, count, results }. Each result has id, name,
+ * address, postcode, distance_miles, website_url and pathways.
+ *
+ * filters: postcode (required), pathway (a slug, optional), radius (miles,
+ * optional, default 15). Throws ApiError(400) with field errors when the
+ * postcode does not exist or a filter is unknown, and ApiError(503) when the
+ * postcode lookup service itself is down.
+ */
+export function searchProviders(filters, options) {
+  return request("/api/providers/search/", { ...options, params: filters });
+}
+
+/**
  * The signed-in user: { id, username, user_type, pathway_interest }.
  * Resolves to null when nobody is signed in, since that is a normal state.
  */

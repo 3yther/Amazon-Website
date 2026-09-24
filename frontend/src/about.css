@@ -1032,6 +1032,27 @@
   text-align: left;
 }
 
+/* ---------- All T-Levels (TLevels.jsx) ---------- */
+
+.t-level-routes__subjects {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.t-level-routes__subjects li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.t-level-routes__note {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
 /* ---------- Motion ---------- */
 
 /* Every transition on these pages, in one place, and only for visitors who

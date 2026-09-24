@@ -33,7 +33,7 @@ function shuffleOptions(questions) {
  * A knowledge check: one question at a time, each with a right answer and an
  * explanation.
  *
- * This is not the same thing as the "Is a T Level right for me?" quiz on the
+ * This is not the same thing as the "Is a T-Level right for me?" quiz on the
  * About page. That one is a self assessment, where no answer is wrong. This
  * one can be got wrong, which is what the assistant needs: when an answer is
  * wrong it calls onIncorrectAnswer with the question, the right answer and the
@@ -130,7 +130,7 @@ export default function KnowledgeQuiz({
   return (
     <section className="knowledge-quiz" aria-labelledby="knowledge-quiz-title">
       <p className="label">Knowledge check</p>
-      <h2 id="knowledge-quiz-title">What do you know about T Levels?</h2>
+      <h2 id="knowledge-quiz-title">What do you know about T-Levels?</h2>
       <p className="knowledge-quiz__lead">
         {questions.length} questions, one at a time. Getting one wrong is useful: Smiley
         will offer to talk it through.

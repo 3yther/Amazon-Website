@@ -7,6 +7,7 @@ variables. Locally they come from backend/.env (copy .env.example, never commit
 preview (see DEPLOYMENT.md), EC2 later.
 """
 import os
+import sys
 from pathlib import Path
 from urllib.parse import parse_qsl, unquote, urlsplit
 
@@ -63,6 +64,7 @@ INSTALLED_APPS = [
     "content",
     "interest",
     "chatbot",
+    "providers",
 ]
 
 MIDDLEWARE = [
@@ -168,6 +170,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+# Tests only: a fast hasher. PBKDF2 is slow on purpose, which is what makes it
+# safe, but the tests create hundreds of throwaway users and pay that cost
+# every time. Real passwords, locally and deployed, still use PBKDF2.
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
+if TESTING:
+    PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 
 # ---------------------------------------------------------------------------
@@ -291,11 +300,13 @@ if not DEBUG:
 
 
 # ---------------------------------------------------------------------------
-# Temporary diagnostic logging: prints server-error tracebacks to the
-# gunicorn console (visible in `railway logs`) even with DEBUG off, so we
-# can see what's causing the 500s on register/pathways/content in prod.
-# Safe to remove once the underlying bug is fixed.
+# Logging
 # ---------------------------------------------------------------------------
+
+# Prints the traceback of every server error (a 500) to the console, even with
+# DEBUG off. Deployed, that console is the host's log (`railway logs` on the
+# preview), so a 500 always leaves a trace we can read. Visitors still only
+# see a plain error: the traceback never goes into the response.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

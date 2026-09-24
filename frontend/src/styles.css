@@ -65,6 +65,14 @@
      gradient (see the design rules in CONTEXT.md). */
   --scrim: rgb(35 47 62 / 0.82);
 
+  /* A lighter tint behind the open menu drawer, so the blurred page still
+     shows through. Fixed navy, like --scrim, so it stays dark in dark mode. */
+  --backdrop: rgb(35 47 62 / 0.45);
+
+  /* Soft shadows under Smiley's panels, so they lift off the page. */
+  --shadow-soft: 0 8px 24px rgb(35 47 62 / 0.14);
+  --shadow-raised: 0 10px 30px rgb(35 47 62 / 0.18);
+
   /* How strongly the drifting subject names show through (RisingSubjects).
      Light ink on a dark page needs more alpha than dark ink on a light one
      to read as the same subtle watermark, so dark mode raises this. */
@@ -497,7 +505,7 @@ main {
 
 .footer-bottom {
   padding-block: 16px;
-  border-top: 1px solid rgb(250 250 247 / 0.2);
+  border-top: 1px solid var(--border-dark-mode);
 }
 
 .footer-bottom .label {
@@ -619,7 +627,7 @@ main {
    plus a tint dark enough to keep the drawer's own edge obvious. Tinted with
    the fixed dark navy rather than --blue, which flips light in dark mode. */
 .menu-overlay::backdrop {
-  background: rgb(35 47 62 / 0.45);
+  background: var(--backdrop);
   backdrop-filter: blur(8px);
 }
 
@@ -1096,9 +1104,21 @@ main {
   color: var(--ink-muted);
 }
 
+/* The page a step talks about. Sits at the foot of the card, so the links
+   line up across the staircase whatever the text length. */
+.step__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  align-self: end;
+  min-height: var(--control-h);
+  font-weight: 700;
+}
+
 @media (min-width: 960px) {
-  /* Bottoms line up and each card starts one step higher than the one
-     before (--drop is how many steps below the top card it starts, set in
+  /* Each card starts one step lower than the one before, so Level 01 is
+     highest (--drop is how many steps below the top card it starts, set in
      HomeSections.jsx). Every top is exactly --rise apart, whatever the text
      length, so the connecting line always meets them. */
   .steps {
@@ -1110,7 +1130,7 @@ main {
   }
 
   /* The staircase line: from each card's top right corner across half the
-     gap, up one step, then on to the next card's top left corner. */
+     gap, down one step, then on to the next card's top left corner. */
   .step:not(:last-child)::after {
     content: "";
     position: absolute;
@@ -1121,13 +1141,13 @@ main {
   }
 
   .step + .step::before {
-    top: -1px;
+    top: calc(-1 * var(--rise) - 1px);
     bottom: auto;
     left: auto;
     right: 100%;
     width: calc(var(--gap) / 2 + 1px);
     height: calc(var(--rise) + 1px);
-    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 }
 
@@ -1628,6 +1648,42 @@ main:has(.auth-layout) {
 
 .icon {
   flex: none;
+}
+
+/* ---------- T-Level Near You (NearYou.jsx) ---------- */
+
+/* .filters lays the three controls out on a grid and aligns everything to
+   the bottom edge. The submit button is a grid item like the rest, so it
+   only needs to not stretch across its cell. */
+.near-you__submit {
+  justify-self: start;
+}
+
+/* How far away, on the provider card. Orange fill with the dark ink that
+   always goes on it, the same treatment .tag--signup uses: the distance is
+   the one thing a visitor scans for, and the colour is decoration, never the
+   only thing carrying the meaning (the miles are written out). */
+.tag--distance {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+/* The pathways a provider offers, inside the card's definition list. A list,
+   because that is what it is, with the bullets and indent taken off. */
+.near-you__pathways {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.near-you__pathways li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* ---------- Error notice ---------- */

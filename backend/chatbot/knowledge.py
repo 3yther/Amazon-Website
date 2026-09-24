@@ -82,7 +82,7 @@ def quoted_card(topic, title, text, source=ABOUT_COPY):
 
 
 def quoted_list(topic, items):
-    """A list from the About page copy, e.g. a pathway's T Levels, read as a sentence."""
+    """A list from the About page copy, e.g. a pathway's T-Levels, read as a sentence."""
     items = tuple(items)
     text = items[0] if len(items) == 1 else f"{', '.join(items[:-1])} and {items[-1]}"
     return Fact(
@@ -105,9 +105,10 @@ VERIFIED_FACTS = (
     Fact(
         topic="Which pages this site has",
         text=(
-            "The site has: Home, About T Levels (/about), T Levels at Amazon "
-            "(/t-levels-at-amazon), Learning Pathways (/pathways), Resources (/resources), "
-            "T Level Near You (/t-level-near-you), a knowledge quiz (/quiz), FAQs (/faqs), "
+            "The site has: Home, About T-Level (/about), T-Levels at Amazon "
+            "(/t-levels-at-amazon), Learning Pathways (/pathways), All T-Levels, every subject "
+            "(/t-levels), Get involved (/get-involved), Resources (/resources), "
+            "T-Level Near You (/t-level-near-you), a knowledge quiz (/quiz), FAQs (/faqs), "
             "Help (/help), Register interest (/register-interest), Sign up (/register) and "
             "Log in (/login). Support pages: Contact us (/contact), Report an issue "
             "(/report-issue), Feedback (/feedback) and Accessibility help "
@@ -138,24 +139,24 @@ VERIFIED_FACTS = (
         ),
         source="frontend/src/pages/RegisterInterest.jsx and POST /api/interest/, checked 2026-09-24.",
     ),
-    # --- T Levels in general --------------------------------------------------
+    # --- T-Levels in general --------------------------------------------------
     quoted(
-        "What a T Level is",
+        "What a T-Level is",
         "Around 20 to choose from. Two years, full time, at a school or college.",
     ),
     quoted(
-        "How much of a T Level is classroom learning",
+        "How much of a T-Level is classroom learning",
         "1,100 to 1,300 hours of lessons: the basics of your industry, then a specialism.",
     ),
     quoted_card(
-        "How a T Level compares with A levels",
+        "How a T-Level compares with A levels",
         "Same size as three A levels",
         "It carries UCAS points, so university stays open.",
     ),
     quoted(
-        "Whether a T Level is the same as an apprenticeship",
+        "Whether a T-Level is the same as an apprenticeship",
         "No, they are the other way round. An apprenticeship is mostly paid work with some "
-        "study. A T Level is mostly study, about 80 percent, with an industry placement of "
+        "study. A T-Level is mostly study, about 80 percent, with an industry placement of "
         "at least 315 hours making up the rest.",
     ),
     quoted(
@@ -165,50 +166,50 @@ VERIFIED_FACTS = (
         "Check with the provider you want to go to.",
     ),
     quoted(
-        "Which T Level subjects there are",
+        "Which T-Level subjects there are",
         "Around 20, across routes including digital, engineering, construction, health, "
         "science, legal and accounting, media, marketing, agriculture, animal care, "
         "education, and craft and design. Sport and Social Care arrive in September 2028. "
-        "The Finance T Level takes its last enrolments in September 2026, so Accounting is "
+        "The Finance T-Level takes its last enrolments in September 2026, so Accounting is "
         "the one continuing.",
     ),
     quoted(
-        "How a T Level is assessed",
+        "How a T-Level is assessed",
         "Two parts. The core is graded A star to E and covers the knowledge for your "
         "industry. The occupational specialism is graded pass, merit or distinction and is "
         "the practical side. Both show on your certificate, along with one overall grade.",
     ),
     quoted(
-        "T Levels and university",
+        "T-Levels and university",
         "Yes. A Distinction star is worth 168 UCAS points, a Distinction 144, a Merit 120 "
         "and a Pass 72 or 96 depending on your core grade. Not every university uses UCAS "
         "points though, so check the entry requirements of the course you want.",
     ),
     quoted(
         "What happens if you do not pass everything",
-        "You get a T Level statement of achievement instead of the full certificate. It "
+        "You get a T-Level statement of achievement instead of the full certificate. It "
         "lists the parts you did complete, so the work is not lost.",
     ),
     quoted(
-        "What if you are not ready for a T Level yet",
-        "There is a T Level Foundation Year, a one year level 2 course that builds up your "
+        "What if you are not ready for a T-Level yet",
+        "There is a T-Level Foundation Year, a one year level 2 course that builds up your "
         "English, maths, digital skills and work experience first, then moves you onto the "
-        "T Level.",
+        "T-Level.",
     ),
     quoted(
-        "Taking other qualifications alongside a T Level",
-        "A T Level is a full time programme broadly the size of three A levels, so it is not "
+        "Taking other qualifications alongside a T-Level",
+        "A T-Level is a full time programme broadly the size of three A levels, so it is not "
         "usually combined with much else. Some providers allow one extra qualification. "
         "Ask yours.",
     ),
     quoted_card(
-        "Where a T Level can lead",
+        "Where a T-Level can lead",
         "Three ways on",
         "A skilled job, a higher apprenticeship, or university.",
     ),
     # --- Money ------------------------------------------------------------------
     quoted_card(
-        "What a T Level costs",
+        "What a T-Level costs",
         "The course is free",
         "If you are 16 to 18 and in full-time education.",
     ),
@@ -251,7 +252,7 @@ VERIFIED_FACTS = (
         (
             "Part of it runs in Amazon's skills hubs, in blocks of 15 days.",
             "Work with other students on projects for charities.",
-            "Tasks set by your team that use your T Level skills.",
+            "Tasks set by your team that use your T-Level skills.",
         ),
         source=AMAZON_COPY,
     ),
@@ -276,7 +277,7 @@ VERIFIED_FACTS = (
     Fact(
         topic="Which pathways Amazon offers placements in",
         text=(
-            "Digital: Where Amazon's T Level programme started. Business: Named by Amazon as "
+            "Digital: Where Amazon's T-Level programme started. Business: Named by Amazon as "
             "a pathway it is expanding into. Media: Named by Amazon as a creative pathway it "
             "is expanding into. Engineering: Named by Amazon as a pathway it is expanding into."
         ),
@@ -285,24 +286,24 @@ VERIFIED_FACTS = (
         # The pathway names are checked by the pathway facts below; these are
         # each pathway's amazonStatus line.
         quoted_parts=(
-            "Where Amazon's T Level programme started.",
+            "Where Amazon's T-Level programme started.",
             "Named by Amazon as a pathway it is expanding into.",
             "Named by Amazon as a creative pathway it is expanding into.",
         ),
     ),
     # --- Each pathway -------------------------------------------------------------
     quoted_list(
-        "The T Levels in the Digital pathway",
+        "The T-Levels in the Digital pathway",
         ["Digital Data Analytics", "Digital Software Development", "Digital Support and Security"],
     ),
-    quoted_list("The T Levels in the Business pathway", ["Management and Administration"]),
-    quoted_list("The T Levels in the Media pathway", ["Media, Broadcast and Production"]),
+    quoted_list("The T-Levels in the Business pathway", ["Management and Administration"]),
+    quoted_list("The T-Levels in the Media pathway", ["Media, Broadcast and Production"]),
     quoted_list(
-        "The T Levels in the Finance pathway",
+        "The T-Levels in the Finance pathway",
         ["Accounting", "Finance, last enrolments September 2026"],
     ),
     quoted_list(
-        "The T Levels in the Engineering pathway",
+        "The T-Levels in the Engineering pathway",
         [
             "Design and Development for Engineering and Manufacturing",
             "Maintenance, Installation and Repair for Engineering and Manufacturing",
@@ -314,7 +315,7 @@ VERIFIED_FACTS = (
         "You sit with a technical team and work on live tasks: writing and reviewing code, "
         "testing, fixing bugs, or keeping systems and users running.",
     ),
-    quoted("Amazon and the Digital pathway", "Where Amazon's T Level programme started."),
+    quoted("Amazon and the Digital pathway", "Where Amazon's T-Level programme started."),
     quoted(
         "What a Business placement involves",
         "You support the day to day running of a team: planning, coordinating, handling data "
@@ -447,7 +448,7 @@ def build_grounding():
 # Who the visitor told Smiley they are, from the question it asks when a
 # conversation starts. Only ever used to pitch the answer; never stored.
 AUDIENCES = {
-    "student": "a student thinking about a T Level",
+    "student": "a student thinking about a T-Level",
     "parent": "a parent or carer of a student",
     "teacher": "a teacher or someone who works in a school or college",
 }
@@ -462,7 +463,7 @@ def build_system_prompt(quiz_context=None, audience=None):
     the visitor said they are, so the answer can be pitched for them.
     """
     prompt = f"""You are Smiley, the guide on T-SMILE. T-SMILE is a website that explains \
-T Levels, including T Levels at Amazon, to students aged 16 to 18, to their parents and \
+T-Levels, including T-Levels at Amazon, to students aged 16 to 18, to their parents and \
 carers, and to teachers.
 
 WHO SMILEY IS
@@ -476,7 +477,7 @@ FACTS YOU MAY USE
 {build_grounding()}
 
 HOW TO ANSWER
-- Use only the facts above. They are the only things you know about T Levels.
+- Use only the facts above. They are the only things you know about T-Levels.
 - If the facts above do not answer the question, say so plainly and send the visitor to \
 the Help page at /help or the Resources page at /resources. A short honest "I do not have \
 that yet" is always better than a guess.
@@ -495,13 +496,14 @@ HOW TO WRITE
 - Clear, conversational and friendly, in British English.
 - Keep the whole reply, question included, under 90 words. Use short sentences.
 - No emoji, no em dashes, and no markdown formatting.
+- Write T-Level and T-Levels with a hyphen, as the rest of this site does.
 - Point people at a page on this site when there is a relevant one.
 
 LOOKING AFTER THE VISITOR
 - Most visitors are under 18. Never ask for personal details: no name, address, school, \
 email, phone number, age or date of birth. You do not need them.
 - If somebody volunteers personal details anyway, do not repeat them back.
-- Do not tell anyone whether they personally should take a T Level, and do not predict \
+- Do not tell anyone whether they personally should take a T-Level, and do not predict \
 whether they would be accepted. Suggest they talk to a teacher or a careers adviser.
 - If somebody seems upset, or raises something serious about their safety or wellbeing, \
 drop the playfulness, be kind, and gently suggest they talk to a teacher, parent, carer or \
