@@ -348,8 +348,8 @@
 
 .faq__trigger:hover span {
   text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.25em;
+  text-decoration-thickness: var(--underline-thickness-hover);
+  text-underline-offset: var(--underline-offset);
 }
 
 .faq__chevron {
@@ -593,12 +593,14 @@
 .about-sources a {
   font-weight: 600;
   color: var(--blue);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 .about-sources a:hover {
-  border-bottom-color: var(--orange);
+  text-decoration-color: var(--orange);
 }
 
 /* ---------- Route call to action (T-Levels at Amazon) ---------- */
@@ -728,7 +730,8 @@
 
 .signpost a:hover .signpost__label {
   text-decoration: underline;
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: var(--underline-thickness-hover);
+  text-underline-offset: var(--underline-offset);
 }
 
 .signpost__label {

@@ -3,6 +3,8 @@ import { Navigate } from "react-router-dom";
 import { getInterestSubmissions } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { FormError } from "../components/FormFields.jsx";
+import { formatDate, formatNumber } from "../formats.js";
+import { useAccessibilityPreferences } from "../hooks/useAccessibilityPreferences.jsx";
 import { USER_TYPES } from "../labels.js";
 
 // How much of a message shows before it is folded away. Long ones open in
@@ -20,6 +22,7 @@ const MESSAGE_PREVIEW = 90;
  */
 export default function StaffDashboard() {
   const { user, checked } = useAuth();
+  const { preferences } = useAccessibilityPreferences();
   const [page, setPage] = useState(1);
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("loading"); // loading | ready | error
@@ -78,8 +81,8 @@ export default function StaffDashboard() {
       {status === "ready" && results.length > 0 && (
         <>
           <p className="results-status" role="status">
-            {data.count} submission{data.count === 1 ? "" : "s"}, showing {results.length} on this
-            page.
+            {formatNumber(data.count, preferences.number_format)} submission
+            {data.count === 1 ? "" : "s"}, showing {results.length} on this page.
           </p>
 
           {/* A scrollable region needs to be reachable by keyboard, so it
@@ -111,7 +114,7 @@ export default function StaffDashboard() {
                     <td>
                       <SubmissionMessage message={row.message} />
                     </td>
-                    <td>{new Date(row.submitted_at).toLocaleDateString()}</td>
+                    <td>{formatDate(row.submitted_at, preferences.date_format)}</td>
                   </tr>
                 ))}
               </tbody>

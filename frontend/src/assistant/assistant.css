@@ -591,6 +591,8 @@
 .assistant__message--assistant a {
   color: inherit;
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness);
 }
 
 .assistant__message--user {

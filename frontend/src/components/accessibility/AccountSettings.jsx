@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deactivateAccount, updateProfile } from "../../api.js";
+import { deactivateAccount, logout, updateProfile } from "../../api.js";
 import { useAuth } from "../../auth.jsx";
 import { formErrors } from "../../formErrors.js";
 import { FormError, TextField } from "../FormFields.jsx";
@@ -15,9 +15,15 @@ function fieldsFrom(user) {
 }
 
 /**
- * Editable profile details, and account deactivation behind a password
- * confirmation. Deactivating signs the user out at once: a deactivated
- * account can no longer authenticate (see DeactivateAccountView).
+ * Editable profile details, signing out, and account deactivation behind a
+ * password confirmation. Deactivating signs the user out at once: a
+ * deactivated account can no longer authenticate (see DeactivateAccountView).
+ *
+ * Logging out lives here rather than in the header's account menu, where it
+ * used to sit one press away on every page. It gets its own section between
+ * the profile form and the danger zone: not part of the form, since it
+ * throws away whatever is typed there, and not in the danger zone either,
+ * since logging out costs nothing and needs no confirmation.
  */
 export default function AccountSettings() {
   const { user, refresh } = useAuth();
@@ -26,6 +32,7 @@ export default function AccountSettings() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | saving | saved
 
+  const [loggingOut, setLoggingOut] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [deactivateError, setDeactivateError] = useState("");
@@ -49,6 +56,17 @@ export default function AccountSettings() {
       setErrors(formErrors(error));
       setStatus("idle");
     }
+  }
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      await logout();
+    } catch {
+      // A 401 means the session had already ended. refresh() settles it either way.
+    }
+    await refresh();
+    navigate("/login");
   }
 
   function closeConfirm() {
@@ -139,6 +157,17 @@ export default function AccountSettings() {
           </button>
         </div>
       </form>
+
+      <div className="settings-block">
+        <p className="label">Signing out</p>
+        <p>
+          Ends this session on this device. Your settings and your account stay exactly as
+          they are.
+        </p>
+        <button type="button" className="button" onClick={handleLogout} disabled={loggingOut}>
+          {loggingOut ? "Logging out" : "Log out"}
+        </button>
+      </div>
 
       <div className="danger-zone">
         <p className="label">Danger zone</p>

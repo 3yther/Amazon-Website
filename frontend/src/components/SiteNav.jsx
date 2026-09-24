@@ -20,6 +20,11 @@ const PAGES = [
   // The Expression of Interest form, a core client requirement, so it is
   // one tap away on every page.
   { to: "/register-interest", label: "Register interest" },
+  // Settings was only reachable from the avatar menu, which signed-out
+  // visitors never see at all, even though the sight, display and language
+  // settings all work without an account. It belongs in the menu everyone
+  // has.
+  { to: "/accessibility", label: "Settings" },
 ];
 
 export default function SiteNav() {
