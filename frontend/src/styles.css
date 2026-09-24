@@ -614,16 +614,83 @@ main {
   overflow: hidden;
 }
 
-.menu-overlay__top {
+/* The greeting band at the top of the drawer, the way Amazon's menu opens:
+   dark navy, a person icon, then "Hello, sam" (or "Hello, sign in" as a link
+   to the login page). Uses the same fixed dark surface as the header, so it
+   reads as the header continuing into the drawer, in both themes. */
+.menu-hello {
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+.menu-hello__inner {
   display: flex;
   align-items: center;
+  gap: 12px;
   min-height: 64px;
-  padding-block: 14px 10px; /* puts the close button where the menu button was */
+  padding-block: 10px; /* puts the close button where the menu button was */
+}
+
+.menu-hello__avatar {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--ink-inverse);
+  color: var(--surface-inverse);
+}
+
+.menu-hello__avatar .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.menu-hello__text {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink-inverse);
+  font-size: 1.1875rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+a.menu-hello__text {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  text-decoration: none;
+}
+
+a.menu-hello__text:hover {
+  text-decoration: underline;
+}
+
+.menu-hello :focus-visible {
+  outline-color: var(--orange);
+}
+
+/* The close button sits on the dark band, so it inverts like the header's. */
+.menu-hello .button {
+  border-color: var(--ink-inverse);
+  color: var(--ink-inverse);
+}
+
+.menu-hello .button:hover {
+  background: var(--ink-inverse);
+  color: var(--surface-inverse);
 }
 
 .menu-overlay__close {
   width: var(--control-h);
+  flex-shrink: 0;
+  margin-inline-start: auto;
   padding: 0;
+}
+
+.menu-overlay__language {
+  padding-block: 0 32px;
 }
 
 .menu-overlay__close .icon {

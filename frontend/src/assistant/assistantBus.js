@@ -44,6 +44,21 @@ export function onQuizEvent(listener) {
   return () => listeners.delete(listener);
 }
 
+// --- easter eggs -----------------------------------------------------------
+
+const eggListeners = new Set();
+
+/** Tells Smiley somebody found an easter egg elsewhere on the site, e.g. "wordmark". */
+export function reportEasterEgg(type) {
+  for (const listener of eggListeners) listener(type);
+}
+
+/** Listen for easter eggs. Returns the function that stops listening. */
+export function onEasterEgg(listener) {
+  eggListeners.add(listener);
+  return () => eggListeners.delete(listener);
+}
+
 /** Listen for wrong answers only. Returns the function that stops listening. */
 export function onIncorrectAnswer(listener) {
   return onQuizEvent((event) => {

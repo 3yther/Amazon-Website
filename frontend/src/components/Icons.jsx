@@ -64,6 +64,40 @@ export function ChevronDownIcon() {
 
 // The show/hide pair on a password field (see TextField in FormFields.jsx).
 
+export function GlobeIcon() {
+  return (
+    <Icon>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" />
+    </Icon>
+  );
+}
+
+export function PersonIcon() {
+  return (
+    <Icon>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+    </Icon>
+  );
+}
+
+export function ThumbUpIcon() {
+  return (
+    <Icon>
+      <path d="M7 11v10H3V11h4zM7 11l4-8c1.7 0 3 1.3 3 3v3h6l-2 12H7" />
+    </Icon>
+  );
+}
+
+export function FlagIcon() {
+  return (
+    <Icon>
+      <path d="M5 21V4h13l-2 4.5 2 4.5H5" />
+    </Icon>
+  );
+}
+
 export function EyeIcon() {
   return (
     <Icon>

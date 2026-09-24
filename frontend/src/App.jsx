@@ -2,16 +2,22 @@ import { useLayoutEffect } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import amazonLogo from "./assets/amazon-wordmark.png";
 import ChatWidget from "./assistant/ChatWidget.jsx";
+import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
 import Footer from "./components/Footer.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
+import LanguagePicker from "./i18n/LanguagePicker.jsx";
+import TranslationNotice from "./i18n/TranslationNotice.jsx";
 import About from "./pages/About.jsx";
 import Accessibility from "./pages/Accessibility.jsx";
 import AccessibilityHelp from "./pages/AccessibilityHelp.jsx";
 import Contact from "./pages/Contact.jsx";
 import Cookies from "./pages/Cookies.jsx";
 import DataRights from "./pages/DataRights.jsx";
+import Community from "./pages/Community.jsx";
+import CommunityAsk from "./pages/CommunityAsk.jsx";
+import CommunityQuestion from "./pages/CommunityQuestion.jsx";
 import Faqs from "./pages/Faqs.jsx";
 import Feedback from "./pages/Feedback.jsx";
 import ContentLibrary from "./pages/ContentLibrary.jsx";
@@ -56,16 +62,21 @@ export default function App() {
             {/* Approved logo file, used unaltered: transparent, sitting
                 straight on the dark header. */}
             <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
-            <Link className="wordmark" to="/">
+            <Link className="wordmark" to="/" onClick={countWordmarkClick}>
               T-<span className="wordmark__accent">SMILE</span>
             </Link>
           </div>
 
-          {/* Third column, balancing the menu button on the left. Empty until
-              someone is signed in, when it shows the account menu. */}
-          <AccountDropdown />
+          {/* Third column, balancing the menu button on the left: the
+              language menu, then the account menu once someone is signed in. */}
+          <div className="site-header__end">
+            <LanguagePicker variant="header" />
+            <AccountDropdown />
+          </div>
         </div>
       </header>
+
+      <TranslationNotice pathname={pathname} />
 
       <main id="main" className="container" tabIndex={-1}>
         <Routes>
@@ -79,6 +90,10 @@ export default function App() {
           <Route path="/register-interest" element={<PageTitle title="Register interest"><RegisterInterest /></PageTitle>} />
           <Route path="/pathways" element={<PageTitle title="Learning Pathways"><Pathways /></PageTitle>} />
           <Route path="/faqs" element={<PageTitle title="FAQs"><Faqs /></PageTitle>} />
+          {/* "ask" before ":id", so /community/ask is never read as a question number. */}
+          <Route path="/community" element={<PageTitle title="Community"><Community /></PageTitle>} />
+          <Route path="/community/ask" element={<PageTitle title="Ask the Community"><CommunityAsk /></PageTitle>} />
+          <Route path="/community/:id" element={<PageTitle title="Community question"><CommunityQuestion /></PageTitle>} />
           <Route path="/register" element={<PageTitle title="Sign up"><Register /></PageTitle>} />
           <Route path="/login" element={<PageTitle title="Login"><Login /></PageTitle>} />
           {/* Linked from the footer. */}
@@ -110,6 +125,19 @@ export default function App() {
       <ChatWidget />
     </>
   );
+}
+
+// An easter egg: click the T-SMILE name five times quickly and Smiley says
+// hello. Each click still goes home as normal.
+let wordmarkClicks = [];
+
+function countWordmarkClick() {
+  const now = Date.now();
+  wordmarkClicks = [...wordmarkClicks.filter((time) => now - time < 2500), now];
+  if (wordmarkClicks.length >= 5) {
+    wordmarkClicks = [];
+    reportEasterEgg("wordmark");
+  }
 }
 
 function NotFound() {

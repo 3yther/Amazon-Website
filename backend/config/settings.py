@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "interest",
     "chatbot",
     "providers",
+    "community",
 ]
 
 MIDDLEWARE = [
@@ -233,6 +234,10 @@ REST_FRAMEWORK = {
         # Every chat message costs us an AI call, so this caps what one visitor
         # can spend. Generous enough for a real conversation.
         "chat": "60/hour",
+        # The Community. Enough for a real conversation, not enough to flood it.
+        "community_ask": "10/hour",
+        "community_answer": "30/hour",
+        "community_action": "120/hour",
     },
 }
 

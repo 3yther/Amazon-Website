@@ -1,29 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../api.js";
 import { useAuth } from "../auth.jsx";
-import { CloseIcon, MenuIcon } from "./Icons.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
+import LanguagePicker from "../i18n/LanguagePicker.jsx";
+import { CloseIcon, MenuIcon, PersonIcon } from "./Icons.jsx";
 
 // Site navigation: at every screen width, a menu button in the header opens a
-// full-screen overlay. The overlay is a modal <dialog>, so the page behind is
-// inert and Escape closes it.
+// drawer from the left edge. The drawer is a modal <dialog>, so the page
+// behind is inert and Escape closes it.
 
+// Labels are translation keys (see i18n/messages/en.js, menu.pages).
 const PAGES = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About T-Level" },
-  { to: "/t-levels-at-amazon", label: "T-Levels at Amazon" },
-  { to: "/resources", label: "T-Level Resources" },
-  { to: "/t-level-near-you", label: "T-Level Near you" },
-  { to: "/quiz", label: "Quiz" },
-  { to: "/help", label: "Help" },
+  { to: "/", label: "menu.pages.home" },
+  { to: "/about", label: "menu.pages.about" },
+  { to: "/t-levels-at-amazon", label: "menu.pages.amazon" },
+  { to: "/resources", label: "menu.pages.resources" },
+  { to: "/t-level-near-you", label: "menu.pages.nearYou" },
+  { to: "/quiz", label: "menu.pages.quiz" },
+  { to: "/community", label: "menu.pages.community" },
+  { to: "/help", label: "menu.pages.help" },
   // The Expression of Interest form, a core client requirement, so it is
   // one tap away on every page.
-  { to: "/register-interest", label: "Register interest" },
+  { to: "/register-interest", label: "menu.pages.registerInterest" },
 ];
 
 export default function SiteNav() {
   const location = useLocation();
+  const t = useT();
   const menuButton = useRef(null);
   const overlay = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -84,7 +89,7 @@ export default function SiteNav() {
         ref={menuButton}
         type="button"
         className="button menu-toggle"
-        aria-label="Menu"
+        aria-label={t("menu.open")}
         aria-expanded={menuOpen}
         aria-controls="menu-overlay"
         onClick={() => setMenuOpen(true)}
@@ -99,7 +104,7 @@ export default function SiteNav() {
           id="menu-overlay"
           ref={overlay}
           className="menu-overlay"
-          aria-label="Menu"
+          aria-label={t("menu.open")}
           onKeyDown={(event) => {
             // Handle Escape directly as well as through the dialog's own cancel
             // event, so it closes the same way however the key arrives.
@@ -117,23 +122,59 @@ export default function SiteNav() {
           {/* No RisingSubjects here any more: its names are position: fixed,
               so inside a part-width drawer they escaped the panel and drifted
               across the blurred page behind it. */}
-          <div className="container menu-overlay__top">
-            <button
-              type="button"
-              className="button menu-overlay__close"
-              aria-label="Close menu"
-              onClick={closeMenu}
-            >
-              <CloseIcon />
-            </button>
-          </div>
-          <nav className="container menu-overlay__nav" aria-label="Main">
+          <Hello onNavigate={closeMenu} />
+
+          <nav className="container menu-overlay__nav" aria-label={t("menu.main")}>
             <NavList onNavigate={closeMenu} />
           </nav>
+
+          <div className="container menu-overlay__language">
+            <LanguagePicker variant="menu" />
+          </div>
         </dialog>,
         document.body,
       )}
     </>
+  );
+}
+
+/**
+ * The dark band at the top of the drawer, the way Amazon's menu greets you:
+ * "Hello, sam" once signed in, or "Hello, sign in" as a link to the login
+ * page. The close button sits at its far end, where the menu button was.
+ */
+function Hello({ onNavigate }) {
+  const t = useT();
+  const { user, checked } = useAuth();
+
+  return (
+    <div className="menu-hello">
+      <div className="container menu-hello__inner">
+        <span className="menu-hello__avatar" aria-hidden="true">
+          <PersonIcon />
+        </span>
+
+        {/* Nothing until the first session check, so "sign in" never flashes
+            up for somebody who is already signed in. */}
+        {checked && user && (
+          <p className="menu-hello__text">{t("menu.helloUser", { name: user.username })}</p>
+        )}
+        {checked && !user && (
+          <Link className="menu-hello__text" to="/login" onClick={onNavigate}>
+            {t("menu.helloGuest")}
+          </Link>
+        )}
+
+        <button
+          type="button"
+          className="button menu-overlay__close"
+          aria-label={t("menu.close")}
+          onClick={onNavigate}
+        >
+          <CloseIcon />
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -143,6 +184,7 @@ export default function SiteNav() {
  */
 function NavList({ onNavigate }) {
   const navigate = useNavigate();
+  const t = useT();
   const { user, checked, refresh } = useAuth();
   const [status, setStatus] = useState("idle"); // idle | submitting
 
@@ -169,7 +211,7 @@ function NavList({ onNavigate }) {
         <li key={page.to} style={order(index)}>
           {/* NavLink adds aria-current="page" to the link for the current route. */}
           <NavLink to={page.to} end={page.to === "/"} onClick={onNavigate}>
-            {page.label}
+            {t(page.label)}
           </NavLink>
         </li>
       ))}
@@ -179,12 +221,12 @@ function NavList({ onNavigate }) {
         <>
           <li style={order(PAGES.length)}>
             <NavLink to="/register" onClick={onNavigate}>
-              Sign up
+              {t("menu.signUp")}
             </NavLink>
           </li>
           <li style={order(PAGES.length + 1)}>
             <NavLink to="/login" onClick={onNavigate}>
-              Login
+              {t("menu.logIn")}
             </NavLink>
           </li>
         </>
@@ -198,7 +240,7 @@ function NavList({ onNavigate }) {
             disabled={status === "submitting"}
             onClick={handleLogout}
           >
-            {status === "submitting" ? "Logging out" : "Log out"}
+            {status === "submitting" ? t("menu.loggingOut") : t("menu.logOut")}
           </button>
         </li>
       )}

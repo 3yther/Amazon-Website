@@ -34,9 +34,13 @@ const POSES = {
   listening: "tilt-in",
   curious: "tilt-out",
   sympathetic: "tilt-in",
+  shy: "tilt-in",
   sleepy: "droop",
   asleep: "droop",
 };
+
+// Moods with rosy cheeks.
+const CHEEKY = new Set(["happy", "celebrating", "shy"]);
 
 // How far the eyes and the face move towards what Smiley is looking at, in
 // drawing units. The face moves a little and the eyes a little more, which
@@ -101,6 +105,9 @@ function Eye({ mood, side }) {
           )}
         </g>
       );
+    case "shy":
+      // Small eyes looking down and away: "oh, you're still looking at me".
+      return <ellipse className="smiley__eye" cx="1.4" cy="1.8" rx="2.6" ry="3.4" />;
     default:
       return <ellipse className="smiley__eye" rx="3.3" ry="4.5" />;
   }
@@ -133,9 +140,56 @@ function Mouth({ mood, talking }) {
       return <path className="smiley__smile" d="M29.5 46 Q32 47.6 34.5 46" />;
     case "dizzy":
       return <path className="smiley__smile" d="M26 46 Q28.5 44 31 46 Q33.5 48 36 46 Q37 45 38 45.4" />;
+    case "shy":
+      return <path className="smiley__smile" d="M29.5 46.3 Q32 48 34.5 46.3" />;
     default:
       // The smile. Symmetric, round-ended, and inside the face: a smile, not a logo.
       return <path className="smiley__smile" d="M26.5 45 Q32 50 37.5 45" />;
+  }
+}
+
+/**
+ * Seasonal hats (see seasonalOutfit in useSmiley.js), in the two brand
+ * colours and paper only. They sit over the top of the hood; the aerial is
+ * tucked away underneath while one is on.
+ */
+function Hat({ outfit }) {
+  switch (outfit) {
+    case "bobble":
+      return (
+        <g className="smiley__hat">
+          <path className="smiley__hat-body" d="M13 20 C13 10 21 5 32 5 C43 5 51 10 51 20 Z" />
+          <rect className="smiley__hat-trim" x="11.5" y="16.5" width="41" height="5.5" rx="2.75" />
+          <circle className="smiley__hat-trim" cx="32" cy="4.5" r="3.4" />
+        </g>
+      );
+    case "witch":
+      return (
+        <g className="smiley__hat">
+          <path className="smiley__hat-body" d="M21 15.5 L33 -7 Q35 -9 37.5 -6 L35 -3 L42 15.5 Z" />
+          <rect className="smiley__hat-trim" x="22" y="11" width="20" height="3.5" />
+          <ellipse className="smiley__hat-body" cx="32" cy="16" rx="23" ry="3.6" />
+        </g>
+      );
+    case "party":
+      return (
+        <g className="smiley__hat">
+          <path className="smiley__hat-trim" d="M24 15 L32 -4 L40 15 Z" />
+          <path className="smiley__hat-stripe" d="M27.2 7.5 L36.8 7.5 M29.2 2.5 L34.8 2.5" />
+          <circle className="smiley__hat-pom" cx="32" cy="-4.5" r="2.6" />
+        </g>
+      );
+    case "gradcap":
+      return (
+        <g className="smiley__hat">
+          <path className="smiley__hat-body" d="M20 11 V17 Q32 21.5 44 17 V11 Z" />
+          <path className="smiley__hat-body" d="M10 9 L32 2 L54 9 L32 16 Z" />
+          <path className="smiley__hat-tassel" d="M32 9 L50 11.5 V20" />
+          <circle className="smiley__hat-trim" cx="50" cy="21" r="1.8" />
+        </g>
+      );
+    default:
+      return null;
   }
 }
 
@@ -149,6 +203,7 @@ const SmileyFace = forwardRef(function SmileyFace(
     motionKey = 0,
     antenna = null,
     antennaKey = 0,
+    outfit = null,
     still = false,
     size = 64,
     grounded = false,
@@ -191,19 +246,21 @@ const SmileyFace = forwardRef(function SmileyFace(
         <g className={`smiley__body${breathing ? " smiley__body--breathe" : ""}`}>
           <g className={`smiley__pose${pose ? ` smiley__pose--${pose}` : ""}`}>
             {/* The T aerial, for T Levels. Drawn first so the hood covers its root. */}
-            <g
-              key={antennaKey}
-              className={`smiley__aerial${aerial && !still ? ` smiley__aerial--${aerial}` : ""}`}
-            >
-              {/* Drawn twice, dark edge then orange core, like the hood, so it
-                  shows on a light page and a dark one. */}
-              <path className="smiley__stem-edge" d="M32 13 Q31.4 8.5 32 4.4" />
-              <path className="smiley__stem" d="M32 13 Q31.4 8.5 32 4.4" />
-              <path
-                className="smiley__t"
-                d="M28.4 1.8 H35.6 Q37 1.8 37 3.1 Q37 4.4 35.6 4.4 H28.4 Q27 4.4 27 3.1 Q27 1.8 28.4 1.8 Z"
-              />
-            </g>
+            {!outfit && (
+              <g
+                key={antennaKey}
+                className={`smiley__aerial${aerial && !still ? ` smiley__aerial--${aerial}` : ""}`}
+              >
+                {/* Drawn twice, dark edge then orange core, like the hood, so it
+                    shows on a light page and a dark one. */}
+                <path className="smiley__stem-edge" d="M32 13 Q31.4 8.5 32 4.4" />
+                <path className="smiley__stem" d="M32 13 Q31.4 8.5 32 4.4" />
+                <path
+                  className="smiley__t"
+                  d="M28.4 1.8 H35.6 Q37 1.8 37 3.1 Q37 4.4 35.6 4.4 H28.4 Q27 4.4 27 3.1 Q27 1.8 28.4 1.8 Z"
+                />
+              </g>
+            )}
 
             {/* The hood: a round head that tucks in under the face, then
                 shoulders. Not a pointed hood with a curl, which is Echo's. */}
@@ -215,6 +272,8 @@ const SmileyFace = forwardRef(function SmileyFace(
             {/* The fold of the hood around the face. */}
             <ellipse className="smiley__rim" cx="32" cy="34.5" rx="18.8" ry="16.2" />
 
+            <Hat outfit={outfit} />
+
             {/* The face is drawn centred at y 39; this lifts it up into the
                 head. A separate group, because the look-around movement below
                 is a CSS transform, which would replace an SVG one. */}
@@ -223,7 +282,7 @@ const SmileyFace = forwardRef(function SmileyFace(
                 <ellipse className="smiley__face" cx="32" cy="39" rx="17" ry="14.5" />
 
                 <g clipPath={`url(#${clipId})`}>
-                  {(mood === "happy" || mood === "celebrating") && (
+                  {CHEEKY.has(mood) && (
                     <g className="smiley__cheeks">
                       <ellipse cx="19.5" cy="44.5" rx="2.4" ry="1.3" />
                       <ellipse cx="44.5" cy="44.5" rx="2.4" ry="1.3" />

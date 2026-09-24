@@ -156,6 +156,31 @@ class ChatApiTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertFalse(ChatMessage.objects.exists())
 
+    def test_smiley_replies_in_the_visitors_language(self):
+        with patch(PROVIDER, return_value="Tak.") as provider:
+            response = self.post_message("Jak długo trwa praktyka?", language="pl")
+
+        self.assertEqual(response.status_code, 200)
+        context = provider.call_args.kwargs["context"]
+        self.assertIn("Reply in Polish", context)
+        self.assertIn("Never add or change a fact while translating it", context)
+
+    def test_english_needs_no_language_instruction(self):
+        with patch(PROVIDER, return_value="Yes.") as provider:
+            self.post_message("How long is the placement?", language="en")
+
+        self.assertNotIn("WHICH LANGUAGE TO USE", provider.call_args.kwargs["context"])
+
+    def test_an_unknown_language_is_rejected(self):
+        response = self.post_message("Hello", language="klingon")
+        self.assertEqual(response.status_code, 400)
+
+    def test_the_widget_is_told_whether_an_ai_is_set_up(self):
+        with self.settings(ANTHROPIC_API_KEY=""):
+            self.assertIs(self.client.get("/api/chat/").data["ai_available"], False)
+        with self.settings(ANTHROPIC_API_KEY="sk-test"):
+            self.assertIs(self.client.get("/api/chat/").data["ai_available"], True)
+
     def test_the_wrong_answer_they_chose_is_explained(self):
         with patch(PROVIDER, return_value="Close!") as provider:
             self.post_message(

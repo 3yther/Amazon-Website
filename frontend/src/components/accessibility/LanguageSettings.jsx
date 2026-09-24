@@ -1,13 +1,10 @@
+import { useI18n } from "../../i18n/I18nProvider.jsx";
+import { LANGUAGES } from "../../i18n/languages.js";
 import { SelectField } from "../FormFields.jsx";
 
-// Only English is actually translated today; the rest are placeholders so the
-// control is ready once full i18n is built (Phase 2 follow-up).
-const LANGUAGES = {
-  en: "English",
-  es: "Spanish (coming soon)",
-  fr: "French (coming soon)",
-  ur: "Urdu (coming soon)",
-};
+// The interface language is the same setting as the language menu in the
+// header and the side menu (see i18n/I18nProvider.jsx), so changing it in any
+// of the three changes all of them, and it is saved to the account too.
 
 const DATE_FORMATS = {
   "DD/MM/YYYY": "31/01/2026 (DD/MM/YYYY)",
@@ -23,20 +20,23 @@ const NUMBER_FORMATS = {
 
 /** Interface language, date format and number format. */
 export default function LanguageSettings({ preferences, updatePreference }) {
+  const { language, setLanguage, t } = useI18n();
+
   return (
     <div className="settings-section">
       <p className="label">Language and region</p>
 
       <SelectField
         id="pref-language"
-        label="Interface language"
-        hint="Only English is fully translated so far."
-        value={preferences.language}
-        onChange={(event) => updatePreference("language", event.target.value)}
+        label={t("language.settingLabel")}
+        hint={t("language.settingHint")}
+        value={language}
+        onChange={(event) => setLanguage(event.target.value)}
       >
-        {Object.entries(LANGUAGES).map(([value, label]) => (
-          <option key={value} value={value}>
-            {label}
+        {LANGUAGES.map((option) => (
+          <option key={option.code} value={option.code} lang={option.htmlLang}>
+            {option.native}
+            {option.code !== "en" ? ` (${option.name})` : ""}
           </option>
         ))}
       </SelectField>

@@ -1,0 +1,160 @@
+/* The language menu and the machine-translation notice. Colours only from the
+   tokens in styles.css, sizes in rem so they grow with the font size setting. */
+
+/* --- the language menu ------------------------------------------------------ */
+
+.language-picker {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.language-picker__label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.language-picker__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* The globe sits inside the select, at its start (left, or right in Arabic
+   and Urdu), and ignores clicks so the whole control opens the menu. */
+.language-picker__control .icon {
+  position: absolute;
+  inset-inline-start: 0.625rem;
+  pointer-events: none;
+}
+
+.language-picker__select {
+  min-height: var(--control-h);
+  width: 100%;
+  padding-inline: 2.25rem 0.75rem;
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* In the header it sits on the dark band beside the account button. */
+.language-picker--header .language-picker__control {
+  color: var(--ink-inverse);
+}
+
+.language-picker--header .language-picker__select {
+  width: auto;
+  max-width: 11rem;
+  border-color: var(--ink-inverse);
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+/* On a phone the header has no room: the menu drawer has the same control. */
+@media (max-width: 40rem) {
+  .language-picker--header {
+    display: none;
+  }
+}
+
+/* The header's third column: language, then the account menu. */
+.site-header__end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  justify-self: end;
+}
+
+/* --- "this was translated by machine" ------------------------------------------ */
+
+.translation-notice {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--blue);
+}
+
+.translation-notice__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-block: 0.625rem;
+  font-size: 0.875rem;
+}
+
+.translation-notice__inner p {
+  flex: 1 1 20rem;
+}
+
+.translation-notice__button {
+  min-height: var(--control-h);
+  padding: 0 0.875rem;
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.translation-notice__button:hover {
+  border-color: var(--paper-dark);
+  background: var(--orange);
+  color: var(--paper-dark);
+}
+
+/* --- right to left (Arabic and Urdu) ------------------------------------------------ */
+
+/* The browser mirrors text and flex rows by itself once <html dir="rtl"> is
+   set. These fix the few places that use a physical left or right. */
+
+/* The menu drawer opens from the right edge instead, where the menu button
+   now sits. */
+[dir="rtl"] .menu-overlay {
+  margin: 0 0 0 auto;
+  border-right: 0;
+  border-left: 3px solid var(--orange);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [dir="rtl"] .menu-overlay[open] {
+    animation-name: menu-slide-in-rtl;
+  }
+
+  [dir="rtl"] .menu-overlay.menu-overlay--closing {
+    animation-name: menu-slide-out-rtl;
+  }
+}
+
+@keyframes menu-slide-in-rtl {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes menu-slide-out-rtl {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+[dir="rtl"] .account-dropdown {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] .dropdown-links a,
+[dir="rtl"] .dropdown-links .nav-button {
+  text-align: right;
+}

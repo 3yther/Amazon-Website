@@ -301,6 +301,99 @@
   }
 }
 
+/* --- hats ---------------------------------------------------------------- */
+
+.smiley__hat-body {
+  fill: var(--paper-dark);
+  stroke: var(--paper-dark);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.smiley__hat-trim {
+  fill: var(--orange);
+  stroke: var(--paper-dark);
+  stroke-width: 1.2;
+}
+
+.smiley__hat-pom {
+  fill: var(--text-dark);
+  stroke: var(--paper-dark);
+  stroke-width: 1.2;
+}
+
+.smiley__hat-stripe,
+.smiley__hat-tassel {
+  fill: none;
+  stroke: var(--paper-dark);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.smiley__hat-tassel {
+  stroke: var(--orange);
+}
+
+/* --- tricks asked for in the chat ---------------------------------------- */
+
+.smiley__move--dance {
+  animation: smiley-dance 1.6s ease-in-out;
+}
+
+/* A flip turns around Smiley's middle, not its feet. */
+.smiley__move--flip {
+  transform-origin: 32px 34px;
+  animation: smiley-flip 900ms cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+.smiley__move--spin {
+  transform-origin: 32px 34px;
+  animation: smiley-spin 1s ease-in-out;
+}
+
+@keyframes smiley-dance {
+  0%,
+  100% {
+    transform: none;
+  }
+  12.5%,
+  62.5% {
+    transform: translateX(-3px) rotate(-9deg);
+  }
+  25%,
+  75% {
+    transform: translateY(-4px);
+  }
+  37.5%,
+  87.5% {
+    transform: translateX(3px) rotate(9deg);
+  }
+}
+
+@keyframes smiley-flip {
+  0% {
+    transform: none;
+  }
+  30% {
+    transform: translateY(-9px);
+  }
+  75% {
+    transform: translateY(-9px) rotate(-360deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes smiley-spin {
+  from {
+    transform: none;
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Reduced motion, from the system or the site's own setting: Smiley keeps
    its expressions but nothing moves, blinks or animates. */
 .smiley--still *,
@@ -580,6 +673,7 @@
   font-size: 0.9375rem;
   line-height: 1.5;
   overflow-wrap: anywhere; /* a long pasted word cannot widen the panel */
+  white-space: pre-line; /* answers made of several points keep one per line */
 }
 
 .assistant__message--assistant {
@@ -712,6 +806,126 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* --- easter eggs --------------------------------------------------------------------- */
+
+/* Peekaboo: now and then Smiley pops its head in from the edge of the screen,
+   has a look round, and ducks away again. Meanwhile the corner Smiley ducks
+   out of sight, so it is clearly the same Smiley and never two at once. The
+   corner button stays where it is and keeps its label, so nothing moves
+   under a keyboard or screen reader user. None of this happens under
+   reduced motion (ChatWidget does not render it). */
+.smiley-cameo {
+  position: fixed;
+  z-index: 45;
+  width: 5rem;
+  height: 5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.smiley-cameo .smiley {
+  width: 100%;
+  height: 100%;
+}
+
+.smiley-cameo--bottom {
+  bottom: 0;
+  left: var(--cameo-x, 30%);
+  animation: smiley-cameo-bottom 3.2s ease-in-out forwards;
+}
+
+.smiley-cameo--left {
+  top: var(--cameo-y, 45%);
+  left: 0;
+  animation: smiley-cameo-left 3.2s ease-in-out forwards;
+}
+
+.smiley-cameo--left .smiley {
+  transform: rotate(90deg);
+}
+
+.smiley-cameo--right {
+  top: var(--cameo-y, 45%);
+  right: 0;
+  animation: smiley-cameo-right 3.2s ease-in-out forwards;
+}
+
+.smiley-cameo--right .smiley {
+  transform: rotate(-90deg);
+}
+
+@keyframes smiley-cameo-bottom {
+  0%,
+  100% {
+    transform: translateY(100%);
+  }
+  18%,
+  78% {
+    transform: translateY(38%);
+  }
+}
+
+@keyframes smiley-cameo-left {
+  0%,
+  100% {
+    transform: translateX(-100%);
+  }
+  18%,
+  78% {
+    transform: translateX(-36%);
+  }
+}
+
+@keyframes smiley-cameo-right {
+  0%,
+  100% {
+    transform: translateX(100%);
+  }
+  18%,
+  78% {
+    transform: translateX(36%);
+  }
+}
+
+.assistant__toggle .smiley {
+  transition:
+    transform 250ms ease,
+    opacity 250ms ease;
+}
+
+.assistant__toggle--ducked .smiley {
+  opacity: 0;
+  transform: translateY(70%);
+}
+
+/* Party mode (the Konami code): a short shower of squares in the two brand
+   colours. Squares, not circles, to match the site's squared-off shapes. */
+.smiley-confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 44;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.smiley-confetti__piece {
+  position: absolute;
+  top: -1rem;
+  left: var(--x);
+  width: 0.55rem;
+  height: 0.8rem;
+  background: var(--piece);
+  animation: smiley-confetti-fall var(--fall) linear var(--delay) forwards;
+}
+
+@keyframes smiley-confetti-fall {
+  to {
+    transform: translateY(110vh) rotate(var(--turn));
   }
 }
 
