@@ -288,3 +288,32 @@ if not DEBUG:
     # otherwise a client could fake it.
     if env_bool("DJANGO_BEHIND_HTTPS_PROXY"):
         SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+
+# ---------------------------------------------------------------------------
+# Temporary diagnostic logging: prints server-error tracebacks to the
+# gunicorn console (visible in `railway logs`) even with DEBUG off, so we
+# can see what's causing the 500s on register/pathways/content in prod.
+# Safe to remove once the underlying bug is fixed.
+# ---------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
