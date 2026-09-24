@@ -16,12 +16,7 @@ const { mockUseAuth, mockGetInterestSubmissions, mockPreferences } = vi.hoisted(
 }));
 
 vi.mock("../auth.jsx", () => ({ useAuth: mockUseAuth }));
-// Same reason as logout.test.jsx: these files share one module registry, so
-// a partial mock of api.js would take the rest of it away from everyone else.
-vi.mock("../api.js", async (importOriginal) => ({
-  ...(await importOriginal()),
-  getInterestSubmissions: mockGetInterestSubmissions,
-}));
+vi.mock("../api.js", () => ({ getInterestSubmissions: mockGetInterestSubmissions }));
 vi.mock("../hooks/useAccessibilityPreferences.jsx", () => ({
   useAccessibilityPreferences: mockPreferences,
 }));

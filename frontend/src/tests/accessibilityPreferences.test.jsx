@@ -7,6 +7,7 @@ import {
   AccessibilityPreferencesProvider,
   DEFAULT_PREFERENCES,
 } from "../hooks/useAccessibilityPreferences.jsx";
+import { AuthProvider } from "../auth.jsx";
 import { REDUCE_MOTION_EVENT, REDUCE_MOTION_KEY } from "../useReducedMotion.js";
 
 // What the settings actually DO to the page, which is the part that kept
@@ -24,23 +25,17 @@ import { REDUCE_MOTION_EVENT, REDUCE_MOTION_KEY } from "../useReducedMotion.js";
 // these tests lock in is the thing that broke: which token each theme's
 // high-contrast rule is built from.
 
-const { mockUseAuth, mockGetPreferences, mockUpdatePreferences } = vi.hoisted(() => ({
-  mockUseAuth: vi.fn(),
-  mockGetPreferences: vi.fn(),
-  mockUpdatePreferences: vi.fn(),
-}));
-
-vi.mock("../auth.jsx", () => ({ useAuth: mockUseAuth }));
-// vitest runs these files in one shared module registry (isolate: false in
-// vitest.config.js), so a mock here is visible to every other test file.
-// importOriginal keeps the rest of api.js real: RegisterInterest.test.jsx
-// leans on the genuine ApiError, and a mock that listed only the functions
-// this file needs would take it away from them.
-vi.mock("../api.js", async (importOriginal) => ({
-  ...(await importOriginal()),
-  getPreferences: mockGetPreferences,
-  updatePreferences: mockUpdatePreferences,
-}));
+// A fake server rather than a vi.mock of api.js: vitest shares one module
+// registry across these files (isolate: false in vitest.config.js), so two
+// files mocking api.js differently fight over which version is cached and one
+// of them silently gets the wrong module. Signed out is all these need, since
+// the provider then reads localStorage and the account never comes into it.
+function fakeServer() {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async () => Response.json({}, { status: 401 })),
+  );
+}
 
 function prefersDark(matches) {
   window.matchMedia = (query) => ({
@@ -68,15 +63,21 @@ function prefersReducedMotion(matches) {
   });
 }
 
-function renderSettings() {
+function renderWith(children) {
   return render(
     <MemoryRouter>
-      <AccessibilityPreferencesProvider>
-        <main>
-          <Accessibility />
-        </main>
-      </AccessibilityPreferencesProvider>
+      <AuthProvider>
+        <AccessibilityPreferencesProvider>{children}</AccessibilityPreferencesProvider>
+      </AuthProvider>
     </MemoryRouter>,
+  );
+}
+
+function renderSettings() {
+  return renderWith(
+    <main>
+      <Accessibility />
+    </main>,
   );
 }
 
@@ -87,13 +88,11 @@ beforeEach(() => {
   document.documentElement.removeAttribute("data-colour-vision");
   document.body.className = "";
   prefersDark(false);
-  mockUseAuth.mockReturnValue({ user: null, checked: true, refresh: vi.fn() });
-  mockGetPreferences.mockResolvedValue(null);
-  mockUpdatePreferences.mockResolvedValue({});
+  fakeServer();
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe("Applying preferences to the page", () => {
@@ -106,13 +105,7 @@ describe("Applying preferences to the page", () => {
       JSON.stringify({ ...DEFAULT_PREFERENCES, high_contrast: true, font_size_scale: 130 }),
     );
 
-    render(
-      <MemoryRouter>
-        <AccessibilityPreferencesProvider>
-          <p>Any other page</p>
-        </AccessibilityPreferencesProvider>
-      </MemoryRouter>,
-    );
+    renderWith(<p>Any other page</p>);
 
     expect(document.body).toHaveClass("high-contrast");
     expect(document.documentElement.style.getPropertyValue("--font-scale")).toBe("1.3");
@@ -165,13 +158,7 @@ describe("Applying preferences to the page", () => {
 
   it("follows the system theme when the choice is Match system", () => {
     prefersDark(true);
-    render(
-      <MemoryRouter>
-        <AccessibilityPreferencesProvider>
-          <p>Any page</p>
-        </AccessibilityPreferencesProvider>
-      </MemoryRouter>,
-    );
+    renderWith(<p>Any page</p>);
     expect(document.documentElement).toHaveClass("dark-mode");
   });
 });
@@ -193,13 +180,7 @@ describe("Reduce motion", () => {
 
   it("is switched on by the system setting alone", () => {
     prefersReducedMotion(true);
-    render(
-      <MemoryRouter>
-        <AccessibilityPreferencesProvider>
-          <p>Any page</p>
-        </AccessibilityPreferencesProvider>
-      </MemoryRouter>,
-    );
+    renderWith(<p>Any page</p>);
     expect(document.documentElement.dataset.motion).toBe("reduced");
   });
 
@@ -207,13 +188,7 @@ describe("Reduce motion", () => {
     prefersReducedMotion(true);
     window.localStorage.setItem(REDUCE_MOTION_KEY, "false");
 
-    render(
-      <MemoryRouter>
-        <AccessibilityPreferencesProvider>
-          <p>Any page</p>
-        </AccessibilityPreferencesProvider>
-      </MemoryRouter>,
-    );
+    renderWith(<p>Any page</p>);
 
     expect(document.documentElement.dataset.motion).toBe("full");
   });

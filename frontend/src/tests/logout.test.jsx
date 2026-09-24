@@ -1,41 +1,71 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import AccountDropdown from "../components/AccountDropdown.jsx";
 import AccountSettings from "../components/accessibility/AccountSettings.jsx";
+import { AuthProvider } from "../auth.jsx";
 
-// Logging out moved out of the header's account menu and onto the Account
-// tab of the settings page. These cover both ends of that move: that it is
-// gone from the menu, and that the new control does exactly what the old one
-// did.
+// Logging out moved out of the header's account menu and onto the Account tab
+// of the settings page. These cover both ends of that move: that it is gone
+// from the menu, and that the new control does exactly what the old one did.
+//
+// A fake server rather than a vi.mock of api.js, the same way
+// RegisterInterest.test.jsx and NearYou.test.jsx work. vitest shares one
+// module registry across these files (isolate: false in vitest.config.js), so
+// two files mocking api.js differently end up fighting over which version is
+// cached: whichever registered last wins, and the other file silently gets
+// the wrong module. Stubbing fetch keeps everything real and asserts the
+// request that actually goes out, which is the thing worth checking anyway.
 
-const { mockUseAuth, mockLogout, mockDeactivate, mockUpdateProfile } = vi.hoisted(() => ({
-  mockUseAuth: vi.fn(),
-  mockLogout: vi.fn(),
-  mockDeactivate: vi.fn(),
-  mockUpdateProfile: vi.fn(),
-}));
+const USER = {
+  id: 1,
+  username: "ada",
+  user_type: "student",
+  first_name: "Ada",
+  last_name: "Lovelace",
+  email: "",
+  phone: "",
+};
 
-vi.mock("../auth.jsx", () => ({ useAuth: mockUseAuth }));
-// vitest runs these files in one shared module registry (isolate: false in
-// vitest.config.js), so a mock here is visible to every other test file.
-// importOriginal keeps the rest of api.js real: RegisterInterest.test.jsx
-// leans on the genuine ApiError, and a mock that listed only the functions
-// this file needs would take it away from them.
-vi.mock("../api.js", async (importOriginal) => ({
-  ...(await importOriginal()),
-  logout: mockLogout,
-  deactivateAccount: mockDeactivate,
-  updateProfile: mockUpdateProfile,
-}));
+/** Records every request, and stops answering /me/ once logout has run. */
+function fakeServer() {
+  const calls = [];
+  let signedIn = true;
 
-const USER = { username: "ada", user_type: "student", first_name: "Ada", last_name: "Lovelace" };
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url, options = {}) => {
+      const address = new URL(url, "http://localhost");
+      calls.push({ path: address.pathname, method: options.method ?? "GET" });
+
+      if (address.pathname === "/api/accounts/me/") {
+        return signedIn ? Response.json(USER) : Response.json({}, { status: 401 });
+      }
+      if (address.pathname === "/api/accounts/csrf/") {
+        return Response.json({ csrf_token: "test-token" });
+      }
+      if (address.pathname === "/api/accounts/logout/") {
+        signedIn = false;
+        return new Response(null, { status: 204 });
+      }
+      return Response.json({}, { status: 404 });
+    }),
+  );
+
+  return calls;
+}
+
+function logoutCalls(calls) {
+  return calls.filter((call) => call.path === "/api/accounts/logout/" && call.method === "POST");
+}
 
 beforeEach(() => {
-  vi.clearAllMocks();
-  mockUseAuth.mockReturnValue({ user: USER, checked: true, refresh: vi.fn().mockResolvedValue() });
-  mockLogout.mockResolvedValue(null);
+  window.localStorage.clear();
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
 });
 
 describe("The header's account menu", () => {
@@ -43,27 +73,37 @@ describe("The header's account menu", () => {
     const user = userEvent.setup({ delay: null });
     render(
       <MemoryRouter>
-        <AccountDropdown />
+        <AuthProvider>
+          <AccountDropdown />
+        </AuthProvider>
       </MemoryRouter>,
     );
-    await user.click(screen.getByRole("button", { name: /Account menu/ }));
+    await user.click(await screen.findByRole("button", { name: /Account menu/ }));
     return user;
   }
 
   it("no longer offers Logout", async () => {
+    fakeServer();
     await openMenu();
+
     expect(screen.queryByRole("menuitem", { name: /log ?out/i })).toBeNull();
     expect(screen.queryByText(/log ?out/i)).toBeNull();
   });
 
   it("still offers a way into Settings", async () => {
+    fakeServer();
     await openMenu();
-    const settings = screen.getByRole("menuitem", { name: "Profile & Settings" });
-    expect(settings).toHaveAttribute("href", "/accessibility");
+
+    expect(screen.getByRole("menuitem", { name: "Profile & Settings" })).toHaveAttribute(
+      "href",
+      "/accessibility",
+    );
   });
 
   it("lists only the account links", async () => {
+    fakeServer();
     await openMenu();
+
     expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual([
       "Profile & Settings",
       "Security Settings",
@@ -76,45 +116,58 @@ describe("Logging out from the Account tab", () => {
   function renderTab() {
     return render(
       <MemoryRouter initialEntries={["/accessibility"]}>
-        <Routes>
-          <Route path="/accessibility" element={<AccountSettings />} />
-          <Route path="/login" element={<h1>Login</h1>} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/accessibility" element={<AccountSettings />} />
+            <Route path="/login" element={<h1>Login</h1>} />
+          </Routes>
+        </AuthProvider>
       </MemoryRouter>,
     );
   }
 
-  it("calls logout and sends you to the login page", async () => {
-    const refresh = vi.fn().mockResolvedValue();
-    mockUseAuth.mockReturnValue({ user: USER, checked: true, refresh });
+  it("ends the session and sends you to the login page", async () => {
+    const calls = fakeServer();
     const user = userEvent.setup({ delay: null });
     renderTab();
 
-    await user.click(screen.getByRole("button", { name: "Log out" }));
+    await user.click(await screen.findByRole("button", { name: "Log out" }));
 
-    await waitFor(() => expect(mockLogout).toHaveBeenCalledTimes(1));
-    expect(refresh).toHaveBeenCalled();
+    await waitFor(() => expect(logoutCalls(calls)).toHaveLength(1));
     expect(await screen.findByRole("heading", { name: "Login" })).toBeInTheDocument();
   });
 
   it("still signs you out when the session had already ended", async () => {
     // A 401 from the server means the session was gone anyway, so the person
     // should still end up signed out rather than stuck on an error.
-    mockLogout.mockRejectedValue(new Error("401"));
+    const calls = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url, options = {}) => {
+        const address = new URL(url, "http://localhost");
+        calls.push(address.pathname);
+        if (address.pathname === "/api/accounts/csrf/") {
+          return Response.json({ csrf_token: "test-token" });
+        }
+        if (address.pathname === "/api/accounts/me/") return Response.json(USER);
+        return Response.json({}, { status: 401 });
+      }),
+    );
     const user = userEvent.setup({ delay: null });
     renderTab();
 
-    await user.click(screen.getByRole("button", { name: "Log out" }));
+    await user.click(await screen.findByRole("button", { name: "Log out" }));
 
     expect(await screen.findByRole("heading", { name: "Login" })).toBeInTheDocument();
   });
 
   it("keeps logging out apart from deactivating", async () => {
+    fakeServer();
     renderTab();
 
     // Its own section, and not inside the profile form: pressing it must not
     // read as saving what is typed above.
-    const logout = screen.getByRole("button", { name: "Log out" });
+    const logout = await screen.findByRole("button", { name: "Log out" });
     expect(logout.closest("form")).toBeNull();
     expect(logout.closest(".danger-zone")).toBeNull();
     expect(logout.closest(".settings-block")).not.toBeNull();
