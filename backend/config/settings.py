@@ -3,10 +3,12 @@ Django settings for T-SMILE.
 
 Secrets and anything that changes between machines are read from environment
 variables. Locally they come from backend/.env (copy .env.example, never commit
-.env). In production they are set on the server (EC2) instead.
+.env). Deployed, they are set on the host instead: Railway for the team
+preview (see DEPLOYMENT.md), EC2 later.
 """
 import os
 from pathlib import Path
+from urllib.parse import parse_qsl, unquote, urlsplit
 
 from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
@@ -99,15 +101,45 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # ---------------------------------------------------------------------------
 
-# Local development uses SQLite, which needs no setup.
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+def database_from_url(url):
+    """
+    Turn a postgres:// connection URL, the form Railway (and most hosts) give
+    in DATABASE_URL, into a Django DATABASES entry. Anything in the query
+    string, e.g. ?sslmode=require, is passed on to the driver.
+    """
+    parts = urlsplit(url)
+    if parts.scheme not in {"postgres", "postgresql"}:
+        raise ImproperlyConfigured(
+            f"DATABASE_URL must be a postgres:// URL, not {parts.scheme or 'blank'}://."
+        )
+    return {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": unquote(parts.path.lstrip("/")),
+        "USER": unquote(parts.username or ""),
+        "PASSWORD": unquote(parts.password or ""),
+        "HOST": parts.hostname or "",
+        "PORT": str(parts.port or 5432),
+        "CONN_MAX_AGE": 60,
+        "CONN_HEALTH_CHECKS": True,
+        "OPTIONS": dict(parse_qsl(parts.query)),
     }
-}
 
-# PRODUCTION: PostgreSQL on AWS RDS (UK/EU region) plugs in here.
+
+# With DATABASE_URL set (Railway sets it when a PostgreSQL database is attached)
+# Django uses that database. Without it, local development uses SQLite, which
+# needs no setup.
+if os.environ.get("DATABASE_URL"):
+    DATABASES = {"default": database_from_url(os.environ["DATABASE_URL"])}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+# PRODUCTION: PostgreSQL on AWS RDS (UK/EU region) plugs in here. Setting
+# DATABASE_URL (as above, with ?sslmode=require) also works for RDS.
 # 1. Add "psycopg[binary]" to requirements.txt.
 # 2. Set the POSTGRES_* variables on the server (see .env.example).
 # 3. Replace the block above with:
@@ -196,6 +228,10 @@ REST_FRAMEWORK = {
     # (e.g. Redis) and set NUM_PROXIES when running behind a load balancer.
     "DEFAULT_THROTTLE_RATES": {
         "interest": "10/hour",
+        "feedback": "10/hour",
+        # Every chat message costs us an AI call, so this caps what one visitor
+        # can spend. Generous enough for a real conversation.
+        "chat": "60/hour",
     },
 }
 
@@ -207,12 +243,31 @@ if DEBUG:
 
 
 # ---------------------------------------------------------------------------
+# AI assistant (the chatbot, Task 4)
+# ---------------------------------------------------------------------------
+
+# The key for Anthropic's API, which the chatbot app calls. It stays on the
+# server: the browser never sees it, because React talks to /api/chat/ and
+# Django makes the call. Without a key the site still works and the widget
+# shows its fallback message, so nobody needs one to run the rest of T-SMILE.
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+
+# Lets Anthropic retry a declined message on another model inside the same
+# call. Set ANTHROPIC_SERVER_SIDE_FALLBACK=false if the account does not have
+# the feature and the API rejects the option.
+ANTHROPIC_SERVER_SIDE_FALLBACK = env_bool("ANTHROPIC_SERVER_SIDE_FALLBACK", default=True)
+
+
+# ---------------------------------------------------------------------------
 # CORS and CSRF (the React front end is a separate app)
 # ---------------------------------------------------------------------------
 
-# In local development the Vite dev server proxies /api to Django, so the browser
-# sees one origin. These only matter when the front end is served from a
-# different domain than the API.
+# Locally the Vite dev server passes /api to Django, and on the Railway preview
+# the frontend service does the same (frontend/Caddyfile), so the browser sees
+# one origin and CORS is not needed. CSRF_TRUSTED_ORIGINS still matters on
+# Railway: Django is reached on its own domain while the browser's Origin
+# header is the frontend's, so the frontend's https:// origin goes there.
+# CORS only matters if the front end ever calls the API from another domain.
 CORS_ALLOWED_ORIGINS = env_list("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
@@ -226,5 +281,10 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
-    # Behind an AWS load balancer that ends HTTPS, uncomment so Django trusts it:
-    # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    # Behind a proxy that ends HTTPS and passes plain HTTP on (Railway, an AWS
+    # load balancer), Django only knows a request was HTTPS from the proxy's
+    # X-Forwarded-Proto header. Without this the redirect above would loop.
+    # Only switch it on where such a proxy always sets that header, since
+    # otherwise a client could fake it.
+    if env_bool("DJANGO_BEHIND_HTTPS_PROXY"):
+        SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

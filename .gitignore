@@ -22,3 +22,6 @@ db.sqlite3
 .vscode/
 .idea/
 .claude/
+
+# Scratch: drafts and previews, not part of the site
+Claude outputs/

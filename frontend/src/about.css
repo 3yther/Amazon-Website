@@ -1,0 +1,1094 @@
+/* Styles for the three information pages: About T-Level, T-Levels at Amazon
+   and Help. Kept in its own file so it does not collide with anyone else's
+   work in styles.css. Imported by each of those three pages.
+
+   Only classes that belong to these pages live here. Shared classes such as
+   .label and .section-intro are styled once in styles.css; redefining them
+   here would change every page on the site, because Vite bundles all CSS
+   together.
+
+   Focus rings are left to the site-wide :focus-visible rule in styles.css.
+   That keeps them dark blue (orange is only about 2:1 on the page colour, too
+   faint for WCAG 2.2) and keeps the thick and dashed outline options on the
+   Accessibility page working.
+
+   No new colours are defined here. Everything below reuses the tokens from
+   styles.css (--orange, --blue, --paper, --surface, --ink-muted, --line,
+   --radius, --control-h), so a change there still changes this page. */
+
+/* ---------- Page rhythm & visual hierarchy ---------- */
+
+/* Enhanced spacing between sections for better visual breathing room.
+   Sections are clearly separated with proportional spacing. */
+.about-section {
+  padding-top: clamp(56px, 8vw, 88px);
+}
+
+.about-section + .about-section {
+  margin-top: clamp(56px, 8vw, 88px);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Opening band (hero section) ---------- */
+
+.about-hero {
+  display: grid;
+  gap: 20px;
+  max-width: 46rem;
+  padding-bottom: clamp(40px, 7vw, 64px);
+  border-bottom: 3px solid var(--orange);
+}
+
+.about-hero h1 {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.about-hero__lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--ink-muted);
+  max-width: 42rem;
+}
+
+/* Hero with a photo. Text first, photo under it on phones; side by side from
+   900px, with the orange rule running under both. */
+.about-hero--photo {
+  max-width: none;
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.about-hero__text {
+  display: grid;
+  gap: 20px;
+  max-width: 46rem;
+}
+
+.about-hero__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Every hero photo is cropped to the same shape, whatever its original. */
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+@media (min-width: 900px) {
+  .about-hero--photo {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* ---------- The three steps (design doc: numbers descending) ---------- */
+
+.route {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+  list-style: none;
+}
+
+/* Each step is a number in the left column and the text in the right, with a
+   hairline between rows. The numbers run down the page in a straight line,
+   which is the descending route from the design doc. Enhanced spacing for
+   better visual rhythm. */
+.route__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px 32px;
+  align-items: start;
+  padding-block: 32px;
+  padding-left: 20px;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid var(--orange);
+}
+
+.route__step:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.route__number {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--blue);
+}
+
+.route__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 10px;
+}
+
+.route__text {
+  max-width: 44rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ---------- Shared card grid (placement facts, Amazon, benefits) ---------- */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.info-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+.info-card h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.info-card p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+/* ---------- Who it is for (audience points) ---------- */
+
+.audience {
+  display: grid;
+  gap: 16px;
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audience li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  padding-left: 4px;
+}
+
+/* A small square marker, squared like the buttons rather than a round bullet. */
+.audience li::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  margin-top: 0.35em;
+  flex: none;
+  background: var(--orange);
+  border-radius: 2px;
+}
+
+.audience li {
+  color: var(--blue);
+  font-weight: 500;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ---------- Pathway switcher (tabs) ---------- */
+
+/* Improved tab styling with better visual hierarchy and spacing. */
+.pathways__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: -1px; /* the selected tab sits on the panel's top edge */
+}
+
+.pathways__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--control-h);
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-bottom: 4px solid transparent;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pathways__tab:hover {
+  background: var(--surface);
+  border-bottom-color: var(--orange);
+}
+
+/* Selected state is unmistakable without relying on colour alone: the tab
+   fills with dark blue and its label flips to the page colour (13:1), with
+   aria-selected for screen readers. The orange underline is decoration on
+   top; on its own it would only be 2:1, which fails WCAG 1.4.11. */
+.pathways__tab[aria-selected="true"] {
+  background: var(--surface-inverse);
+  border-color: var(--surface-inverse);
+  border-bottom-color: var(--orange);
+  color: var(--ink-inverse);
+}
+
+/* Hidden panels are completely removed from the layout. */
+.pathways__panel[hidden] {
+  display: none;
+}
+
+.pathways__panel {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+  padding: clamp(28px, 5vw, 40px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+}
+
+.pathways__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.pathways__detail {
+  display: grid;
+  gap: 10px;
+  max-width: 46rem;
+  width: 100%;
+}
+
+.pathways__detail p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.pathways__list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 24px;
+  font-weight: 600;
+  color: var(--blue);
+  line-height: 1.5;
+}
+
+.pathways__list li {
+  font-size: 1rem;
+}
+
+.pathways__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* ---------- FAQ (disclosure pattern) ---------- */
+
+.faq {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+  max-width: 52rem;
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__heading {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* The whole row is the button, so the target is large and easily clickable. */
+.faq__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 60px;
+  padding: 18px 4px;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq__trigger:hover span {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+.faq__chevron {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--blue);
+}
+
+/* The chevron points down when closed and up when open. It only repeats what
+   aria-expanded already says, so nothing is lost if it is not seen. */
+.faq__trigger[aria-expanded="true"] .faq__chevron {
+  transform: rotate(180deg);
+}
+
+.faq__answer {
+  max-width: 44rem;
+  padding: 0 4px 24px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ---------- Quiz ---------- */
+
+.quiz {
+  display: grid;
+  gap: 28px;
+  max-width: 44rem;
+}
+
+.quiz__questions {
+  display: grid;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quiz__question {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 24px 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* Marks the question being answered. Dark blue, so the border reaches 3:1. */
+.quiz__question:focus-within {
+  border-color: var(--blue);
+}
+
+.quiz__legend {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.quiz__number {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.quiz__option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: var(--control-h);
+}
+
+/* Native radios with improved sizing and accessibility. */
+.quiz__option input[type="radio"] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--blue);
+}
+
+.quiz__option label {
+  cursor: pointer;
+  color: var(--blue);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.quiz__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.quiz__result {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  max-width: 44rem;
+  margin-top: 32px;
+  padding: clamp(24px, 5vw, 40px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+.quiz__result:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.quiz__result-heading {
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--blue);
+}
+
+.quiz__result-note {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.quiz__result-action {
+  margin-top: 8px;
+  align-self: start;
+}
+
+/* ---------- Pathway panel: Amazon status line ---------- */
+
+/* A factual line about Amazon's commitment to that pathway. */
+.pathways__status {
+  padding-left: 14px;
+  border-left: 3px solid var(--orange);
+  font-weight: 600;
+  color: var(--blue);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* ---------- Grades table ---------- */
+
+/* Table scrolls sideways on narrow screens while remaining keyboard accessible. */
+.grades__scroll {
+  max-width: 34rem;
+  overflow-x: auto;
+}
+
+.grades {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.grades th,
+.grades td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.grades thead th {
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.grades tbody th {
+  font-weight: 700;
+  color: var(--blue);
+}
+
+/* The points column is the key information, so it gets emphasis. */
+.grades td {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--blue);
+}
+
+.grades tbody tr:last-child th,
+.grades tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.grades__note {
+  max-width: 44rem;
+  margin-top: 18px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  font-size: 0.9375rem;
+}
+
+/* ---------- Sources (bibliography) ---------- */
+
+.about-sources {
+  max-width: 48rem;
+  margin-top: clamp(56px, 8vw, 88px);
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.about-sources h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin: 0 0 16px;
+}
+
+.about-sources ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 24px;
+}
+
+.about-sources a {
+  font-weight: 600;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.about-sources a:hover {
+  border-bottom-color: var(--orange);
+}
+
+/* ---------- Route call to action (T-Levels at Amazon) ---------- */
+
+.route__action {
+  margin-top: 28px;
+}
+
+/* ---------- Pathway summary list (T-Levels at Amazon) ---------- */
+
+/* All five pathways in a table-like format for comparing at a glance. */
+.pathway-summary {
+  max-width: 52rem;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.pathway-summary__row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) 1fr;
+  gap: 8px 32px;
+  padding-block: 20px;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+
+.pathway-summary dt {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--blue);
+  margin: 0;
+}
+
+.pathway-summary dd {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* The Amazon status line gets full emphasis to indicate confirmation. */
+.pathway-summary__status {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* Stack on narrow screens for better readability. */
+@media (max-width: 600px) {
+  .pathway-summary__row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* ---------- Growth figures (T-Levels at Amazon) ---------- */
+
+.growth {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.growth__item {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+/* Large number in dark blue for high contrast and visual emphasis. */
+.growth__value {
+  font-family: var(--font-mono);
+  font-size: clamp(2.5rem, 7vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--blue);
+  margin: 0;
+}
+
+.growth__caption {
+  color: var(--ink-muted);
+  line-height: 1.5;
+  font-size: 0.9375rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ---------- Signposts (Help page) ---------- */
+
+/* Navigation links that are large, scannable, and keyboard accessible. */
+.signpost {
+  display: grid;
+  gap: 12px;
+  max-width: 52rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The whole row is the link for maximum click target area. */
+.signpost a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
+  min-height: var(--control-h);
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.signpost a:hover {
+  border-left-color: var(--orange);
+}
+
+.signpost a:hover .signpost__label {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.signpost__label {
+  font-weight: 700;
+  color: var(--blue);
+  font-size: 1.0625rem;
+}
+
+.signpost__meta {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+/* ---------- Pictures (Pictogram.jsx and InfoBlocks.jsx) ---------- */
+
+/* A line drawing on an orange tile. The ink is --ink-on-orange, which stays
+   dark blue in both themes, so the drawing always reads against the orange. */
+.pictogram {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius);
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+.pictogram svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.pictogram--small {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.pictogram--small svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.info-card .pictogram {
+  margin-bottom: 4px;
+}
+
+/* On a card with a picture, the orange tile is the accent, so the card's
+   orange top edge goes back to a plain line to keep the orange from
+   shouting. */
+.info-card:has(.pictogram) {
+  border-top: 1px solid var(--line);
+}
+
+/* Room for four cards in a row on a laptop, so a set of four never leaves
+   one card on its own line. */
+.info-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+/* Route steps: number, picture, then the words. */
+.route__step {
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+}
+
+/* On a phone there is not room for number, picture and words side by side:
+   the number and picture share the top row, the words go underneath, and
+   cards put the picture beside the words instead of above them. */
+@media (max-width: 599px) {
+  .route__step {
+    grid-template-columns: auto 1fr;
+  }
+
+  .route__step > div {
+    grid-column: 1 / -1;
+  }
+
+  .info-card:has(.pictogram) {
+    grid-template-columns: auto 1fr;
+    column-gap: 16px;
+  }
+
+  .info-card:has(.pictogram) .pictogram {
+    grid-row: span 3;
+    margin-bottom: 0;
+  }
+
+  .info-card:has(.pictogram) > :not(.pictogram) {
+    grid-column: 2;
+  }
+}
+
+/* Short points with a small picture instead of a bullet. */
+.icon-list {
+  display: grid;
+  gap: 16px;
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.icon-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--blue);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* The learning and placement split, drawn as one bar. The dark part uses the
+   inverse tokens, so it stays dark blue in dark mode too. */
+.share-bar {
+  display: grid;
+  gap: 12px;
+  max-width: 52rem;
+  margin: 32px 0 0;
+}
+
+.share-bar__bar {
+  display: flex;
+  gap: 4px;
+  height: 4rem;
+}
+
+.share-bar__part {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.5rem;
+  border-radius: var(--radius);
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+.share-bar__part--accent {
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+/* Inside the bar the picture sits straight on the colour, without a tile. */
+.share-bar__part .pictogram {
+  background: none;
+  color: inherit;
+}
+
+.share-bar__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  color: var(--ink-muted);
+}
+
+.share-bar__key strong {
+  color: var(--blue);
+}
+
+.share-bar__key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-bar__swatch {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radius);
+  background: var(--surface-inverse);
+}
+
+.share-bar__swatch--accent {
+  background: var(--orange);
+}
+
+/* Growth figures as bars, so the growth shows at a glance. */
+.growth__bar {
+  display: block;
+  height: 12px;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.growth__bar span {
+  display: block;
+  height: 100%;
+  background: var(--blue);
+}
+
+/* Pathway names on the Amazon page carry their homepage icon. */
+.pathway-summary dt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Signposts with a picture: picture, then the label taking the space. */
+.signpost a {
+  align-items: center;
+}
+
+.signpost a .pictogram + .signpost__label {
+  flex: 1 1 12rem;
+}
+
+.signpost--single {
+  margin-top: 24px;
+}
+
+/* "Ask a person" on the Help page. */
+.help-person {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 48rem;
+  font-size: 1.0625rem;
+}
+
+/* ---------- Register interest (RegisterInterest.jsx) ---------- */
+
+/* Form on the left, "what happens next" on the right; stacked on phones. */
+.interest {
+  display: grid;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .interest {
+    grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+  }
+}
+
+.interest__aside {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.interest__aside-title {
+  font-size: 1.25rem;
+}
+
+.interest__note {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+/* ---------- Legal pages (LegalPage.jsx) ---------- */
+
+.legal {
+  display: grid;
+  gap: 32px;
+  max-width: 48rem;
+}
+
+.legal .intro {
+  margin-bottom: 0;
+}
+
+.legal__section {
+  display: grid;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.legal__section h2 {
+  font-size: 1.375rem;
+}
+
+/* ---------- Motion ---------- */
+
+/* Every transition on these pages, in one place, and only for visitors who
+   have not asked their system for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .pathways__tab,
+  .signpost a,
+  .about-sources a {
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .faq__chevron {
+    transition: transform 150ms ease;
+  }
+}
+
+/* ---------- Photo strip ---------- */
+
+/* A looping row of photographs. The container clips its own overflow, so a
+   track wider than the page never gives the page a horizontal scrollbar. */
+.photo-strip {
+  overflow: hidden;
+  margin-top: 32px;
+}
+
+.photo-strip__track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.photo-strip__item {
+  flex: none;
+  width: clamp(160px, 18vw, 220px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.photo-strip__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Reduced motion: no animation, and the visitor scrolls the row themselves. */
+.photo-strip--static {
+  overflow-x: auto;
+}
+
+/* The track holds the six photos twice, so sliding it exactly half its width
+   lands on the copy of the first photo and the loop is invisible. */
+@media (prefers-reduced-motion: no-preference) {
+  .photo-strip:not(.photo-strip--static) .photo-strip__track {
+    animation: photo-strip-scroll 70s linear infinite;
+  }
+
+  .photo-strip:hover .photo-strip__track,
+  .photo-strip:focus-within .photo-strip__track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes photo-strip-scroll {
+  to {
+    /* Half the track, plus half of one gap, is exactly one full set. */
+    transform: translateX(calc(-50% - 8px));
+  }
+}
+
+/* A wide illustrative photo inside a section, matching the cards' edge. */
+.about-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 32px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}

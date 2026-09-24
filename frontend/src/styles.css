@@ -10,6 +10,8 @@
   /* Dark blue blended into paper. 5.4:1 on paper, passes WCAG AA for text. */
   --ink-muted: #5f6872;
   --line: rgb(35 47 62 / 0.16);
+  /* Dark blue laid flat over whatever is behind it (see .modal-overlay). */
+  --overlay: rgb(35 47 62 / 0.7);
 
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -18,6 +20,118 @@
   --container: 1120px;
   --gutter: clamp(16px, 4vw, 32px);
   --control-h: 44px;
+
+  /* Semantic tokens for dark mode: still only orange, blue and paper, just
+     with blue and paper swapping which one is "page" and which is "ink".
+     Written as literals matching --blue/--paper above, not var(--blue) /
+     var(--paper): html.dark-mode redefines --blue and --paper in the same
+     rule it uses these in, so a var() reference here would resolve back to
+     itself (a cycle), which CSS treats as invalid rather than swapped. */
+  --text-primary: var(--blue);
+  --text-secondary: var(--ink-muted);
+  --border-light: var(--line);
+  --paper-dark: #1a2430;
+  --text-dark: #fafaf7;
+  --border-dark-mode: rgb(250 250 247 / 0.2);
+
+  /* Chrome that is dark in BOTH themes, and the ink that sits on it: the
+     header, the footer, the photo scrim on the audience cards, table heads.
+     These deliberately do NOT flip with the theme.
+     --blue/--paper are the page's ink and page's background, so dark mode
+     swaps them. Anything that used them to mean "dark panel with light text
+     on it" swapped too and came out dark-on-dark, which is what made the
+     audience-card text unreadable in dark mode. Use these instead whenever a
+     surface is meant to stay dark whatever the theme. */
+  --surface-inverse: #232f3e;
+  --ink-inverse: #fafaf7;
+
+  /* Orange is a light chip in both themes, so its ink is always the dark
+     navy. var(--blue) here would turn light in dark mode and drop the
+     contrast to about 2:1. */
+  --ink-on-orange: #232f3e;
+
+  /* The one sanctioned non-brand colour, for destructive actions only. The
+     light-mode red is too dark to read on the dark page, so it lightens. */
+  --danger: #b3261e;
+
+  /* A flat dark panel behind text laid over a photo. Stronger than
+     --overlay: it has to carry text contrast over whatever the photo does,
+     so it holds 6:1 for light text even over a white patch. Flat, not a
+     gradient (see the design rules in CONTEXT.md). */
+  --scrim: rgb(35 47 62 / 0.82);
+
+  /* How strongly the drifting subject names show through (RisingSubjects).
+     Light ink on a dark page needs more alpha than dark ink on a light one
+     to read as the same subtle watermark, so dark mode raises this. */
+  --subject-strength: 1;
+
+  /* How far a preference has moved something, applied by
+     useAccessibilityPreferences.js. Defaults are a no-op. */
+  --font-scale: 1;
+  --text-spacing: normal;
+}
+
+/* Fallback for the "system" theme before useAccessibilityPreferences.js has
+   run (e.g. the first paint, or with JavaScript disabled). Once it runs it
+   sets .dark-mode or .light-mode explicitly and those win instead. */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) {
+    --paper: var(--paper-dark);
+    --surface: #2b3947;
+    --blue: var(--text-dark);
+    --ink-muted: #b7bfc9;
+    --line: var(--border-dark-mode);
+    --danger: #f2857a;
+    --subject-strength: 2.6;
+  }
+}
+
+/* An explicit choice of Dark in accessibility settings, or "Match system"
+   resolved to dark: same swap as above, forced regardless of the OS setting. */
+html.dark-mode {
+  --paper: var(--paper-dark);
+  --surface: #2b3947;
+  --blue: var(--text-dark);
+  --ink-muted: #b7bfc9;
+  --line: var(--border-dark-mode);
+  --danger: #f2857a;
+  --subject-strength: 2.6;
+}
+
+html {
+  font-size: calc(100% * var(--font-scale, 1));
+}
+
+body {
+  letter-spacing: var(--text-spacing, normal);
+}
+
+/* A stronger version of the same two colours: heavier borders and no muted
+   mid-tone text, so everything reads at full contrast. */
+body.high-contrast {
+  --ink-muted: var(--blue);
+  --line: rgb(35 47 62 / 0.5);
+}
+
+html.dark-mode body.high-contrast {
+  --ink-muted: var(--paper);
+  --line: rgb(250 250 247 / 0.5);
+}
+
+body[data-page-background="cream"] {
+  --paper: #f2ead9;
+}
+
+body[data-page-background="gray"] {
+  --paper: #e7e7e2;
+}
+
+body[data-outline-style="thick"] :focus-visible {
+  outline-width: 5px;
+}
+
+body[data-outline-style="dashed"] :focus-visible {
+  outline-style: dashed;
 }
 
 *,
@@ -49,7 +163,8 @@ body {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 0;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -59,6 +174,15 @@ h2 {
 
 p {
   margin: 0;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
 }
 
 :focus-visible {
@@ -92,13 +216,13 @@ main:focus {
 }
 
 .skip-link {
-  position: absolute;
+  position: fixed;
   top: -100px;
   left: var(--gutter);
-  z-index: 10;
+  z-index: 40;
   padding: 10px 14px;
   background: var(--orange);
-  color: var(--blue);
+  color: var(--ink-on-orange);
   font-weight: 700;
   border-radius: var(--radius);
 }
@@ -117,32 +241,101 @@ main:focus {
   color: var(--ink-muted);
 }
 
-.label--on-dark {
-  color: var(--paper);
-}
 
 /* ---------- Header and footer ---------- */
 
+/* Sticky at every width, so the menu, brand and account button are reachable
+   from any scroll position. The background is opaque (--surface-inverse, not
+   a translucent value) because page content now scrolls underneath it.
+
+   Stacking order, lowest first: page content, .account-dropdown (5, inside
+   this header's own stacking context), .site-header (20), .modal-overlay
+   (30, so a confirmation dialog still covers the header rather than leaving
+   it live above the dim), .skip-link (40, so focusing it is never hidden
+   behind the header). The menu overlay is a native <dialog> opened with
+   showModal(), which the browser puts in the top layer above all of these. */
 .site-header {
-  background: var(--blue);
-  color: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
   border-bottom: 3px solid var(--orange);
 }
 
+/* Three columns: menu button on the left, brand in the middle, and an empty
+   right column that balances the left one so the brand sits in the true
+   centre. Columns never overlap, so the brand cannot collide with the button;
+   on very narrow screens it shifts right slightly instead. */
 .site-header__inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   min-height: 64px;
+  padding-block: 10px;
+}
+
+.site-header__brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 16px;
+}
+
+/* Shown at half the file's 190px width so it stays sharp on high-density screens. */
+.site-header__logo {
+  display: block;
+  width: 95px;
+  height: auto;
+  border-radius: var(--radius);
 }
 
 .site-header :focus-visible {
   outline-color: var(--orange);
 }
 
+/* Header buttons sit on dark blue in both themes, so they invert to the
+   light ink on hover. */
+.site-header .button {
+  border-color: var(--ink-inverse);
+  color: var(--ink-inverse);
+}
+
+.site-header .button--primary {
+  border-color: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+.site-header .button:hover {
+  background: var(--ink-inverse);
+  border-color: var(--ink-inverse);
+  color: var(--surface-inverse);
+}
+
+/* Menu button: shown at every width. It opens the full-screen menu overlay,
+   which is the site's navigation. */
+.site-header .menu-toggle {
+  display: inline-flex;
+  justify-self: start;
+  width: var(--control-h);
+  padding: 0;
+}
+
+.site-header .menu-toggle[aria-expanded="true"] {
+  background: var(--ink-inverse);
+  border-color: var(--ink-inverse);
+  color: var(--surface-inverse);
+}
+
+.menu-toggle .icon {
+  width: 24px;
+  height: 24px;
+}
+
 .wordmark {
-  color: var(--paper);
+  color: var(--ink-inverse);
   font-size: 1.375rem;
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -158,9 +351,331 @@ main {
   padding-block: clamp(40px, 7vw, 80px);
 }
 
+/* Dark blue background so the footer reads as a distinct band, using only the
+   two site colours: orange for the small mono labels (6.34:1 on blue, see the
+   step__number comment above) and paper for body text and links (>10:1). */
 .site-footer {
-  border-top: 1px solid var(--line);
-  padding-block: 24px;
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+.site-footer :focus-visible {
+  outline-color: var(--orange);
+}
+
+.site-footer .label {
+  color: var(--orange);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding-block: 48px 32px;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.footer-column {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.footer-column p {
+  color: var(--ink-inverse);
+}
+
+.footer-column ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Full control height, so each link is an easy tap target. */
+.footer-column a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.footer-column a[aria-current="page"] {
+  text-decoration-color: var(--orange);
+  text-decoration-thickness: 3px;
+}
+
+.footer-bottom {
+  padding-block: 16px;
+  border-top: 1px solid rgb(250 250 247 / 0.2);
+}
+
+.footer-bottom .label {
+  color: var(--ink-inverse);
+}
+
+/* ---------- Account menu ---------- */
+
+.account-menu {
+  position: relative;
+  justify-self: end;
+}
+
+/* Circular initial button, on the same orange-background/blue-text chip
+   pattern used elsewhere (e.g. .tag--signup). */
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--ink-on-orange);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.account-button[aria-expanded="true"] {
+  outline: 3px solid var(--ink-inverse);
+  outline-offset: 2px;
+}
+
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 5;
+  width: max-content;
+  max-width: 280px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--blue);
+}
+
+.dropdown-header {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dropdown-header p:first-child {
+  font-weight: 700;
+}
+
+.dropdown-links {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dropdown-links a,
+.dropdown-links .nav-button {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-h);
+  width: 100%;
+  font-weight: 600;
+  text-align: left;
+}
+
+.dropdown-links a:hover,
+.dropdown-links .nav-button:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Menu overlay ---------- */
+
+/* A modal <dialog> drawer: full height, part of the width, anchored to the
+   left edge because that is the corner the menu button sits in, so the panel
+   opens from where you pressed. The rest of the page stays visible (and
+   blurred) behind it.
+
+   A dialog opened with showModal() is centred by the UA's `margin: auto`;
+   `margin-right: auto` alone pins it to the left instead. */
+.menu-overlay {
+  width: min(420px, 88vw);
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0 auto 0 0;
+  padding: 0;
+  border: 0;
+  border-right: 3px solid var(--orange);
+  background: var(--paper);
+  color: var(--blue);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.menu-overlay[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The page behind stays readable in outline but clearly out of focus: a blur
+   plus a tint dark enough to keep the drawer's own edge obvious. Tinted with
+   the fixed dark navy rather than --blue, which flips light in dark mode. */
+.menu-overlay::backdrop {
+  background: rgb(35 47 62 / 0.45);
+  backdrop-filter: blur(8px);
+}
+
+/* The nav was sized for a full-screen surface: at the old size the longest
+   label wrapped inside a 420px drawer, so the type steps down. It stays
+   vertically centred, which still reads well at this width. */
+.menu-overlay__nav a,
+.menu-overlay__nav .nav-button {
+  font-size: clamp(1.125rem, 4vw, 1.5rem);
+}
+
+/* The drawer slides in from the edge it is anchored to, and the backdrop
+   fades its blur in behind it. Closing plays the same motion in reverse.
+   Only for visitors who have not asked for reduced motion; everyone else
+   gets an instant open and close. */
+@media (prefers-reduced-motion: no-preference) {
+  .menu-overlay[open] {
+    animation: menu-slide-in 220ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .menu-overlay[open]::backdrop {
+    animation: menu-backdrop-in 220ms ease-out;
+  }
+
+  .menu-overlay.menu-overlay--closing {
+    animation: menu-slide-out 200ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .menu-overlay.menu-overlay--closing::backdrop {
+    animation: menu-backdrop-in 200ms ease-in reverse forwards;
+  }
+
+  /* Then the links climb in one after another, top to bottom: each fades in
+     while rising 16px, starting 40ms after the one above it (--i is set per
+     item in SiteNav.jsx). The eighth link lands 540ms after opening. Closing
+     stays one quick fade of the whole overlay, so leaving is never slowed. */
+  .menu-overlay[open] .menu-overlay__nav li {
+    animation: menu-link-rise 200ms cubic-bezier(0.2, 0, 0, 1) both;
+    animation-delay: calc(60ms + var(--i, 0) * 40ms);
+  }
+}
+
+@keyframes menu-link-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes menu-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes menu-slide-out {
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes menu-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Set on <html> while the menu is open, so the page behind cannot scroll. */
+.menu-open {
+  overflow: hidden;
+}
+
+.menu-overlay__top {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding-block: 14px 10px; /* puts the close button where the menu button was */
+}
+
+.menu-overlay__close {
+  width: var(--control-h);
+  padding: 0;
+}
+
+.menu-overlay__close .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.menu-overlay__nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-block: 24px 48px;
+}
+
+.menu-overlay__nav ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Log out is a button, so it needs the link look without button chrome. */
+.nav-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.menu-overlay__nav a,
+.menu-overlay__nav .nav-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  border-block: 3px solid transparent;
+  font-size: clamp(1.375rem, 6vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+.menu-overlay__nav a:hover,
+.menu-overlay__nav .nav-button:hover {
+  text-decoration: underline;
+}
+
+.menu-overlay__nav a[aria-current="page"] {
+  border-bottom-color: var(--orange);
 }
 
 /* ---------- Page intro ---------- */
@@ -178,6 +693,375 @@ main {
 
 .lead {
   font-size: 1.125rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Homepage hero ---------- */
+
+/* The opening band: one big headline, one line of context, one action. A
+   hairline closes it off before the library starts. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(16px, 5vw, 64px) clamp(56px, 10vw, 120px);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 20px;
+}
+
+/* The largest type on the site, used only here. */
+.hero__title {
+  max-width: 13ch;
+  font-size: clamp(2.75rem, 8vw, 5.75rem);
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.hero__subhead {
+  max-width: 34rem;
+  font-size: clamp(1.125rem, 2.2vw, 1.375rem);
+  line-height: 1.45;
+  color: var(--ink-muted);
+  /* Invisible until an audience card is picked: then Home.jsx fades it to
+     orange and back, to show which line just changed. */
+  outline: 2px solid transparent;
+  outline-offset: 8px;
+}
+
+.hero__content .button {
+  margin-top: 12px;
+}
+
+/* ---------- Homepage sections (below the hero) ---------- */
+
+.home-section {
+  padding-top: clamp(40px, 7vw, 72px);
+}
+
+/* Stats: big numbers over small mono labels, closed off by a hairline like
+   the hero above. Two by two on phones, one row from tablet up. */
+.stats {
+  padding-block: clamp(32px, 5vw, 48px);
+  border-bottom: 1px solid var(--line);
+}
+
+.stats__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stats__item {
+  display: grid;
+  gap: 6px;
+}
+
+.stats__value {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums; /* digits keep one width while counting */
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+@media (min-width: 720px) {
+  .stats__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Audience cards: the photo fills the card and the text sits on a flat dark
+   panel (--overlay, as on the sign-up page) so it stays readable over any
+   part of the photo. Dark blue shows while a photo loads. Each card is also
+   a toggle for the hero subhead (see AudienceCards in HomeSections.jsx). */
+.audience-grid {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audience-card {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 22rem;
+  overflow: hidden;
+  /* Always 3px, so choosing a card changes its colour, not its size. The
+     dark loading colour stops at the border, so an unchosen edge is clear. */
+  border: 3px solid transparent;
+  border-radius: var(--radius);
+  background: var(--surface-inverse) padding-box;
+  color: var(--ink-inverse);
+}
+
+.audience-card:hover {
+  border-color: var(--blue);
+}
+
+.audience-card--selected,
+.audience-card--selected:hover {
+  border-color: var(--orange);
+}
+
+/* "Selected" tag in the top corner, as well as the border, so the choice
+   never rests on colour alone. Dark blue on orange, like the sign-up tag. */
+.audience-card__selected {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  background: var(--orange);
+  color: var(--ink-on-orange);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The headline is the toggle button. It looks like the headline, and its
+   click area stretches over the whole card. */
+.audience-card__button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.audience-card__button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Focus shows on the whole card, outside it, where the blue ring always has
+   the page colour behind it. Browsers without :has() keep the button's own
+   focus ring instead. */
+@supports selector(:has(*)) {
+  .audience-card__button:focus-visible {
+    outline: none;
+  }
+
+  .audience-card:has(.audience-card__button:focus-visible) {
+    outline: 3px solid var(--blue);
+    outline-offset: 2px;
+  }
+}
+
+.audience-card__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* The scrim, not --overlay: this panel is the only thing guaranteeing the
+   text's contrast over an arbitrary photo, so it stays dark enough to hold
+   about 6:1 for the light text even where the photo underneath is white. */
+.audience-card__body {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+  background: var(--scrim);
+}
+
+.audience-card__body .label {
+  color: var(--ink-inverse);
+}
+
+.audience-card__body h3 {
+  font-size: 1.375rem;
+}
+
+@media (min-width: 860px) {
+  .audience-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .audience-card {
+    min-height: auto;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* Pathway tiles: calmer than the cards above. White, hairline edge, line
+   icon, no photos. */
+.pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pathway-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+
+.pathway-tile > .icon:first-child {
+  width: 28px;
+  height: 28px;
+}
+
+/* The arrow sits at the foot of every tile, so they line up across the row. */
+.pathway-tile > .icon:last-child {
+  margin-top: auto;
+}
+
+.pathway-tile__name {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.pathway-tile__summary {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.pathway-tile:hover {
+  border-color: var(--blue);
+}
+
+.pathway-tile:hover .pathway-tile__name {
+  text-decoration: underline;
+}
+
+/* How it works: "Level" cards. On desktop they climb left to right like a
+   staircase, each one step (--rise) higher than the last, joined along
+   their top edges by a hairline. Below that they stack in order, joined by
+   a short line down the left. Plain bordered boxes: no shadows, no fills. */
+.steps {
+  --rise: 28px;
+  --gap: 24px;
+  display: grid;
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* Stacked: a short line from each card down to the next. */
+.step + .step::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 28px;
+  height: calc(var(--gap) + 1px);
+  border-left: 1px solid var(--line);
+}
+
+/* "LEVEL 01": the number in orange, on a dark blue chip because orange on
+   the page colour alone is 2.05:1 and fails contrast (on blue it is 6.34:1). */
+.step__number {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  border-radius: var(--radius);
+  background: var(--surface-inverse);
+  color: var(--orange);
+}
+
+.step__title {
+  font-size: 1.25rem;
+}
+
+.step__text {
+  color: var(--ink-muted);
+}
+
+@media (min-width: 960px) {
+  /* Bottoms line up and each card starts one step higher than the one
+     before (--drop is how many steps below the top card it starts, set in
+     HomeSections.jsx). Every top is exactly --rise apart, whatever the text
+     length, so the connecting line always meets them. */
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .step {
+    margin-top: calc(var(--drop) * var(--rise));
+  }
+
+  /* The staircase line: from each card's top right corner across half the
+     gap, up one step, then on to the next card's top left corner. */
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 100%;
+    width: calc(var(--gap) / 2 + 1px);
+    border-top: 1px solid var(--line);
+  }
+
+  .step + .step::before {
+    top: -1px;
+    bottom: auto;
+    left: auto;
+    right: 100%;
+    width: calc(var(--gap) / 2 + 1px);
+    height: calc(var(--rise) + 1px);
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* ---------- Library section ---------- */
+
+.section-intro {
+  display: grid;
+  gap: 10px;
+  max-width: 40rem;
+  margin-bottom: 32px;
+}
+
+/* A clear step down from the hero headline and a step up from card titles. */
+.section-intro h2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.section-intro__lead {
   color: var(--ink-muted);
 }
 
@@ -214,6 +1098,7 @@ main {
 .button--primary {
   background: var(--orange);
   border-color: var(--orange);
+  color: var(--ink-on-orange);
 }
 
 .button--primary:hover {
@@ -263,6 +1148,236 @@ select {
 
 .filters__clear {
   justify-self: start;
+}
+
+/* ---------- Account forms ---------- */
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
+  width: 100%;
+  min-height: var(--control-h);
+  padding: 0 12px;
+  border: 1px solid var(--ink-muted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+}
+
+textarea {
+  width: 100%;
+  min-height: 8rem;
+  padding: 10px 12px;
+  border: 1px solid var(--ink-muted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  resize: vertical;
+}
+
+/* Keep the dark border for contrast; the orange ring and the message below
+   mark the error, so it never relies on colour alone. */
+[aria-invalid="true"] {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--orange);
+}
+
+.account-form {
+  display: grid;
+  gap: 20px;
+  max-width: 28rem;
+}
+
+.account-form .notice {
+  margin-top: 0;
+}
+
+.account-form > .button {
+  justify-self: start;
+}
+
+.field__hint {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+/* Tick box beside its label, both clickable. The box itself takes the page's
+   dark blue, and the shared focus ring and invalid ring apply to it as they
+   do to the other controls. */
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checkbox input[type="checkbox"] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+.checkbox label {
+  cursor: pointer;
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.field__error .icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.account-switch {
+  margin-top: 24px;
+}
+
+/* A pair of actions side by side, stacking when there is not room for both.
+   Used by the account settings forms. */
+.account-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Log in and sign up ---------- */
+
+/* Both auth pages are a branded panel beside the form. <main> is normally a
+   padded container; these two pages run edge to edge instead so the panel
+   reaches the sides. */
+main:has(.auth-layout) {
+  max-width: none;
+  padding: 0;
+}
+
+.auth-layout {
+  display: grid;
+  min-height: 100%;
+}
+
+/* Two columns from the same 1024px step the footer and the settings tabs
+   already use. Below it the panel collapses to a short banner above the
+   form, so a phone still gets the branding without losing the fold. */
+@media (min-width: 1024px) {
+  .auth-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.auth-panel {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: center;
+  padding: clamp(28px, 5vw, 72px);
+  overflow: hidden;
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+}
+
+.auth-panel__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The same flat scrim the audience cards use, so the wordmark and the line
+   under it hold their contrast whatever part of the photo sits behind them. */
+.auth-panel__photo + .auth-panel__content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--scrim);
+}
+
+.auth-panel__content {
+  display: grid;
+  gap: 12px;
+  max-width: 26rem;
+}
+
+.auth-panel__wordmark {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.auth-panel__line {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--ink-inverse);
+}
+
+.auth-side {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: clamp(32px, 6vw, 72px) var(--gutter);
+  background: var(--paper);
+}
+
+.auth-form {
+  display: grid;
+  gap: 32px;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.auth-heading {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-heading h1 {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+}
+
+/* Roomier than the settings forms: this is the whole page, not a panel in a
+   tab, so the fields get more space and the action is full width. */
+.auth-form .account-form {
+  gap: 24px;
+  max-width: none;
+}
+
+.auth-form .account-form > .button {
+  justify-self: stretch;
+  width: 100%;
+  min-height: 52px;
+}
+
+.auth-form input {
+  min-height: 52px;
+}
+
+.auth-form .account-switch {
+  margin-top: 0;
+}
+
+@media (max-width: 1023px) {
+  /* Collapsed to a banner strip: tall enough to read as branding, short
+     enough that the first field is still near the top of the screen. */
+  .auth-panel {
+    min-height: 8rem;
+    padding-block: 24px;
+  }
 }
 
 .results-status {
@@ -315,6 +1430,7 @@ select {
 .tag--signup {
   background: var(--orange);
   border-color: var(--orange);
+  color: var(--ink-on-orange);
 }
 
 .card__title {
@@ -344,7 +1460,8 @@ select {
   margin-top: auto;
 }
 
-.card__action {
+.card__action,
+.card__locked {
   align-self: flex-start;
 }
 
@@ -386,8 +1503,317 @@ select {
   font-weight: 800;
 }
 
+/* A save confirmation rather than an error: same shape, blue border instead
+   of orange, since orange on this site always means "needs your attention". */
+.notice--success {
+  border-color: var(--blue);
+}
+
 .load-more {
   display: flex;
   justify-content: center;
   margin-top: 32px;
+}
+
+/* ---------- Rising subjects (homepage background) ---------- */
+
+/* Fixed behind the page content (z-index -1) and never takes clicks. Only
+   shown to visitors who have not asked for reduced motion; everyone else
+   gets no effect at all. */
+.rising-subjects {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rising-subjects {
+    display: block;
+  }
+}
+
+/* Dark blue at 3% to 5% opacity (set per subject in RisingSubjects.jsx)
+   keeps small muted text in front of it at 4.5:1 or better, even where two
+   subjects overlap. */
+.rising-subjects__item {
+  position: absolute;
+  bottom: 0;
+  left: var(--x);
+  color: var(--blue);
+  font-size: var(--size);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  animation: rise-up var(--duration) linear var(--delay) 1 both;
+}
+
+/* The name comes from data-subject, so it cannot be selected or matched by
+   find-in-page. */
+.rising-subjects__item::before {
+  content: attr(data-subject);
+}
+
+/* On the homepage the subjects stay inside the hero band rather than covering
+   the whole page, so the library below stays calm. The layer reaches up to
+   the header (through main's top padding), so names slide away under it. */
+.hero .rising-subjects {
+  position: absolute;
+  top: calc(-1 * clamp(40px, 7vw, 80px)); /* matches main's top padding */
+  z-index: 0;
+}
+
+/* Long names wrap and are kept inside the band's width, so none are cut off
+   at the side. */
+.hero .rising-subjects__item {
+  left: max(0px, min(var(--x), calc(100% - 16ch)));
+  max-width: min(16ch, 100%);
+  white-space: normal;
+  line-height: 1.05;
+}
+
+/* On small screens big wrapped names crowd the headline, so cap their size. */
+@media (max-width: 768px) {
+  .hero .rising-subjects__item {
+    font-size: min(var(--size), 1.375rem);
+  }
+}
+
+/* Cursor spotlight (useSpotlight in Home.jsx). In the hero the name's own
+   animation only fades it in and out (0 to 1), and its text carries the
+   strength (--opacity), so the two multiply to exactly the usual look. The
+   spotlight then raises just the text, through --lit, without fighting the
+   animation. */
+.hero .rising-subjects__item {
+  animation-name: rise-up-envelope;
+}
+
+/* Scaled by --subject-strength so the watermark reads the same in both
+   themes; the spotlight's --lit scales with it rather than being swamped. */
+.hero .rising-subjects__item::before {
+  opacity: calc(var(--lit, var(--opacity)) * var(--subject-strength));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero .rising-subjects__item::before {
+    transition: opacity 200ms ease-out;
+  }
+}
+
+@keyframes rise-up-envelope {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, calc(-100vh - 100%), 0);
+  }
+}
+
+@keyframes rise-up {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  10%,
+  85% {
+    opacity: calc(var(--opacity) * var(--subject-strength));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, calc(-100vh - 100%), 0);
+  }
+}
+
+/* ---------- Accessibility settings ---------- */
+
+.tab-nav {
+  display: grid;
+  gap: 24px;
+}
+
+.tab-nav__list {
+  display: flex;
+  overflow-x: auto;
+  gap: 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-nav__tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding: 0 16px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* The indicator is dark blue, not orange: it is the only thing marking the
+   selected tab besides the text colour, so it needs 3:1 against the page
+   (WCAG 1.4.11). Orange is about 2:1 there. Dark blue flips to off-white in
+   dark mode, so it passes in both themes. */
+.tab-nav__tab[aria-selected="true"] {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+
+.tab-nav__panel {
+  display: grid;
+  gap: 24px;
+  max-width: 32rem;
+}
+
+@media (min-width: 1024px) {
+  .tab-nav {
+    grid-template-columns: 220px 1fr;
+    align-items: start;
+  }
+
+  .tab-nav__list {
+    flex-direction: column;
+    overflow-x: visible;
+    padding-bottom: 0;
+    padding-right: 16px;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .tab-nav__tab {
+    justify-content: flex-start;
+    border-bottom: 0;
+    border-left: 3px solid transparent;
+    text-align: left;
+  }
+
+  .tab-nav__tab[aria-selected="true"] {
+    border-left-color: var(--blue);
+  }
+}
+
+/* Mobile: accordions instead of tabs, so nothing needs a sideways scroll. */
+.tab-nav--accordion details {
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-nav--accordion summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding-block: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab-nav--accordion .tab-nav__panel {
+  max-width: none;
+  padding-block: 4px 20px;
+}
+
+.settings-section {
+  display: grid;
+  gap: 20px;
+}
+
+.settings-section .account-form {
+  max-width: none;
+}
+
+.range-field__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.range-field__value {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.password-strength {
+  height: 4px;
+  margin-top: -8px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.password-strength__bar {
+  height: 100%;
+  width: calc(var(--strength, 0) * 100%);
+  background: var(--orange);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .password-strength__bar {
+    transition: width 150ms ease;
+  }
+}
+
+.danger-zone {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.button--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.button--danger:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--surface-inverse);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30; /* above the sticky header, so the dim covers it too */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  background: var(--overlay);
+}
+
+.modal {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 26rem;
+  padding: clamp(20px, 5vw, 32px);
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.modal .account-form {
+  gap: 16px;
 }

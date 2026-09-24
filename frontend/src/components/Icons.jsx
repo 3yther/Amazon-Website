@@ -38,11 +38,80 @@ export function LockIcon() {
   );
 }
 
+export function MenuIcon() {
+  return (
+    <Icon>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </Icon>
+  );
+}
+
+export function CloseIcon() {
+  return (
+    <Icon>
+      <path d="M6 6l12 12M18 6 6 18" />
+    </Icon>
+  );
+}
+
+export function ChevronDownIcon() {
+  return (
+    <Icon>
+      <path d="M6 9l6 6 6-6" />
+    </Icon>
+  );
+}
+
 export function AlertIcon() {
   return (
     <Icon>
       <path d="M12 3 2 21h20L12 3z" />
       <path d="M12 10v5M12 18v.01" />
+    </Icon>
+  );
+}
+
+// One per pathway, for the homepage pathway tiles.
+
+export function DigitalIcon() {
+  return (
+    <Icon>
+      <path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" />
+    </Icon>
+  );
+}
+
+export function BusinessIcon() {
+  return (
+    <Icon>
+      <rect x="3" y="7" width="18" height="13" />
+      <path d="M9 7V4h6v3M3 13h18" />
+    </Icon>
+  );
+}
+
+export function MediaIcon() {
+  return (
+    <Icon>
+      <rect x="3" y="6" width="13" height="12" />
+      <path d="M16 10l5-3v10l-5-3" />
+    </Icon>
+  );
+}
+
+export function FinanceIcon() {
+  return (
+    <Icon>
+      <path d="M4 20h16M7 16v-4M12 16V7M17 16v-7" />
+    </Icon>
+  );
+}
+
+export function EngineeringIcon() {
+  return (
+    <Icon>
+      <path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z" />
+      <circle cx="12" cy="12" r="3" />
     </Icon>
   );
 }

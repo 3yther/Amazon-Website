@@ -6,7 +6,7 @@
       "name": "Digital",
       "slug": "digital",
       "summary": "Build, run and support technology.",
-      "description": "Covers the Digital T Levels: Digital Production, Design and Development; Digital Support and Services; Digital Business Services."
+      "description": "Covers the Digital T Levels: Digital Data Analytics, Digital Software Development, and Digital Support and Security."
     }
   },
   {
@@ -16,7 +16,7 @@
       "name": "Business",
       "slug": "business",
       "summary": "Keep teams and operations running.",
-      "description": "Covers the Management and Administration T Level."
+      "description": "Covers the Management and Administration T Level, in the Business and Administration route."
     }
   },
   {
@@ -26,7 +26,7 @@
       "name": "Media",
       "slug": "media",
       "summary": "Plan, make and publish content.",
-      "description": "Covers the Media, Broadcast and Production T Level."
+      "description": "Covers the Media, Broadcast and Production T Level, in the Creative and Design route."
     }
   },
   {
@@ -36,7 +36,7 @@
       "name": "Finance",
       "slug": "finance",
       "summary": "Work with the numbers behind decisions.",
-      "description": "Covers the Finance and Accounting T Levels."
+      "description": "Covers the Accounting T Level. The Finance T Level takes its last enrolments in September 2026, so Accounting is the continuing route."
     }
   },
   {
@@ -46,7 +46,7 @@
       "name": "Engineering",
       "slug": "engineering",
       "summary": "Design, build and maintain systems.",
-      "description": "Covers the Engineering and Manufacturing T Levels."
+      "description": "Covers the three Engineering and Manufacturing T Levels: Design and Development; Maintenance, Installation and Repair; and Engineering, Manufacturing, Processing and Control."
     }
   }
 ]

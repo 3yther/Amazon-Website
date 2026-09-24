@@ -1,0 +1,730 @@
+/* Smiley, and the chat around it.
+ *
+ * Kept in its own file so it never collides with styles.css. Colours come only
+ * from the tokens in styles.css, in two kinds:
+ *
+ *   Fixed brand tokens  --orange, --paper-dark (#232f3e), --text-dark (#fafaf7).
+ *                       Used for Smiley itself and the chat header, which look
+ *                       the same in light and dark mode.
+ *   Theme tokens        --surface, --paper, --blue, --line, --ink-muted.
+ *                       Used for everything else, so the chat follows dark mode
+ *                       and high contrast from the Accessibility settings.
+ *
+ * Sizes are in rem, so the Accessibility font size setting and browser zoom
+ * grow the chat with the text instead of spilling out of it. */
+
+/* ==========================================================================
+   Smiley
+   ========================================================================== */
+
+.smiley {
+  display: block;
+  overflow: visible;
+}
+
+.smiley__hood {
+  fill: var(--orange);
+  stroke: var(--paper-dark); /* 13:1 against the light page, so Smiley reads */
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.smiley__t {
+  fill: var(--orange);
+  stroke: var(--paper-dark);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+/* A thin aerial rather than a thick handle, so Smiley reads as a character
+   and not as a school bell. An orange core on a dark edge, like the hood. */
+.smiley__stem-edge,
+.smiley__stem {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.smiley__stem-edge {
+  stroke: var(--paper-dark);
+  stroke-width: 3.4;
+}
+
+.smiley__stem {
+  stroke: var(--orange);
+  stroke-width: 1.6;
+}
+
+/* The fold of the hood around the face: dark blue, faint. */
+.smiley__rim {
+  fill: none;
+  stroke: var(--paper-dark);
+  stroke-opacity: 0.25;
+  stroke-width: 1.6;
+}
+
+.smiley__face {
+  fill: var(--paper-dark);
+}
+
+.smiley__eye {
+  fill: var(--text-dark);
+}
+
+.smiley__line {
+  fill: none;
+  stroke: var(--text-dark);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.smiley__line--thin {
+  stroke-width: 1.5;
+}
+
+.smiley__smile {
+  fill: none;
+  stroke: var(--orange); /* 6.3:1 on the dark face */
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.smiley__fill {
+  fill: var(--orange);
+}
+
+.smiley__cheeks {
+  fill: var(--orange);
+  opacity: 0.5;
+}
+
+.smiley__shadow {
+  fill: var(--line);
+}
+
+.smiley__zs {
+  fill: var(--blue); /* the only part that follows the theme: it sits on the page */
+  font-family: var(--font-sans);
+  font-weight: 800;
+}
+
+/* --- where Smiley looks, and blinking ------------------------------------ */
+
+.smiley__turn {
+  transition: transform 140ms ease-out;
+}
+
+.smiley__eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 70ms ease-in;
+}
+
+.smiley__eyes--shut {
+  transform: scaleY(0.12);
+}
+
+/* --- body language --------------------------------------------------------- */
+
+/* Everything pivots from where Smiley stands, bottom centre. */
+.smiley__move,
+.smiley__body,
+.smiley__pose {
+  transform-box: view-box;
+  transform-origin: 32px 60px;
+}
+
+.smiley__pose {
+  transition: transform 300ms ease;
+}
+
+.smiley__pose--tilt-in {
+  transform: rotate(-5deg);
+}
+
+.smiley__pose--tilt-out {
+  transform: rotate(6deg);
+}
+
+.smiley__pose--droop {
+  transform: translateY(1.5px) rotate(-4deg);
+}
+
+.smiley__body--breathe {
+  animation: smiley-breathe 3.4s ease-in-out infinite;
+}
+
+.smiley__move--hop {
+  animation: smiley-hop 420ms ease-out;
+}
+
+.smiley__move--bounce {
+  animation: smiley-hop 420ms ease-out 3;
+}
+
+.smiley__move--sway {
+  animation: smiley-sway 900ms ease-in-out 2;
+}
+
+.smiley__aerial {
+  transform-box: view-box;
+  transform-origin: 32px 13px;
+}
+
+.smiley__aerial--wiggle {
+  animation: smiley-wiggle 600ms ease-in-out;
+}
+
+/* Thinking: the T blinks, slowly (well under three flashes a second). */
+.smiley__aerial--flash .smiley__t {
+  animation: smiley-flash 1.2s steps(1) infinite;
+}
+
+.smiley__mouth--talk {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: smiley-talk 260ms ease-in-out infinite alternate;
+}
+
+.smiley__mouth--yawn {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: smiley-yawn 5s ease-in-out infinite;
+}
+
+.smiley__zs text {
+  animation: smiley-z 2.4s ease-in-out infinite;
+}
+
+.smiley__zs text + text {
+  animation-delay: 1.2s;
+}
+
+@keyframes smiley-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.025);
+  }
+}
+
+@keyframes smiley-hop {
+  0% {
+    transform: none;
+  }
+  35% {
+    transform: translateY(-5px) scaleY(1.04);
+  }
+  70% {
+    transform: scaleY(0.95);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes smiley-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes smiley-wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-14deg);
+  }
+  40% {
+    transform: rotate(12deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes smiley-flash {
+  0% {
+    fill: var(--orange);
+  }
+  50% {
+    fill: var(--text-dark);
+  }
+}
+
+@keyframes smiley-talk {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes smiley-yawn {
+  0%,
+  70%,
+  100% {
+    transform: scale(1);
+  }
+  80%,
+  88% {
+    transform: scale(1.8, 2.6);
+  }
+}
+
+@keyframes smiley-z {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Reduced motion, from the system or the site's own setting: Smiley keeps
+   its expressions but nothing moves, blinks or animates. */
+.smiley--still *,
+.assistant--still * {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smiley *,
+  .assistant * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   The chat
+   ========================================================================== */
+
+.assistant {
+  position: fixed;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+/* --- Smiley in the corner ------------------------------------------------ */
+
+.assistant__toggle {
+  /* 4.5rem is 72px at the default size: well over the 44px minimum target. */
+  width: 4.5rem;
+  height: 4.5rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.assistant__toggle .smiley {
+  width: 4rem;
+  height: 4rem;
+}
+
+/* While the chat is open Smiley is up in the header, and the corner is just
+   the way to close it. */
+.assistant__toggle--open {
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--blue);
+  background: var(--surface);
+}
+
+.assistant__toggle--open:hover {
+  background: var(--orange);
+  border-color: var(--paper-dark);
+  color: var(--paper-dark);
+}
+
+/* --- the speech bubble ---------------------------------------------------- */
+
+.assistant__teaser {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  max-width: 16rem;
+  margin-right: 1.5rem;
+  border: 2px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgb(35 47 62 / 0.14);
+}
+
+/* The tail, pointing down at Smiley. */
+.assistant__teaser::after {
+  content: "";
+  position: absolute;
+  right: 1.25rem;
+  bottom: -0.5rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-right: 2px solid var(--blue);
+  border-bottom: 2px solid var(--blue);
+  background: var(--surface);
+  transform: rotate(45deg);
+}
+
+.assistant__teaser-text {
+  flex: 1;
+  min-height: 2.75rem;
+  padding: 0.625rem 0 0.625rem 0.75rem;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.assistant__teaser-close {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+/* --- the panel -------------------------------------------------------------- */
+
+.assistant__panel {
+  display: flex;
+  flex-direction: column;
+  width: 24rem;
+  max-width: calc(100vw - (var(--gutter) * 2));
+  max-height: min(36rem, calc(100vh - 7rem));
+  overflow: hidden;
+  border: 2px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgb(35 47 62 / 0.18);
+}
+
+/* The header stays dark in both themes, like a name badge, so Smiley's
+   orange always has something to stand out against. */
+.assistant__header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.625rem;
+  background: var(--paper-dark);
+  color: var(--text-dark);
+}
+
+/* The site's focus ring is dark blue, which would vanish on this header. */
+.assistant__header :focus-visible {
+  outline-color: var(--orange);
+}
+
+.assistant__poke {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  cursor: pointer;
+}
+
+.assistant__poke .smiley {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.assistant__identity {
+  flex: 1;
+  min-width: 0;
+}
+
+.assistant__name {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.assistant__role {
+  margin-top: 0.125rem;
+  color: var(--orange); /* 6.3:1 on the dark header */
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.assistant__close {
+  flex-shrink: 0;
+  width: 2.75rem; /* 44px minimum target */
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.assistant__close:hover {
+  border-color: var(--border-dark-mode);
+}
+
+.assistant__disclosure {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-muted); /* 5.4:1 */
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* --- the conversation -------------------------------------------------------- */
+
+.assistant__scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.assistant__log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.assistant__turn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+  max-width: 90%;
+}
+
+.assistant__who {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+}
+
+.assistant__who .smiley {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.assistant__who-name {
+  font-weight: 700;
+}
+
+/* Marks a message Smiley sent on its own, like "Checking in". */
+.assistant__tag {
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--radius);
+  background: var(--orange);
+  color: var(--paper-dark); /* 6.3:1 */
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.assistant__message {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere; /* a long pasted word cannot widen the panel */
+}
+
+.assistant__message--assistant {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--blue);
+}
+
+.assistant__message--assistant a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.assistant__message--user {
+  align-self: flex-end;
+  max-width: 85%;
+  background: var(--blue);
+  color: var(--surface);
+}
+
+.assistant__thinking {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.assistant__dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--blue);
+  animation: assistant-dot 1s ease-in-out infinite;
+}
+
+.assistant__dot + .assistant__dot {
+  animation-delay: 0.15s;
+}
+
+.assistant__dot + .assistant__dot + .assistant__dot {
+  animation-delay: 0.3s;
+}
+
+@keyframes assistant-dot {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Suggested replies sit on the visitor's side, because picking one is
+   answering. */
+.assistant__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.assistant__chip {
+  min-height: 2.75rem; /* 44px minimum target */
+  padding: 0.375rem 0.75rem;
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.assistant__chip:hover {
+  border-color: var(--paper-dark);
+  background: var(--orange);
+  color: var(--paper-dark); /* 6.3:1 */
+}
+
+/* --- asking a question --------------------------------------------------------- */
+
+.assistant__form {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.assistant__input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--control-h);
+  padding: 0 0.75rem;
+  border: 1px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  font-size: 1rem; /* 16px, so iOS does not zoom in when it is focused */
+}
+
+.assistant__send {
+  min-width: var(--control-h);
+  min-height: var(--control-h);
+}
+
+/* --- arriving gently ----------------------------------------------------------- */
+
+/* The panel and the bubble ease in so a nudge is noticed without startling
+   anyone. Off under reduced motion, from either setting. */
+@media (prefers-reduced-motion: no-preference) {
+  .assistant:not(.assistant--still) .assistant__panel,
+  .assistant:not(.assistant--still) .assistant__teaser {
+    animation: assistant-appear 180ms ease-out;
+  }
+}
+
+@keyframes assistant-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- small screens ---------------------------------------------------------------- */
+
+@media (max-width: 30rem) {
+  .assistant {
+    /* Span the screen so the panel can use the full width, with Smiley still
+       in the corner. */
+    left: var(--gutter);
+  }
+
+  .assistant__panel {
+    width: 100%;
+  }
+}
