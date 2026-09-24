@@ -11,6 +11,7 @@ admin.site.index_title = "Content, submissions and accounts"
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("content.urls")),
+    path("api/", include("providers.urls")),
     path("api/", include("interest.urls")),
     path("api/accounts/", include("accounts.urls")),
     path("api/", include("chatbot.urls")),

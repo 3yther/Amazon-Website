@@ -49,7 +49,7 @@ The site does three jobs:
 - **Content library** of guides, documents, videos and prep packs, some free and some gated behind a sign-up.
 - **Accounts** with sign up and log in, so gated content unlocks for signed-in users.
 - **Expression of Interest** form, validated server side and rate limited.
-- **Find Near You** page to find T Level courses and placements nearby.
+- **T Level Near You**: enter a postcode, optionally pick a pathway and a distance, and see the schools and colleges running T Levels near you, nearest first.
 - **Smiley, the AI guide**: answers T Level questions from the site's own checked copy, asks who you are and what interests you, offers help when a page goes quiet or a quiz answer goes wrong, and has a personality of its own (it blinks, watches your cursor, dozes off and wakes up). Every animation stops under reduced motion.- **Help, About and T Level at Amazon** information pages.
 - **Staff admin** where Amazon staff review submissions and manage content.
 
@@ -87,6 +87,7 @@ backend/
   accounts/    Profile (extends Django's built-in User)
   content/     Pathway, ContentItem, content API
   interest/    ExpressionOfInterest, submission API
+  providers/   Provider, the near-you search API and the geocoding command
   chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI providerfrontend/
   src/api.js                    all calls to the Django API
   src/assistant/                Smiley: the chat widget, its face, moods and script
@@ -192,10 +193,13 @@ The Railway preview is temporary and has known limits: the Django admin is unsty
 | GET | `/api/content/` | Paginated. Filters: `pathway=<slug>`, `audience=student|parent|teacher`, `access_level=free|signup` |
 | GET | `/api/content/<slug>/` | One item |
 | POST | `/api/interest/` | Expression of Interest. Validated server side, rate limited |
+| GET | `/api/providers/search/` | Schools and colleges near a postcode, nearest first. `postcode=` required; `pathway=<slug>` and `radius=<miles>` (default 15) optional |
 | GET | `/api/chat/` | The visitor's recent messages with Smiley |
 | POST | `/api/chat/` | Ask Smiley something. Rate limited. `503` when the AI is unavailable |
 
 Filtering by pathway also returns items for all pathways; filtering by audience also returns items for everyone. Sign-up content is listed for everyone, but its `file` link is only sent to signed-in users (`locked: true` otherwise).
+
+The provider search answers `{ postcode, radius_miles, count, results }`. It geocodes the visitor's postcode with [postcodes.io](https://postcodes.io) (free, no key) and measures the distance itself; the providers already carry their coordinates, so one search is one lookup however many providers there are. An unknown postcode, pathway or radius is a `400` naming the field; a `503` means postcodes.io itself is down.
 
 ## Admin
 

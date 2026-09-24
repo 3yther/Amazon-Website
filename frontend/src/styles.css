@@ -1546,6 +1546,42 @@ main:has(.auth-layout) {
   flex: none;
 }
 
+/* ---------- T Level Near You (NearYou.jsx) ---------- */
+
+/* .filters lays the three controls out on a grid and aligns everything to
+   the bottom edge. The submit button is a grid item like the rest, so it
+   only needs to not stretch across its cell. */
+.near-you__submit {
+  justify-self: start;
+}
+
+/* How far away, on the provider card. Orange fill with the dark ink that
+   always goes on it, the same treatment .tag--signup uses: the distance is
+   the one thing a visitor scans for, and the colour is decoration, never the
+   only thing carrying the meaning (the miles are written out). */
+.tag--distance {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+/* The pathways a provider offers, inside the card's definition list. A list,
+   because that is what it is, with the bullets and indent taken off. */
+.near-you__pathways {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.near-you__pathways li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* ---------- Error notice ---------- */
 
 .notice {
