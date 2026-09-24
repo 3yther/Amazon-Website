@@ -5,7 +5,7 @@
 // The sources are listed in SOURCES at the bottom of this file and shown at
 // the foot of the page, so a marker can follow any number back to gov.uk,
 // UCAS or Amazon. Re-check before submission: the placement minimum, the
-// UCAS points, the bursary amount and the number of T Level subjects are the
+// UCAS points, the bursary amount and the number of T-Level subjects are the
 // ones most likely to move.
 
 /** The three steps from GCSEs to an Amazon placement (the design doc's numbered route). */
@@ -63,7 +63,7 @@ export const PLACEMENT_FACTS = [
   },
 ];
 
-/** How a T Level is graded, and what each grade is worth in UCAS points. */
+/** How a T-Level is graded, and what each grade is worth in UCAS points. */
 export const GRADES = [
   { grade: "Distinction*", points: "168" },
   { grade: "Distinction", points: "144" },
@@ -72,7 +72,7 @@ export const GRADES = [
   { grade: "Pass, with D or E in the core", points: "72" },
 ];
 
-/** Who a T Level suits. Honest about the trade-offs. */
+/** Who a T-Level suits. Honest about the trade-offs. */
 export const AUDIENCE_POINTS = [
   { icon: "person", text: "You are 16 to 19 and finishing your GCSEs, or changing course." },
   { icon: "target", text: "You know roughly which industry you want to work in." },
@@ -126,9 +126,9 @@ export const COST_POINTS = [
  * across the site.
  *
  * amazonStatus says what Amazon has publicly confirmed for that pathway.
- * TEAM NOTE: the Finance T Level takes its last enrolments in September 2026.
+ * TEAM NOTE: the Finance T-Level takes its last enrolments in September 2026.
  * Accounting carries on, so the finance pathway is not dead, but the copy
- * should not promise a Finance T Level to anyone starting after that.
+ * should not promise a Finance T-Level to anyone starting after that.
  * TEAM NOTE: Finance is null on purpose. Amazon's own page names digital,
  * creative, business and engineering, and does not mention finance. Ask the
  * Emerging Talent contact before we claim a finance placement exists.
@@ -142,7 +142,7 @@ export const PATHWAYS = [
     placement:
       "You sit with a technical team and work on live tasks: writing and reviewing code, testing, fixing bugs, or keeping systems and users running.",
     suits: "People who like solving a problem and seeing it work straight away.",
-    amazonStatus: "Where Amazon's T Level programme started.",
+    amazonStatus: "Where Amazon's T-Level programme started.",
   },
   {
     slug: "business",
@@ -194,9 +194,9 @@ export const PATHWAYS = [
 export const FAQS = [
   {
     id: "apprenticeship",
-    question: "Is a T Level the same as an apprenticeship?",
+    question: "Is a T-Level the same as an apprenticeship?",
     answer:
-      "No, they are the other way round. An apprenticeship is mostly paid work with some study. A T Level is mostly study, about 80 percent, with an industry placement of at least 315 hours making up the rest.",
+      "No, they are the other way round. An apprenticeship is mostly paid work with some study. A T-Level is mostly study, about 80 percent, with an industry placement of at least 315 hours making up the rest.",
   },
   {
     id: "entry",
@@ -206,9 +206,9 @@ export const FAQS = [
   },
   {
     id: "choice",
-    question: "Which T Level subjects can I choose from?",
+    question: "Which T-Level subjects can I choose from?",
     answer:
-      "Around 20, across routes including digital, engineering, construction, health, science, legal and accounting, media, marketing, agriculture, animal care, education, and craft and design. Sport and Social Care arrive in September 2028. The Finance T Level takes its last enrolments in September 2026, so Accounting is the one continuing.",
+      "Around 20, across routes including digital, engineering, construction, health, science, legal and accounting, media, marketing, agriculture, animal care, education, and craft and design. Sport and Social Care arrive in September 2028. The Finance T-Level takes its last enrolments in September 2026, so Accounting is the one continuing.",
   },
   {
     id: "assessed",
@@ -226,7 +226,7 @@ export const FAQS = [
     id: "fail",
     question: "What if I do not pass everything?",
     answer:
-      "You get a T Level statement of achievement instead of the full certificate. It lists the parts you did complete, so the work is not lost.",
+      "You get a T-Level statement of achievement instead of the full certificate. It lists the parts you did complete, so the work is not lost.",
   },
   {
     id: "placement",
@@ -248,15 +248,15 @@ export const FAQS = [
   },
   {
     id: "not-ready",
-    question: "What if I am not ready for a T Level yet?",
+    question: "What if I am not ready for a T-Level yet?",
     answer:
-      "There is a T Level Foundation Year, a one year level 2 course that builds up your English, maths, digital skills and work experience first, then moves you onto the T Level.",
+      "There is a T-Level Foundation Year, a one year level 2 course that builds up your English, maths, digital skills and work experience first, then moves you onto the T-Level.",
   },
   {
     id: "alongside",
     question: "Can I take other qualifications alongside it?",
     answer:
-      "A T Level is a full time programme broadly the size of three A levels, so it is not usually combined with much else. Some providers allow one extra qualification. Ask yours.",
+      "A T-Level is a full time programme broadly the size of three A levels, so it is not usually combined with much else. Some providers allow one extra qualification. Ask yours.",
   },
 ];
 
@@ -326,8 +326,8 @@ export const QUIZ_QUESTIONS = [
 export const QUIZ_RESULTS = [
   {
     minScore: 9,
-    heading: "A T Level looks like a strong fit",
-    text: "You want hands-on learning, real workplace time and a clear route into an industry. That is exactly what a T Level is built for. Next step: look at which of the five pathways fits you, then register your interest with Amazon.",
+    heading: "A T-Level looks like a strong fit",
+    text: "You want hands-on learning, real workplace time and a clear route into an industry. That is exactly what a T-Level is built for. Next step: look at which of the five pathways fits you, then register your interest with Amazon.",
   },
   {
     minScore: 5,
@@ -360,7 +360,7 @@ export const SOURCES = [
   },
   {
     title: "16 to 19 Bursary Fund guide, Department for Education",
-    url: "https://www.gov.uk/government/publications/16-to-19-bursary-fund-guidance/16-to-19-bursary-fund-guide-2025-to-2026",
+    url: "https://www.gov.uk/government/publications/16-to-19-bursary-fund-provider-guide/16-to-19-bursary-fund-guide-2026-to-2027",
   },
   {
     title: "T Level Placements, About Amazon UK",

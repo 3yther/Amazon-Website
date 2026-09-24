@@ -17,7 +17,7 @@ import { IconList } from "../components/InfoBlocks.jsx";
 import "../about.css";
 
 // The Expression of Interest form: the site's main way for someone to tell
-// Amazon they want a T Level placement. Sends to POST /api/interest/ (the
+// Amazon they want a T-Level placement. Sends to POST /api/interest/ (the
 // interest app), which validates it again on the server and saves it for
 // Amazon staff to see in Django admin. No account is needed.
 
@@ -127,7 +127,7 @@ export default function RegisterInterest() {
         <p className="label">Amazon Emerging Talent</p>
         <h1 id="page-title">Register your interest</h1>
         <p className="lead">
-          Want a T Level placement at Amazon? Tell us which pathway. You do not need an account.
+          Want a T-Level placement at Amazon? Tell us which pathway. You do not need an account.
         </p>
       </section>
 

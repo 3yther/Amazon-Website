@@ -1,32 +1,111 @@
-// Named T-Level subjects, from tlevels.gov.uk/students/subjects (checked
-// September 2026). Used by the homepage background. Update here if subjects
-// are added or renamed.
+// Every T-Level subject, grouped into the routes gov.uk uses, from
+// tlevels.gov.uk/students/subjects (checked 24 September 2026). Used by the
+// All T-Levels page and the homepage background. Update here if subjects are
+// added or renamed.
 //
-// Checked against gov.uk in September 2026: all 20 names below are current.
-// Two more arrive in September 2028, Social Care and Sport, Physical Activity
-// and Health. They are left out until they exist. The Finance T Level takes
-// its last enrolments in September 2026, so it is on its way out, but it is
-// still being studied for the next two years and stays in the list.
+// Each subject's `page` is its address on tlevels.gov.uk, copied from the
+// links on that page, not guessed. Two subjects arrive in September 2028,
+// Social Care and Sport; they have no page yet, so `comingIn` is set instead.
+// The Finance T-Level takes its last enrolments in September 2026, but it is
+// still being studied for the next two years, so it stays in.
+//
+// `pathway` links a route to one of the five pathways on this site (see
+// PATHWAYS in aboutContent.js), so the page can point to it.
 
-export const T_LEVEL_SUBJECTS = [
-  "Agriculture, Land Management and Production",
-  "Animal Care and Management",
-  "Management and Administration",
-  "Building Services Engineering for Construction",
-  "Design, Surveying and Planning for Construction",
-  "Craft and Design",
-  "Media, Broadcast and Production",
-  "Digital Data Analytics",
-  "Digital Software Development",
-  "Digital Support and Security",
-  "Education and Early Years",
-  "Design and Development for Engineering and Manufacturing",
-  "Maintenance, Installation and Repair for Engineering and Manufacturing",
-  "Engineering, Manufacturing, Processing and Control",
-  "Health",
-  "Science",
-  "Accounting",
-  "Finance",
-  "Legal Services",
-  "Marketing",
+const GOV_SUBJECTS = "https://www.tlevels.gov.uk/students/subjects/";
+
+export const T_LEVEL_ROUTES = [
+  {
+    name: "Agriculture, Environmental and Animal Care",
+    subjects: [
+      { name: "Agriculture, Land Management and Production", page: "agriculture-land-management-production" },
+      { name: "Animal Care and Management", page: "animal-care-management" },
+    ],
+  },
+  {
+    name: "Business and Administration",
+    pathway: "business",
+    subjects: [{ name: "Management and Administration", page: "management-administration" }],
+  },
+  {
+    name: "Construction",
+    subjects: [
+      { name: "Building Services Engineering for Construction", page: "building-services-engineering" },
+      { name: "Design, Surveying and Planning for Construction", page: "design-surveying-planning" },
+    ],
+  },
+  {
+    name: "Creative and Design",
+    pathway: "media",
+    subjects: [
+      { name: "Craft and Design", page: "craft-design" },
+      { name: "Media, Broadcast and Production", page: "media-broadcast-production" },
+    ],
+  },
+  {
+    name: "Digital",
+    pathway: "digital",
+    subjects: [
+      { name: "Digital Data Analytics", page: "digital-data-analytics" },
+      { name: "Digital Software Development", page: "digital-software-development" },
+      { name: "Digital Support and Security", page: "digital-support-security" },
+    ],
+  },
+  {
+    name: "Education and Early Years",
+    subjects: [{ name: "Education and Early Years", page: "education" }],
+  },
+  {
+    name: "Engineering and Manufacturing",
+    pathway: "engineering",
+    subjects: [
+      {
+        name: "Design and Development for Engineering and Manufacturing",
+        page: "design-development-engineering",
+      },
+      {
+        name: "Maintenance, Installation and Repair for Engineering and Manufacturing",
+        page: "maintenance-installation-repair",
+      },
+      {
+        name: "Engineering, Manufacturing, Processing and Control",
+        page: "engineering-manufacturing-processing-control",
+      },
+    ],
+  },
+  {
+    name: "Health and Science",
+    subjects: [
+      { name: "Health", page: "health" },
+      { name: "Science", page: "science" },
+      { name: "Social Care", comingIn: "September 2028" },
+    ],
+  },
+  {
+    name: "Legal, Finance and Accounting",
+    pathway: "finance",
+    subjects: [
+      { name: "Accounting", page: "accounting" },
+      { name: "Finance", page: "finance", note: "Last enrolments September 2026" },
+      { name: "Legal Services", page: "legal-services" },
+    ],
+  },
+  {
+    name: "Sales, Marketing and Procurement",
+    subjects: [{ name: "Marketing", page: "marketing" }],
+  },
+  {
+    name: "Sport",
+    subjects: [{ name: "Sport", comingIn: "September 2028" }],
+  },
 ];
+
+/** The full address of a subject's page on tlevels.gov.uk. */
+export function subjectPage(subject) {
+  return GOV_SUBJECTS + subject.page;
+}
+
+/** The names of the subjects running today (20), for the homepage. */
+export const T_LEVEL_SUBJECTS = T_LEVEL_ROUTES.flatMap((route) =>
+  route.subjects.filter((subject) => !subject.comingIn).map((subject) => subject.name),
+);

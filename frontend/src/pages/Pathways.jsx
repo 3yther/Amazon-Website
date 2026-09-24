@@ -11,7 +11,7 @@ export default function Pathways() {
       <section className="intro" aria-labelledby="page-title">
         <p className="label">Learning Pathways</p>
         <h1 id="page-title">Five pathways</h1>
-        <p className="lead">Pick one to see the T Levels in it and what the placement involves.</p>
+        <p className="lead">Pick one to see the T-Levels in it and what the placement involves.</p>
       </section>
 
       <PathwaySwitcher />

@@ -139,13 +139,16 @@ Leave these unset on the frontend:
 - Asking the assistant a question gets a real answer, not the fallback message
   (that confirms `ANTHROPIC_API_KEY` is set).
 - Signing up logs you in, and logging out works (that confirms the CSRF setup).
-- The T Level Near You page finds colleges for a postcode such as `W1D 3QU`
+- The T-Level Near You page finds colleges for a postcode such as `W1D 3QU`
   (that confirms the providers fixture loaded and `geocode_providers` ran; if
   the page says nothing was found anywhere, check the pre-deploy command
   above). It also confirms the server can reach `api.postcodes.io`.
 - `https://<backend domain>/admin/` shows the Django admin login.
 - In the backend's deploy logs, the pre-deploy step shows the migrations, and
   the service log shows gunicorn listening.
+- If an `/api` request answers 500, the traceback is in the backend's service
+  log (`railway logs`). `LOGGING` in `backend/config/settings.py` prints every
+  server error there, even with debug off.
 
 ## Known limits of the preview
 

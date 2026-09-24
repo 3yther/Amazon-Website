@@ -1554,7 +1554,7 @@ main:has(.auth-layout) {
   flex: none;
 }
 
-/* ---------- T Level Near You (NearYou.jsx) ---------- */
+/* ---------- T-Level Near You (NearYou.jsx) ---------- */
 
 /* .filters lays the three controls out on a grid and aligns everything to
    the bottom edge. The submit button is a grid item like the rest, so it

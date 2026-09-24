@@ -15,7 +15,7 @@ export default function Quiz() {
         <p className="label">Quiz</p>
         <h1 id="page-title">Test what you know</h1>
         <p className="lead">
-          {KNOWLEDGE_QUESTIONS.length} questions about T Levels, Amazon placements and this
+          {KNOWLEDGE_QUESTIONS.length} questions about T-Levels, Amazon placements and this
           site. Nothing is saved, and nobody sees your score.
         </p>
       </section>

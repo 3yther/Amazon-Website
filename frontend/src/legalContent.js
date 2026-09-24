@@ -10,7 +10,7 @@
 // Each page is a list of sections: { heading, paragraphs, points }.
 
 const DRAFT_NOTE =
-  "T-SMILE is a student project, made for the Amazon Emerging Talent Digital T Level programme. It is not an official Amazon website.";
+  "T-SMILE is a student project, made for the Amazon Emerging Talent Digital T-Level programme. It is not an official Amazon website.";
 
 export const TERMS = {
   label: "Legal",
@@ -51,7 +51,7 @@ export const TERMS = {
     {
       heading: "Amazon's name",
       paragraphs: [
-        "\"Amazon\" and its logo belong to Amazon.com, Inc. or its affiliates. We use them to describe Amazon's T Level placements.",
+        "\"Amazon\" and its logo belong to Amazon.com, Inc. or its affiliates. We use them to describe Amazon's T-Level placements.",
       ],
     },
   ],
