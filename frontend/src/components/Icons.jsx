@@ -92,6 +92,18 @@ export function AlertIcon() {
   );
 }
 
+// Stands in for the circular initial when nobody is signed in, so the header's
+// account button is still something to aim at on a narrow screen where its
+// label is hidden.
+export function PersonIcon() {
+  return (
+    <Icon>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
+    </Icon>
+  );
+}
+
 // One per pathway, for the homepage pathway tiles.
 
 export function DigitalIcon() {

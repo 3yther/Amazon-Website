@@ -418,12 +418,25 @@ main:focus {
   height: 24px;
 }
 
+/* The two boxes ARE centred on each other: align-items: center on
+   .site-header__brand does that correctly, and both boxes measure the same
+   centre line. What does not line up is the ink inside them. The approved
+   logo file keeps the lower third of its box for the smile, so the "amazon"
+   lettering spans rows 31 to 62 of the image's 106, putting its optical
+   centre 3px above the box centre at the 53px height we show it at. The
+   wordmark comes up by the same 3px so the two read as one line.
+
+   A transform rather than a margin, so this stays a purely visual nudge and
+   does not change what the flex row measures. The logo is a fixed 95px at
+   every width, so the 3px holds at every breakpoint. */
 .wordmark {
+  display: inline-block;
   color: var(--ink-inverse);
   font-size: 1.375rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   text-decoration: none;
+  transform: translateY(-3px);
 }
 
 .wordmark__accent {
@@ -519,22 +532,67 @@ main {
   justify-self: end;
 }
 
-/* Circular initial button, on the same orange-background/blue-text chip
-   pattern used elsewhere (e.g. .tag--signup). */
+/* "Hello, Ada" beside a circular initial, or "Hello, sign in" beside a person
+   icon. The button itself is transparent on the dark header; only the
+   initial keeps the orange chip. */
 .account-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: var(--control-h);
-  height: var(--control-h);
+  gap: 8px;
+  min-height: var(--control-h);
   padding: 0;
   border: 0;
+  background: none;
+  color: var(--ink-inverse);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The circular chip, on the same orange-background/blue-text pattern used
+   elsewhere (e.g. .tag--signup). */
+.account-button__initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--control-h);
+  height: var(--control-h);
   border-radius: 50%;
   background: var(--orange);
   color: var(--ink-on-orange);
   font-size: 1.0625rem;
   font-weight: 800;
-  cursor: pointer;
+}
+
+/* Signed out there is no chip, so the icon carries the target size on its
+   own and keeps the button tappable. */
+.account-button > .icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.account-button__greeting {
+  white-space: nowrap;
+}
+
+/* The header is three columns and the middle one holds the brand. Past this
+   width the greeting starts pushing the brand off centre, so it goes and the
+   initial (or the icon) speaks for it. The button keeps its accessible name
+   either way, so nothing is lost to a screen reader. */
+@media (max-width: 720px) {
+  .account-button__greeting {
+    display: none;
+  }
+}
+
+.account-button:hover .account-button__greeting {
+  text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 .account-button[aria-expanded="true"] {
@@ -592,6 +650,19 @@ main {
   text-decoration: underline;
   text-underline-offset: var(--underline-offset);
   text-decoration-thickness: var(--underline-thickness-hover);
+}
+
+/* The Sign up button at the foot of the signed-out menu. A button, not
+   another row, because it is the thing a new visitor is meant to press.
+   .button--primary carries the orange fill and the dark ink that always goes
+   on it; this only has to stretch it across the menu. */
+.dropdown-links__cta {
+  margin-top: 8px;
+}
+
+.dropdown-cta {
+  justify-content: center;
+  width: 100%;
 }
 
 /* ---------- Menu overlay ---------- */
@@ -1650,7 +1721,7 @@ main:has(.auth-layout) {
   flex: none;
 }
 
-/* ---------- T-Level Near You (NearYou.jsx) ---------- */
+/* ---------- Find T-Levels Near You (NearYou.jsx) ---------- */
 
 /* .filters lays the three controls out on a grid and aligns everything to
    the bottom edge. The submit button is a grid item like the rest, so it

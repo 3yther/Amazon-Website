@@ -2,13 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import AccountDropdown from "../components/AccountDropdown.jsx";
 import AccountSettings from "../components/accessibility/AccountSettings.jsx";
 import { AuthProvider } from "../auth.jsx";
 
 // Logging out moved out of the header's account menu and onto the Account tab
-// of the settings page. These cover both ends of that move: that it is gone
-// from the menu, and that the new control does exactly what the old one did.
+// of the settings page. This covers the control itself; that the header no
+// longer offers one is covered in AccountDropdown.test.jsx, along with the
+// rest of that menu.
 //
 // A fake server rather than a vi.mock of api.js, the same way
 // RegisterInterest.test.jsx and NearYou.test.jsx work. vitest shares one
@@ -66,50 +66,6 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
-});
-
-describe("The header's account menu", () => {
-  async function openMenu() {
-    const user = userEvent.setup({ delay: null });
-    render(
-      <MemoryRouter>
-        <AuthProvider>
-          <AccountDropdown />
-        </AuthProvider>
-      </MemoryRouter>,
-    );
-    await user.click(await screen.findByRole("button", { name: /Account menu/ }));
-    return user;
-  }
-
-  it("no longer offers Logout", async () => {
-    fakeServer();
-    await openMenu();
-
-    expect(screen.queryByRole("menuitem", { name: /log ?out/i })).toBeNull();
-    expect(screen.queryByText(/log ?out/i)).toBeNull();
-  });
-
-  it("still offers a way into Settings", async () => {
-    fakeServer();
-    await openMenu();
-
-    expect(screen.getByRole("menuitem", { name: "Profile & Settings" })).toHaveAttribute(
-      "href",
-      "/accessibility",
-    );
-  });
-
-  it("lists only the account links", async () => {
-    fakeServer();
-    await openMenu();
-
-    expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual([
-      "Profile & Settings",
-      "Security Settings",
-      "Contact Us",
-    ]);
-  });
 });
 
 describe("Logging out from the Account tab", () => {
