@@ -2,9 +2,57 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getContent, getPathways } from "../api.js";
 import { ACCESS_LEVELS, AUDIENCES, CONTENT_TYPES } from "../labels.js";
-import { AlertIcon, ArrowIcon, LockIcon } from "../components/Icons.jsx";
+import {
+  AlertIcon,
+  ArrowIcon,
+  BusinessIcon,
+  DigitalIcon,
+  EngineeringIcon,
+  FinanceIcon,
+  LockIcon,
+  MediaIcon,
+} from "../components/Icons.jsx";
+import Pictogram from "../components/Pictogram.jsx";
+import "../about.css";
 
 const NO_FILTERS = { pathway: "", audience: "", access_level: "" };
+
+// The picture shown beside each content type's label.
+const TYPE_PICTURES = {
+  guide: "book",
+  document: "document",
+  video: "video",
+  prep_pack: "clipboard",
+  class_pack: "folder",
+};
+
+// The same pathway icons the homepage tiles use, keyed by pathway slug.
+const PATHWAY_ICONS = {
+  digital: DigitalIcon,
+  business: BusinessIcon,
+  media: MediaIcon,
+  finance: FinanceIcon,
+  engineering: EngineeringIcon,
+};
+
+/**
+ * A short name for the site a link goes to, for the "Open on ..." button.
+ * Every gov.uk address becomes "gov.uk", because long ones such as
+ * assets.publishing.service.gov.uk overflow a phone screen.
+ *
+ * NEW CONCEPT: the URL class. new URL() splits an address into parts
+ * (hostname, path and so on) and throws if the text is not a valid address,
+ * which is how we spot a bad link.
+ */
+export function siteName(link) {
+  let host;
+  try {
+    host = new URL(link).hostname.replace(/^www\./, "");
+  } catch {
+    return "another website";
+  }
+  return host === "gov.uk" || host.endsWith(".gov.uk") ? "gov.uk" : host;
+}
 
 /**
  * The resources page (/resources): the content library, which loads pathways
@@ -76,9 +124,11 @@ export default function ContentLibrary() {
     <>
       <section aria-labelledby="page-title">
         <div className="intro">
-          <p className="label">Content library</p>
+          <p className="label">Resources</p>
           <h1 id="page-title">T-Level Resources</h1>
-          <p className="lead">Filter by pathway, audience or access.</p>
+          <p className="lead">
+            Free guides, videos and packs, linked from official sources such as gov.uk and UCAS.
+          </p>
         </div>
 
         <form className="filters" aria-label="Filter content" onSubmit={(e) => e.preventDefault()}>
@@ -183,11 +233,15 @@ export default function ContentLibrary() {
 
 function ContentCard({ item }) {
   const signupOnly = item.access_level === "signup";
+  const PathwayIcon = item.pathway ? PATHWAY_ICONS[item.pathway.slug] : null;
 
   return (
     <li className="card">
       <div className="card__tags">
-        <span className="label">{CONTENT_TYPES[item.content_type] ?? item.content_type}</span>
+        <span className="label card__type">
+          <Pictogram name={TYPE_PICTURES[item.content_type]} size="small" />
+          {CONTENT_TYPES[item.content_type] ?? item.content_type}
+        </span>
         <span className={signupOnly ? "tag tag--signup" : "tag"}>
           {ACCESS_LEVELS[item.access_level]}
         </span>
@@ -200,7 +254,10 @@ function ContentCard({ item }) {
       <dl className="card__meta">
         <div>
           <dt className="label">Pathway</dt>
-          <dd>{item.pathway ? item.pathway.name : "All pathways"}</dd>
+          <dd className="card__pathway">
+            {PathwayIcon && <PathwayIcon />}
+            {item.pathway ? item.pathway.name : "All pathways"}
+          </dd>
         </div>
         <div>
           <dt className="label">For</dt>
@@ -214,12 +271,21 @@ function ContentCard({ item }) {
           Sign up to access
         </Link>
       ) : (
-        item.file && (
-          <a className="button button--primary card__action" href={item.file}>
-            Open<span className="sr-only"> {item.title}</span>
-            <ArrowIcon />
-          </a>
-        )
+        <>
+          {item.link && (
+            <a className="button button--primary card__action" href={item.link}>
+              Open on {siteName(item.link)}
+              <span className="sr-only">, {item.title}</span>
+              <ArrowIcon />
+            </a>
+          )}
+          {item.file && (
+            <a className="button button--primary card__action" href={item.file}>
+              Open<span className="sr-only"> {item.title}</span>
+              <ArrowIcon />
+            </a>
+          )}
+        </>
       )}
     </li>
   );

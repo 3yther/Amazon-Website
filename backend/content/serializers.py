@@ -20,11 +20,12 @@ class PathwaySummarySerializer(serializers.ModelSerializer):
 class ContentItemSerializer(serializers.ModelSerializer):
     """
     A library item. Sign-up content is always listed so visitors can see it
-    exists, but its file link is only sent to signed-in users.
+    exists, but its file and link are only sent to signed-in users.
     """
 
     pathway = PathwaySummarySerializer(read_only=True)
     file = serializers.SerializerMethodField()
+    link = serializers.SerializerMethodField()
     locked = serializers.SerializerMethodField()
 
     class Meta:
@@ -38,6 +39,7 @@ class ContentItemSerializer(serializers.ModelSerializer):
             "pathway",
             "audience",
             "file",
+            "link",
             "locked",
             "created_at",
         ]
@@ -54,3 +56,8 @@ class ContentItemSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         url = item.file.url
         return request.build_absolute_uri(url) if request else url
+
+    def get_link(self, item):
+        if not item.link or self.get_locked(item):
+            return None
+        return item.link

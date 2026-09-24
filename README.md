@@ -111,7 +111,7 @@ cp .env.example .env
 python -c "from django.core.management.utils import get_random_secret_key as k; print(k())"
 # paste the printed key into .env as DJANGO_SECRET_KEY
 python manage.py migrate
-python manage.py loaddata pathways   # optional: the five pathways
+python manage.py loaddata pathways resources   # optional: the five pathways and starter resources
 python manage.py createsuperuser
 python manage.py runserver
 ```
@@ -210,7 +210,7 @@ Amazon staff review Expressions of Interest at `/admin/`. Submissions are read-o
 ## Troubleshooting
 
 - **Wrong Python or Node version.** The backend needs Python 3.11 and the frontend needs Node 20.19+ (or 22.12+). Check with `python3.11 --version` and `node --version`.
-- **The Resources filter is empty.** The five pathways are not loaded. Run `python manage.py loaddata pathways` in the backend.
+- **The Resources filter is empty.** The five pathways are not loaded. Run `python manage.py loaddata pathways resources` in the backend.
 - **`/api` requests fail in the browser.** Make sure Django is running on port 8000 in a second terminal. The Vite dev server on 5173 forwards `/api` and `/media` to it.
 - **Django will not start.** Usually a missing `DJANGO_SECRET_KEY`. Generate one and paste it into `.env` (see [Getting started](#getting-started)).
 

@@ -43,6 +43,8 @@ The settings on the Accessibility page, saved for signed-in users.
 - summary         -> short text (up to 255 characters)
 - description     -> long text
 The five rows are loaded from `backend/content/fixtures/pathways.json`.
+The starter resources (ContentItems linking to official pages) load from
+`backend/content/fixtures/resources.json`.
 
 ### ContentItem  (`content` app, the resources library)
 - title           -> text
@@ -53,6 +55,7 @@ The five rows are loaded from `backend/content/fixtures/pathways.json`.
 - pathway         -> ForeignKey(Pathway, nullable)  # null = applies to all
 - audience        -> choice: all | student | parent | teacher
 - file            -> uploaded file (nullable); local disk in development, S3 in production
+- link            -> web address of a resource on another site (optional); use this or file
 - created_at      -> datetime (auto)
 
 ### ExpressionOfInterest  (`interest` app)
