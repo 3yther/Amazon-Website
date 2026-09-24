@@ -1020,9 +1020,21 @@ main {
   color: var(--ink-muted);
 }
 
+/* The page a step talks about. Sits at the foot of the card, so the links
+   line up across the staircase whatever the text length. */
+.step__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  align-self: end;
+  min-height: var(--control-h);
+  font-weight: 700;
+}
+
 @media (min-width: 960px) {
-  /* Bottoms line up and each card starts one step higher than the one
-     before (--drop is how many steps below the top card it starts, set in
+  /* Each card starts one step lower than the one before, so Level 01 is
+     highest (--drop is how many steps below the top card it starts, set in
      HomeSections.jsx). Every top is exactly --rise apart, whatever the text
      length, so the connecting line always meets them. */
   .steps {
@@ -1034,7 +1046,7 @@ main {
   }
 
   /* The staircase line: from each card's top right corner across half the
-     gap, up one step, then on to the next card's top left corner. */
+     gap, down one step, then on to the next card's top left corner. */
   .step:not(:last-child)::after {
     content: "";
     position: absolute;
@@ -1045,13 +1057,13 @@ main {
   }
 
   .step + .step::before {
-    top: -1px;
+    top: calc(-1 * var(--rise) - 1px);
     bottom: auto;
     left: auto;
     right: 100%;
     width: calc(var(--gap) / 2 + 1px);
     height: calc(var(--rise) + 1px);
-    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 }
 
