@@ -60,6 +60,14 @@
      gradient (see the design rules in CONTEXT.md). */
   --scrim: rgb(35 47 62 / 0.82);
 
+  /* A lighter tint behind the open menu drawer, so the blurred page still
+     shows through. Fixed navy, like --scrim, so it stays dark in dark mode. */
+  --backdrop: rgb(35 47 62 / 0.45);
+
+  /* Soft shadows under Smiley's panels, so they lift off the page. */
+  --shadow-soft: 0 8px 24px rgb(35 47 62 / 0.14);
+  --shadow-raised: 0 10px 30px rgb(35 47 62 / 0.18);
+
   /* How strongly the drifting subject names show through (RisingSubjects).
      Light ink on a dark page needs more alpha than dark ink on a light one
      to read as the same subtle watermark, so dark mode raises this. */
@@ -419,7 +427,7 @@ main {
 
 .footer-bottom {
   padding-block: 16px;
-  border-top: 1px solid rgb(250 250 247 / 0.2);
+  border-top: 1px solid var(--border-dark-mode);
 }
 
 .footer-bottom .label {
@@ -539,7 +547,7 @@ main {
    plus a tint dark enough to keep the drawer's own edge obvious. Tinted with
    the fixed dark navy rather than --blue, which flips light in dark mode. */
 .menu-overlay::backdrop {
-  background: rgb(35 47 62 / 0.45);
+  background: var(--backdrop);
   backdrop-filter: blur(8px);
 }
 
