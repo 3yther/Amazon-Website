@@ -263,8 +263,8 @@ const STEPS = [
 ];
 
 /**
- * Four "Level" cards, a nod to T-Levels. On desktop they climb left to right
- * like a staircase (see .steps in styles.css); on smaller screens they stack.
+ * Four "Level" cards, a nod to T-Levels. On desktop they step down left to
+ * right like a staircase, Level 01 highest (see .steps in styles.css); on smaller screens they stack.
  */
 export function HowItWorks() {
   return (
@@ -277,7 +277,7 @@ export function HowItWorks() {
       <ol className="steps">
         {STEPS.map((step, index) => (
           // --drop: how many steps below the top card this one starts.
-          <li key={step.title} className="step" style={{ "--drop": STEPS.length - 1 - index }}>
+          <li key={step.title} className="step" style={{ "--drop": index }}>
             <p className="label">
               Level <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
             </p>
