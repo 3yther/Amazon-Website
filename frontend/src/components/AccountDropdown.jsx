@@ -18,6 +18,11 @@ const MENU_ITEMS = [
   { to: "/contact", label: "Contact Us" },
 ];
 
+// Shown only to Amazon staff. Hiding it is a convenience, not a control:
+// /staff redirects anyone else away and its API refuses them (see
+// accounts/permissions.py).
+const STAFF_ITEM = { to: "/staff", label: "Submissions" };
+
 /**
  * Circular initial button in the header that opens a menu of account links
  * plus Logout. Nothing renders until a signed-in user is known, so signed-out
@@ -94,7 +99,7 @@ export default function AccountDropdown() {
           </div>
 
           <ul className="dropdown-links">
-            {MENU_ITEMS.map((item) => (
+            {(user.user_type === "amazon_staff" ? [STAFF_ITEM, ...MENU_ITEMS] : MENU_ITEMS).map((item) => (
               <li key={item.label} role="none">
                 <NavLink to={item.to} role="menuitem" onClick={() => setOpen(false)}>
                   {item.label}

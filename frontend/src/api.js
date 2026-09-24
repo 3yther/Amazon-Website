@@ -186,6 +186,16 @@ export function submitInterest(fields) {
 }
 
 /**
+ * One page of Expression of Interest submissions: { count, next, previous,
+ * results }. Amazon staff only; anyone else gets ApiError 403. The check
+ * that matters is the server's (accounts/permissions.py IsAmazonStaff), not
+ * anything the front end does with this.
+ */
+export function getInterestSubmissions(params, options) {
+  return request("/api/interest/submissions/", { ...options, params });
+}
+
+/**
  * Send feedback about the site. Open to anyone: signed in or not.
  * fields: category, message, email (optional; ignored server-side if signed in).
  * Resolves to { success: true }.

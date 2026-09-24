@@ -62,6 +62,27 @@ export function ChevronDownIcon() {
   );
 }
 
+// The show/hide pair on a password field (see TextField in FormFields.jsx).
+
+export function EyeIcon() {
+  return (
+    <Icon>
+      <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z" />
+      <circle cx="12" cy="12" r="3" />
+    </Icon>
+  );
+}
+
+export function EyeOffIcon() {
+  return (
+    <Icon>
+      <path d="M4 4l16 16" />
+      <path d="M9.5 6.3A9.7 9.7 0 0 1 12 6c6 0 10 6 10 6a17 17 0 0 1-3.3 3.8" />
+      <path d="M6.6 7.6A16.6 16.6 0 0 0 2 12s4 6 10 6a9.6 9.6 0 0 0 3.4-.6" />
+    </Icon>
+  );
+}
+
 export function AlertIcon() {
   return (
     <Icon>
