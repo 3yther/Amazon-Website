@@ -37,7 +37,7 @@ function seeResult() {
 
 const [STRONG, WORTH_A_LOOK, ANOTHER_ROUTE] = QUIZ_RESULTS;
 
-describe("Is a T Level right for me? quiz", () => {
+describe("Is a T-Level right for me? quiz", () => {
   it("has one radio group per question", () => {
     renderQuiz();
     expect(screen.getAllByRole("group")).toHaveLength(QUIZ_QUESTIONS.length);

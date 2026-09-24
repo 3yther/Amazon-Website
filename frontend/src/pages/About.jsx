@@ -24,7 +24,7 @@ import aboutPhoto from "../assets/about-hero.jpg";
 //     https://www.pexels.com/photo/engineers-in-workshop-3861960/
 
 /**
- * About T-Level: what a T Level is, how the placement works, the five
+ * About T-Level: what a T-Level is, how the placement works, the five
  * pathways, grades, who it suits, why do one and what it costs, plus the
  * pathway tabs, a quiz and an FAQ.
  *
@@ -45,7 +45,7 @@ export default function About() {
       <section className="about-section" aria-labelledby="what-title">
         <div className="section-intro">
           <p className="label">How it works</p>
-          <h2 id="what-title">What a T Level is</h2>
+          <h2 id="what-title">What a T-Level is</h2>
         </div>
 
         <RouteSteps steps={ROUTE_STEPS} />
@@ -98,7 +98,7 @@ export default function About() {
         >
           <table className="grades">
             <caption className="sr-only">
-              T Level overall grades and the UCAS Tariff points each one is worth
+              T-Level overall grades and the UCAS Tariff points each one is worth
             </caption>
             <thead>
               <tr>

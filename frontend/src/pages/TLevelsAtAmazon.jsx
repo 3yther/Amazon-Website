@@ -59,7 +59,7 @@ export default function TLevelsAtAmazon() {
       <PageHero
         label="Amazon Emerging Talent"
         title="Nine weeks inside a team."
-        lead="Amazon takes T Level students on placement. You join a real team and do real work."
+        lead="Amazon takes T-Level students on placement. You join a real team and do real work."
         photo={amazonPhoto}
       />
 

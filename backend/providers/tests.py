@@ -110,7 +110,7 @@ class ProviderModelTests(TestCase):
 
 
 class ProviderSearchTests(APITestCase):
-    """The endpoint the T Level Near You page calls."""
+    """The endpoint the T-Level Near You page calls."""
 
     URL = "/api/providers/search/"
 

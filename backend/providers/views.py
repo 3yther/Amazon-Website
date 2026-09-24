@@ -49,7 +49,7 @@ class ProviderSearchView(APIView):
     ContentItemViewSet.filter_list uses, so the front end can show the message
     against the control it belongs to.
 
-    Public: which colleges run T Levels is public information, so no account
+    Public: which colleges run T-Levels is public information, so no account
     is needed, the same as pathways and the content library.
     """
 

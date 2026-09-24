@@ -4,7 +4,7 @@
 //
 // Checked against gov.uk in September 2026: all 20 names below are current.
 // Two more arrive in September 2028, Social Care and Sport, Physical Activity
-// and Health. They are left out until they exist. The Finance T Level takes
+// and Health. They are left out until they exist. The Finance T-Level takes
 // its last enrolments in September 2026, so it is on its way out, but it is
 // still being studied for the next two years and stays in the list.
 

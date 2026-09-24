@@ -22,7 +22,7 @@ export function greetingFor(date = new Date()) {
 }
 
 export const INTRO =
-  "I'm Smiley, your T Level guide. Ask me anything about T Levels or placements at " +
+  "I'm Smiley, your T-Level guide. Ask me anything about T-Levels or placements at " +
   "Amazon. If I don't know something, I'll tell you rather than make it up.";
 
 export const WELCOME_BACK = "Good to see you again. Pick up where you left off, or ask me something new.";
@@ -53,8 +53,8 @@ const AUDIENCE_REPLIES = {
     text: "What would help most?",
     chips: [
       { label: "How does the placement work?", action: { type: "ask", text: "How does the industry placement work?" } },
-      { label: "Does it cost anything?", action: { type: "ask", text: "Does a T Level cost anything, and is there help with travel?" } },
-      { label: "Is it like an apprenticeship?", action: { type: "ask", text: "Is a T Level the same as an apprenticeship?" } },
+      { label: "Does it cost anything?", action: { type: "ask", text: "Does a T-Level cost anything, and is there help with travel?" } },
+      { label: "Is it like an apprenticeship?", action: { type: "ask", text: "Is a T-Level the same as an apprenticeship?" } },
     ],
   },
   teacher: {
@@ -62,7 +62,7 @@ const AUDIENCE_REPLIES = {
     text: "What are you after today?",
     chips: [
       { label: "Resources for my class", action: { type: "ask", text: "What resources do you have for teachers?" } },
-      { label: "How are T Levels assessed?", action: { type: "ask", text: "How is a T Level assessed?" } },
+      { label: "How are T-Levels assessed?", action: { type: "ask", text: "How is a T-Level assessed?" } },
       { label: "Amazon's programme", action: { type: "ask", text: "What does Amazon's placement programme involve?" } },
     ],
   },
@@ -120,9 +120,9 @@ export function quizNudge(question) {
 // checked facts can answer.
 const NUDGES = {
   "/": {
-    text: "Still deciding where to start? I can explain what a T Level is, or what an Amazon placement looks like.",
+    text: "Still deciding where to start? I can explain what a T-Level is, or what an Amazon placement looks like.",
     chips: [
-      { label: "What is a T Level?", action: { type: "ask", text: "What is a T Level?" } },
+      { label: "What is a T-Level?", action: { type: "ask", text: "What is a T-Level?" } },
       { label: "What is an Amazon placement like?", action: { type: "ask", text: "What is an Amazon placement like?" } },
     ],
   },
@@ -130,7 +130,7 @@ const NUDGES = {
     text: "Anything on this page not quite clicking? Ask me and I'll try explaining it another way.",
     chips: [
       { label: "How long is the placement?", action: { type: "ask", text: "How long is the industry placement?" } },
-      { label: "Is it like an apprenticeship?", action: { type: "ask", text: "Is a T Level the same as an apprenticeship?" } },
+      { label: "Is it like an apprenticeship?", action: { type: "ask", text: "Is a T-Level the same as an apprenticeship?" } },
     ],
   },
   "/t-levels-at-amazon": {
@@ -147,9 +147,9 @@ const NUDGES = {
     ],
   },
   "/t-level-near-you": {
-    text: "Hunting for a T Level near you? Ask me anything while you look.",
+    text: "Hunting for a T-Level near you? Ask me anything while you look.",
     chips: [
-      { label: "What are the entry requirements?", action: { type: "ask", text: "What are the entry requirements for a T Level?" } },
+      { label: "What are the entry requirements?", action: { type: "ask", text: "What are the entry requirements for a T-Level?" } },
     ],
   },
   "/quiz": {
@@ -171,8 +171,8 @@ const NUDGES = {
 };
 
 const DEFAULT_NUDGE = {
-  text: "Still there? Ask me anything about T Levels and I'll answer if I know it.",
-  chips: [{ label: "What is a T Level?", action: { type: "ask", text: "What is a T Level?" } }],
+  text: "Still there? Ask me anything about T-Levels and I'll answer if I know it.",
+  chips: [{ label: "What is a T-Level?", action: { type: "ask", text: "What is a T-Level?" } }],
 };
 
 /** The nudge for a page, by route. */
@@ -182,7 +182,7 @@ export function nudgeForPath(pathname) {
 
 // The little speech bubble beside Smiley when the chat is closed.
 export const TEASERS = {
-  hello: "Hi, I'm Smiley! Ask me anything about T Levels.",
+  hello: "Hi, I'm Smiley! Ask me anything about T-Levels.",
   perfect: "Full marks! Nice work.",
   finished: "Done! Want to go over any of them?",
   quiz: "That one was tricky. Want me to explain it?",

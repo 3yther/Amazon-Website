@@ -42,14 +42,14 @@ const PAGES = [
   ["Contact us", Contact],
   ["Report an issue", ReportIssue],
   ["Accessibility help", AccessibilityHelp],
-  ["T Level Near You", NearYou],
+  ["T-Level Near You", NearYou],
   ["Terms of Service", Terms],
   ["Privacy Policy", Privacy],
   ["Cookie Policy", Cookies],
   ["GDPR and data rights", DataRights],
 ];
 
-// One page here (T Level Near You) asks the API for the pathway filter as
+// One page here (T-Level Near You) asks the API for the pathway filter as
 // soon as it renders. Answering that here keeps every page in this file
 // offline and the same on every run; the page's own behaviour is tested in
 // NearYou.test.jsx.

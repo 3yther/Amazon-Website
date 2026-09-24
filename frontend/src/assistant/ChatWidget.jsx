@@ -440,7 +440,7 @@ export default function ChatWidget() {
               <p className="assistant__name" id={`${panelId}-name`}>
                 Smiley
               </p>
-              <p className="assistant__role">T Level guide, powered by AI</p>
+              <p className="assistant__role">T-Level guide, powered by AI</p>
             </div>
             <button
               type="button"
@@ -573,7 +573,7 @@ export default function ChatWidget() {
         ) : (
           <SmileyFace ref={smiley.faceRef} {...smiley.face} size={64} grounded />
         )}
-        <span className="sr-only">{open ? "Close Smiley" : "Open Smiley, your T Level guide"}</span>
+        <span className="sr-only">{open ? "Close Smiley" : "Open Smiley, your T-Level guide"}</span>
       </button>
     </aside>
   );
