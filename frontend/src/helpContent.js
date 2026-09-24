@@ -23,7 +23,7 @@ export const SERVICES = [
     title: "Help with travel and kit",
     text: "The 16 to 19 Bursary. Apply through your school or college.",
     linkText: "16 to 19 Bursary Fund guidance",
-    href: "https://www.gov.uk/government/publications/16-to-19-bursary-fund-guidance/16-to-19-bursary-fund-guide-2025-to-2026",
+    href: "https://www.gov.uk/government/publications/16-to-19-bursary-fund-provider-guide/16-to-19-bursary-fund-guide-2026-to-2027",
   },
   {
     icon: "document",

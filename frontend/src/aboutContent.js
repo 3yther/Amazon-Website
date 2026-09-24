@@ -360,7 +360,7 @@ export const SOURCES = [
   },
   {
     title: "16 to 19 Bursary Fund guide, Department for Education",
-    url: "https://www.gov.uk/government/publications/16-to-19-bursary-fund-guidance/16-to-19-bursary-fund-guide-2025-to-2026",
+    url: "https://www.gov.uk/government/publications/16-to-19-bursary-fund-provider-guide/16-to-19-bursary-fund-guide-2026-to-2027",
   },
   {
     title: "T Level Placements, About Amazon UK",
