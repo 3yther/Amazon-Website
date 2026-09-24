@@ -17,6 +17,27 @@
   max-width: 34rem;
 }
 
+/* Progress bar. Orange is only a fill here: the "Question 2 of 7" text says
+   the same thing, so nobody relies on the colour. */
+.knowledge-quiz__progress {
+  height: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.knowledge-quiz__progress-fill {
+  height: 100%;
+  background: var(--orange);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .knowledge-quiz__progress-fill {
+    transition: width 200ms ease;
+  }
+}
+
 .knowledge-quiz__question {
   margin: 0;
   padding: 1.25rem;
