@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { logout } from "../api.js";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 
 // Same choices as labels.js USER_TYPES, plus the staff role that only exists
@@ -18,21 +17,25 @@ const MENU_ITEMS = [
   { to: "/contact", label: "Contact Us" },
 ];
 
+// Logging out is NOT here on purpose. It used to be the last item in this
+// menu, one press from the header on every page, which is a long way to fall
+// from "I wanted my settings". It lives on the Account tab of
+// /accessibility now (see accessibility/AccountSettings.jsx), which the
+// first item here goes to.
+
 // Shown only to Amazon staff. Hiding it is a convenience, not a control:
 // /staff redirects anyone else away and its API refuses them (see
 // accounts/permissions.py).
 const STAFF_ITEM = { to: "/staff", label: "Submissions" };
 
 /**
- * Circular initial button in the header that opens a menu of account links
- * plus Logout. Nothing renders until a signed-in user is known, so signed-out
- * visitors see the same empty corner as before this existed.
+ * Circular initial button in the header that opens a menu of account links.
+ * Nothing renders until a signed-in user is known, so signed-out visitors
+ * see the same empty corner as before this existed.
  */
 export default function AccountDropdown() {
-  const { user, refresh } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState("idle"); // idle | submitting
   const rootRef = useRef(null);
   const triggerRef = useRef(null);
 
@@ -64,19 +67,6 @@ export default function AccountDropdown() {
   const initial = (user.first_name || user.username || "?").charAt(0).toUpperCase();
   const roleLabel = ROLE_LABELS[user.user_type] ?? user.user_type;
 
-  async function handleLogout() {
-    setStatus("submitting");
-    setOpen(false);
-    try {
-      await logout();
-    } catch {
-      // A 401 means the session had already ended. refresh() settles it either way.
-    }
-    await refresh();
-    setStatus("idle");
-    navigate("/login");
-  }
-
   return (
     <div className="account-menu" ref={rootRef}>
       <button
@@ -106,17 +96,6 @@ export default function AccountDropdown() {
                 </NavLink>
               </li>
             ))}
-            <li role="none">
-              <button
-                type="button"
-                role="menuitem"
-                className="nav-button"
-                disabled={status === "submitting"}
-                onClick={handleLogout}
-              >
-                {status === "submitting" ? "Logging out" : "Logout"}
-              </button>
-            </li>
           </ul>
         </div>
       )}

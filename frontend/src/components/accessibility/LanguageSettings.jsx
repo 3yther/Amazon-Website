@@ -21,7 +21,13 @@ const NUMBER_FORMATS = {
   EU: "1.234,56 (EU)",
 };
 
-/** Interface language, date format and number format. */
+/**
+ * Interface language, date format and number format.
+ *
+ * Date and number format now reach real output through formats.js. Language
+ * is still the odd one out: the control saves, but nothing is translated
+ * behind it yet, which is what its hint says.
+ */
 export default function LanguageSettings({ preferences, updatePreference }) {
   return (
     <div className="settings-section">
@@ -44,6 +50,7 @@ export default function LanguageSettings({ preferences, updatePreference }) {
       <SelectField
         id="pref-date-format"
         label="Date format"
+        hint="Used wherever T-SMILE shows a date: when your password last changed, and the dates on staff submissions."
         value={preferences.date_format}
         onChange={(event) => updatePreference("date_format", event.target.value)}
       >
@@ -57,6 +64,7 @@ export default function LanguageSettings({ preferences, updatePreference }) {
       <SelectField
         id="pref-number-format"
         label="Number format"
+        hint="Changes how thousands and decimals are written. Most numbers on T-SMILE are small, so you will only see this on larger counts."
         value={preferences.number_format}
         onChange={(event) => updatePreference("number_format", event.target.value)}
       >

@@ -6,7 +6,7 @@ import LanguageSettings from "../components/accessibility/LanguageSettings.jsx";
 import SecuritySettings from "../components/accessibility/SecuritySettings.jsx";
 import SightLossSettings from "../components/accessibility/SightLossSettings.jsx";
 import { useAuth } from "../auth.jsx";
-import { useAccessibilityPreferences } from "../hooks/useAccessibilityPreferences.js";
+import { useAccessibilityPreferences } from "../hooks/useAccessibilityPreferences.jsx";
 
 const TAB_IDS = ["sight-loss", "display", "language", "security", "account"];
 

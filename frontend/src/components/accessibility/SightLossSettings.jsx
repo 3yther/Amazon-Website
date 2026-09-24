@@ -24,9 +24,9 @@ function RangeField({ id, label, value, valueLabel, ...inputProps }) {
 }
 
 /**
- * Font size, contrast, text spacing, colour-blindness simulation, and
- * text-to-speech: the settings someone with low vision or colour blindness is
- * most likely to need. Reduce motion lives here too, reusing the same
+ * Font size, contrast, text spacing, colour-vision correction and the chat
+ * assistant's voice: the settings someone with low vision or colour blindness
+ * is most likely to need. Reduce motion lives here too, reusing the same
  * preference useReducedMotion.js already reads everywhere else on the site.
  */
 export default function SightLossSettings({ preferences, updatePreference }) {
@@ -67,8 +67,13 @@ export default function SightLossSettings({ preferences, updatePreference }) {
         <label className="label" htmlFor="pref-color-blindness">
           Colour blindness type
         </label>
+        <p className="field__hint" id="pref-color-blindness-hint">
+          Tell us how you see colour and the site adjusts its own, so shades that would look
+          alike to you are pulled apart.
+        </p>
         <select
           id="pref-color-blindness"
+          aria-describedby="pref-color-blindness-hint"
           value={preferences.color_blindness_type}
           onChange={(event) => updatePreference("color_blindness_type", event.target.value)}
         >
@@ -80,9 +85,15 @@ export default function SightLossSettings({ preferences, updatePreference }) {
         </select>
       </div>
 
+      {/* Named for what it actually does. It used to say "Read page content
+          aloud", which promised a screen reader for the whole site; all it
+          drives is Smiley's replies (assistant/useSpeech.js). Reading the
+          page itself is still to build, so the label says so rather than
+          leaving someone to find out by turning it on. */}
       <CheckboxField
         id="pref-text-to-speech"
-        label="Read page content aloud (text-to-speech)"
+        label="Read the chat assistant's replies aloud"
+        hint="Speaks Smiley's answers only, using a voice on this device. The rest of the page is not read aloud yet."
         checked={preferences.text_to_speech}
         onChange={(event) => updatePreference("text_to_speech", event.target.checked)}
       />

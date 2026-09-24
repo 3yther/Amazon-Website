@@ -17,6 +17,14 @@
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   --radius: 2px;
+  /* One underline treatment for the whole site, so a link in a paragraph, in
+     the footer and in a card all sit the same distance from their text. Any
+     context that wants something else overrides these two rather than
+     inventing its own offset, and high contrast thickens them everywhere at
+     once. */
+  --underline-offset: 0.2em;
+  --underline-thickness: 1px;
+  --underline-thickness-hover: 2px;
   --container: 1120px;
   --gutter: clamp(16px, 4vw, 32px);
   --control-h: 44px;
@@ -27,9 +35,6 @@
      var(--paper): html.dark-mode redefines --blue and --paper in the same
      rule it uses these in, so a var() reference here would resolve back to
      itself (a cycle), which CSS treats as invalid rather than swapped. */
-  --text-primary: var(--blue);
-  --text-secondary: var(--ink-muted);
-  --border-light: var(--line);
   --paper-dark: #1a2430;
   --text-dark: #fafaf7;
   --border-dark-mode: rgb(250 250 247 / 0.2);
@@ -106,16 +111,86 @@ body {
   letter-spacing: var(--text-spacing, normal);
 }
 
-/* A stronger version of the same two colours: heavier borders and no muted
-   mid-tone text, so everything reads at full contrast. */
+/* A stronger version of the same two colours: heavier borders, heavier
+   underlines and no muted mid-tone text, so everything reads at full
+   contrast.
+
+   WRITTEN AS LITERALS, NOT var(--blue) / var(--paper). Those two swap
+   meaning between the themes (see html.dark-mode above), so a reference to
+   either follows the theme and lands on the wrong side of it. That is
+   exactly what broke this: in dark mode --ink-muted was set to var(--paper),
+   which dark mode had already redefined as the dark PAGE colour, so every
+   .label, .card__text and .results-status turned background-on-background
+   and the words disappeared. The same trap in reverse waits in light mode
+   for anything sitting on the always-dark chrome, so each theme gets its own
+   pair and neither is derived from the other. */
 body.high-contrast {
-  --ink-muted: var(--blue);
-  --line: rgb(35 47 62 / 0.5);
+  --ink-muted: #232f3e; /* the brand navy, 13.6:1 on paper */
+  --line: rgb(35 47 62 / 0.55);
+  --underline-thickness: 2px;
 }
 
+/* Dark mode's own pair. Both selectors set the same values: the class is
+   there once the theme has been applied, the media query covers the moment
+   before that on a dark system. */
 html.dark-mode body.high-contrast {
-  --ink-muted: var(--paper);
-  --line: rgb(250 250 247 / 0.5);
+  --ink-muted: #fafaf7; /* the paper colour as INK, 14.9:1 on the dark page */
+  --line: rgb(250 250 247 / 0.6);
+  --underline-thickness: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) body.high-contrast {
+    --ink-muted: #fafaf7;
+    --line: rgb(250 250 247 / 0.6);
+    --underline-thickness: 2px;
+  }
+}
+
+/* ---------- Motion and colour vision (set by useAccessibilityPreferences) ---------- */
+
+/* @media (prefers-reduced-motion) only ever hears the operating system. The
+   site has its own Reduce motion setting too, and it wins, so
+   useReducedMotion works out the answer from both and it is written here as
+   data-motion. Every rule that asks the media query alone kept animating
+   after the site's own toggle was turned on, which is what left the
+   homepage's drifting subject names moving.
+
+   The blanket rule catches animations added later as well, so nothing new
+   has to remember to ask. */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* The one filter the colour-vision setting applies, on <html> so nothing can
+   sit outside it: the menu drawer and the chat widget both render through a
+   portal into <body>, so a filter on #root would have missed them. The
+   filters themselves are drawn by components/ColourVisionFilters.jsx. */
+html[data-colour-vision="protanopia"] {
+  filter: url("#colour-vision-protanopia");
+}
+
+html[data-colour-vision="deuteranopia"] {
+  filter: url("#colour-vision-deuteranopia");
+}
+
+html[data-colour-vision="tritanopia"] {
+  filter: url("#colour-vision-tritanopia");
+}
+
+/* The filter's own <svg> holder: present on every page, never drawn. */
+.colour-vision-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 body[data-page-background="cream"] {
@@ -178,11 +253,12 @@ p {
 
 a {
   color: inherit;
-  text-underline-offset: 0.2em;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness);
 }
 
 a:hover {
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 :focus-visible {
@@ -412,6 +488,8 @@ main {
   font-weight: 600;
 }
 
+/* Deliberately heavier than --underline-thickness-hover and in orange: this
+   is the "you are here" marker, not an ordinary link underline. */
 .footer-column a[aria-current="page"] {
   text-decoration-color: var(--orange);
   text-decoration-thickness: 3px;
@@ -504,6 +582,8 @@ main {
 .dropdown-links a:hover,
 .dropdown-links .nav-button:hover {
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 /* ---------- Menu overlay ---------- */
@@ -672,6 +752,8 @@ main {
 .menu-overlay__nav a:hover,
 .menu-overlay__nav .nav-button:hover {
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 .menu-overlay__nav a[aria-current="page"] {
@@ -956,6 +1038,8 @@ main {
 
 .pathway-tile:hover .pathway-tile__name {
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 /* How it works: "Level" cards. On desktop they climb left to right like a
@@ -1599,10 +1683,16 @@ main:has(.auth-layout) {
   user-select: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .rising-subjects {
-    display: block;
-  }
+/* Hidden until we know motion is wanted: before the preference has been
+   read, still is the safe answer. data-motion already folds in the system
+   setting (see useReducedMotion), so this is the whole condition.
+
+   display: none rather than a stopped animation on purpose. Each name
+   recycles itself on animationend, so an animation cut to nothing would
+   spin through replacements forever; a hidden element runs no animation at
+   all. */
+html[data-motion="full"] .rising-subjects {
+  display: block;
 }
 
 /* Dark blue at 3% to 5% opacity (set per subject in RisingSubjects.jsx)
@@ -1842,6 +1932,11 @@ input[type="range"] {
   }
 }
 
+/* A section of the settings tab that is not part of the form above it: its
+   own bordered block, so pressing something in here plainly does not save
+   what is typed up there. Used by Signing out; the danger zone below is the
+   same shape with a heavier border. */
+.settings-block,
 .danger-zone {
   display: grid;
   gap: 12px;
@@ -1849,6 +1944,12 @@ input[type="range"] {
   padding: 20px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
+}
+
+/* Logging out is reversible, so it stays in the ordinary border rather than
+   the danger zone's. */
+.danger-zone {
+  border-color: var(--danger);
 }
 
 .button--danger {
