@@ -8,6 +8,28 @@ import { KNOWLEDGE_QUESTIONS } from "../knowledgeQuizQuestions.js";
 import "./knowledgeQuiz.css";
 
 /**
+ * A new copy of the list in a random order, so the right answer is not always
+ * in the same place.
+ *
+ * NEW CONCEPT: the Fisher-Yates shuffle. Walk backwards through the list and
+ * swap each item with a random one at or before it. Every order is equally
+ * likely, which sorting by Math.random() does not guarantee.
+ */
+function shuffle(list) {
+  const copy = [...list];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/** Each question's options in a fresh random order, keyed by question id. */
+function shuffleOptions(questions) {
+  return Object.fromEntries(questions.map((q) => [q.id, shuffle(q.options)]));
+}
+
+/**
  * A knowledge check: one question at a time, each with a right answer and an
  * explanation.
  *
@@ -35,11 +57,16 @@ export default function KnowledgeQuiz({
   const [checked, setChecked] = useState(false);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  // Shuffled once per attempt, not on every render, so options do not jump
+  // around while someone is choosing.
+  const [optionOrder, setOptionOrder] = useState(() => shuffleOptions(questions));
   const feedbackRef = useRef(null);
 
   const question = questions[index];
   const isLast = index === questions.length - 1;
   const wasRight = checked && chosen === question.correctAnswer;
+  // Questions finished so far, counting this one once its answer is checked.
+  const answered = index + (checked ? 1 : 0);
 
   function checkAnswer(event) {
     event.preventDefault();
@@ -81,6 +108,7 @@ export default function KnowledgeQuiz({
     setChecked(false);
     setScore(0);
     setDone(false);
+    setOptionOrder(shuffleOptions(questions));
   }
 
   if (done) {
@@ -108,6 +136,15 @@ export default function KnowledgeQuiz({
         will offer to talk it through.
       </p>
 
+      {/* The bar is only a picture of the "Question 2 of 7" text below, so
+          screen readers skip it rather than hear the progress twice. */}
+      <div className="knowledge-quiz__progress" aria-hidden="true">
+        <div
+          className="knowledge-quiz__progress-fill"
+          style={{ width: `${(answered / questions.length) * 100}%` }}
+        />
+      </div>
+
       <form onSubmit={checkAnswer}>
         <fieldset className="knowledge-quiz__question">
           <legend className="knowledge-quiz__legend">
@@ -117,7 +154,7 @@ export default function KnowledgeQuiz({
             {question.question}
           </legend>
 
-          {question.options.map((option) => {
+          {(optionOrder[question.id] ?? question.options).map((option) => {
             const optionId = `${groupId}-${question.id}-${option}`;
             return (
               <div className="knowledge-quiz__option" key={option}>
