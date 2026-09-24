@@ -14,6 +14,7 @@ import Cookies from "./pages/Cookies.jsx";
 import DataRights from "./pages/DataRights.jsx";
 import Faqs from "./pages/Faqs.jsx";
 import Feedback from "./pages/Feedback.jsx";
+import GetInvolved from "./pages/GetInvolved.jsx";
 import ContentLibrary from "./pages/ContentLibrary.jsx";
 import Help from "./pages/Help.jsx";
 import Home from "./pages/Home.jsx";
@@ -27,6 +28,7 @@ import RegisterInterest from "./pages/RegisterInterest.jsx";
 import StaffDashboard from "./pages/StaffDashboard.jsx";
 import ReportIssue from "./pages/ReportIssue.jsx";
 import Terms from "./pages/Terms.jsx";
+import TLevels from "./pages/TLevels.jsx";
 import TLevelsAtAmazon from "./pages/TLevelsAtAmazon.jsx";
 
 // Page shell: skip link, header, main, footer. The page inside <main> comes
@@ -74,6 +76,8 @@ export default function App() {
           <Route path="/t-levels-at-amazon" element={<PageTitle title="T-Levels at Amazon"><TLevelsAtAmazon /></PageTitle>} />
           <Route path="/resources" element={<PageTitle title="T-Level Resources"><ContentLibrary /></PageTitle>} />
           <Route path="/t-level-near-you" element={<PageTitle title="T-Level Near You"><NearYou /></PageTitle>} />
+          <Route path="/t-levels" element={<PageTitle title="All T-Levels"><TLevels /></PageTitle>} />
+          <Route path="/get-involved" element={<PageTitle title="Get involved"><GetInvolved /></PageTitle>} />
           <Route path="/quiz" element={<PageTitle title="Quiz"><Quiz /></PageTitle>} />
           <Route path="/help" element={<PageTitle title="Help"><Help /></PageTitle>} />
           <Route path="/register-interest" element={<PageTitle title="Register interest"><RegisterInterest /></PageTitle>} />
@@ -96,9 +100,6 @@ export default function App() {
           <Route path="/staff" element={<PageTitle title="Submissions"><StaffDashboard /></PageTitle>} />
           {/* /account is gone: profile and accessibility settings live at /accessibility now. */}
           <Route path="/account" element={<Navigate to="/accessibility" replace />} />
-          {/* Earlier placeholder addresses, sent on to About. */}
-          <Route path="/t-levels" element={<Navigate to="/about" replace />} />
-          <Route path="/get-involved" element={<Navigate to="/about" replace />} />
           <Route path="*" element={<PageTitle title="Page not found"><NotFound /></PageTitle>} />
         </Routes>
       </main>

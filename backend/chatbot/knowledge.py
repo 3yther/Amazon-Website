@@ -106,7 +106,8 @@ VERIFIED_FACTS = (
         topic="Which pages this site has",
         text=(
             "The site has: Home, About T-Level (/about), T-Levels at Amazon "
-            "(/t-levels-at-amazon), Learning Pathways (/pathways), Resources (/resources), "
+            "(/t-levels-at-amazon), Learning Pathways (/pathways), All T-Levels, every subject "
+            "(/t-levels), Get involved (/get-involved), Resources (/resources), "
             "T-Level Near You (/t-level-near-you), a knowledge quiz (/quiz), FAQs (/faqs), "
             "Help (/help), Register interest (/register-interest), Sign up (/register) and "
             "Log in (/login). Support pages: Contact us (/contact), Report an issue "

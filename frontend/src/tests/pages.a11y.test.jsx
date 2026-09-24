@@ -8,7 +8,9 @@ import Contact from "../pages/Contact.jsx";
 import Cookies from "../pages/Cookies.jsx";
 import DataRights from "../pages/DataRights.jsx";
 import Faqs from "../pages/Faqs.jsx";
+import GetInvolved from "../pages/GetInvolved.jsx";
 import Help from "../pages/Help.jsx";
+import TLevels from "../pages/TLevels.jsx";
 import NearYou from "../pages/NearYou.jsx";
 import Pathways from "../pages/Pathways.jsx";
 import Privacy from "../pages/Privacy.jsx";
@@ -43,6 +45,8 @@ const PAGES = [
   ["Report an issue", ReportIssue],
   ["Accessibility help", AccessibilityHelp],
   ["T-Level Near You", NearYou],
+  ["All T-Levels", TLevels],
+  ["Get involved", GetInvolved],
   ["Terms of Service", Terms],
   ["Privacy Policy", Privacy],
   ["Cookie Policy", Cookies],

@@ -13,6 +13,7 @@ const LINK_COLUMNS = [
     links: [
       { to: "/", label: "Home" },
       { to: "/pathways", label: "Learning Pathways" },
+      { to: "/t-levels", label: "All T-Levels" },
       // Profile is the Account tab of the settings page (see App.jsx).
       { to: "/accessibility?tab=account", label: "Profile" },
       { to: "/resources", label: "Resources" },
@@ -42,6 +43,7 @@ const LINK_COLUMNS = [
     links: [
       // The Expression of Interest form, the most important action on the site.
       { to: "/register-interest", label: "Register your interest" },
+      { to: "/get-involved", label: "Get involved" },
       { to: "/register", label: "Sign up" },
     ],
   },

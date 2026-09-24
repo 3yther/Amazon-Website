@@ -47,6 +47,7 @@ export const PROVIDER_QUESTIONS = [
 /** Where to go on this site, by what the person is trying to do. */
 export const SITE_ROUTES = [
   { to: "/about", icon: "info", label: "What is a T-Level?", detail: "About T-Levels" },
+  { to: "/t-levels", icon: "book", label: "I want to see every subject", detail: "All T-Levels" },
   {
     to: "/t-levels-at-amazon",
     icon: "briefcase",
