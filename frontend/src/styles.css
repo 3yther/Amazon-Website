@@ -1020,6 +1020,18 @@ main {
   color: var(--ink-muted);
 }
 
+/* The page a step talks about. Sits at the foot of the card, so the links
+   line up across the staircase whatever the text length. */
+.step__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  align-self: end;
+  min-height: var(--control-h);
+  font-weight: 700;
+}
+
 @media (min-width: 960px) {
   /* Bottoms line up and each card starts one step higher than the one
      before (--drop is how many steps below the top card it starts, set in

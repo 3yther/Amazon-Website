@@ -241,11 +241,25 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
+// `link` goes to the page a step talks about. "Hear back" has none: it is
+// something we do, not somewhere to go.
 const STEPS = [
-  { title: "Browse resources", text: "Guides, packs and videos for all five pathways." },
-  { title: "Register interest", text: "Tell us which pathway you want to explore." },
+  {
+    title: "Browse resources",
+    text: "Guides, packs and videos for all five pathways.",
+    link: { to: "/resources", label: "Browse resources" },
+  },
+  {
+    title: "Register interest",
+    text: "Tell us which pathway you want to explore.",
+    link: { to: "/register-interest", label: "Register interest" },
+  },
   { title: "Hear back", text: "We review each submission and reply by email." },
-  { title: "Get involved", text: "Sign up to open more resources for your pathway." },
+  {
+    title: "Get involved",
+    text: "Sign up to open more resources for your pathway.",
+    link: { to: "/register", label: "Sign up" },
+  },
 ];
 
 /**
@@ -269,6 +283,12 @@ export function HowItWorks() {
             </p>
             <h3 className="step__title">{step.title}</h3>
             <p className="step__text">{step.text}</p>
+            {step.link && (
+              <Link className="step__link" to={step.link.to}>
+                {step.link.label}
+                <ArrowIcon />
+              </Link>
+            )}
           </li>
         ))}
       </ol>
