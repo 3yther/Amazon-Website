@@ -2,26 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../api.js";
 import { useAuth } from "../auth.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 // Same choices as labels.js USER_TYPES, plus the staff role that only exists
 // through Django admin, so a signed-in staff member still gets a label here.
-const ROLE_LABELS = {
-  student: "Student",
-  parent: "Parent or guardian",
-  teacher: "Teacher or school",
-  amazon_staff: "Amazon staff",
-};
+// Labels are translation keys (i18n/messages, account).
+const ROLES = ["student", "parent", "teacher", "amazon_staff"];
 
 const MENU_ITEMS = [
-  { to: "/accessibility", label: "Profile & Settings" },
-  { to: "/accessibility?tab=security", label: "Security Settings" },
-  { to: "/contact", label: "Contact Us" },
+  { to: "/accessibility", label: "account.settings" },
+  { to: "/accessibility?tab=security", label: "account.security" },
+  { to: "/contact", label: "account.contact" },
 ];
 
 // Shown only to Amazon staff. Hiding it is a convenience, not a control:
 // /staff redirects anyone else away and its API refuses them (see
 // accounts/permissions.py).
-const STAFF_ITEM = { to: "/staff", label: "Submissions" };
+const STAFF_ITEM = { to: "/staff", label: "account.submissions" };
 
 /**
  * Circular initial button in the header that opens a menu of account links
@@ -30,6 +27,7 @@ const STAFF_ITEM = { to: "/staff", label: "Submissions" };
  */
 export default function AccountDropdown() {
   const { user, refresh } = useAuth();
+  const t = useT();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | submitting
@@ -62,7 +60,7 @@ export default function AccountDropdown() {
 
   const displayName = [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username;
   const initial = (user.first_name || user.username || "?").charAt(0).toUpperCase();
-  const roleLabel = ROLE_LABELS[user.user_type] ?? user.user_type;
+  const roleLabel = ROLES.includes(user.user_type) ? t(`account.roles.${user.user_type}`) : user.user_type;
 
   async function handleLogout() {
     setStatus("submitting");
@@ -85,14 +83,14 @@ export default function AccountDropdown() {
         className="account-button"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={`Account menu for ${displayName}`}
+        aria-label={t("account.menuFor", { name: displayName })}
         onClick={() => setOpen((current) => !current)}
       >
         {initial}
       </button>
 
       {open && (
-        <div className="account-dropdown" role="menu" aria-label="Account">
+        <div className="account-dropdown" role="menu" aria-label={t("account.menu")}>
           <div className="dropdown-header">
             <p>{displayName}</p>
             <p className="label">{roleLabel}</p>
@@ -102,7 +100,7 @@ export default function AccountDropdown() {
             {(user.user_type === "amazon_staff" ? [STAFF_ITEM, ...MENU_ITEMS] : MENU_ITEMS).map((item) => (
               <li key={item.label} role="none">
                 <NavLink to={item.to} role="menuitem" onClick={() => setOpen(false)}>
-                  {item.label}
+                  {t(item.label)}
                 </NavLink>
               </li>
             ))}
@@ -114,7 +112,7 @@ export default function AccountDropdown() {
                 disabled={status === "submitting"}
                 onClick={handleLogout}
               >
-                {status === "submitting" ? "Logging out" : "Logout"}
+                {status === "submitting" ? t("menu.loggingOut") : t("account.logOut")}
               </button>
             </li>
           </ul>

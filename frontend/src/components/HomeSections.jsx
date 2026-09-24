@@ -5,6 +5,7 @@ import studentPhoto from "../assets/audience-student.jpg";
 import teacherPhoto from "../assets/audience-teacher.jpg";
 import { AUDIENCES, CONTENT_TYPES, PATHWAY_NAMES } from "../labels.js";
 import { T_LEVEL_SUBJECTS } from "../tlevelSubjects.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
 import {
   ArrowIcon,
@@ -20,11 +21,12 @@ import {
 /* ---------- Stats ---------- */
 
 // Counted from the project's own data, so the numbers stay accurate.
+// Labels are translation keys (i18n/messages, home.stats).
 const STATS = [
-  { value: T_LEVEL_SUBJECTS.length, label: "Named T-Levels" },
-  { value: PATHWAY_NAMES.length, label: "Pathways" },
-  { value: Object.keys(CONTENT_TYPES).length, label: "Resource types" },
-  { value: Object.keys(AUDIENCES).filter((key) => key !== "all").length, label: "Audiences" },
+  { value: T_LEVEL_SUBJECTS.length, label: "home.stats.tLevels" },
+  { value: PATHWAY_NAMES.length, label: "home.stats.pathways" },
+  { value: Object.keys(CONTENT_TYPES).length, label: "home.stats.resourceTypes" },
+  { value: Object.keys(AUDIENCES).filter((key) => key !== "all").length, label: "home.stats.audiences" },
 ];
 
 const COUNT_UP_MS = 1200;
@@ -72,6 +74,7 @@ function useCountUp(ref) {
 }
 
 export function StatsRow() {
+  const t = useT();
   const list = useRef(null);
   const progress = useCountUp(list);
   const eased = 1 - (1 - progress) ** 3; // fast start, gentle landing
@@ -79,7 +82,7 @@ export function StatsRow() {
   return (
     <section className="stats" aria-labelledby="stats-title">
       <h2 id="stats-title" className="sr-only">
-        T-Levels at a glance
+        {t("home.stats.title")}
       </h2>
       <ul ref={list} className="stats__list">
         {STATS.map((stat) => (
@@ -90,9 +93,9 @@ export function StatsRow() {
               {Math.round(stat.value * eased)}
             </span>
             <span className="label" aria-hidden="true">
-              {stat.label}
+              {t(stat.label)}
             </span>
-            <span className="sr-only">{`${stat.value} ${stat.label}`}</span>
+            <span className="sr-only">{`${stat.value} ${t(stat.label)}`}</span>
           </li>
         ))}
       </ul>
@@ -111,25 +114,11 @@ export function StatsRow() {
 //     https://www.pexels.com/photo/a-mother-and-daughter-looking-at-the-paper-6471429/
 //   audience-student.jpg: Julia M Cameron,
 //     https://www.pexels.com/photo/boy-wearing-yellow-shirt-while-writing-on-white-paper-4144100/
+// Each card's words are home.audiences.<audience> in i18n/messages.
 const AUDIENCE_CARDS = [
-  {
-    audience: "teacher",
-    photo: teacherPhoto,
-    title: "Resources ready for your classroom",
-    text: "Class packs and guides that introduce T-Levels to your students.",
-  },
-  {
-    audience: "parent",
-    photo: parentPhoto,
-    title: "Help them choose with confidence",
-    text: "Plain guides to what T-Levels involve and where they lead.",
-  },
-  {
-    audience: "student",
-    photo: studentPhoto,
-    title: "Learn it in class, use it at work",
-    text: "Study a subject you care about, with real work experience built in.",
-  },
+  { audience: "teacher", photo: teacherPhoto },
+  { audience: "parent", photo: parentPhoto },
+  { audience: "student", photo: studentPhoto },
 ];
 
 /**
@@ -139,12 +128,13 @@ const AUDIENCE_CARDS = [
  * stretched over the whole card in styles.css.
  */
 export function AudienceCards({ selected, onSelect }) {
+  const t = useT();
   return (
     <section className="home-section" aria-labelledby="audiences-title">
       <div className="section-intro">
-        <p className="label">Who it is for</p>
-        <h2 id="audiences-title">Teachers, parents and students</h2>
-        <p className="section-intro__lead">Pick one to tailor the introduction at the top of the page.</p>
+        <p className="label">{t("home.audiences.label")}</p>
+        <h2 id="audiences-title">{t("home.audiences.title")}</h2>
+        <p className="section-intro__lead">{t("home.audiences.lead")}</p>
       </div>
 
       <ul className="audience-grid">
@@ -170,11 +160,11 @@ export function AudienceCards({ selected, onSelect }) {
                   button's pressed state instead. */}
               {isSelected && (
                 <span className="audience-card__selected" aria-hidden="true">
-                  Selected
+                  {t("home.audiences.selected")}
                 </span>
               )}
               <div className="audience-card__body">
-                <p className="label">{AUDIENCES[card.audience]}</p>
+                <p className="label">{t(`home.audiences.${card.audience}.who`)}</p>
                 <h3>
                   <button
                     type="button"
@@ -182,10 +172,10 @@ export function AudienceCards({ selected, onSelect }) {
                     aria-pressed={isSelected}
                     onClick={() => onSelect(card.audience)}
                   >
-                    {card.title}
+                    {t(`home.audiences.${card.audience}.title`)}
                   </button>
                 </h3>
-                <p>{card.text}</p>
+                <p>{t(`home.audiences.${card.audience}.text`)}</p>
               </div>
             </li>
           );
@@ -197,39 +187,34 @@ export function AudienceCards({ selected, onSelect }) {
 
 /* ---------- Pathway tiles ---------- */
 
-// Names, slugs and summaries match backend/content/fixtures/pathways.json.
-// Each tile opens the library already filtered to its pathway.
+// Slugs match backend/content/fixtures/pathways.json. Names and summaries
+// are pathways.<slug> and home.pathways.<slug> in i18n/messages. Each tile
+// opens the library already filtered to its pathway.
 const PATHWAYS = [
-  { name: "Digital", slug: "digital", summary: "Build, run and support technology.", Icon: DigitalIcon },
-  { name: "Business", slug: "business", summary: "Keep teams and operations running.", Icon: BusinessIcon },
-  { name: "Media", slug: "media", summary: "Plan, make and publish content.", Icon: MediaIcon },
-  { name: "Finance", slug: "finance", summary: "Work with the numbers behind decisions.", Icon: FinanceIcon },
-  {
-    name: "Engineering",
-    slug: "engineering",
-    summary: "Design, build and maintain systems.",
-    Icon: EngineeringIcon,
-  },
+  { slug: "digital", Icon: DigitalIcon },
+  { slug: "business", Icon: BusinessIcon },
+  { slug: "media", Icon: MediaIcon },
+  { slug: "finance", Icon: FinanceIcon },
+  { slug: "engineering", Icon: EngineeringIcon },
 ];
 
 export function PathwayTiles() {
+  const t = useT();
   return (
     <section className="home-section" aria-labelledby="pathways-title">
       <div className="section-intro">
-        <p className="label">Pathways</p>
-        <h2 id="pathways-title">Explore by pathway</h2>
-        <p className="section-intro__lead">
-          Each covers a group of related T-Levels. Pick one to see its resources.
-        </p>
+        <p className="label">{t("home.pathways.label")}</p>
+        <h2 id="pathways-title">{t("home.pathways.title")}</h2>
+        <p className="section-intro__lead">{t("home.pathways.lead")}</p>
       </div>
 
       <ul className="pathway-grid">
-        {PATHWAYS.map(({ name, slug, summary, Icon }) => (
-          <li key={name}>
+        {PATHWAYS.map(({ slug, Icon }) => (
+          <li key={slug}>
             <Link className="pathway-tile" to={`/resources?pathway=${slug}`}>
               <Icon />
-              <span className="pathway-tile__name">{name}</span>
-              <span className="pathway-tile__summary">{summary}</span>
+              <span className="pathway-tile__name">{t(`pathways.${slug}`)}</span>
+              <span className="pathway-tile__summary">{t(`home.pathways.${slug}`)}</span>
               <ArrowIcon />
             </Link>
           </li>
@@ -241,34 +226,31 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
-const STEPS = [
-  { title: "Browse resources", text: "Guides, packs and videos for all five pathways." },
-  { title: "Register interest", text: "Tell us which pathway you want to explore." },
-  { title: "Hear back", text: "We review each submission and reply by email." },
-  { title: "Get involved", text: "Sign up to open more resources for your pathway." },
-];
+// Each step's words are home.steps.<key> in i18n/messages.
+const STEPS = ["browse", "register", "hearBack", "getInvolved"];
 
 /**
  * Four "Level" cards, a nod to T-Levels. On desktop they climb left to right
  * like a staircase (see .steps in styles.css); on smaller screens they stack.
  */
 export function HowItWorks() {
+  const t = useT();
   return (
     <section className="home-section" aria-labelledby="steps-title">
       <div className="section-intro">
-        <p className="label">How it works</p>
-        <h2 id="steps-title">Start in four steps</h2>
+        <p className="label">{t("home.steps.label")}</p>
+        <h2 id="steps-title">{t("home.steps.title")}</h2>
       </div>
 
       <ol className="steps">
         {STEPS.map((step, index) => (
           // --drop: how many steps below the top card this one starts.
-          <li key={step.title} className="step" style={{ "--drop": STEPS.length - 1 - index }}>
+          <li key={step} className="step" style={{ "--drop": STEPS.length - 1 - index }}>
             <p className="label">
-              Level <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
+              {t("home.steps.level")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
             </p>
-            <h3 className="step__title">{step.title}</h3>
-            <p className="step__text">{step.text}</p>
+            <h3 className="step__title">{t(`home.steps.${step}.title`)}</h3>
+            <p className="step__text">{t(`home.steps.${step}.text`)}</p>
           </li>
         ))}
       </ol>

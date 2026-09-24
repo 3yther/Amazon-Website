@@ -7,6 +7,7 @@ import AccountDropdown from "./components/AccountDropdown.jsx";
 import Footer from "./components/Footer.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
+import { useT } from "./i18n/I18nProvider.jsx";
 import LanguagePicker from "./i18n/LanguagePicker.jsx";
 import TranslationNotice from "./i18n/TranslationNotice.jsx";
 import About from "./pages/About.jsx";
@@ -39,6 +40,7 @@ import TLevelsAtAmazon from "./pages/TLevelsAtAmazon.jsx";
 // from the current route, and each route sets its own browser tab title.
 export default function App() {
   const { pathname } = useLocation();
+  const t = useT();
 
   // Start each new page at the top, as a normal page load would. Runs before
   // the pages' own effects, so a page can still choose where to scroll.
@@ -49,7 +51,7 @@ export default function App() {
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to content
+        {t("shell.skip")}
       </a>
 
       <header className="site-header">
@@ -141,12 +143,13 @@ function countWordmarkClick() {
 }
 
 function NotFound() {
+  const t = useT();
   return (
     <section className="intro" aria-labelledby="page-title">
-      <p className="label">Error 404</p>
-      <h1 id="page-title">Page not found</h1>
+      <p className="label">{t("shell.error404")}</p>
+      <h1 id="page-title">{t("shell.notFound")}</h1>
       <p className="lead">
-        <Link to="/resources">Go to the content library</Link>
+        <Link to="/resources">{t("shell.toLibrary")}</Link>
       </p>
     </section>
   );

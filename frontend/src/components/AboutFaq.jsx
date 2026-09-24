@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FAQS } from "../aboutContent.js";
+import { useSiteContent } from "../i18n/content.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 // Expandable FAQ for the About T-Level page.
 //
@@ -33,6 +34,9 @@ function ChevronIcon() {
 }
 
 export default function AboutFaq() {
+  const t = useT();
+  // The FAQs from aboutContent.js, in the visitor's language.
+  const FAQS = useSiteContent().about.FAQS;
   // The id of the open question, or null when they are all closed. Holding one
   // id (rather than a list) is what makes opening one close the others.
   const [openId, setOpenId] = useState(null);
@@ -44,9 +48,9 @@ export default function AboutFaq() {
   return (
     <section className="about-section" aria-labelledby="faq-title">
       <div className="section-intro">
-        <p className="label">Questions</p>
-        <h2 id="faq-title">The things people ask</h2>
-        <p className="section-intro__lead">Short answers. Ask the chatbot if yours is not here.</p>
+        <p className="label">{t("about.faq.label")}</p>
+        <h2 id="faq-title">{t("about.faq.title")}</h2>
+        <p className="section-intro__lead">{t("about.faq.lead")}</p>
       </div>
 
       <ul className="faq">

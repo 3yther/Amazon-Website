@@ -94,8 +94,8 @@ export function answerLocally(text, ctx) {
   }
   if (!best) return null;
 
-  // Two word groups matched, a word from the visitor's own language matched,
-  // or a very short message ("placement pay?") hit one group: sure enough.
+  // Two word groups matched, two words from the visitor's own language
+  // matched, or a very short message ("placement pay?") hit one: sure enough.
   const confident = best.score >= 1.5 || (best.score >= 1 && words <= 4);
 
   return { ...answerTopic(best.topic.id, ctx), confident, score: best.score };

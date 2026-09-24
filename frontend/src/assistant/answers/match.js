@@ -25,8 +25,9 @@ const SPELLINGS = [
 /** Lower case, no punctuation, single spaces, common spellings folded. */
 export function normalise(text) {
   let clean = ` ${String(text).toLowerCase()} `
-    // Keep letters and numbers from any alphabet, drop everything else.
-    .replace(/[^\p{L}\p{N}\s@.+']/gu, " ")
+    // Keep letters and numbers from any alphabet, drop everything else. \p{M}
+    // keeps the vowel signs Bengali, Gujarati and Gurmukhi write words with.
+    .replace(/[^\p{L}\p{M}\p{N}\s@.+']/gu, " ")
     .replace(/'/g, "")
     .replace(/\s+/g, " ");
   for (const [pattern, replacement] of SPELLINGS) clean = clean.replace(pattern, replacement);
@@ -75,7 +76,9 @@ export function hasAny(clean, terms) {
  *                 more specific topic wins.
  * topic.also      extra words that make a match more certain (+0.5 each)
  * extraTerms      words in the visitor's own language, from smiley.keywords in
- *                 their translation file. Any one of them scores 1.5.
+ *                 their translation file. One of them scores 1.25, a best
+ *                 guess like a one-group pattern; each extra one adds 0.5, so
+ *                 "how long" + "placement" beats "how long" on its own.
  */
 export function scoreTopic(clean, topic, extraTerms = []) {
   let score = 0;
@@ -88,7 +91,8 @@ export function scoreTopic(clean, topic, extraTerms = []) {
     score += topic.also.filter((term) => hasTerm(clean, term)).length * 0.5;
   }
 
-  if (extraTerms.length && hasAny(clean, extraTerms)) score = Math.max(score, 1.5);
+  const hits = extraTerms.filter((term) => hasTerm(clean, term)).length;
+  if (hits > 0) score = Math.max(score, 0.75 + hits * 0.5);
 
   return score;
 }

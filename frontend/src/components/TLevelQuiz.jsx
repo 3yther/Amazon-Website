@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { QUIZ_QUESTIONS, QUIZ_RESULTS } from "../aboutContent.js";
+import { useSiteContent } from "../i18n/content.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { AlertIcon } from "./Icons.jsx";
 
 // "Is a T Level right for me?" quiz, six questions, one screen.
@@ -16,17 +17,20 @@ import { AlertIcon } from "./Icons.jsx";
 // having to go hunting for it. "polite" behaviour, so it waits its turn.
 
 /** Adds up the scores of the chosen options and picks a result band. */
-function scoreAnswers(answers) {
-  const total = QUIZ_QUESTIONS.reduce((sum, question) => {
+function scoreAnswers(answers, questions, results) {
+  const total = questions.reduce((sum, question) => {
     const chosen = question.options.find((option) => option.value === answers[question.id]);
     return sum + (chosen ? chosen.score : 0);
   }, 0);
 
-  // QUIZ_RESULTS is ordered highest band first, so the first match wins.
-  return QUIZ_RESULTS.find((band) => total >= band.minScore);
+  // The results are ordered highest band first, so the first match wins.
+  return results.find((band) => total >= band.minScore);
 }
 
 export default function TLevelQuiz() {
+  const t = useT();
+  // The questions and results from aboutContent.js, in the visitor's language.
+  const { QUIZ_QUESTIONS, QUIZ_RESULTS } = useSiteContent().about;
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -44,13 +48,11 @@ export default function TLevelQuiz() {
 
     if (answeredCount < QUIZ_QUESTIONS.length) {
       setResult(null);
-      setError(
-        `Answer all ${QUIZ_QUESTIONS.length} questions to see your result. You have done ${answeredCount}.`,
-      );
+      setError(t("about.quiz.incomplete", { total: QUIZ_QUESTIONS.length, done: answeredCount }));
       return;
     }
 
-    setResult(scoreAnswers(answers));
+    setResult(scoreAnswers(answers, QUIZ_QUESTIONS, QUIZ_RESULTS));
     // Move focus to the result, so a keyboard or screen reader user lands on
     // the answer rather than being left on the button.
     requestAnimationFrame(() => resultRef.current?.focus());
@@ -65,11 +67,9 @@ export default function TLevelQuiz() {
   return (
     <section className="about-section" aria-labelledby="quiz-title">
       <div className="section-intro">
-        <p className="label">Quiz</p>
-        <h2 id="quiz-title">Is a T Level right for me?</h2>
-        <p className="section-intro__lead">
-          Six questions. There are no wrong answers, and nothing is saved or sent anywhere.
-        </p>
+        <p className="label">{t("about.quiz.label")}</p>
+        <h2 id="quiz-title">{t("about.quiz.title")}</h2>
+        <p className="section-intro__lead">{t("about.quiz.lead")}</p>
       </div>
 
       <form className="quiz" onSubmit={handleSubmit}>
@@ -107,7 +107,7 @@ export default function TLevelQuiz() {
         </ol>
 
         <p className="label" role="status">
-          {answeredCount} of {QUIZ_QUESTIONS.length} answered
+          {t("about.quiz.progress", { done: answeredCount, total: QUIZ_QUESTIONS.length })}
         </p>
 
         {error && (
@@ -121,11 +121,11 @@ export default function TLevelQuiz() {
 
         <div className="quiz__actions">
           <button type="submit" className="button button--primary">
-            See my result
+            {t("about.quiz.seeResult")}
           </button>
           {(answeredCount > 0 || result) && (
             <button type="button" className="button" onClick={startAgain}>
-              Start again
+              {t("about.quiz.startAgain")}
             </button>
           )}
         </div>
@@ -136,15 +136,12 @@ export default function TLevelQuiz() {
       <div role="status" aria-live="polite">
         {result && (
           <article className="quiz__result" tabIndex={-1} ref={resultRef}>
-            <p className="label">Your result</p>
+            <p className="label">{t("about.quiz.yourResult")}</p>
             <h3 className="quiz__result-heading">{result.heading}</h3>
             <p>{result.text}</p>
-            <p className="quiz__result-note">
-              This is a guide to think with, not advice. Talk to a teacher or a careers adviser
-              before you decide.
-            </p>
+            <p className="quiz__result-note">{t("about.quiz.note")}</p>
             <Link className="button button--primary quiz__result-action" to="/register-interest">
-              Register your interest
+              {t("footer.links.registerInterest")}
             </Link>
           </article>
         )}

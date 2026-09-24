@@ -1,4 +1,5 @@
 import PathwaySwitcher from "../components/PathwaySwitcher.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
 /**
@@ -6,12 +7,13 @@ import "../about.css";
  * the same tab switcher as the About page, so the detail is written once.
  */
 export default function Pathways() {
+  const t = useT();
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Learning Pathways</p>
-        <h1 id="page-title">Five pathways</h1>
-        <p className="lead">Pick one to see the T Levels in it and what the placement involves.</p>
+        <p className="label">{t("pathwaysPage.label")}</p>
+        <h1 id="page-title">{t("pathwaysPage.title")}</h1>
+        <p className="lead">{t("pathwaysPage.lead")}</p>
       </section>
 
       <PathwaySwitcher />

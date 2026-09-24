@@ -3,6 +3,7 @@ import * as about from "../aboutContent.js";
 import * as amazon from "../amazonContent.js";
 import * as help from "../helpContent.js";
 import { answerLocally, answerTopic, dontKnow } from "../assistant/answers/answerEngine.js";
+import { normalise } from "../assistant/answers/match.js";
 import { TOPICS } from "../assistant/answers/topics.js";
 import { makeTranslate } from "../i18n/translate.js";
 
@@ -156,5 +157,29 @@ describe("other languages", () => {
       t: makeTranslate({ smiley: { keywords: { placementLength: "praktyka, staż" } } }),
     };
     expect(ask("ile trwa praktyka?", polish).id).toBe("placementLength");
+  });
+
+  it("prefers the topic more of the question's words belong to", () => {
+    const spanish = {
+      ...ctx,
+      language: "es",
+      t: makeTranslate({
+        smiley: {
+          keywords: { courseLength: "cuánto dura, años", placementLength: "cuánto dura, prácticas" },
+        },
+      }),
+    };
+    expect(ask("¿cuánto dura un T Level?", spanish).id).toBe("courseLength");
+    expect(ask("¿cuánto dura la parte de prácticas?", spanish).id).toBe("placementLength");
+  });
+
+  it("keeps the vowel signs of Indic scripts, so their words match whole", () => {
+    const bengali = {
+      ...ctx,
+      language: "bn",
+      t: makeTranslate({ smiley: { keywords: { placementPay: "বেতন" } } }),
+    };
+    expect(normalise("প্লেসমেন্টে বেতন?")).toBe("প্লেসমেন্টে বেতন");
+    expect(ask("প্লেসমেন্টে বেতন পাব?", bengali).id).toBe("placementPay");
   });
 });

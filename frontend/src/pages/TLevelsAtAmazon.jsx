@@ -8,20 +8,15 @@ import {
   MediaIcon,
 } from "../components/Icons.jsx";
 import warehousePhoto from "../assets/pexels-warehouse-operations.jpg";
-import { PATHWAYS } from "../aboutContent.js";
+import { useSiteContent } from "../i18n/content.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 // Photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
 // free to use, attribution not required. Credited here for the asset log.
 //   pexels-warehouse-operations.jpg: GB The Green Brand,
 //     https://www.pexels.com/photo/modern-warehouse-operations-with-employees-and-forklift-30824313/
 
-import {
-  AMAZON_SOURCES,
-  GROWTH,
-  PLACEMENT_SHAPE,
-  ROUTE_IN,
-  SUPPORT,
-} from "../amazonContent.js";
+import { GROWTH } from "../amazonContent.js";
 import "../about.css";
 import amazonPhoto from "../assets/amazon-hero.jpg";
 
@@ -54,19 +49,21 @@ const MOST = Math.max(...GROWTH.map((point) => point.value));
  * described once on the front end rather than twice.
  */
 export default function TLevelsAtAmazon() {
+  const t = useT();
+  // amazonContent.js and the pathways from aboutContent.js, in the visitor's language.
+  const { about, amazon } = useSiteContent();
+  const { PATHWAYS } = about;
+  const { AMAZON_SOURCES, PLACEMENT_SHAPE, ROUTE_IN, SUPPORT } = amazon;
+  const growth = amazon.GROWTH;
+
   return (
     <>
-      <PageHero
-        label="Amazon Emerging Talent"
-        title="Nine weeks inside a team."
-        lead="Amazon takes T Level students on placement. You join a real team and do real work."
-        photo={amazonPhoto}
-      />
+      <PageHero label={t("amazon.hero.label")} title={t("amazon.hero.title")} lead={t("amazon.hero.lead")} photo={amazonPhoto} />
 
       <section className="about-section" aria-labelledby="shape-title">
         <div className="section-intro">
-          <p className="label">The placement</p>
-          <h2 id="shape-title">What the nine weeks look like</h2>
+          <p className="label">{t("amazon.shape.label")}</p>
+          <h2 id="shape-title">{t("amazon.shape.title")}</h2>
         </div>
 
         <IconCards items={PLACEMENT_SHAPE} />
@@ -87,8 +84,8 @@ export default function TLevelsAtAmazon() {
 
       <section className="about-section" aria-labelledby="support-title">
         <div className="section-intro">
-          <p className="label">Support</p>
-          <h2 id="support-title">Three people looking after you</h2>
+          <p className="label">{t("amazon.support.label")}</p>
+          <h2 id="support-title">{t("amazon.support.title")}</h2>
         </div>
 
         <IconCards items={SUPPORT} />
@@ -96,10 +93,11 @@ export default function TLevelsAtAmazon() {
 
       <section className="about-section" aria-labelledby="pathways-title">
         <div className="section-intro">
-          <p className="label">Pathways</p>
-          <h2 id="pathways-title">Which subjects Amazon takes</h2>
+          <p className="label">{t("amazon.pathways.label")}</p>
+          <h2 id="pathways-title">{t("amazon.pathways.title")}</h2>
           <p className="section-intro__lead">
-            More on each one on the <Link to="/about">About T-Levels</Link> page.
+            {t("amazon.pathways.leadBefore")} <Link to="/about">{t("amazon.pathways.leadLink")}</Link>
+            {t("amazon.pathways.leadAfter")}
           </p>
         </div>
 
@@ -132,26 +130,26 @@ export default function TLevelsAtAmazon() {
 
       <section className="about-section" aria-labelledby="route-title">
         <div className="section-intro">
-          <p className="label">Getting one</p>
-          <h2 id="route-title">How to get a placement</h2>
+          <p className="label">{t("amazon.route.label")}</p>
+          <h2 id="route-title">{t("amazon.route.title")}</h2>
         </div>
 
         <RouteSteps steps={ROUTE_IN} />
 
         <Link className="button button--primary route__action" to="/register-interest">
-          Register your interest
+          {t("footer.links.registerInterest")}
         </Link>
       </section>
 
       <section className="about-section" aria-labelledby="growth-title">
         <div className="section-intro">
-          <p className="label">The programme</p>
-          <h2 id="growth-title">It is growing</h2>
-          <p className="section-intro__lead">Figures from the Department for Education.</p>
+          <p className="label">{t("amazon.growth.label")}</p>
+          <h2 id="growth-title">{t("amazon.growth.title")}</h2>
+          <p className="section-intro__lead">{t("amazon.growth.lead")}</p>
         </div>
 
         <ol className="growth">
-          {GROWTH.map((point) => (
+          {growth.map((point) => (
             <li className="growth__item" key={point.year}>
               <p className="label">{point.year}</p>
               <p className="growth__value">{point.value}</p>
@@ -168,13 +166,15 @@ export default function TLevelsAtAmazon() {
 
       <section className="about-sources" aria-labelledby="sources-title">
         <h2 id="sources-title" className="label">
-          Sources
+          {t("about.sources.title")}
         </h2>
-        <p>Checked in September 2026.</p>
+        <p>{t("amazon.sourcesNote")}</p>
         <ol>
           {AMAZON_SOURCES.map((source) => (
             <li key={source.url}>
-              <a href={source.url}>{source.title}</a>
+              <a href={source.url} lang="en-GB">
+                {source.title}
+              </a>
             </li>
           ))}
         </ol>

@@ -416,7 +416,9 @@
 
 .assistant {
   position: fixed;
-  right: var(--gutter);
+  /* Logical sides, so Smiley sits in the reading-end corner: bottom right in
+     English, bottom left in Arabic and Urdu. */
+  inset-inline-end: var(--gutter);
   bottom: var(--gutter);
   z-index: 50;
   display: flex;
@@ -468,7 +470,7 @@
   display: flex;
   align-items: flex-start;
   max-width: 16rem;
-  margin-right: 1.5rem;
+  margin-inline-end: 1.5rem;
   border: 2px solid var(--blue);
   border-radius: var(--radius);
   background: var(--surface);
@@ -479,7 +481,7 @@
 .assistant__teaser::after {
   content: "";
   position: absolute;
-  right: 1.25rem;
+  inset-inline-end: 1.25rem;
   bottom: -0.5rem;
   width: 0.8rem;
   height: 0.8rem;
@@ -492,7 +494,8 @@
 .assistant__teaser-text {
   flex: 1;
   min-height: 2.75rem;
-  padding: 0.625rem 0 0.625rem 0.75rem;
+  padding-block: 0.625rem;
+  padding-inline: 0.75rem 0;
   border: 0;
   background: none;
   color: var(--blue);
@@ -500,7 +503,7 @@
   font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.4;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 
@@ -750,7 +753,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.3;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 }
 
@@ -935,7 +938,7 @@
   .assistant {
     /* Span the screen so the panel can use the full width, with Smiley still
        in the corner. */
-    left: var(--gutter);
+    inset-inline-start: var(--gutter);
   }
 
   .assistant__panel {
