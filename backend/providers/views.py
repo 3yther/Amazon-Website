@@ -55,6 +55,21 @@ class ProviderSearchView(APIView):
 
     Public: which colleges run T-Levels is public information, so no account
     is needed, the same as pathways and the content library.
+
+    NOT PAGINATED, ON PURPOSE. This is an APIView answering with its own
+    envelope, so it never touches the project-wide PageNumberPagination the
+    content library and the staff submissions list use. Every provider inside
+    the radius comes back. Do not turn this into a generic list view without
+    dealing with that: it would quietly start returning one page, and
+    NearYou.jsx reads results straight out of the body with nothing to follow
+    a next link with. There are tests pinning both halves of that down.
+
+    The radius is what bounds the answer, and with a few dozen providers the
+    widest search returns a few dozen rows. If the table ever grows into the
+    thousands, the fix is real pagination the page knows about, or a cap the
+    response ADMITS to. Not a silent one: a search that quietly returns the
+    first few looks exactly like a thin list of colleges, which is how long
+    it took anyone to question this the first time.
     """
 
     permission_classes = [AllowAny]

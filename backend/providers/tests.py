@@ -528,3 +528,123 @@ class CheckProvidersCommandTests(TestCase):
 
         self.assertEqual(code, 0)
         self.assertIn("No providers at all", err)
+
+
+class ResultsAreNotCappedTests(APITestCase):
+    """
+    Every match inside the radius comes back, however many there are.
+
+    The report behind these was "the search only ever shows about five".
+    It was not a cap: the endpoint is a plain APIView, which has no
+    pagination to inherit, and the project's page size is 20 rather than 5
+    anyway. It was that the fixture held fifteen colleges spread across the
+    whole of England, so at the widest radius the page offers nobody could
+    ever see more than four.
+
+    These pin both halves down: nothing truncates, and the data we ship is
+    dense enough to prove it.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.digital = Pathway.objects.create(
+            name="Digital", slug="digital", summary="s", description="d"
+        )
+        # Twelve, spread along a line north of the search point so every one
+        # is inside 25 miles. More than any page size in the project.
+        for index in range(12):
+            provider = Provider.objects.create(
+                name=f"College {index}",
+                address="a",
+                postcode="N14 6BS",
+                latitude=str(round(51.5 + index * 0.02, 6)),
+                longitude="-0.130000",
+            )
+            provider.pathways.add(cls.digital)
+
+    def search(self, **params):
+        with stub_lookup(point=(51.5, -0.13)):
+            return self.client.get("/api/providers/search/", {"postcode": "W1D 3QU", **params})
+
+    def test_all_twelve_come_back_not_the_first_five(self):
+        response = self.search(radius="25")
+
+        self.assertEqual(response.data["count"], 12)
+        self.assertEqual(len(response.data["results"]), 12)
+
+    def test_count_always_matches_what_was_actually_sent(self):
+        """
+        A cap usually shows up as these two disagreeing: a count of everything
+        matched, next to one page of results.
+        """
+        for radius in ["5", "10", "25", "50"]:
+            with self.subTest(radius=radius):
+                response = self.search(radius=radius)
+                self.assertEqual(response.data["count"], len(response.data["results"]))
+
+    def test_the_answer_is_not_a_paginated_one(self):
+        """
+        Locks the shape down. If this view is ever rewritten as a generic list
+        view it will pick up the project-wide PageNumberPagination and start
+        truncating silently, and NearYou.jsx reads results straight out of the
+        body with nothing to follow a next link with.
+        """
+        response = self.search(radius="25")
+
+        self.assertEqual(
+            set(response.data), {"postcode", "radius_miles", "count", "results"}
+        )
+        self.assertNotIn("next", response.data)
+        self.assertNotIn("previous", response.data)
+
+    def test_filtering_by_pathway_still_returns_all_the_matches(self):
+        response = self.search(radius="25", pathway="digital")
+
+        self.assertEqual(len(response.data["results"]), 12)
+
+
+class SeedCoverageTests(APITestCase):
+    """
+    The shipped fixture has to be dense enough to be worth searching.
+
+    With the fifteen it started with, six of a spread of ordinary UK postcodes
+    returned NOTHING at the default fifteen miles, and no postcode anywhere
+    could return more than four at the widest radius the page offers. The
+    search worked perfectly and still looked broken.
+    """
+
+    fixtures = ["pathways", "providers"]
+
+    # Ordinary places somebody testing this would type, and the city centre
+    # coordinates postcodes.io gives for them.
+    CITIES = {
+        "London": (51.513, -0.134),
+        "Birmingham": (52.4778, -1.8990),
+        "Manchester": (53.4794, -2.2453),
+        "Leeds": (53.7965, -1.5478),
+        "Bristol": (51.4536, -2.5977),
+        "Liverpool": (53.4045, -2.9819),
+        "Southampton": (50.9020, -1.4040),
+        "Newcastle": (54.9738, -1.6131),
+    }
+
+    def count_near(self, point, radius):
+        with stub_lookup(point=point):
+            response = self.client.get(
+                "/api/providers/search/", {"postcode": "W1D 3QU", "radius": str(radius)}
+            )
+        return response.data["count"]
+
+    def test_no_major_city_comes_back_empty_handed(self):
+        for city, point in self.CITIES.items():
+            with self.subTest(city=city):
+                self.assertGreater(self.count_near(point, 15), 0)
+
+    def test_a_city_search_returns_a_list_worth_reading(self):
+        """More than five, which is the number that prompted this."""
+        for city in ["London", "Birmingham", "Manchester"]:
+            with self.subTest(city=city):
+                self.assertGreater(self.count_near(self.CITIES[city], 15), 5)
+
+    def test_the_widest_radius_reaches_a_lot(self):
+        self.assertGreater(self.count_near(self.CITIES["London"], 50), 15)
