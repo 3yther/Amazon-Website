@@ -31,7 +31,13 @@ const { mockUseAuth, mockGetPreferences, mockUpdatePreferences } = vi.hoisted(()
 }));
 
 vi.mock("../auth.jsx", () => ({ useAuth: mockUseAuth }));
-vi.mock("../api.js", () => ({
+// vitest runs these files in one shared module registry (isolate: false in
+// vitest.config.js), so a mock here is visible to every other test file.
+// importOriginal keeps the rest of api.js real: RegisterInterest.test.jsx
+// leans on the genuine ApiError, and a mock that listed only the functions
+// this file needs would take it away from them.
+vi.mock("../api.js", async (importOriginal) => ({
+  ...(await importOriginal()),
   getPreferences: mockGetPreferences,
   updatePreferences: mockUpdatePreferences,
 }));
