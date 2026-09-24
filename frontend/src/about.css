@@ -1006,6 +1006,29 @@
   font-size: 1.375rem;
 }
 
+/* ---------- Resources cards (ContentLibrary.jsx) ---------- */
+
+/* The picture sits beside the type label, and the pathway icon beside its name. */
+.card__type {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card__pathway {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* "Open on amazingapprenticeships.com" is long, so let the button wrap on phones
+   rather than push past the card. */
+.card .card__action {
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+}
+
 /* ---------- Motion ---------- */
 
 /* Every transition on these pages, in one place, and only for visitors who

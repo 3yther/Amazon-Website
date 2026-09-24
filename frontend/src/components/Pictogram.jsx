@@ -136,6 +136,12 @@ const PATHS = {
     </>
   ),
   folder: <path d="M3 6h6l2 2h10v12H3z" />,
+  video: (
+    <>
+      <rect x="3" y="5" width="18" height="14" />
+      <path d="M10 9v6l5-3z" />
+    </>
+  ),
   key: (
     <>
       <circle cx="8" cy="15" r="4" />

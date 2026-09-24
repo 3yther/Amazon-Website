@@ -23,7 +23,7 @@ cookies between them, which would break log in and sign up.
 
 | File | Purpose |
 |---|---|
-| `backend/railway.toml` | Build with Railpack; before each deploy run migrations and load the five pathways; start with gunicorn |
+| `backend/railway.toml` | Build with Railpack; before each deploy run migrations and load the five pathways and starter resources; start with gunicorn |
 | `backend/.python-version` | Python 3.11, to match local development |
 | `backend/requirements.txt` | Adds `gunicorn` and `psycopg[binary]` |
 | `backend/config/settings.py` | Uses `DATABASE_URL` when set (SQLite otherwise); `DJANGO_BEHIND_HTTPS_PROXY` |
@@ -114,9 +114,10 @@ Leave these unset on the frontend:
 - **Uploaded content files are not kept or served.** Railway's disk is reset
   on every deploy, and Django only serves `/media` in debug mode. Content items
   without a file are fine. Files belong in S3, planned for AWS.
-- **The five pathways are reloaded on every deploy**, from
-  `backend/content/fixtures/pathways.json`. Edits to them made in the admin
-  are overwritten, so change the fixture instead.
+- **The five pathways and the starter resources are reloaded on every
+  deploy**, from `backend/content/fixtures/pathways.json` and `resources.json`.
+  Edits to them made in the admin are overwritten, so change the fixture
+  instead. Resources added in the admin are kept.
 - **Its data is separate.** Users and content on the preview live in
   Railway's PostgreSQL, not in anyone's local `db.sqlite3`.
 - **No HSTS.** Deliberately left off for a temporary address. Worth adding on

@@ -68,6 +68,12 @@ class ContentItem(models.Model):
     # Local disk in development, S3 in production (see STORAGES in settings).
     # The database only stores the file's path, never the file itself.
     file = models.FileField(upload_to="content/", null=True, blank=True)
+    # Official guides are linked rather than copied, so they stay current.
+    link = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="A resource on another website. Leave empty if you upload a file.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

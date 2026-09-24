@@ -9,9 +9,10 @@ builder = "RAILPACK"
 
 [deploy]
 # Runs before each deploy goes live: brings the database schema up to date,
-# then loads the five pathways (safe to repeat, it rewrites the same five rows).
+# then loads the five pathways and the starter resources (safe to repeat, it
+# rewrites the same rows; resources added in admin are left alone).
 # If it fails, the deploy stops and the previous one keeps running.
-preDeployCommand = "sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways'"
+preDeployCommand = "sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources'"
 
 # gunicorn rather than the Django dev server. Railway sets $PORT, and [::]
 # listens on both IPv4 and IPv6.

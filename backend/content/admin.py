@@ -12,7 +12,7 @@ class PathwayAdmin(admin.ModelAdmin):
 
 @admin.register(ContentItem)
 class ContentItemAdmin(admin.ModelAdmin):
-    list_display = ["title", "content_type", "access_level", "audience", "pathway", "created_at"]
+    list_display = ["title", "content_type", "access_level", "audience", "pathway", "link", "created_at"]
     list_filter = ["content_type", "access_level", "audience", "pathway"]
     search_fields = ["title", "description"]
     prepopulated_fields = {"slug": ["title"]}

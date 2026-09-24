@@ -1,0 +1,370 @@
+[
+  {
+    "model": "content.contentitem",
+    "pk": 1,
+    "fields": {
+      "title": "Find a T Level near you",
+      "slug": "find-a-t-level-near-you",
+      "description": "Official search. Enter a postcode or town and a subject to see which schools and colleges run it.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "all",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/find",
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 2,
+    "fields": {
+      "title": "What are T Levels? (video)",
+      "slug": "what-are-t-levels-video",
+      "description": "A six-minute film from the Department for Education, with teachers, employers and students.",
+      "content_type": "video",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "all",
+      "file": "",
+      "link": "https://www.gov.uk/government/publications/t-levels-resources-for-teachers-and-careers-advisers/what-are-t-levels-video",
+      "created_at": "2026-09-24T08:59:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 3,
+    "fields": {
+      "title": "What are T Levels? UCAS explains",
+      "slug": "what-are-t-levels-ucas-explains",
+      "description": "What a T Level involves, how it is graded, and the UCAS points each grade is worth.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.ucas.com/further-education/post-16-qualifications/qualifications-you-can-take/t-levels",
+      "created_at": "2026-09-24T08:58:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 4,
+    "fields": {
+      "title": "T Level info for parents",
+      "slug": "t-level-info-for-parents",
+      "description": "Courses, placements and success stories, from the Gatsby Charitable Foundation. Linked from the official T Levels site.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "parent",
+      "file": "",
+      "link": "https://tlevelinfo.org.uk/",
+      "created_at": "2026-09-24T08:57:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 5,
+    "fields": {
+      "title": "T Levels: a guide for parents and carers",
+      "slug": "t-levels-a-guide-for-parents-and-carers",
+      "description": "A short guide from Amazing Apprenticeships. PDF.",
+      "content_type": "document",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "parent",
+      "file": "",
+      "link": "https://www.amazingapprenticeships.com/wp-content/uploads/2025/09/T-Levels-Parents-Carers-Guide.pdf",
+      "created_at": "2026-09-24T08:56:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 6,
+    "fields": {
+      "title": "Your options after GCSEs",
+      "slug": "your-options-after-gcses",
+      "description": "Compare T Levels with A levels, apprenticeships and other routes. From the Department for Education.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.skillsforcareers.education.gov.uk/your-training-options",
+      "created_at": "2026-09-24T08:55:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 7,
+    "fields": {
+      "title": "Where a T Level can lead",
+      "slug": "where-a-t-level-can-lead",
+      "description": "Occupational maps from Skills England: the jobs each route leads to.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "student",
+      "file": "",
+      "link": "https://occupational-maps.skillsengland.education.gov.uk",
+      "created_at": "2026-09-24T08:54:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 8,
+    "fields": {
+      "title": "T Level placements at Amazon",
+      "slug": "t-level-placements-at-amazon",
+      "description": "Amazon's own page about its T Level placements.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "all",
+      "file": "",
+      "link": "https://www.aboutamazon.co.uk/amazon-for-schools/online-hub-offerings/t-level-placements",
+      "created_at": "2026-09-24T08:53:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 9,
+    "fields": {
+      "title": "How Amazon grew its placement programme",
+      "slug": "how-amazon-grew-its-placement-programme",
+      "description": "A case study from the Department for Education on Amazon's T Level placements.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "all",
+      "file": "",
+      "link": "https://employers.tlevels.gov.uk/hc/en-gb/articles/22282093518226-Amazon-Growing-a-successful-industry-placement-programme",
+      "created_at": "2026-09-24T08:52:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 10,
+    "fields": {
+      "title": "Digital Software Development T Level",
+      "slug": "digital-software-development-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 1,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/digital-software-development",
+      "created_at": "2026-09-24T08:51:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 11,
+    "fields": {
+      "title": "Digital Data Analytics T Level",
+      "slug": "digital-data-analytics-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 1,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/digital-data-analytics",
+      "created_at": "2026-09-24T08:50:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 12,
+    "fields": {
+      "title": "Digital Support and Security T Level",
+      "slug": "digital-support-and-security-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 1,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/digital-support-security",
+      "created_at": "2026-09-24T08:49:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 13,
+    "fields": {
+      "title": "Management and Administration T Level",
+      "slug": "management-and-administration-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 2,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/management-administration",
+      "created_at": "2026-09-24T08:48:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 14,
+    "fields": {
+      "title": "Media, Broadcast and Production T Level",
+      "slug": "media-broadcast-and-production-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 3,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/media-broadcast-production",
+      "created_at": "2026-09-24T08:47:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 15,
+    "fields": {
+      "title": "Accounting T Level",
+      "slug": "accounting",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 4,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/accounting",
+      "created_at": "2026-09-24T08:46:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 16,
+    "fields": {
+      "title": "Finance T Level",
+      "slug": "finance",
+      "description": "The official page for this T Level. Last enrolments are in September 2026.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 4,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/finance",
+      "created_at": "2026-09-24T08:45:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 17,
+    "fields": {
+      "title": "Design and Development for Engineering and Manufacturing T Level",
+      "slug": "design-and-development-for-engineering-and-manufacturing-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 5,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/design-development-engineering",
+      "created_at": "2026-09-24T08:44:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 18,
+    "fields": {
+      "title": "Maintenance, Installation and Repair for Engineering and Manufacturing T Level",
+      "slug": "maintenance-installation-and-repair-for-engineering-and-manufacturing-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 5,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/maintenance-installation-repair",
+      "created_at": "2026-09-24T08:43:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 19,
+    "fields": {
+      "title": "Engineering, Manufacturing, Processing and Control T Level",
+      "slug": "engineering-manufacturing-processing-and-control-t-level",
+      "description": "The official page for this T Level: what you learn, the placement and where it leads.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": 5,
+      "audience": "student",
+      "file": "",
+      "link": "https://www.tlevels.gov.uk/students/subjects/engineering-manufacturing-processing-control",
+      "created_at": "2026-09-24T08:42:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 20,
+    "fields": {
+      "title": "T Level guide for teachers",
+      "slug": "t-level-guide-for-teachers",
+      "description": "The Department for Education's overview for teachers and careers advisers (2023). PDF.",
+      "content_type": "document",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "teacher",
+      "file": "",
+      "link": "https://assets.publishing.service.gov.uk/media/6500148257e8840013e128ed/T_Level_Guide_2023.pdf",
+      "created_at": "2026-09-24T08:41:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 21,
+    "fields": {
+      "title": "T Levels toolkit for careers leaders",
+      "slug": "t-levels-toolkit-for-careers-leaders",
+      "description": "How to introduce T Levels to students, staff, parents and governors (2023). PDF.",
+      "content_type": "guide",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "teacher",
+      "file": "",
+      "link": "https://assets.publishing.service.gov.uk/media/657998be0467eb000d55f6c5/T_Level_Digital_Toolkit_2023.pdf",
+      "created_at": "2026-09-24T08:40:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 22,
+    "fields": {
+      "title": "T Levels activity pack for Years 9 to 11",
+      "slug": "t-levels-activity-pack-for-years-9-to-11",
+      "description": "Classroom tasks on what T Levels are and where they lead (2023). Word document.",
+      "content_type": "class_pack",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "teacher",
+      "file": "",
+      "link": "https://assets.publishing.service.gov.uk/media/6500147457e884000de128d4/T_Levels_Activity_Pack_April_2023.docx",
+      "created_at": "2026-09-24T08:39:00Z"
+    }
+  },
+  {
+    "model": "content.contentitem",
+    "pk": 23,
+    "fields": {
+      "title": "Industry placement rules",
+      "slug": "industry-placement-rules",
+      "description": "What a T Level placement must include, from the Department for Education.",
+      "content_type": "document",
+      "access_level": "free",
+      "pathway": null,
+      "audience": "teacher",
+      "file": "",
+      "link": "https://www.gov.uk/government/publications/t-level-industry-placements-guidance-for-providers/t-level-industry-placements-guidance-for-education-providers",
+      "created_at": "2026-09-24T08:38:00Z"
+    }
+  }
+]

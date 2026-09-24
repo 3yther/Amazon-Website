@@ -81,3 +81,54 @@ class ContentApiTests(APITestCase):
         response = self.client.get("/api/content/digital-prep-pack/")
         self.assertFalse(response.data["locked"])
         self.assertTrue(response.data["file"].endswith("/media/content/digital-prep-pack.pdf"))
+
+
+class ContentLinkTests(APITestCase):
+    """Links to other sites follow the same sign-up rule as files."""
+
+    @classmethod
+    def setUpTestData(cls):
+        ContentItem.objects.create(
+            title="Free link", slug="free-link", description="d", content_type="guide",
+            access_level="free", link="https://www.gov.uk/free",
+        )
+        ContentItem.objects.create(
+            title="Sign-up link", slug="signup-link", description="d", content_type="guide",
+            access_level="signup", link="https://www.gov.uk/signup",
+        )
+
+    def test_free_link_is_returned(self):
+        response = self.client.get("/api/content/free-link/")
+        self.assertEqual(response.data["link"], "https://www.gov.uk/free")
+
+    def test_signup_link_hidden_until_signed_in(self):
+        response = self.client.get("/api/content/signup-link/")
+        self.assertTrue(response.data["locked"])
+        self.assertIsNone(response.data["link"])
+
+        self.client.force_authenticate(User.objects.create_user("student2", password="x"))
+        response = self.client.get("/api/content/signup-link/")
+        self.assertFalse(response.data["locked"])
+        self.assertEqual(response.data["link"], "https://www.gov.uk/signup")
+
+
+class StarterResourcesTests(APITestCase):
+    """The resources.json fixture loaded on every deploy."""
+
+    fixtures = ["pathways", "resources"]
+
+    def test_every_item_is_free_with_an_https_link_and_no_file(self):
+        items = ContentItem.objects.all()
+        self.assertEqual(items.count(), 23)
+        for item in items:
+            self.assertEqual(item.access_level, "free", item.slug)
+            self.assertTrue(item.link.startswith("https://"), item.slug)
+            self.assertFalse(item.file, item.slug)
+
+    def test_every_pathway_has_an_item(self):
+        for pathway in Pathway.objects.all():
+            self.assertTrue(pathway.content_items.exists(), pathway.slug)
+
+    def test_digital_filter_returns_more_than_three(self):
+        response = self.client.get("/api/content/", {"pathway": "digital"})
+        self.assertGreater(response.data["count"], 3)
