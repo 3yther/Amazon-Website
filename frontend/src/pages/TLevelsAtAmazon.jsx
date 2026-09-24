@@ -147,7 +147,10 @@ export default function TLevelsAtAmazon() {
         <div className="section-intro">
           <p className="label">The programme</p>
           <h2 id="growth-title">It is growing</h2>
-          <p className="section-intro__lead">Figures from the Department for Education.</p>
+          <p className="section-intro__lead">
+            From six students to 100 in its first three years, with more planned. Figures
+            from the Department for Education.
+          </p>
         </div>
 
         <ol className="growth">
