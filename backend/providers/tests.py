@@ -350,3 +350,181 @@ class GeocodeProvidersCommandTests(TestCase):
         self.assertIn("run this again later", errors.getvalue())
         self.unplaced.refresh_from_db()
         self.assertEqual(float(self.unplaced.latitude), 0)
+
+
+class SeededSearchEndToEndTests(APITestCase):
+    """
+    The search, from the shipped fixture to a non-empty answer, with nothing
+    mocked but the visitor's own postcode lookup.
+
+    Written after the live site answered every search with an empty list for
+    days. The existing tests all passed throughout, because they build their
+    own providers: none of them ever asked "does the data we actually ship
+    produce a result?", so the one thing that was wrong was the one thing
+    nothing looked at.
+
+    These load providers.json exactly as the deploy does, and measure real
+    distances between real coordinates. Only postcodes.io is stood in for,
+    and only for the visitor's postcode, because a test suite must not depend
+    on somebody else's API being up.
+    """
+
+    fixtures = ["pathways", "providers"]
+
+    # Soho, central London. Four of the seeded colleges are inside 15 miles.
+    LONDON = (51.513, -0.134)
+
+    def test_the_fixture_alone_is_enough_to_find_something(self):
+        with patch("providers.views.lookup", return_value=self.LONDON):
+            response = self.client.get("/api/providers/search/", {"postcode": "W1D 3QU"})
+
+        self.assertEqual(response.status_code, 200)
+        # The assertion that would have caught it: not "is the shape right"
+        # but "did anything come back at all".
+        self.assertGreater(response.data["count"], 0)
+        self.assertGreater(len(response.data["results"]), 0)
+
+    def test_the_distances_are_real_and_sorted(self):
+        with patch("providers.views.lookup", return_value=self.LONDON):
+            response = self.client.get(
+                "/api/providers/search/", {"postcode": "W1D 3QU", "radius": "50"}
+            )
+
+        miles = [provider["distance_miles"] for provider in response.data["results"]]
+        self.assertEqual(miles, sorted(miles))
+        # Real numbers from the real formula, not zeroes or None.
+        self.assertTrue(all(isinstance(m, float) for m in miles))
+        self.assertTrue(all(0 <= m <= 50 for m in miles), miles)
+        # Somewhere in London should have a college within a few miles.
+        self.assertLess(miles[0], 10, miles[:3])
+
+    def test_every_seeded_provider_can_be_found_from_somewhere(self):
+        """
+        A provider left at 0, 0 is silently dropped from every search. This
+        walks the whole fixture and searches from each one's own position, so
+        a row that cannot be found fails by name rather than by absence.
+        """
+        for provider in Provider.objects.all():
+            with self.subTest(provider=provider.name):
+                self.assertNotEqual(
+                    (provider.latitude, provider.longitude),
+                    (0, 0),
+                    f"{provider.name} has no position, so no search can return it",
+                )
+                origin = (float(provider.latitude), float(provider.longitude))
+                with patch("providers.views.lookup", return_value=origin):
+                    response = self.client.get(
+                        "/api/providers/search/", {"postcode": provider.postcode, "radius": "5"}
+                    )
+                names = [item["name"] for item in response.data["results"]]
+                self.assertIn(provider.name, names)
+
+    def test_a_search_from_far_away_still_reaches_them(self):
+        """Guards the radius comparison: 200 miles from London reaches most of England."""
+        with patch("providers.views.lookup", return_value=self.LONDON):
+            response = self.client.get(
+                "/api/providers/search/", {"postcode": "W1D 3QU", "radius": "200"}
+            )
+
+        self.assertGreater(response.data["count"], 8, response.data["count"])
+
+
+class UngeocodedProvidersTests(APITestCase):
+    """
+    The failure mode this whole batch is about: rows in the table that no
+    search can return. It has to be loud somewhere, because to a visitor it
+    looks exactly like "no colleges near you".
+    """
+
+    def setUp(self):
+        self.provider = Provider.objects.create(
+            name="Loaded but never placed", address="a", postcode="N14 6BS",
+            latitude="0.000000", longitude="0.000000",
+        )
+
+    def test_the_search_still_answers_rather_than_erroring(self):
+        with patch("providers.views.lookup", return_value=(51.513, -0.134)):
+            response = self.client.get("/api/providers/search/", {"postcode": "W1D 3QU"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 0)
+
+    def test_but_it_says_so_in_the_log(self):
+        with patch("providers.views.lookup", return_value=(51.513, -0.134)):
+            with self.assertLogs("providers.views", level="ERROR") as logged:
+                self.client.get("/api/providers/search/", {"postcode": "W1D 3QU"})
+
+        self.assertIn("geocode_providers", "".join(logged.output))
+
+    def test_an_empty_table_says_something_different(self):
+        Provider.objects.all().delete()
+
+        with patch("providers.views.lookup", return_value=(51.513, -0.134)):
+            with self.assertLogs("providers.views", level="ERROR") as logged:
+                self.client.get("/api/providers/search/", {"postcode": "W1D 3QU"})
+
+        self.assertIn("loaddata providers", "".join(logged.output))
+
+    def test_a_genuine_miss_is_not_reported_as_a_fault(self):
+        """Nothing within the radius is an answer, not a broken deploy."""
+        self.provider.latitude, self.provider.longitude = "51.630410", "-0.129501"
+        self.provider.save()
+
+        with patch("providers.views.lookup", return_value=(58.0, -4.0)):  # the Highlands
+            with self.assertNoLogs("providers.views", level="ERROR"):
+                response = self.client.get("/api/providers/search/", {"postcode": "IV27 4HP"})
+
+        self.assertEqual(response.data["count"], 0)
+
+
+class CheckProvidersCommandTests(TestCase):
+    """The health check that a deploy can fail on."""
+
+    def run_check(self, **options):
+        out, err = StringIO(), StringIO()
+        try:
+            call_command("check_providers", stdout=out, stderr=err, **options)
+            return 0, out.getvalue(), err.getvalue()
+        except SystemExit as exit_code:
+            return exit_code.code, out.getvalue(), err.getvalue()
+
+    def test_it_passes_when_every_provider_can_be_found(self):
+        Provider.objects.create(
+            name="Placed", address="a", postcode="N14 6BS",
+            latitude="51.630410", longitude="-0.129501",
+        )
+        code, out, _ = self.run_check()
+
+        self.assertEqual(code, 0)
+        self.assertIn("1 provider(s) ready to search", out)
+
+    def test_it_fails_on_an_empty_table(self):
+        # The exact state the deployed site was in: migrations applied, no
+        # providers, every search answering "none found".
+        code, _, err = self.run_check()
+
+        self.assertEqual(code, 1)
+        self.assertIn("No providers at all", err)
+        self.assertIn("loaddata providers", err)
+
+    def test_it_fails_when_a_provider_has_no_position(self):
+        Provider.objects.create(
+            name="Placed", address="a", postcode="N14 6BS",
+            latitude="51.630410", longitude="-0.129501",
+        )
+        Provider.objects.create(
+            name="Not placed", address="b", postcode="CR9 1DX",
+            latitude="0.000000", longitude="0.000000",
+        )
+        code, _, err = self.run_check()
+
+        self.assertEqual(code, 1)
+        self.assertIn("1 of 2", err)
+        self.assertIn("Not placed", err)
+        self.assertIn("geocode_providers", err)
+
+    def test_allow_empty_is_for_a_fresh_database(self):
+        code, _, err = self.run_check(allow_empty=True)
+
+        self.assertEqual(code, 0)
+        self.assertIn("No providers at all", err)

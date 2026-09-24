@@ -60,38 +60,57 @@ to match.
 
 ## Where the deploy settings really live
 
-Checked against the live project on 24 September 2026: **config-as-code is off
-for the `backend` service.** Its Config File Path is empty, so Railway never
-reads `backend/railway.toml`, and what actually runs is whatever is typed into
-the dashboard. Two things prove it rather than just suggest it: the live
-service restarts up to 10 times (Railway's default) where the toml asks for 3,
-and its start command is empty where the toml sets a gunicorn line.
+**Settled, 24 September 2026, after this cost us a working feature.** The
+answer is the dashboard, and `backend/railway.toml` is not part of it:
 
-So **editing `backend/railway.toml` alone changes nothing on the preview.**
-Pick one of these and stick to it:
+- The `backend` service has no Config File Path set, so Railway has never
+  read that file. Its own API reports `railwayConfigFile: null`.
+- Config as Code is now **deprecated by Railway anyway.** The CLI says
+  existing files keep working until 2026-12-01 and points at Infrastructure
+  as Code (`.railway/railway.ts`) instead. So switching it on is not the fix;
+  it is a dead end with a date on it.
+- **The Pre-deploy Command in `backend` -> Settings -> Deploy is the field
+  that runs.** It is the only place this setting lives.
 
-**Either** switch config-as-code on, which is the better end state: backend
-service -> Settings -> Source -> Config-as-code -> Config File Path
-`/backend/railway.toml`, then redeploy. From then on the file in this repo is
-the single source of truth and the fields below are ignored.
+The toml is kept in the repo, correct and in step with this page, so the
+command is reviewable in a pull request and there is something to migrate
+from if the team moves to `.railway/railway.ts`. It changes nothing on its
+own. Do not edit it and expect a deploy to notice.
 
-**Or** keep using the dashboard, in which case the Pre-deploy Command in
-backend -> Settings -> Deploy is the field that matters. It currently reads:
+### What that field must say
+
+```
+sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources providers && python manage.py geocode_providers && python manage.py check_providers'
+```
+
+Four steps, and each one matters:
+
+| Step | Why |
+|---|---|
+| `migrate` | schema |
+| `loaddata pathways resources providers` | **`providers` was missing.** Without it the table is empty and every near-you search answers "none found". |
+| `geocode_providers` | turns each provider's postcode into a position. A provider without one is left out of the search. Safe to repeat; it does nothing when there is nothing to do. |
+| `check_providers` | **fails the deploy if the two above did not work.** This is the step that stops it happening again quietly. |
+
+`check_providers` only exists once the pull request that added it is merged.
+Until then leave it off the end, or the pre-deploy step fails on an unknown
+command and the deploy never goes live.
+
+### How this was missed
+
+The command that actually ran was:
 
 ```
 sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources'
 ```
 
-and needs to become:
-
-```
-sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources providers && python manage.py geocode_providers'
-```
-
-Until that field is changed, a deployed preview has no providers in it and the
-T Level Near You page finds nothing, however green the tests are. `loaddata`
-and `geocode_providers` are both safe to repeat, so there is no harm in a
-redeploy running them again.
+No `providers`, no `geocode_providers`. Both had been written into
+`railway.toml` only, which nothing reads. The deploy log said
+`Installed 28 object(s) from 2 fixture(s)`, which is pathways (5) plus
+resources (23) and no providers at all, and the search endpoint answered a
+perfectly healthy `200 {"count": 0, "results": []}` to every visitor. No
+error anywhere, and the backend suite green throughout, because the tests
+load the fixture themselves rather than depending on a deploy having done it.
 
 ## Environment variables
 
@@ -139,10 +158,18 @@ Leave these unset on the frontend:
 - Asking the assistant a question gets a real answer, not the fallback message
   (that confirms `ANTHROPIC_API_KEY` is set).
 - Signing up logs you in, and logging out works (that confirms the CSRF setup).
-- The T-Level Near You page finds colleges for a postcode such as `W1D 3QU`
-  (that confirms the providers fixture loaded and `geocode_providers` ran; if
-  the page says nothing was found anywhere, check the pre-deploy command
-  above). It also confirms the server can reach `api.postcodes.io`.
+- Find T-Levels Near You returns colleges for a postcode such as `W1D 3QU` at
+  50 miles. **Check this by hand after any deploy that touches the pre-deploy
+  command.** An empty answer is a 200 with an empty list, so nothing else
+  will tell you. Without a browser:
+
+  ```bash
+  curl -s "https://<backend domain>/api/providers/search/?postcode=W1D%203QU&radius=50" | head -c 200
+  ```
+
+  A healthy answer has a `count` above zero. A zero means the providers
+  fixture did not load or `geocode_providers` did not run; the backend log
+  now says which of the two it was.
 - `https://<backend domain>/admin/` shows the Django admin login.
 - In the backend's deploy logs, the pre-deploy step shows the migrations, and
   the service log shows gunicorn listening.
