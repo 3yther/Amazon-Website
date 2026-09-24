@@ -56,3 +56,22 @@ class ExpressionOfInterestSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         # Lower-case the domain part, as Django does for user emails.
         return BaseUserManager.normalize_email(value.strip())
+
+
+class ExpressionOfInterestStaffSerializer(serializers.ModelSerializer):
+    """
+    What Amazon staff read on the submissions list.
+
+    Deliberately a second serializer rather than a flag on the one above.
+    That one keeps every personal field write_only so a submission is never
+    echoed back to whoever sent it, and it has to stay that way; staff
+    genuinely need to read those fields, so they get their own read-only
+    serializer instead of the public one being loosened.
+    """
+
+    pathway = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+
+    class Meta:
+        model = ExpressionOfInterest
+        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "submitted_at"]
+        read_only_fields = fields

@@ -2,11 +2,15 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from rest_framework.test import APITestCase
 
+from accounts.models import Profile
 from content.models import Pathway
 
 from .models import ExpressionOfInterest
 
 URL = "/api/interest/"
+SUBMISSIONS_URL = "/api/interest/submissions/"
+
+PASSWORD = "harbour-lantern-47"
 
 
 class ExpressionOfInterestApiTests(APITestCase):
@@ -79,6 +83,10 @@ class ExpressionOfInterestApiTests(APITestCase):
         self.assertEqual(ExpressionOfInterest.objects.get().user, user)
 
     def test_submissions_cannot_be_listed(self):
+        # The public create endpoint still refuses to list, for everyone,
+        # with no exception for staff. Staff read submissions through the
+        # separate endpoint below, which has its own permission check, so
+        # this rule stays as strict as it always was.
         response = self.client.get(URL)
         self.assertEqual(response.status_code, 405)
 
@@ -87,3 +95,101 @@ class ExpressionOfInterestApiTests(APITestCase):
             self.client.post(URL, self.valid_payload(), format="json")
         response = self.client.post(URL, self.valid_payload(), format="json")
         self.assertEqual(response.status_code, 429)
+
+
+class StaffSubmissionsListTests(APITestCase):
+    """
+    The staff-only read path. Everything here is about who is allowed to see
+    other people's submitted personal details, so each case is spelled out.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        pathway = Pathway.objects.create(
+            name="Digital", slug="digital", summary="s", description="d"
+        )
+        ExpressionOfInterest.objects.create(
+            full_name="Ada Lovelace",
+            email="ada@example.com",
+            user_type="student",
+            pathway=pathway,
+            message="Please tell me more.",
+        )
+
+    def setUp(self):
+        cache.clear()
+
+    def make_user(self, username, user_type):
+        user = User.objects.create_user(username, password=PASSWORD)
+        Profile.objects.create(user=user, user_type=user_type)
+        return user
+
+    def test_anonymous_is_denied(self):
+        response = self.client.get(SUBMISSIONS_URL)
+        self.assertIn(response.status_code, (401, 403))
+
+    def test_signed_in_student_is_denied(self):
+        self.make_user("student", "student")
+        self.client.login(username="student", password=PASSWORD)
+
+        response = self.client.get(SUBMISSIONS_URL)
+        self.assertEqual(response.status_code, 403)
+
+    def test_signed_in_teacher_is_denied(self):
+        self.make_user("teacher", "teacher")
+        self.client.login(username="teacher", password=PASSWORD)
+
+        self.assertEqual(self.client.get(SUBMISSIONS_URL).status_code, 403)
+
+    def test_user_without_a_profile_is_denied_not_crashed(self):
+        # Fails closed: a User row with no Profile must not turn into a 500.
+        User.objects.create_user("orphan", password=PASSWORD)
+        self.client.login(username="orphan", password=PASSWORD)
+
+        self.assertEqual(self.client.get(SUBMISSIONS_URL).status_code, 403)
+
+    def test_amazon_staff_can_list_submissions(self):
+        self.make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+
+        response = self.client.get(SUBMISSIONS_URL)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 1)
+
+    def test_staff_response_includes_the_personal_fields(self):
+        # The public serializer keeps these write_only; staff need to read
+        # them, which is the whole point of the separate serializer.
+        self.make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+
+        row = self.client.get(SUBMISSIONS_URL).data["results"][0]
+        self.assertEqual(row["full_name"], "Ada Lovelace")
+        self.assertEqual(row["email"], "ada@example.com")
+        self.assertEqual(row["user_type"], "student")
+        self.assertEqual(row["pathway"], "digital")
+        self.assertEqual(row["message"], "Please tell me more.")
+        self.assertIn("submitted_at", row)
+
+    def test_response_is_paginated(self):
+        self.make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+
+        response = self.client.get(SUBMISSIONS_URL)
+        for key in ("count", "next", "previous", "results"):
+            self.assertIn(key, response.data)
+
+    def test_creating_still_echoes_nothing_back(self):
+        # The read path must not have loosened the write path.
+        response = self.client.post(
+            URL,
+            {
+                "full_name": "Grace Hopper",
+                "email": "grace@example.com",
+                "user_type": "teacher",
+                "pathway": "digital",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+        for personal in ("full_name", "email", "user_type", "message"):
+            self.assertNotIn(personal, response.data)

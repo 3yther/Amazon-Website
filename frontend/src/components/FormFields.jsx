@@ -1,4 +1,5 @@
-import { AlertIcon } from "./Icons.jsx";
+import { useState } from "react";
+import { AlertIcon, EyeIcon, EyeOffIcon } from "./Icons.jsx";
 
 // Form building blocks for the account pages. Each field links its label,
 // hint and error to the control, so screen readers read them together.
@@ -18,6 +19,21 @@ function FieldError({ id, message }) {
 }
 
 export function TextField({ id, label, hint, error, type = "text", ...inputProps }) {
+  // Only a password field tracks this, and only it renders the toggle: a
+  // text or email field comes out exactly as it did before.
+  const [visible, setVisible] = useState(false);
+  const isPassword = type === "password";
+
+  const input = (
+    <input
+      id={id}
+      type={isPassword && visible ? "text" : type}
+      aria-invalid={error ? true : undefined}
+      aria-describedby={describedBy(id, hint, error)}
+      {...inputProps}
+    />
+  );
+
   return (
     <div className="field">
       <label className="label" htmlFor={id}>
@@ -28,13 +44,25 @@ export function TextField({ id, label, hint, error, type = "text", ...inputProps
           {hint}
         </p>
       )}
-      <input
-        id={id}
-        type={type}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={describedBy(id, hint, error)}
-        {...inputProps}
-      />
+
+      {isPassword ? (
+        <div className="field__control">
+          {input}
+          {/* type="button" so it never submits the form it sits in. The name
+              says what pressing it will do, since the icon alone does not. */}
+          <button
+            type="button"
+            className="field__reveal"
+            aria-label={visible ? "Hide password" : "Show password"}
+            onClick={() => setVisible((current) => !current)}
+          >
+            {visible ? <EyeOffIcon /> : <EyeIcon />}
+          </button>
+        </div>
+      ) : (
+        input
+      )}
+
       {error && <FieldError id={`${id}-error`} message={error} />}
     </div>
   );

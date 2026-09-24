@@ -24,6 +24,7 @@ import Privacy from "./pages/Privacy.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import Register from "./pages/Register.jsx";
 import RegisterInterest from "./pages/RegisterInterest.jsx";
+import StaffDashboard from "./pages/StaffDashboard.jsx";
 import ReportIssue from "./pages/ReportIssue.jsx";
 import Terms from "./pages/Terms.jsx";
 import TLevelsAtAmazon from "./pages/TLevelsAtAmazon.jsx";
@@ -90,6 +91,9 @@ export default function App() {
           <Route path="/accessibility" element={<PageTitle title="Accessibility"><Accessibility /></PageTitle>} />
           <Route path="/contact" element={<PageTitle title="Contact us"><Contact /></PageTitle>} />
           <Route path="/feedback" element={<PageTitle title="Feedback"><Feedback /></PageTitle>} />
+          {/* Amazon staff only. The page itself sends anyone else to "/", and
+              the API behind it refuses them regardless. */}
+          <Route path="/staff" element={<PageTitle title="Submissions"><StaffDashboard /></PageTitle>} />
           {/* /account is gone: profile and accessibility settings live at /accessibility now. */}
           <Route path="/account" element={<Navigate to="/accessibility" replace />} />
           {/* Earlier placeholder addresses, sent on to About. */}

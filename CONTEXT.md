@@ -54,6 +54,25 @@ receive interest submissions and manage content).
 - Database is never public; secrets live in environment variables, not in code.
 - The Anthropic API key stays on the backend. The browser never sees it.
 
+## Roles and permissions
+- Four account types live on `Profile.user_type`: student, parent, teacher, amazon_staff.
+- **Only the first three can be self-registered.** `REGISTRATION_USER_TYPES` in
+  `backend/accounts/serializers.py` deliberately leaves `amazon_staff` out, so nobody can
+  sign themselves up as staff. **A staff account is made by hand in Django admin**: create
+  the user, then set their Profile's user type to "Amazon staff".
+- **What staff can see that nobody else can:** Expression of Interest submissions, including
+  the submitter's name, email, user type, pathway and message. Everyone else, signed in or
+  not, is refused.
+- **Where the check lives:** `IsAmazonStaff` in `backend/accounts/permissions.py`. It fails
+  closed, so a user with no Profile row is denied rather than erroring.
+- The endpoint is `GET /api/interest/submissions/` (paginated, 20 per page), served by
+  `ExpressionOfInterestListView` with its own read-only serializer. It is deliberately a
+  separate URL from `POST /api/interest/`, which still answers 405 to GET for everyone and
+  still echoes none of the personal fields back. Do not merge the two.
+- The frontend page is `/staff` (`frontend/src/pages/StaffDashboard.jsx`), linked from the
+  account menu for staff only. That link and the page's redirect are conveniences, not
+  controls: the permission class is the actual gate.
+
 ## Who owns what (code)
 - Amir: framework for the whole site (routing, layout, nav, footer, accounts, data models,
   settings), and the Railway preview
