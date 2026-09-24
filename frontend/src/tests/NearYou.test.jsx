@@ -106,7 +106,7 @@ describe("formatDistance", () => {
   });
 });
 
-describe("T-Level Near You page", () => {
+describe("Find T-Levels Near You page", () => {
   it("invites a postcode before anything has been searched", async () => {
     fakeServer();
     renderPage();

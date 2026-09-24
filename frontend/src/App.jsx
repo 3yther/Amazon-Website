@@ -75,7 +75,7 @@ export default function App() {
           <Route path="/about" element={<PageTitle title="About T-Level"><About /></PageTitle>} />
           <Route path="/t-levels-at-amazon" element={<PageTitle title="T-Levels at Amazon"><TLevelsAtAmazon /></PageTitle>} />
           <Route path="/resources" element={<PageTitle title="T-Level Resources"><ContentLibrary /></PageTitle>} />
-          <Route path="/t-level-near-you" element={<PageTitle title="T-Level Near You"><NearYou /></PageTitle>} />
+          <Route path="/t-level-near-you" element={<PageTitle title="Find T-Levels Near You"><NearYou /></PageTitle>} />
           <Route path="/t-levels" element={<PageTitle title="All T-Levels"><TLevels /></PageTitle>} />
           <Route path="/get-involved" element={<PageTitle title="Get involved"><GetInvolved /></PageTitle>} />
           <Route path="/quiz" element={<PageTitle title="Quiz"><Quiz /></PageTitle>} />

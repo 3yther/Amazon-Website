@@ -15,7 +15,7 @@ export const AUDIENCES = [
         to: "/t-level-near-you",
         icon: "mappin",
         label: "Find a school or college near you",
-        detail: "T-Level Near You",
+        detail: "Find T-Levels Near You",
       },
       {
         to: "/register-interest",

@@ -1,30 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { logout } from "../api.js";
-import { useAuth } from "../auth.jsx";
+import { NavLink, useLocation } from "react-router-dom";
 import { CloseIcon, MenuIcon } from "./Icons.jsx";
 
 // Site navigation: at every screen width, a menu button in the header opens a
 // full-screen overlay. The overlay is a modal <dialog>, so the page behind is
 // inert and Escape closes it.
+//
+// Pages only. Signing in, signing out and the settings all live behind the
+// account button in the header (see AccountDropdown.jsx), so there is one
+// place to look for them rather than two that have to agree.
 
 const PAGES = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About T-Level" },
   { to: "/t-levels-at-amazon", label: "T-Levels at Amazon" },
   { to: "/resources", label: "T-Level Resources" },
-  { to: "/t-level-near-you", label: "T-Level Near You" },
+  { to: "/t-level-near-you", label: "Find T-Levels Near You" },
   { to: "/quiz", label: "Quiz" },
   { to: "/help", label: "Help" },
   // The Expression of Interest form, a core client requirement, so it is
   // one tap away on every page.
   { to: "/register-interest", label: "Register interest" },
-  // Settings was only reachable from the avatar menu, which signed-out
-  // visitors never see at all, even though the sight, display and language
-  // settings all work without an account. It belongs in the menu everyone
-  // has.
-  { to: "/accessibility", label: "Settings" },
 ];
 
 export default function SiteNav() {
@@ -143,27 +140,15 @@ export default function SiteNav() {
 }
 
 /**
- * The page links, then Sign up and Login. Once someone is signed in those two
- * are replaced by Log out, which is the only way to sign out.
+ * The page links, and nothing else.
+ *
+ * Sign up, Login and Log out used to sit at the bottom of this list. They are
+ * all behind the account button in the header now: the drawer was showing a
+ * different answer to "am I signed in?" in a second place, and Log out in
+ * particular was one press from every page, which is what moving it onto the
+ * Account tab was meant to stop.
  */
 function NavList({ onNavigate }) {
-  const navigate = useNavigate();
-  const { user, checked, refresh } = useAuth();
-  const [status, setStatus] = useState("idle"); // idle | submitting
-
-  async function handleLogout() {
-    setStatus("submitting");
-    try {
-      await logout();
-    } catch {
-      // A 401 means the session had already ended. refresh() settles it either way.
-    }
-    await refresh();
-    setStatus("idle");
-    onNavigate?.();
-    navigate("/");
-  }
-
   // Each item's position in the list, which sets its place in the opening
   // cascade (see menu-link-rise in styles.css).
   const order = (index) => ({ "--i": index });
@@ -178,35 +163,6 @@ function NavList({ onNavigate }) {
           </NavLink>
         </li>
       ))}
-
-      {/* Nothing until the first session check, so the wrong links never flash up. */}
-      {checked && !user && (
-        <>
-          <li style={order(PAGES.length)}>
-            <NavLink to="/register" onClick={onNavigate}>
-              Sign up
-            </NavLink>
-          </li>
-          <li style={order(PAGES.length + 1)}>
-            <NavLink to="/login" onClick={onNavigate}>
-              Login
-            </NavLink>
-          </li>
-        </>
-      )}
-
-      {checked && user && (
-        <li style={order(PAGES.length)}>
-          <button
-            type="button"
-            className="nav-button"
-            disabled={status === "submitting"}
-            onClick={handleLogout}
-          >
-            {status === "submitting" ? "Logging out" : "Log out"}
-          </button>
-        </li>
-      )}
     </ul>
   );
 }

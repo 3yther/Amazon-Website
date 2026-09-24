@@ -138,7 +138,7 @@ export default function NearYou() {
     <>
       <section className="intro" aria-labelledby="page-title">
         <p className="label">Find a provider</p>
-        <h1 id="page-title">T-Level Near You</h1>
+        <h1 id="page-title">Find T-Levels Near You</h1>
         <p className="lead">
           Enter your postcode to see the schools and colleges running T-Levels near you, closest
           first.
