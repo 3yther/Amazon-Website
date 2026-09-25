@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
 import { IconList } from "../components/InfoBlocks.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
 // How to use the site in the way that suits you. Each point is something the
-// site really does (checked against the code), not a promise.
+// site really does (checked against the code), not a promise. The words are
+// in i18n/messages (accessibilityHelp.ways), keyed by `key` below.
 const WAYS = [
-  { icon: "tools", text: "Change text size, contrast, spacing and colours in Accessibility settings." },
-  { icon: "key", text: "Everything works with a keyboard. Press Tab to move, Enter to choose." },
-  { icon: "info", text: "Press Tab once on any page to skip straight to the main content." },
-  { icon: "person", text: "Pages are built to work with screen readers such as NVDA and VoiceOver." },
-  { icon: "clock", text: "Moving words and animations stop if your device is set to reduce motion." },
-  { icon: "chat", text: "Smiley can read its answers out loud. Switch it on in Accessibility settings." },
+  { icon: "tools", key: "settings" },
+  { icon: "key", key: "keyboard" },
+  { icon: "info", key: "skip" },
+  { icon: "person", key: "screenReaders" },
+  { icon: "clock", key: "motion" },
+  { icon: "chat", key: "speech" },
 ];
 
 /**
@@ -18,35 +20,35 @@ const WAYS = [
  * gets in the way. The settings themselves are on /accessibility.
  */
 export default function AccessibilityHelp() {
+  const t = useT();
+
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Support</p>
-        <h1 id="page-title">Accessibility help</h1>
-        <p className="lead">We aim to meet WCAG 2.2 AA, the standard for accessible websites.</p>
+        <p className="label">{t("accessibilityHelp.label")}</p>
+        <h1 id="page-title">{t("accessibilityHelp.title")}</h1>
+        <p className="lead">{t("accessibilityHelp.lead")}</p>
       </section>
 
       <section className="about-section" aria-labelledby="ways-title">
         <div className="section-intro">
-          <h2 id="ways-title">Use the site your way</h2>
+          <h2 id="ways-title">{t("accessibilityHelp.waysTitle")}</h2>
         </div>
-        <IconList items={WAYS} />
+        <IconList items={WAYS.map((way) => ({ icon: way.icon, text: t(`accessibilityHelp.ways.${way.key}`) }))} />
         <p className="route__action">
           <Link className="button button--primary" to="/accessibility">
-            Open Accessibility settings
+            {t("accessibilityHelp.openSettings")}
           </Link>
         </p>
       </section>
 
       <section className="about-section" aria-labelledby="problem-title">
         <div className="section-intro">
-          <h2 id="problem-title">Something not working for you?</h2>
-          <p className="section-intro__lead">
-            Tell us which page and what got in the way, and we will fix it.
-          </p>
+          <h2 id="problem-title">{t("accessibilityHelp.problemTitle")}</h2>
+          <p className="section-intro__lead">{t("accessibilityHelp.problemLead")}</p>
         </div>
         <Link className="button" to="/report-issue">
-          Report an accessibility issue
+          {t("accessibilityHelp.report")}
         </Link>
       </section>
     </>

@@ -122,13 +122,14 @@ VERIFIED_FACTS = (
     Fact(
         topic="Getting an account, and what needs one",
         text=(
-            "Anyone can browse the site and talk to Smiley without an account. "
-            "Some resources are marked sign-up, and you need a free account to open "
-            "those files. You can sign up at /register and log in at /login."
+            "Anyone can browse the site, open every resource and talk to Smiley without "
+            "an account. A free account lets you ask and answer in the Community, and "
+            "keeps your settings on any device you sign in on. You can sign up at "
+            "/register and log in at /login."
         ),
         source=(
-            "ContentItem.access_level in backend/content/models.py and the "
-            "serializer's locked field, checked 2026-09-22."
+            "backend/content/fixtures/resources.json (every resource is free) and "
+            "the Community's permissions in backend/community/views.py, checked 2026-09-25."
         ),
     ),
     Fact(
@@ -228,7 +229,8 @@ VERIFIED_FACTS = (
     quoted(
         "How long the industry placement is",
         "At least 315 hours, roughly 45 days. It can be one or two days a week, a full-time "
-        "block, or a mix. Amazon runs its placements as a nine week block.",
+        "block, or a mix. Amazon runs its placements as a nine week block. The Early Years "
+        "Educator specialism needs 750 hours instead.",
     ),
     quoted_card(
         "What placement work is like",

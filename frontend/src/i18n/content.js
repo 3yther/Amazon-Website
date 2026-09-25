@@ -3,11 +3,13 @@ import * as aboutEnglish from "../aboutContent.js";
 import * as amazonEnglish from "../amazonContent.js";
 import * as helpEnglish from "../helpContent.js";
 import * as interestEnglish from "../interestContent.js";
+import * as legalEnglish from "../legalContent.js";
 import * as quizEnglish from "../knowledgeQuizQuestions.js";
 import { useI18n } from "./I18nProvider.jsx";
 
 // The page copy (aboutContent.js, amazonContent.js, helpContent.js,
-// interestContent.js and the quiz questions) in the visitor's language.
+// interestContent.js, legalContent.js and the quiz questions) in the
+// visitor's language.
 //
 // English stays in those files, unchanged: they are the checked source,
 // and Smiley's backend facts are quoted from them word for word. Each other
@@ -22,40 +24,41 @@ const ENGLISH = {
   amazon: amazonEnglish,
   help: helpEnglish,
   interest: interestEnglish,
+  legal: legalEnglish,
   quiz: quizEnglish,
 };
 
 const TRANSLATIONS = import.meta.glob("./content/*.js");
 
 /**
- * One list: item by item, the translated words laid over the English item.
- * A list inside an item (a quiz question's options) is merged the same way,
- * so a translation only has to give the words, never the values or scores.
- * null or a missing entry keeps the English.
+ * Lays the translated words over the English, whatever the shape: a list item
+ * by item, an object key by key, a string swapped for its translation. So a
+ * list inside an item (a quiz question's options) or a whole page object (a
+ * legal page with its sections) is merged the same way, and a translation
+ * only ever gives the words. Anything that is not a string in the English
+ * (numbers, scores, null) always comes from the English, as does anything a
+ * translation leaves out or sets to null.
  */
-function mergeList(english, translated) {
-  if (!Array.isArray(translated)) return english;
-  return english.map((item, index) => {
-    const words = translated[index];
-    if (words === undefined || words === null) return item;
-    if (typeof item === "string" || typeof words === "string") return words;
-    const merged = { ...item };
-    for (const [key, value] of Object.entries(words)) {
-      merged[key] = Array.isArray(item[key]) ? mergeList(item[key], value) : value;
-    }
+function mergeValue(english, words) {
+  if (words === undefined || words === null) return english;
+  if (Array.isArray(english)) {
+    if (!Array.isArray(words)) return english;
+    return english.map((item, index) => mergeValue(item, words[index]));
+  }
+  if (english !== null && typeof english === "object") {
+    if (typeof words !== "object" || Array.isArray(words)) return english;
+    const merged = {};
+    for (const [key, value] of Object.entries(english)) merged[key] = mergeValue(value, words[key]);
     return merged;
-  });
+  }
+  if (typeof english === "string" && typeof words === "string") return words;
+  return english;
 }
 
 function mergeModule(english, translated) {
   if (!translated) return english;
   const merged = {};
-  for (const [name, value] of Object.entries(english)) {
-    const words = translated[name];
-    if (Array.isArray(value)) merged[name] = mergeList(value, words);
-    else if (typeof value === "string" && typeof words === "string") merged[name] = words;
-    else merged[name] = value;
-  }
+  for (const [name, value] of Object.entries(english)) merged[name] = mergeValue(value, translated[name]);
   return merged;
 }
 
@@ -71,7 +74,7 @@ export function mergeContent(translated) {
 const loaded = new Map([["en", ENGLISH]]);
 
 /**
- * { about, amazon, help, interest, quiz } in the current language. Returns the English
+ * { about, amazon, help, interest, legal, quiz } in the current language. Returns the English
  * straight away and swaps in the translation once its file has loaded.
  */
 export function useSiteContent() {

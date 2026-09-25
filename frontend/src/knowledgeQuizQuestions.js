@@ -91,11 +91,11 @@ export const KNOWLEDGE_QUESTIONS = [
       "No, everything is open to everyone",
       "Only if you are a teacher",
     ],
-    correctAnswer: "No, but some resources need a free account to open",
+    correctAnswer: "No, everything is open to everyone",
     explanation:
-      "Anyone can browse the library and see what is in it. Items marked sign-up need " +
-      "a free account before you can open the file.",
-    // Source: ContentItem.access_level in backend/content/models.py, and the
-    // locked field in backend/content/serializers.py
+      "Anyone can browse the library and open everything in it. A free account is for asking " +
+      "and answering in the Community, and keeping your settings.",
+    // Source: backend/content/fixtures/resources.json, where every resource is
+    // free, and the Community's sign-in rules in backend/community/views.py
   },
 ];

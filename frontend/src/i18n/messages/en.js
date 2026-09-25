@@ -85,7 +85,7 @@ const en = {
       browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways.", link: "Browse resources" },
       register: { title: "Register interest", text: "Tell us which pathway you want to explore.", link: "Register interest" },
       hearBack: { title: "Hear back", text: "We review each submission and reply by email." },
-      getInvolved: { title: "Get involved", text: "Sign up to open more resources for your pathway.", link: "Sign up" },
+      getInvolved: { title: "Get involved", text: "Sign up to ask and answer in the Community, and keep your settings on any device.", link: "Sign up" },
     },
   },
 
@@ -301,7 +301,7 @@ const en = {
     signUp: "Sign up",
     signInOrUp: "Sign in or sign up",
     notSignedIn: "Not signed in",
-    needAccount: "Some resources need an account",
+    needAccount: "Sign up to join the Community",
     roles: {
       student: "Student",
       parent: "Parent or guardian",
@@ -331,7 +331,7 @@ const en = {
   login: {
     label: "Account",
     title: "Welcome back",
-    lead: "Log in to open sign-up resources.",
+    lead: "Log in to join the Community and keep your settings on any device.",
     username: "Username",
     password: "Password",
     submitting: "Logging in",
@@ -698,19 +698,18 @@ const en = {
       amazonPathways: "Here's what Amazon has said about each pathway:",
       pathwaysList: "There are five pathways:",
       providerQuestions: "Good questions to ask a school or college:",
-      resources: "The Resources page has guides, packs and videos. Some need a free account to open.",
+      resources: "The Resources page has guides, packs and videos, all free to open.",
       quiz: "The quiz has quick questions about T-Levels, and I'll help with any you get wrong.",
       community:
         "In the Community you can ask a question and other students, parents, teachers and Amazon staff can answer. " +
         "Anything I don't know is a good one to ask there.",
       account:
-        "You can browse the site and talk to me without an account. A free account opens the resources marked sign-up, " +
-        "and lets you ask and answer in the Community.",
+        "You can browse the site, open every resource and talk to me without an account. A free account lets you ask and answer in the Community, and keeps your settings on any device.",
       contact: "You can reach the T-SMILE team through the Contact page.",
       accessibility:
         "You can change the text size, colours, dark mode, motion and text to speech in the Accessibility settings.",
       language:
-        "Yes! Use the globe menu at the top of the page, or the one in the side menu. There are ten languages to choose from.",
+        "Yes! Use the language menu under the account button at the top of the page, or the one in the side menu. There are ten languages to choose from.",
       privacy:
         "I only save questions I have to look up, so we can pick up where we left off. Anything I answer myself, and anything " +
         "about how you move around the site, stays in your browser. The Privacy Policy has the details.",
@@ -801,6 +800,182 @@ const en = {
       personal:
         "Quick tip: you don't need to share personal details like your email, phone number or address with me, and it's safest " +
         "not to. I haven't sent that message anywhere. What would you like to know about T-Levels?",
+    },
+  },
+
+  legalPage: {
+    updated: "Last updated {date}. Draft, to be checked before launch.",
+  },
+
+  messageForm: {
+    about: "What is it about?",
+    email: "Email (optional)",
+    emailHint: "Add it if you want a reply.",
+    sending: "Sending",
+    empty: "Write a message first.",
+  },
+
+  contact: {
+    label: "Support",
+    title: "Contact us",
+    leadBefore: "Send the team a message. Something broken? Use",
+    leadLink: "Report an issue",
+    leadAfter: ".",
+    categories: {
+      general: "A question or anything else",
+      feature: "An idea for the site",
+    },
+    message: "Your message",
+    submit: "Send message",
+    sent: "Thanks, your message has reached the team.",
+  },
+
+  reportIssue: {
+    label: "Support",
+    title: "Report an issue",
+    lead: "Tell us what went wrong and which page you were on.",
+    categories: {
+      bug: "Something is broken",
+      accessibility: "Something is hard to use or read",
+    },
+    message: "What happened?",
+    submit: "Send report",
+    sent: "Thanks, we have your report and will look into it.",
+  },
+
+  feedbackPage: {
+    label: "Feedback",
+    title: "Feedback",
+    lead: "Tell us what’s working and what isn’t.",
+    category: "Category",
+    categories: {
+      bug: "Bug report",
+      feature: "Feature suggestion",
+      general: "General feedback",
+      accessibility: "Accessibility issue",
+    },
+    message: "Message",
+    email: "Email (optional)",
+    emailHint: "So we can follow up, if you’d like.",
+    sending: "Sending",
+    submit: "Send feedback",
+    thanksTitle: "Thank you",
+    thanksLead: "We read every message. Thanks for taking the time.",
+  },
+
+  accessibilityHelp: {
+    label: "Support",
+    title: "Accessibility help",
+    lead: "We aim to meet WCAG 2.2 AA, the standard for accessible websites.",
+    waysTitle: "Use the site your way",
+    ways: {
+      settings: "Change text size, contrast, spacing and colours in Accessibility settings.",
+      keyboard: "Everything works with a keyboard. Press Tab to move, Enter to choose.",
+      skip: "Press Tab once on any page to skip straight to the main content.",
+      screenReaders: "Pages are built to work with screen readers such as NVDA and VoiceOver.",
+      motion: "Moving words and animations stop if your device is set to reduce motion.",
+      speech: "Smiley can read its answers out loud. Switch it on in Accessibility settings.",
+    },
+    openSettings: "Open Accessibility settings",
+    problemTitle: "Something not working for you?",
+    problemLead: "Tell us which page and what got in the way, and we will fix it.",
+    report: "Report an accessibility issue",
+  },
+
+  settings: {
+    label: "Settings",
+    title: "Accessibility",
+    lead: "Change how T-SMILE looks and behaves for you. Signed in, these settings follow you to any device; signed out, they stay on this browser.",
+    signInPrompt: "Log in to manage this.",
+    tabs: {
+      sightLoss: "Sight and vision",
+      display: "Display",
+      language: "Language",
+      security: "Security",
+      account: "Account",
+    },
+    sight: {
+      fontSize: "Font size",
+      highContrast: "High contrast",
+      textSpacing: "Text spacing",
+      spacing: {
+        normal: "Normal",
+        comfortable: "Comfortable",
+        relaxed: "Relaxed",
+        wide: "Wide",
+      },
+      colourBlindness: "Colour blindness type",
+      colourBlindnessHint: "Tell us how you see colour and the site adjusts its own, so shades that would look alike to you are pulled apart.",
+      colours: {
+        none: "None",
+        protanopia: "Protanopia (red-blind)",
+        deuteranopia: "Deuteranopia (green-blind)",
+        tritanopia: "Tritanopia (blue-blind)",
+      },
+      speech: "Read the chat assistant’s replies aloud",
+      speechHint: "Speaks Smiley’s answers only, using a voice on this device. The rest of the page is not read aloud yet.",
+      reduceMotion: "Reduce motion",
+      reduceMotionHint: "Turns off the site’s animations, on top of your system setting.",
+    },
+    display: {
+      theme: "Theme",
+      themes: {
+        light: "Light",
+        dark: "Dark",
+        system: "Match system",
+      },
+      outline: "Focus outline style",
+      outlines: {
+        default: "Default",
+        thick: "Thick",
+        dashed: "Dashed",
+      },
+      background: "Page background",
+      backgrounds: {
+        white: "White",
+        cream: "Cream",
+        gray: "Grey",
+      },
+    },
+    security: {
+      lastChanged: "Password last changed {date}.",
+      changed: "Password changed.",
+      current: "Current password",
+      new: "New password",
+      strength: "Strength: {level}",
+      strengths: {
+        veryWeak: "Very weak",
+        weak: "Weak",
+        fair: "Fair",
+        good: "Good",
+        strong: "Strong",
+        veryStrong: "Very strong",
+      },
+      minLength: "At least 8 characters.",
+      confirm: "Confirm new password",
+      saving: "Saving",
+      submit: "Change password",
+    },
+    account: {
+      saved: "Profile saved.",
+      firstName: "First name",
+      lastName: "Last name",
+      email: "Email",
+      phone: "Phone",
+      saving: "Saving",
+      save: "Save",
+      cancel: "Cancel",
+      signingOutLabel: "Signing out",
+      signingOutText: "Ends this session on this device. Your settings and your account stay exactly as they are.",
+      loggingOut: "Logging out",
+      logOut: "Log out",
+      dangerLabel: "Danger zone",
+      dangerText: "Deactivating your account signs you out and disables sign-in until it is reactivated.",
+      deactivate: "Deactivate account",
+      confirmText: "Enter your password to confirm. This signs you out immediately.",
+      password: "Password",
+      deactivating: "Deactivating",
+      wrongPassword: "Incorrect password.",
     },
   },
 };

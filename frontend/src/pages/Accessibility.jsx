@@ -7,13 +7,16 @@ import SecuritySettings from "../components/accessibility/SecuritySettings.jsx";
 import SightLossSettings from "../components/accessibility/SightLossSettings.jsx";
 import { useAuth } from "../auth.jsx";
 import { useAccessibilityPreferences } from "../hooks/useAccessibilityPreferences.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 const TAB_IDS = ["sight-loss", "display", "language", "security", "account"];
 
 function SignInPrompt() {
+  const t = useT();
+
   return (
     <p>
-      <Link to="/login">Log in</Link> to manage this.
+      <Link to="/login">{t("settings.signInPrompt")}</Link>
     </p>
   );
 }
@@ -23,8 +26,10 @@ function SignInPrompt() {
  * language settings work for anyone, signed in or not (they live in
  * localStorage either way, see useAccessibilityPreferences). Security and
  * account settings need a session, since they change the account itself.
+ * Wording is in i18n/messages (settings).
  */
 export default function Accessibility() {
+  const t = useT();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, checked } = useAuth();
   const { preferences, updatePreference } = useAccessibilityPreferences();
@@ -40,27 +45,27 @@ export default function Accessibility() {
   const tabs = [
     {
       id: "sight-loss",
-      label: "Sight and vision",
+      label: t("settings.tabs.sightLoss"),
       content: <SightLossSettings preferences={preferences} updatePreference={updatePreference} />,
     },
     {
       id: "display",
-      label: "Display",
+      label: t("settings.tabs.display"),
       content: <DisplaySettings preferences={preferences} updatePreference={updatePreference} />,
     },
     {
       id: "language",
-      label: "Language",
+      label: t("settings.tabs.language"),
       content: <LanguageSettings />,
     },
     {
       id: "security",
-      label: "Security",
+      label: t("settings.tabs.security"),
       content: signedIn ? <SecuritySettings lastChanged={user?.last_password_changed} /> : <SignInPrompt />,
     },
     {
       id: "account",
-      label: "Account",
+      label: t("settings.tabs.account"),
       content: signedIn ? <AccountSettings /> : <SignInPrompt />,
     },
   ];
@@ -68,12 +73,9 @@ export default function Accessibility() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Settings</p>
-        <h1 id="page-title">Accessibility</h1>
-        <p className="lead">
-          Change how T-SMILE looks and behaves for you. Signed in, these settings follow you to any
-          device; signed out, they stay on this browser.
-        </p>
+        <p className="label">{t("settings.label")}</p>
+        <h1 id="page-title">{t("settings.title")}</h1>
+        <p className="lead">{t("settings.lead")}</p>
       </section>
 
       <TabNav tabs={tabs} activeId={activeId} onChange={setActiveId} />

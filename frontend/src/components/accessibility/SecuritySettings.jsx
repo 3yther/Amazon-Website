@@ -2,10 +2,12 @@ import { useState } from "react";
 import { changePassword } from "../../api.js";
 import { formatDate } from "../../formats.js";
 import { formErrors } from "../../formErrors.js";
+import { useT } from "../../i18n/I18nProvider.jsx";
 import { FormError, TextField } from "../FormFields.jsx";
 
 const EMPTY_FIELDS = { current_password: "", new_password: "", confirm_password: "" };
-const STRENGTH_LABELS = ["Very weak", "Weak", "Fair", "Good", "Strong", "Very strong"];
+// Score 0 to 5, in order; the words are in i18n/messages (settings.security.strengths).
+const STRENGTH_KEYS = ["veryWeak", "weak", "fair", "good", "strong", "veryStrong"];
 
 /** A rough client-side estimate, only to guide the person typing; the
  * server-side validators in backend/config/settings.py AUTH_PASSWORD_VALIDATORS
@@ -17,7 +19,7 @@ function passwordStrength(password) {
   if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 1;
   if (/[0-9]/.test(password)) score += 1;
   if (/[^A-Za-z0-9]/.test(password)) score += 1;
-  return { score, label: STRENGTH_LABELS[score] };
+  return { score, key: STRENGTH_KEYS[score] };
 }
 
 /**
@@ -25,6 +27,7 @@ function passwordStrength(password) {
  * when the password was last changed.
  */
 export default function SecuritySettings({ lastChanged }) {
+  const t = useT();
   const [fields, setFields] = useState(EMPTY_FIELDS);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting | success
@@ -53,11 +56,11 @@ export default function SecuritySettings({ lastChanged }) {
 
   return (
     <div className="settings-section">
-      <p className="label">Security</p>
+      <p className="label">{t("settings.tabs.security")}</p>
 
       {lastChanged && (
         <p className="field__hint">
-          Password last changed {formatDate(lastChanged)}.
+          {t("settings.security.lastChanged", { date: formatDate(lastChanged) })}
         </p>
       )}
 
@@ -65,13 +68,13 @@ export default function SecuritySettings({ lastChanged }) {
         {errors.form && <FormError message={errors.form} />}
         {status === "success" && (
           <div className="notice notice--success" role="status">
-            <p>Password changed.</p>
+            <p>{t("settings.security.changed")}</p>
           </div>
         )}
 
         <TextField
           id="pref-current-password"
-          label="Current password"
+          label={t("settings.security.current")}
           name="current_password"
           type="password"
           value={fields.current_password}
@@ -83,10 +86,14 @@ export default function SecuritySettings({ lastChanged }) {
         <div>
           <TextField
             id="pref-new-password"
-            label="New password"
+            label={t("settings.security.new")}
             name="new_password"
             type="password"
-            hint={fields.new_password ? `Strength: ${strength.label}` : "At least 8 characters."}
+            hint={
+              fields.new_password
+                ? t("settings.security.strength", { level: t(`settings.security.strengths.${strength.key}`) })
+                : t("settings.security.minLength")
+            }
             value={fields.new_password}
             onChange={updateField}
             autoComplete="new-password"
@@ -101,7 +108,7 @@ export default function SecuritySettings({ lastChanged }) {
         </div>
         <TextField
           id="pref-confirm-password"
-          label="Confirm new password"
+          label={t("settings.security.confirm")}
           name="confirm_password"
           type="password"
           value={fields.confirm_password}
@@ -112,7 +119,7 @@ export default function SecuritySettings({ lastChanged }) {
         />
 
         <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-          {status === "submitting" ? "Saving" : "Change password"}
+          {status === "submitting" ? t("settings.security.saving") : t("settings.security.submit")}
         </button>
       </form>
     </div>

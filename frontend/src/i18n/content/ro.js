@@ -133,7 +133,7 @@ export default {
       {
         question: "Cât durează stagiul la angajator?",
         answer:
-          "Cel puțin 315 ore, cam 45 de zile. Poate fi una sau două zile pe săptămână, un bloc cu normă întreagă sau o combinație. Amazon organizează stagiile ca un bloc de nouă săptămâni.",
+          "Cel puțin 315 ore, cam 45 de zile. Poate fi una sau două zile pe săptămână, un bloc cu normă întreagă sau o combinație. Amazon organizează stagiile ca un bloc de nouă săptămâni. Specializarea Early Years Educator cere în schimb 750 de ore.",
       },
       {
         question: "Sunt plătit în stagiu?",
@@ -354,10 +354,177 @@ export default {
           "Nu, totul este deschis tuturor",
           "Doar dacă ești profesor",
         ],
-        correctAnswer: "Nu, dar unele resurse au nevoie de un cont gratuit ca să se deschidă",
+        correctAnswer: "Nu, totul este deschis tuturor",
         explanation:
-          "Oricine poate răsfoi biblioteca și vedea ce conține. Elementele marcate pentru utilizatori înregistrați au nevoie de un cont gratuit ca să poți deschide fișierul.",
+          "Oricine poate naviga prin bibliotecă și poate deschide tot ce e în ea. Un cont gratuit e pentru a pune întrebări și a răspunde în Comunitate și pentru a-ți păstra setările.",
       },
     ],
+  },
+  legal: {
+    TERMS: {
+      label: "Informații legale",
+      title: "Termenii serviciului",
+      updated: "septembrie 2026",
+      intro: "T-SMILE este un proiect al elevilor, făcut pentru programul Amazon Emerging Talent Digital T-Level. Nu este un site oficial Amazon.",
+      sections: [
+        {
+          heading: "Folosirea site-ului",
+          paragraphs: [
+            "Oricine poate citi fiecare pagină, deschide orice resursă, face quiz-urile și vorbi cu Smiley fără cont. Un cont gratuit îți permite să pui întrebări și să răspunzi în Comunitate.",
+            "Trebuie să ai cel puțin 16 ani ca să îți faci cont.",
+          ],
+        },
+        {
+          heading: "Contul tău",
+          points: [
+            "Nu spune nimănui parola ta.",
+            "Dă date adevărate când îți faci cont sau îți înregistrezi interesul.",
+            "Îți poți dezactiva contul oricând din Profil.",
+          ],
+        },
+        {
+          heading: "Fii amabil",
+          points: [
+            "Nu posta nimic nepoliticos, jignitor sau ilegal în formulare, în chat sau în Comunitate.",
+            "Nu încerca să strici site-ul sau să ajungi la datele altor oameni.",
+            "Putem dezactiva conturile care încalcă aceste reguli.",
+          ],
+        },
+        {
+          heading: "Informațiile noastre",
+          paragraphs: [
+            "Verificăm faptele pe gov.uk, UCAS și Amazon și ne listăm sursele pe fiecare pagină. Lucrurile se schimbă, așa că verifică mereu cu școala sau colegiul tău înainte să decizi.",
+            "Smiley, asistentul, poate greși. Este un ajutor, nu un sfat.",
+          ],
+        },
+        {
+          heading: "Numele Amazon",
+          paragraphs: [
+            "„Amazon” și logoul său aparțin Amazon.com, Inc. sau afiliaților săi. Le folosim ca să descriem stagiile T-Level de la Amazon.",
+          ],
+        },
+      ],
+    },
+    PRIVACY: {
+      label: "Informații legale",
+      title: "Politica de confidențialitate",
+      updated: "septembrie 2026",
+      intro: "T-SMILE este un proiect al elevilor, făcut pentru programul Amazon Emerging Talent Digital T-Level. Nu este un site oficial Amazon.",
+      sections: [
+        {
+          heading: "Cine are grijă de datele tale",
+          paragraphs: [
+            "Echipa de elevi T-SMILE. Ne poți contacta prin pagina Contact.",
+          ],
+        },
+        {
+          heading: "Ce colectăm și de ce",
+          points: [
+            "Înregistrarea interesului: numele, emailul, dacă ești elev, părinte sau profesor, un parcurs și un mesaj opțional. Ca echipa Amazon Emerging Talent să vadă că ești interesat și să te contacteze.",
+            "Un cont: un nume de utilizator, o parolă (stocată criptat, niciodată lizibilă), rolul și parcursul tău. Mai târziu, dacă le adaugi, numele, emailul și numărul de telefon. Ca să te poți autentifica, să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.",
+            "Setările de accesibilitate: mărimea textului, contrastul, tema și alte alegeri asemănătoare. Ca site-ul să arate cum l-ai setat.",
+            "Chatul cu Smiley: ce scrii și răspunsurile lui Smiley. Ca Smiley să poată urmări conversația.",
+            "Postările din Comunitate: întrebările și răspunsurile pe care le postezi, afișate cu numele tău de utilizator. Ca alți vizitatori să le poată citi și să răspundă.",
+            "Păreri și mesaje de contact: mesajul tău și emailul, dacă îl dai. Ca să putem repara lucrurile și să îți răspundem.",
+          ],
+        },
+        {
+          heading: "Cine le vede",
+          points: [
+            "Echipa T-SMILE și, pentru formularele de interes, personalul Amazon Emerging Talent.",
+            "Anthropic, compania a cărei inteligență artificială scrie răspunsurile lui Smiley. Mesajele tale din chat sunt trimise la ei ca să primești un răspuns.",
+            "Compania care găzduiește site-ul (Railway pentru versiunea de test, Amazon Web Services mai târziu).",
+            "Nimeni altcineva. Nu vindem date și nu le folosim pentru reclame.",
+          ],
+        },
+        {
+          heading: "Cât timp le păstrăm",
+          paragraphs: [
+            "Nu am stabilit încă și o vom face înainte de lansarea site-ului. Până atunci, cere-ne și îți ștergem datele.",
+          ],
+        },
+        {
+          heading: "Sub 18 ani",
+          paragraphs: [
+            "Mulți dintre vizitatorii noștri au sub 18 ani, așa că cerem doar ce ne trebuie. Nu cerem niciodată într-un formular adresa, data nașterii sau școala.",
+          ],
+        },
+        {
+          heading: "Drepturile tale",
+          paragraphs: [
+            "Îți poți vedea, corecta sau șterge datele și nu numai. Pagina despre drepturile asupra datelor explică cum.",
+          ],
+        },
+      ],
+    },
+    COOKIES: {
+      label: "Informații legale",
+      title: "Politica privind cookie-urile",
+      updated: "septembrie 2026",
+      intro: "Folosim doar cookie-urile de care site-ul are nevoie ca să funcționeze. Fără urmărire, fără reclame, fără analize.",
+      sections: [
+        {
+          heading: "Cookie-uri",
+          points: [
+            "sessionid: te ține autentificat și îl lasă pe Smiley să îți țină minte chatul. Durează două săptămâni sau până te deconectezi.",
+            "csrftoken: împiedică alte site-uri să trimită formulare în numele tău. Durează până la un an.",
+          ],
+          paragraphs: [
+            "Site-ul nu poate funcționa în siguranță fără ele, așa că legea nu ne cere un banner pentru cookie-uri.",
+          ],
+        },
+        {
+          heading: "Salvate în browserul tău",
+          paragraphs: [
+            "Acestea nu sunt cookie-uri și nu părăsesc niciodată dispozitivul tău.",
+          ],
+          points: [
+            "Setările tale de accesibilitate, ca să rămână când revii.",
+            "Dacă Smiley te-a salutat deja, până închizi fila.",
+          ],
+        },
+        {
+          heading: "Ștergerea lor",
+          paragraphs: [
+            "Poți șterge cookie-urile și datele salvate din setările browserului. Vei fi deconectat, iar setările tale vor reveni la normal.",
+          ],
+        },
+      ],
+    },
+    DATA_RIGHTS: {
+      label: "Informații legale",
+      title: "GDPR și drepturile tale asupra datelor",
+      updated: "septembrie 2026",
+      intro: "Legea din Regatul Unit (UK GDPR) îți dă drepturi asupra datelor tale. Le poți folosi gratuit.",
+      sections: [
+        {
+          heading: "Drepturile tale",
+          points: [
+            "Să le vezi: cere o copie a datelor pe care le avem despre tine.",
+            "Să le corectezi: cere-ne să corectăm orice e greșit.",
+            "Să le ștergi: cere-ne să îți ștergem datele.",
+            "Să le limitezi: cere-ne să nu le mai folosim o vreme.",
+            "Să le iei: cere-ți datele într-un fișier pe care îl poți folosi în altă parte.",
+            "Să te opui: spune-ne să nu le mai folosim.",
+          ],
+        },
+        {
+          heading: "Cum ceri",
+          paragraphs: [
+            "Folosește formularul de contact și spune ce drept vrei să folosești. Te putem ruga să confirmi că ești tu. Îți răspundem în cel mult o lună.",
+            "Îți poți corecta singur datele sau îți poți dezactiva contul din Profil.",
+          ],
+        },
+        {
+          heading: "Nu ești mulțumit?",
+          paragraphs: [
+            "Poți face o plângere la Information Commissioner's Office (ICO), care se ocupă de protecția datelor în Regatul Unit.",
+          ],
+          link: {
+            text: "Fă o plângere la ICO",
+          },
+        },
+      ],
+    },
   },
 };

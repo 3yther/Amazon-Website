@@ -1,5 +1,6 @@
 // Copy for the Terms, Privacy, Cookie and Data Rights pages. Same idea as
-// aboutContent.js: the wording lives here, the page just lays it out.
+// aboutContent.js: the wording lives here, the page just lays it out. The
+// other languages are in i18n/content/, words only, in the same shape.
 //
 // TEAM: these are DRAFTS written from what the code actually does, checked
 // against the repo on 24 September 2026. They are not legal advice. Before
@@ -21,7 +22,7 @@ export const TERMS = {
     {
       heading: "Using the site",
       paragraphs: [
-        "Anyone can read the pages, take the quizzes and talk to Smiley without an account. Some resources need a free account.",
+        "Anyone can read every page, open every resource, take the quizzes and talk to Smiley without an account. A free account lets you ask and answer in the Community.",
         "You need to be 16 or over to create an account.",
       ],
     },
@@ -36,7 +37,7 @@ export const TERMS = {
     {
       heading: "Be kind",
       points: [
-        "Do not post anything rude, hurtful or illegal in forms or in the chat.",
+        "Do not post anything rude, hurtful or illegal in forms, in the chat or in the Community.",
         "Do not try to break the site or get at other people's data.",
         "We may switch off accounts that break these rules.",
       ],
@@ -73,9 +74,10 @@ export const PRIVACY = {
       heading: "What we collect, and why",
       points: [
         "Register interest: your name, email, whether you are a student, parent or teacher, a pathway and an optional message. So the Amazon Emerging Talent team can see you are interested and get in touch.",
-        "An account: a username, a password (stored scrambled, never readable), your role and pathway. Later, if you add them, your name, email and phone number. So you can sign in and open sign-up resources.",
+        "An account: a username, a password (stored scrambled, never readable), your role and pathway. Later, if you add them, your name, email and phone number. So you can sign in, ask and answer in the Community, and keep your settings on any device.",
         "Accessibility settings: text size, contrast, theme and similar choices. So the site looks the way you set it.",
         "Chat with Smiley: what you type and Smiley's replies. So Smiley can follow the conversation.",
+        "Community posts: the questions and answers you post, shown with your username. So other visitors can read them and reply.",
         "Feedback and contact messages: your message, and your email if you give it. So we can fix things and reply.",
       ],
     },
