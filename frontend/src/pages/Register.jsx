@@ -1,10 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
+import { SIGNUP_BOX } from "../interestContent.js";
 import { PATHWAY_NAMES, USER_TYPES } from "../labels.js";
 import AuthPanel from "../components/AuthPanel.jsx";
+import InterestForm from "../components/InterestForm.jsx";
+import { ChevronDownIcon } from "../components/Icons.jsx";
+import "../about.css";
 import { CheckboxField, FormError, SelectField, TextField } from "../components/FormFields.jsx";
 
 // Exactly the fields RegisterSerializer accepts. Everything else on this form
@@ -231,8 +235,50 @@ export default function Register() {
           <p className="account-switch">
             Already registered? <Link to="/login">Log in</Link>
           </p>
+
+          <InterestBox />
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Register interest without an account, in a box under the Sign up form.
+ *
+ * NEW CONCEPT: <details> and <summary>. The browser gives a box that opens
+ * and closes on its own, keyboard and screen reader support included, so the
+ * sign-up form is not buried under a second one until someone asks for it.
+ */
+function InterestBox() {
+  const [sentPathway, setSentPathway] = useState(null);
+  const thanks = useRef(null);
+
+  // Replace the form with a thank-you and put focus on it, as the Register
+  // interest page does.
+  useEffect(() => {
+    if (sentPathway) thanks.current?.focus();
+  }, [sentPathway]);
+
+  return (
+    <details className="interest-box">
+      <summary className="interest-box__summary">
+        {SIGNUP_BOX.summary}
+        <ChevronDownIcon />
+      </summary>
+      <div className="interest-box__body">
+        {sentPathway ? (
+          <p className="interest-box__thanks" tabIndex={-1} ref={thanks}>
+            Thanks, your interest in the {sentPathway.name} pathway has been sent to the Amazon
+            Emerging Talent team.
+          </p>
+        ) : (
+          <>
+            <p className="interest__note">{SIGNUP_BOX.text}</p>
+            <InterestForm onSent={setSentPathway} />
+          </>
+        )}
+      </div>
+    </details>
   );
 }

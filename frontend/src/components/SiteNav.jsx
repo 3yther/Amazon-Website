@@ -19,9 +19,8 @@ const PAGES = [
   { to: "/t-level-near-you", label: "Find T-Levels Near You" },
   { to: "/quiz", label: "Quiz" },
   { to: "/help", label: "Help" },
-  // The Expression of Interest form, a core client requirement, so it is
-  // one tap away on every page.
-  { to: "/register-interest", label: "Register interest" },
+  // Register interest is not a tab: it is a box on the Sign up page, and
+  // linked from the homepage, the footer and the pathway pages.
 ];
 
 export default function SiteNav() {

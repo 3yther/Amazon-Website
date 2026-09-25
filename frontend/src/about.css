@@ -986,6 +986,46 @@
   font-size: 0.9375rem;
 }
 
+/* ---------- Interest box on the Sign up page (Register.jsx) ---------- */
+
+.interest-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--radius);
+}
+
+.interest-box__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--control-h);
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+/* The browser's own triangle is replaced by the chevron. */
+.interest-box__summary::-webkit-details-marker {
+  display: none;
+}
+
+.interest-box[open] .interest-box__summary .icon {
+  transform: rotate(180deg);
+}
+
+.interest-box__body {
+  display: grid;
+  gap: 20px;
+  padding: 4px 16px 20px;
+}
+
+.interest-box__thanks {
+  font-weight: 700;
+}
+
 /* ---------- Legal pages (LegalPage.jsx) ---------- */
 
 .legal {

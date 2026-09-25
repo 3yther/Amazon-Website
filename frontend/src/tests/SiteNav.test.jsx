@@ -49,7 +49,6 @@ describe("The nav drawer", () => {
       "Find T-Levels Near You",
       "Quiz",
       "Help",
-      "Register interest",
     ]);
   });
 
