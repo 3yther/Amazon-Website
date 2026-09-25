@@ -20,6 +20,7 @@ import CommunityAsk from "./pages/CommunityAsk.jsx";
 import CommunityQuestion from "./pages/CommunityQuestion.jsx";
 import Faqs from "./pages/Faqs.jsx";
 import Feedback from "./pages/Feedback.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 import GetInvolved from "./pages/GetInvolved.jsx";
 import ContentLibrary from "./pages/ContentLibrary.jsx";
 import Help from "./pages/Help.jsx";
@@ -31,6 +32,7 @@ import Privacy from "./pages/Privacy.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import Register from "./pages/Register.jsx";
 import RegisterInterest from "./pages/RegisterInterest.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import StaffDashboard from "./pages/StaffDashboard.jsx";
 import ReportIssue from "./pages/ReportIssue.jsx";
 import Terms from "./pages/Terms.jsx";
@@ -100,6 +102,8 @@ export default function App() {
           <Route path="/community/:id" element={<PageTitle title="Community question"><CommunityQuestion /></PageTitle>} />
           <Route path="/register" element={<PageTitle title="Sign up"><Register /></PageTitle>} />
           <Route path="/login" element={<PageTitle title="Login"><Login /></PageTitle>} />
+          <Route path="/forgot-password" element={<PageTitle title="Forgotten password"><ForgotPassword /></PageTitle>} />
+          <Route path="/reset-password" element={<PageTitle title="Reset password"><ResetPassword /></PageTitle>} />
           {/* Linked from the footer. */}
           <Route path="/terms" element={<PageTitle title="Terms of Service"><Terms /></PageTitle>} />
           <Route path="/privacy" element={<PageTitle title="Privacy Policy"><Privacy /></PageTitle>} />

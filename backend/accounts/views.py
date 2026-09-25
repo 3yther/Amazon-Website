@@ -15,6 +15,8 @@ from .serializers import (
     DeactivateAccountSerializer,
     FeedbackSerializer,
     LoginSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
     RegisterSerializer,
     UserPreferenceSerializer,
 )
@@ -185,6 +187,58 @@ class ChangePasswordView(SignedInMixin, APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         update_session_auth_hash(request, user)
+        return Response({"success": True})
+
+
+class PasswordResetRequestView(CsrfCheckedMixin, generics.GenericAPIView):
+    """
+    POST /api/accounts/password-reset/
+
+    Body: username.
+    Always returns 200 with the same generic message, whether or not that
+    username exists or has an email on file - see PasswordResetRequestSerializer.
+    Checked for CSRF even though the visitor is signed out, the same as
+    RegisterView and LoginView above. Throttled per IP so this cannot be
+    used to spam an inbox or discover usernames by timing.
+    """
+
+    serializer_class = PasswordResetRequestSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "password_reset"
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {
+                "detail": "If that account has an email on file, we've sent password "
+                "reset instructions to it."
+            }
+        )
+
+
+class PasswordResetConfirmView(CsrfCheckedMixin, generics.GenericAPIView):
+    """
+    POST /api/accounts/password-reset/confirm/
+
+    Body: uid, token (both come from the link in the email), new_password,
+    confirm_password. Returns {"success": true} and signs the visitor in
+    (same as register and login), or 400 with field errors when the link is
+    wrong, reused or expired, or the new password fails validation.
+    """
+
+    serializer_class = PasswordResetConfirmSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "password_reset"
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        login(request, user)
         return Response({"success": True})
 
 

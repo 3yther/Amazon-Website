@@ -1,13 +1,17 @@
 from django.contrib.auth import authenticate, password_validation
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
 from content.models import PathwayName
 
+from .emails import send_password_reset_email
 from .models import Feedback, Profile, UserPreference
 
 # Staff accounts are created in Django admin only, never through sign-up.
@@ -21,6 +25,7 @@ USERNAME_TAKEN = "A user with that username already exists."
 INVALID_CREDENTIALS = "Invalid username or password."
 INCORRECT_PASSWORD = "Current password is incorrect."
 INCORRECT_DEACTIVATE_PASSWORD = "Incorrect password."
+RESET_LINK_INVALID = "This password reset link is invalid or has expired. Request a new one."
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -249,6 +254,75 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(INVALID_CREDENTIALS, code="authorization")
         attrs["user"] = user
         return attrs
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """
+    Looks up the account by username, the same identifier LoginSerializer
+    uses. save() is a no-op for an unknown username or one with no email on
+    file, so the view's response is identical either way - the same
+    no-enumeration principle LoginSerializer follows for a wrong password.
+    """
+
+    username = serializers.CharField()
+
+    def save(self):
+        try:
+            user = User.objects.get(username__iexact=self.validated_data["username"], is_active=True)
+        except User.DoesNotExist:
+            return None
+        if not user.email:
+            return None  # nothing to send it to; registration does not require one
+        send_password_reset_email(user)
+        return user
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """
+    Checks the uid and token from the emailed link, then the new password.
+
+    uid/token failures and a reused/expired token are reported under the
+    same "token" field with the same message, so the front end does not
+    need to tell them apart - both mean "get a new link".
+    """
+
+    uid = serializers.CharField()
+    token = serializers.CharField()
+    new_password = serializers.CharField(
+        write_only=True, trim_whitespace=False, style={"input_type": "password"}
+    )
+    confirm_password = serializers.CharField(
+        write_only=True, trim_whitespace=False, style={"input_type": "password"}
+    )
+
+    def validate(self, attrs):
+        user = None
+        try:
+            uid = force_str(urlsafe_base64_decode(attrs["uid"]))
+            user = User.objects.get(pk=uid, is_active=True)
+        except (User.DoesNotExist, ValueError, TypeError, OverflowError):
+            user = None
+
+        if user is None or not default_token_generator.check_token(user, attrs["token"]):
+            raise serializers.ValidationError({"token": [RESET_LINK_INVALID]})
+
+        if attrs["confirm_password"] != attrs["new_password"]:
+            raise serializers.ValidationError({"confirm_password": ["Passwords do not match."]})
+
+        try:
+            password_validation.validate_password(attrs["new_password"], user=user)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError({"new_password": list(error.messages)})
+
+        attrs["user"] = user
+        return attrs
+
+    def save(self):
+        user = self.validated_data["user"]
+        user.set_password(self.validated_data["new_password"])
+        user.save()
+        Profile.objects.filter(user=user).update(last_password_changed=timezone.now())
+        return user
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

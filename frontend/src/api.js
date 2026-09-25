@@ -152,6 +152,26 @@ export function logout() {
 }
 
 /**
+ * Ask for a password reset email. Resolves to { detail }, always the same
+ * message whether or not the username exists - the backend never reveals
+ * that (see PasswordResetRequestView in backend/accounts/views.py).
+ */
+export function requestPasswordReset(username) {
+  return postJson("/api/accounts/password-reset/", { username });
+}
+
+/**
+ * Finish a reset with the uid and token from the emailed link.
+ * fields: uid, token, new_password, confirm_password.
+ * Resolves to { success: true } and signs the visitor in, same as login().
+ */
+export async function confirmPasswordReset(fields) {
+  const result = await postJson("/api/accounts/password-reset/confirm/", fields);
+  await refreshCsrfTokenAfterSignIn();
+  return result;
+}
+
+/**
  * Update the signed-in user's name, email or phone.
  * fields: any of first_name, last_name, email, phone.
  * Resolves to the same shape as getCurrentUser().

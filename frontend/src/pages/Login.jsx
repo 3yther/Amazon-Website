@@ -77,6 +77,9 @@ export default function Login() {
           </form>
 
           <p className="account-switch">
+            <Link to="/forgot-password">{t("login.forgotPassword")}</Link>
+          </p>
+          <p className="account-switch">
             {t("login.noAccount")} <Link to="/register">{t("login.register")}</Link>
           </p>
         </div>

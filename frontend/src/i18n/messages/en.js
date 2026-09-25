@@ -336,6 +336,7 @@ const en = {
     password: "Password",
     submitting: "Logging in",
     submit: "Log in",
+    forgotPassword: "Forgotten your password?",
     noAccount: "No account yet?",
     register: "Register",
   },
@@ -381,6 +382,27 @@ const en = {
       overSixteen: "Confirm you are 16 or over to create an account.",
       terms: "Agree to the Terms and Conditions to create an account.",
     },
+  },
+
+  forgotPassword: {
+    title: "Forgotten password",
+    lead: "Enter your username and, if there is an email on the account, we will send a link to reset your password.",
+    submitting: "Sending",
+    submit: "Send reset link",
+    sent: "If that account has an email on file, we’ve sent password reset instructions to it. The link works once and expires after a few days.",
+    backToLogin: "Remembered it after all?",
+  },
+
+  resetPassword: {
+    title: "Choose a new password",
+    newPassword: "New password",
+    passwordHint: "At least 8 characters. Not all numbers, not a common password.",
+    confirmPassword: "Confirm new password",
+    submitting: "Saving",
+    submit: "Save new password",
+    backToLogin: "Remembered it after all?",
+    requestNewLink: "Request a new link",
+    linkMissing: "This password reset link is missing some information. Request a new one below.",
   },
 
   registerInterest: {
