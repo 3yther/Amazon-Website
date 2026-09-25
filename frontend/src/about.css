@@ -991,7 +991,8 @@
 .interest-box {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-left: 4px solid var(--orange);
+  /* inline-start: the left edge, or the right in Arabic and Urdu. */
+  border-inline-start: 4px solid var(--orange);
   border-radius: var(--radius);
 }
 
