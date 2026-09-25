@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import SiteNav from "../components/SiteNav.jsx";
@@ -88,5 +88,35 @@ describe("The nav drawer", () => {
   it("has no accessibility problems axe can find", async () => {
     await openDrawer();
     await expectNoAxeViolations(document.body);
+  });
+});
+
+describe("Closing the drawer by clicking beside it", () => {
+  // jsdom lays nothing out, so the drawer is given the box it has in a real
+  // browser: the left 420px of the screen, full height.
+  function drawer() {
+    const dialog = document.getElementById("menu-overlay");
+    dialog.getBoundingClientRect = () => ({ left: 0, right: 420, top: 0, bottom: 800, width: 420, height: 800 });
+    return dialog;
+  }
+
+  it("closes when the empty space next to the drawer is clicked", async () => {
+    await openDrawer();
+    const dialog = drawer();
+
+    fireEvent.click(dialog, { clientX: 700, clientY: 300, detail: 1 });
+
+    expect(dialog.open).toBe(false);
+    expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();
+  });
+
+  it("stays open when the drawer itself is clicked", async () => {
+    await openDrawer();
+    const dialog = drawer();
+
+    fireEvent.click(dialog, { clientX: 200, clientY: 300, detail: 1 });
+    fireEvent.click(screen.getByRole("navigation"), { clientX: 200, clientY: 300, detail: 1 });
+
+    expect(dialog.open).toBe(true);
   });
 });

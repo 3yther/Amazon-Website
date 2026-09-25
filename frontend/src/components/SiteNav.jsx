@@ -74,7 +74,8 @@ export default function SiteNav() {
     // animation, so it closes straight away. The timer is a backstop in case
     // the animation never reports finishing (e.g. the tab is hidden).
     dialog.classList.add(closing);
-    const animations = dialog.getAnimations();
+    // getAnimations is missing in some test browsers; no animations means close now.
+    const animations = dialog.getAnimations?.() ?? [];
     if (animations.length === 0) {
       finishClosing();
     } else {
@@ -86,6 +87,22 @@ export default function SiteNav() {
   }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
+
+  // A click on the blurred page beside the drawer closes it. The ::backdrop
+  // belongs to the <dialog>, so that click arrives on the dialog itself, just
+  // outside the panel's box. A click inside the panel (on its padding, say)
+  // also lands on the dialog, so the position is what tells them apart.
+  function closeOnBackdrop(event) {
+    if (event.target !== event.currentTarget) return; // a link, button or text inside
+    if (event.detail === 0) return; // keyboard "clicks" have no position
+    const box = event.currentTarget.getBoundingClientRect();
+    const inside =
+      event.clientX >= box.left &&
+      event.clientX <= box.right &&
+      event.clientY >= box.top &&
+      event.clientY <= box.bottom;
+    if (!inside) closeMenu();
+  }
 
   return (
     <>
@@ -122,6 +139,7 @@ export default function SiteNav() {
             closeMenu();
           }}
           onClose={closeMenu}
+          onClick={closeOnBackdrop}
         >
           {/* No RisingSubjects here any more: its names are position: fixed,
               so inside a part-width drawer they escaped the panel and drifted
