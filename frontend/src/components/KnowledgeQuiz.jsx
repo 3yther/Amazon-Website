@@ -8,14 +8,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import { KNOWLEDGE_QUESTIONS } from "../knowledgeQuizQuestions.js";
 import "./knowledgeQuiz.css";
 
-/**
- * A new copy of the list in a random order, so the right answer is not always
- * in the same place.
- *
- * NEW CONCEPT: the Fisher-Yates shuffle. Walk backwards through the list and
- * swap each item with a random one at or before it. Every order is equally
- * likely, which sorting by Math.random() does not guarantee.
- */
+// Shuffles a copy of the list (Fisher-Yates) so the right answer moves around.
 function shuffle(list) {
   const copy = [...list];
   for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -31,20 +24,9 @@ function shuffleOptions(questions) {
 }
 
 /**
- * A knowledge check: one question at a time, each with a right answer and an
- * explanation.
- *
- * This is not the same thing as the "Is a T-Level right for me?" quiz on the
- * About page. That one is a self assessment, where no answer is wrong. This
- * one can be got wrong, which is what the assistant needs: when an answer is
- * wrong it calls onIncorrectAnswer with the question, the right answer and the
- * explanation, and the assistant offers to talk that question through using
- * the quiz's own wording rather than something it made up.
- *
- * It also tells Smiley about right answers and the final score, so Smiley
- * can be pleased with them. All three callbacks can be passed in; by default
- * they tell Smiley. None of it is sent to the server: it goes to the widget in
- * this browser, and only travels if the visitor then asks Smiley something.
+ * The knowledge check quiz. Unlike the "Is a T-Level right for me?" quiz,
+ * answers can be wrong. Wrong answers are passed to Smiley so it can offer
+ * to explain them.
  */
 export default function KnowledgeQuiz({
   questions = KNOWLEDGE_QUESTIONS,
@@ -127,11 +109,7 @@ export default function KnowledgeQuiz({
   }
 
   return (
-    <section className="knowledge-quiz" aria-labelledby="knowledge-quiz-title">
-      <p className="label">{t("quiz.label")}</p>
-      <h2 id="knowledge-quiz-title">{t("quiz.title")}</h2>
-      <p className="knowledge-quiz__lead">{t("quiz.lead", { count: questions.length })}</p>
-
+    <section className="knowledge-quiz" aria-label={t("quiz.label")}>
       {/* The bar is only a picture of the "Question 2 of 7" text below, so
           screen readers skip it rather than hear the progress twice. */}
       <div className="knowledge-quiz__progress" aria-hidden="true">

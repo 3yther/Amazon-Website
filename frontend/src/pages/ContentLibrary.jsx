@@ -1,18 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getContent, getPathways } from "../api.js";
-import { ACCESS_LEVELS, AUDIENCES, CONTENT_TYPES } from "../labels.js";
-import {
-  AlertIcon,
-  ArrowIcon,
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  LockIcon,
-  MediaIcon,
-} from "../components/Icons.jsx";
+import { AlertIcon, ArrowIcon, LockIcon, PATHWAY_ICONS } from "../components/Icons.jsx";
 import Pictogram from "../components/Pictogram.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
 const NO_FILTERS = { pathway: "", audience: "", access_level: "" };
@@ -26,41 +17,21 @@ const TYPE_PICTURES = {
   class_pack: "folder",
 };
 
-// The same pathway icons the homepage tiles use, keyed by pathway slug.
-const PATHWAY_ICONS = {
-  digital: DigitalIcon,
-  business: BusinessIcon,
-  media: MediaIcon,
-  finance: FinanceIcon,
-  engineering: EngineeringIcon,
-};
-
-/**
- * A short name for the site a link goes to, for the "Open on ..." button.
- * Every gov.uk address becomes "gov.uk", because long ones such as
- * assets.publishing.service.gov.uk overflow a phone screen.
- *
- * NEW CONCEPT: the URL class. new URL() splits an address into parts
- * (hostname, path and so on) and throws if the text is not a valid address,
- * which is how we spot a bad link.
- */
+// Short site name for the "Open on ..." button, or null if the link is broken.
+// Any gov.uk address just says "gov.uk".
 export function siteName(link) {
   let host;
   try {
     host = new URL(link).hostname.replace(/^www\./, "");
   } catch {
-    return "another website";
+    return null;
   }
   return host === "gov.uk" || host.endsWith(".gov.uk") ? "gov.uk" : host;
 }
 
-/**
- * The resources page (/resources): the content library, which loads pathways
- * for the filter and lists content from /api/content/ with server-side
- * filtering. /resources?pathway=<slug> (used by the homepage pathway tiles)
- * opens it with that pathway already chosen.
- */
+// The resources page. /resources?pathway=digital opens it filtered to that pathway.
 export default function ContentLibrary() {
+  const t = useT();
   const [searchParams] = useSearchParams();
   const [pathways, setPathways] = useState([]);
   const [filters, setFilters] = useState(() => ({
@@ -79,15 +50,14 @@ export default function ContentLibrary() {
     getPathways({ signal: controller.signal })
       .then((list) => {
         setPathways(list);
-        // Drop a pathway from the address that does not exist, which the API
-        // would otherwise reject.
+        // Drop a pathway from the address that doesn't exist (the API would reject it).
         setFilters((current) =>
           current.pathway && !list.some((pathway) => pathway.slug === current.pathway)
             ? { ...current, pathway: "" }
             : current,
         );
       })
-      .catch(() => {}); // a dead API is reported by the content request below
+      .catch(() => {}); // the content request below reports a dead API
     return () => controller.abort();
   }, [attempt]);
 
@@ -120,118 +90,114 @@ export default function ContentLibrary() {
 
   const filtered = Object.values(filters).some(Boolean);
 
+  let summary;
+  if (status === "loading" && items.length === 0) summary = t("resources.loading");
+  else if (count === 0) summary = t("resources.noMatches");
+  else if (count === 1) summary = t("resources.oneItem");
+  else summary = t("resources.items", { count });
+
   return (
-    <>
-      <section aria-labelledby="page-title">
-        <div className="intro">
-          <p className="label">Resources</p>
-          <h1 id="page-title">T-Level Resources</h1>
-          <p className="lead">
-            Free guides, videos and packs, linked from official sources such as gov.uk and UCAS.
-          </p>
+    <section aria-labelledby="page-title">
+      <div className="intro">
+        <p className="label">{t("resources.label")}</p>
+        <h1 id="page-title">{t("resources.title")}</h1>
+        <p className="lead">{t("resources.lead")}</p>
+      </div>
+
+      <form className="filters" aria-label={t("resources.filters")} onSubmit={(e) => e.preventDefault()}>
+        <div className="field">
+          <label className="label" htmlFor="filter-pathway">
+            {t("resources.pathway")}
+          </label>
+          <select id="filter-pathway" name="pathway" value={filters.pathway} onChange={updateFilter}>
+            <option value="">{t("resources.allPathways")}</option>
+            {pathways.map((pathway) => (
+              <option key={pathway.slug} value={pathway.slug}>
+                {t(`pathways.${pathway.slug}`)}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <form className="filters" aria-label="Filter content" onSubmit={(e) => e.preventDefault()}>
-          <div className="field">
-            <label className="label" htmlFor="filter-pathway">
-              Pathway
-            </label>
-            <select id="filter-pathway" name="pathway" value={filters.pathway} onChange={updateFilter}>
-              <option value="">All pathways</option>
-              {pathways.map((pathway) => (
-                <option key={pathway.slug} value={pathway.slug}>
-                  {pathway.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="field">
-            <label className="label" htmlFor="filter-audience">
-              For
-            </label>
-            <select id="filter-audience" name="audience" value={filters.audience} onChange={updateFilter}>
-              <option value="">Anyone</option>
-              <option value="student">{AUDIENCES.student}</option>
-              <option value="parent">{AUDIENCES.parent}</option>
-              <option value="teacher">{AUDIENCES.teacher}</option>
-            </select>
-          </div>
-
-          <div className="field">
-            <label className="label" htmlFor="filter-access">
-              Access
-            </label>
-            <select
-              id="filter-access"
-              name="access_level"
-              value={filters.access_level}
-              onChange={updateFilter}
-            >
-              <option value="">Any</option>
-              <option value="free">{ACCESS_LEVELS.free}</option>
-              <option value="signup">{ACCESS_LEVELS.signup}</option>
-            </select>
-          </div>
-
-          {filtered && (
-            <button type="button" className="button filters__clear" onClick={clearFilters}>
-              Clear filters
-            </button>
-          )}
-        </form>
-
-        {status === "error" ? (
-          <div className="notice" role="alert">
-            <AlertIcon />
-            <div>
-              <p className="notice__title">Could not load content.</p>
-              <p>
-                {import.meta.env.DEV
-                  ? "Check the Django API is running on port 8000, then try again."
-                  : "Something went wrong on our side. Please try again in a moment."}
-              </p>
-              <button type="button" className="button" onClick={() => setAttempt((n) => n + 1)}>
-                Try again
-              </button>
-            </div>
-          </div>
-        ) : (
-          <p className="label results-status" role="status">
-            {status === "loading" && items.length === 0
-              ? "Loading"
-              : count === 0
-                ? "No content matches these filters."
-                : `${count} ${count === 1 ? "item" : "items"}`}
-          </p>
-        )}
-
-        {items.length > 0 && status !== "error" && (
-          <ul className="card-grid" aria-busy={status === "loading"}>
-            {items.map((item) => (
-              <ContentCard key={item.slug} item={item} />
+        <div className="field">
+          <label className="label" htmlFor="filter-audience">
+            {t("resources.for")}
+          </label>
+          <select id="filter-audience" name="audience" value={filters.audience} onChange={updateFilter}>
+            <option value="">{t("resources.anyone")}</option>
+            {["student", "parent", "teacher"].map((audience) => (
+              <option key={audience} value={audience}>
+                {t(`resources.audiences.${audience}`)}
+              </option>
             ))}
-          </ul>
-        )}
+          </select>
+        </div>
 
-        {hasMore && status !== "error" && (
-          <div className="load-more">
-            <button
-              type="button"
-              className="button"
-              disabled={status === "loading"}
-              onClick={() => setPage((n) => n + 1)}
-            >
-              {status === "loading" ? "Loading" : "Load more"}
+        <div className="field">
+          <label className="label" htmlFor="filter-access">
+            {t("resources.access")}
+          </label>
+          <select id="filter-access" name="access_level" value={filters.access_level} onChange={updateFilter}>
+            <option value="">{t("resources.any")}</option>
+            <option value="free">{t("resources.accessLevels.free")}</option>
+            <option value="signup">{t("resources.accessLevels.signup")}</option>
+          </select>
+        </div>
+
+        {filtered && (
+          <button type="button" className="button filters__clear" onClick={clearFilters}>
+            {t("resources.clear")}
+          </button>
+        )}
+      </form>
+
+      {status === "error" ? (
+        <div className="notice" role="alert">
+          <AlertIcon />
+          <div>
+            <p className="notice__title">{t("resources.loadError")}</p>
+            <p>
+              {import.meta.env.DEV
+                ? "Check the Django API is running on port 8000, then try again."
+                : t("resources.serverError")}
+            </p>
+            <button type="button" className="button" onClick={() => setAttempt((n) => n + 1)}>
+              {t("resources.tryAgain")}
             </button>
           </div>
-        )}
-      </section>
-    </>
+        </div>
+      ) : (
+        <p className="label results-status" role="status">
+          {summary}
+        </p>
+      )}
+
+      {items.length > 0 && status !== "error" && (
+        <ul className="card-grid" aria-busy={status === "loading"}>
+          {items.map((item) => (
+            <ContentCard key={item.slug} item={item} />
+          ))}
+        </ul>
+      )}
+
+      {hasMore && status !== "error" && (
+        <div className="load-more">
+          <button
+            type="button"
+            className="button"
+            disabled={status === "loading"}
+            onClick={() => setPage((n) => n + 1)}
+          >
+            {status === "loading" ? t("resources.loading") : t("resources.loadMore")}
+          </button>
+        </div>
+      )}
+    </section>
   );
 }
 
 function ContentCard({ item }) {
+  const t = useT();
   const signupOnly = item.access_level === "signup";
   const PathwayIcon = item.pathway ? PATHWAY_ICONS[item.pathway.slug] : null;
 
@@ -240,48 +206,49 @@ function ContentCard({ item }) {
       <div className="card__tags">
         <span className="label card__type">
           <Pictogram name={TYPE_PICTURES[item.content_type]} size="small" />
-          {CONTENT_TYPES[item.content_type] ?? item.content_type}
+          {t(`resources.types.${item.content_type}`)}
         </span>
         <span className={signupOnly ? "tag tag--signup" : "tag"}>
-          {ACCESS_LEVELS[item.access_level]}
+          {t(`resources.accessLevels.${item.access_level}`)}
         </span>
       </div>
 
-      {/* h2: the cards sit straight under the page's h1. */}
+      {/* h2 because the cards sit straight under the page's h1 */}
       <h2 className="card__title">{item.title}</h2>
       <p className="card__text">{item.description}</p>
 
       <dl className="card__meta">
         <div>
-          <dt className="label">Pathway</dt>
+          <dt className="label">{t("resources.pathway")}</dt>
           <dd className="card__pathway">
             {PathwayIcon && <PathwayIcon />}
-            {item.pathway ? item.pathway.name : "All pathways"}
+            {item.pathway ? t(`pathways.${item.pathway.slug}`) : t("resources.allPathways")}
           </dd>
         </div>
         <div>
-          <dt className="label">For</dt>
-          <dd>{AUDIENCES[item.audience]}</dd>
+          <dt className="label">{t("resources.for")}</dt>
+          <dd>{t(`resources.audiences.${item.audience}`)}</dd>
         </div>
       </dl>
 
       {item.locked ? (
         <Link className="card__locked" to="/register">
           <LockIcon />
-          Sign up to access
+          {t("resources.signUp")}
         </Link>
       ) : (
         <>
           {item.link && (
             <a className="button button--primary card__action" href={item.link}>
-              Open on {siteName(item.link)}
+              {t("resources.openOn", { site: siteName(item.link) ?? t("resources.anotherWebsite") })}
               <span className="sr-only">, {item.title}</span>
               <ArrowIcon />
             </a>
           )}
           {item.file && (
             <a className="button button--primary card__action" href={item.file}>
-              Open<span className="sr-only"> {item.title}</span>
+              {t("resources.open")}
+              <span className="sr-only"> {item.title}</span>
               <ArrowIcon />
             </a>
           )}

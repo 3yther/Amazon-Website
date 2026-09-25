@@ -59,11 +59,7 @@ const UNCONFIRMED = [
   },
 ];
 
-/**
- * A fake server, as in ContentLibrary.test.jsx. `queries` records the query
- * string of each search, so tests can check what was sent. `search` decides
- * what comes back: a body, or { status, body } for a failure.
- */
+// Fake server. `queries` records each search, and `search` decides the reply.
 const ANSWER = {
   count: 2,
   radius_miles: 15,
@@ -489,7 +485,7 @@ describe("Providers whose subjects nobody has confirmed", () => {
 
     await screen.findByRole("heading", { name: "Offering Digital", level: 2 });
     expect(screen.getByRole("status")).toHaveTextContent(
-      "2 providers offering Digital within 15 miles of W1D 3QU. 1 provider nearby has not had their subjects confirmed.",
+      "2 providers offering Digital within 15 miles of W1D 3QU. 1 provider nearby has not had its subjects confirmed.",
     );
   });
 

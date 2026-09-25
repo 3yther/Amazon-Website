@@ -13,24 +13,8 @@ const CHECK_MS = 5000;
 const ACTIVITY_EVENTS = ["mousemove", "mousedown", "keydown", "scroll", "touchstart", "focusin"];
 
 /**
- * Calls onIdle once when the visitor has not interacted for delayMs on the
- * current page.
- *
- * Any interaction restarts the count. It fires at most once per page, and
- * changing page starts it again, so nobody gets nudged over and over.
- *
- * Everything here stays in the browser and is forgotten on navigation. No
- * timer, dwell time or mouse position is ever sent to the server, which is
- * what section 8 of the brief (and the mentor) asked for: behavioural signals
- * stay client side and ephemeral, and only the messages people actually type
- * are stored.
- *
- * WORTH TRYING LATER: the team's ideas document suggests that scrolling up and
- * down the same section, or bouncing between two pages, says more about being
- * stuck than sitting still does. Both are measurable here without sending
- * anything anywhere: count direction changes in the scroll handler, or count
- * how often the same pathname comes back. Left out for now to keep the rule
- * easy to explain to a visitor.
+ * Calls onIdle once if the visitor does nothing for delayMs on a page.
+ * Starts again on a new page. Nothing is sent to the server.
  */
 export function useIdleNudge({ enabled, onIdle, delayMs = IDLE_MS }) {
   const { pathname } = useLocation();

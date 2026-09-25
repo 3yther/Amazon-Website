@@ -1,14 +1,8 @@
-"""
-Sends the password reset email.
+"""Sends the password reset email.
 
-Kept separate from serializers.py so the token and link-building logic has
-one home. See settings.py for EMAIL_BACKEND: no SMTP account exists for the
-prototype, so this writes the message to the server console instead of a
-real inbox. That is enough to demonstrate and test the flow end to end.
-PRODUCTION: point EMAIL_BACKEND (and DEFAULT_FROM_EMAIL) at Amazon SES, as
-noted as a stretch service in the Hosting and Data Architecture section of
-the proposal; nothing here or in views.py needs to change to make that
-switch.
+There's no email account for the prototype yet, so EMAIL_BACKEND in
+settings.py prints the email to the server console. For production, point
+EMAIL_BACKEND at Amazon SES.
 """
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator

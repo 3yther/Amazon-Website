@@ -1,12 +1,6 @@
-// Copy and data for the About T-Level page. Kept out of the components so the
-// wording can be edited without touching any logic (same idea as labels.js).
-//
-// Every figure below was checked against a primary source in September 2026.
-// The sources are listed in SOURCES at the bottom of this file and shown at
-// the foot of the page, so a marker can follow any number back to gov.uk,
-// UCAS or Amazon. Re-check before submission: the placement minimum, the
-// UCAS points, the bursary amount and the number of T-Level subjects are the
-// ones most likely to move.
+// Words and data for the About page, kept out of the components so they're easy to edit.
+// Every figure was checked in September 2026 against the SOURCES at the bottom.
+// Check again before hand-in: placement hours, UCAS points, the bursary and the number of subjects.
 
 /** The three steps from GCSEs to an Amazon placement (the design doc's numbered route). */
 export const ROUTE_STEPS = [
@@ -30,10 +24,7 @@ export const ROUTE_STEPS = [
   },
 ];
 
-/**
- * The split between learning and working, drawn as a bar on the About page.
- * About 80 percent in lessons, about 20 percent on placement (DfE guidance).
- */
+// Learning vs working split, shown as a bar (about 80/20, from DfE guidance).
 export const TIME_SPLIT = [
   { icon: "book", share: 80, label: "Learning", detail: "about 80% of the course" },
   { icon: "briefcase", share: 20, label: "Placement", detail: "at least 315 hours" },
@@ -120,19 +111,10 @@ export const COST_POINTS = [
   },
 ];
 
-/**
- * The five pathways Amazon offers, matching the Pathway records in
- * backend/content/fixtures/pathways.json so the names and slugs stay the same
- * across the site.
- *
- * amazonStatus says what Amazon has publicly confirmed for that pathway.
- * TEAM NOTE: the Finance T-Level takes its last enrolments in September 2026.
- * Accounting carries on, so the finance pathway is not dead, but the copy
- * should not promise a Finance T-Level to anyone starting after that.
- * TEAM NOTE: Finance is null on purpose. Amazon's own page names digital,
- * creative, business and engineering, and does not mention finance. Ask the
- * Emerging Talent contact before we claim a finance placement exists.
- */
+// The five pathways (same names and slugs as backend/content/fixtures/pathways.json).
+// amazonStatus is what Amazon has said publicly about that pathway.
+// TEAM NOTE: Finance is null because Amazon's page doesn't mention finance, and
+// the Finance T-Level takes its last students in September 2026.
 export const PATHWAYS = [
   {
     slug: "digital",
@@ -232,7 +214,7 @@ export const FAQS = [
     id: "placement",
     question: "How long is the industry placement?",
     answer:
-      "At least 315 hours, roughly 45 days. It can be one or two days a week, a full-time block, or a mix. Amazon runs its placements as a nine week block.",
+      "At least 315 hours, roughly 45 days. It can be one or two days a week, a full-time block, or a mix. Amazon runs its placements as a nine week block. The Early Years Educator specialism needs 750 hours instead.",
   },
   {
     id: "paid",
@@ -260,11 +242,7 @@ export const FAQS = [
   },
 ];
 
-/**
- * The quiz. Each option carries a score, and the scores are added up at the
- * end to pick a result band. It is a guide to think with, not advice, and the
- * result copy says so.
- */
+// The "Is a T-Level right for me?" quiz. Scores are added up to pick a result.
 export const QUIZ_QUESTIONS = [
   {
     id: "learning",
@@ -341,10 +319,7 @@ export const QUIZ_RESULTS = [
   },
 ];
 
-/**
- * Where the facts on this page came from. Shown at the foot of the page, and
- * doubles as the bibliography entry for the Task 1 write-up.
- */
+// Where the facts came from. Shown at the bottom of the page.
 export const SOURCES = [
   {
     title: "Introduction of T Levels, Department for Education",

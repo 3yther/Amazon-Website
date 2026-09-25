@@ -1,8 +1,4 @@
-/* The knowledge check at /quiz.
- *
- * Class names start with knowledge-quiz so they cannot clash with the .quiz
- * styles arriving with the About page work on the other branches. Colours come
- * from the variables in styles.css: no new ones. */
+/* The quiz at /quiz. Classes start with knowledge-quiz so they don't clash with .quiz. */
 
 .knowledge-quiz {
   max-width: 40rem;
@@ -17,13 +13,12 @@
   max-width: 34rem;
 }
 
-/* Progress bar. Orange is only a fill here: the "Question 2 of 7" text says
-   the same thing, so nobody relies on the colour. */
+/* Progress bar: a grey track that fills orange as you answer. The
+   "Question 2 of 7" text says the same thing, so nobody relies on the colour. */
 .knowledge-quiz__progress {
-  height: 0.5rem;
-  border: 1px solid var(--line);
+  height: 0.375rem;
   border-radius: var(--radius);
-  background: var(--surface);
+  background: var(--line);
   overflow: hidden;
 }
 
@@ -46,7 +41,12 @@
   background: var(--surface);
 }
 
+/* A legend normally sits on top of the fieldset's border. Floating it at
+   full width puts it inside the box like a normal heading. */
 .knowledge-quiz__legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 0.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -61,6 +61,7 @@
 }
 
 .knowledge-quiz__option {
+  clear: both;
   display: flex;
   align-items: center;
   gap: 0.625rem;

@@ -8,11 +8,8 @@ import * as matchers from "@testing-library/jest-dom/matchers";
 
 expect.extend(matchers);
 
-// jsdom does not implement matchMedia, and anything that reads a media query
-// in JavaScript (useReducedMotion, the accessibility preferences hook, the
-// tab nav's mobile check) calls it while rendering. This stub answers "no"
-// to every query, which is the default state: motion allowed, light theme,
-// desktop width. A test that needs another answer can override it.
+// jsdom doesn't have matchMedia, so this fake one says "no" to every query
+// (motion on, light theme, desktop). Tests can override it.
 if (!window.matchMedia) {
   window.matchMedia = (query) => ({
     matches: false,

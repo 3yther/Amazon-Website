@@ -1,6 +1,4 @@
-/* The Community pages. Colours only from the tokens in styles.css; squared
-   corners like the rest of the site (no pills); every control at least 44px
-   tall; sizes in rem so the font size setting grows everything together. */
+/* The Community pages. Colours from styles.css, square corners, controls at least 44px tall. */
 
 .community-caveat {
   max-width: 44rem;

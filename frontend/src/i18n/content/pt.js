@@ -133,7 +133,7 @@ export default {
       {
         question: "Quanto tempo dura o estágio numa empresa?",
         answer:
-          "Pelo menos 315 horas, cerca de 45 dias. Pode ser um ou dois dias por semana, um bloco a tempo inteiro, ou uma mistura. A Amazon faz os seus estágios num bloco de nove semanas.",
+          "Pelo menos 315 horas, cerca de 45 dias. Pode ser um ou dois dias por semana, um bloco a tempo inteiro, ou uma mistura. A Amazon faz os seus estágios num bloco de nove semanas. A especialização Early Years Educator exige 750 horas.",
       },
       {
         question: "Sou pago no estágio?",
@@ -354,10 +354,177 @@ export default {
           "Não, está tudo aberto a toda a gente",
           "Só se fores professor",
         ],
-        correctAnswer: "Não, mas alguns recursos precisam de uma conta gratuita para abrir",
+        correctAnswer: "Não, está tudo aberto a toda a gente",
         explanation:
-          "Qualquer pessoa pode ver a biblioteca e o que tem. Os itens marcados para utilizadores registados precisam de uma conta gratuita antes de poderes abrir o ficheiro.",
+          "Qualquer pessoa pode navegar na biblioteca e abrir tudo o que lá está. Uma conta gratuita serve para perguntar e responder na Comunidade e guardar as tuas definições.",
       },
     ],
+  },
+  legal: {
+    TERMS: {
+      label: "Informação legal",
+      title: "Termos de Serviço",
+      updated: "setembro de 2026",
+      intro: "O T-SMILE é um projeto de estudantes, feito para o programa Amazon Emerging Talent Digital T-Level. Não é um site oficial da Amazon.",
+      sections: [
+        {
+          heading: "Usar o site",
+          paragraphs: [
+            "Qualquer pessoa pode ler todas as páginas, abrir todos os recursos, fazer os questionários e falar com o Smiley sem conta. Uma conta gratuita permite perguntar e responder na Comunidade.",
+            "Tens de ter 16 anos ou mais para criar uma conta.",
+          ],
+        },
+        {
+          heading: "A tua conta",
+          points: [
+            "Não partilhes a tua palavra-passe.",
+            "Dá dados verdadeiros quando criares conta ou registares o teu interesse.",
+            "Podes desativar a tua conta a qualquer momento no teu Perfil.",
+          ],
+        },
+        {
+          heading: "Sê simpático",
+          points: [
+            "Não publiques nada ofensivo, que magoe ou ilegal nos formulários, no chat ou na Comunidade.",
+            "Não tentes estragar o site nem aceder aos dados de outras pessoas.",
+            "Podemos desativar contas que não cumpram estas regras.",
+          ],
+        },
+        {
+          heading: "A nossa informação",
+          paragraphs: [
+            "Confirmamos os factos no gov.uk, na UCAS e na Amazon, e indicamos as fontes em cada página. As coisas mudam, por isso confirma sempre com a tua escola ou colégio antes de decidires.",
+            "O Smiley, o assistente, pode enganar-se. É uma ajuda, não um conselho.",
+          ],
+        },
+        {
+          heading: "O nome da Amazon",
+          paragraphs: [
+            "«Amazon» e o seu logótipo pertencem à Amazon.com, Inc. ou às suas afiliadas. Usamo-los para descrever os estágios de T-Level da Amazon.",
+          ],
+        },
+      ],
+    },
+    PRIVACY: {
+      label: "Informação legal",
+      title: "Política de Privacidade",
+      updated: "setembro de 2026",
+      intro: "O T-SMILE é um projeto de estudantes, feito para o programa Amazon Emerging Talent Digital T-Level. Não é um site oficial da Amazon.",
+      sections: [
+        {
+          heading: "Quem cuida dos teus dados",
+          paragraphs: [
+            "A equipa de estudantes do T-SMILE. Podes contactar-nos através da página Contacto.",
+          ],
+        },
+        {
+          heading: "O que recolhemos, e porquê",
+          points: [
+            "Registar interesse: o teu nome, email, se és estudante, pai, mãe ou professor, um percurso e uma mensagem opcional. Para que a equipa Amazon Emerging Talent veja que tens interesse e entre em contacto.",
+            "Uma conta: um nome de utilizador, uma palavra-passe (guardada cifrada, nunca legível), o teu papel e percurso. Mais tarde, se os adicionares, o teu nome, email e número de telefone. Para poderes iniciar sessão, perguntar e responder na Comunidade e manter as tuas definições em qualquer dispositivo.",
+            "Definições de acessibilidade: tamanho do texto, contraste, tema e escolhas semelhantes. Para que o site fique como o configuraste.",
+            "Chat com o Smiley: o que escreves e as respostas do Smiley. Para que o Smiley possa acompanhar a conversa.",
+            "Publicações na Comunidade: as perguntas e respostas que publicas, mostradas com o teu nome de utilizador. Para que outros visitantes as possam ler e responder.",
+            "Opiniões e mensagens de contacto: a tua mensagem e o teu email, se o deres. Para podermos corrigir coisas e responder.",
+          ],
+        },
+        {
+          heading: "Quem os vê",
+          points: [
+            "A equipa do T-SMILE e, nos formulários de interesse, a equipa da Amazon Emerging Talent.",
+            "A Anthropic, a empresa cuja IA escreve as respostas do Smiley. As tuas mensagens do chat são-lhe enviadas para obter uma resposta.",
+            "A empresa que aloja o site (Railway para a versão de teste, Amazon Web Services mais tarde).",
+            "Mais ninguém. Não vendemos dados nem os usamos para publicidade.",
+          ],
+        },
+        {
+          heading: "Durante quanto tempo os guardamos",
+          paragraphs: [
+            "Ainda não definimos isto, e vamos fazê-lo antes de o site ficar público. Até lá, pede-nos e apagamos os teus dados.",
+          ],
+        },
+        {
+          heading: "Menores de 18 anos",
+          paragraphs: [
+            "Muitos dos nossos visitantes têm menos de 18 anos, por isso só pedimos o que precisamos. Nunca pedimos a tua morada, data de nascimento ou escola num formulário.",
+          ],
+        },
+        {
+          heading: "Os teus direitos",
+          paragraphs: [
+            "Podes ver, corrigir ou apagar os teus dados, e mais. A página dos Direitos sobre os dados explica como.",
+          ],
+        },
+      ],
+    },
+    COOKIES: {
+      label: "Informação legal",
+      title: "Política de Cookies",
+      updated: "setembro de 2026",
+      intro: "Só usamos os cookies de que o site precisa para funcionar. Sem rastreio, sem publicidade, sem análises.",
+      sections: [
+        {
+          heading: "Cookies",
+          points: [
+            "sessionid: mantém a tua sessão iniciada e deixa o Smiley lembrar-se do teu chat. Dura duas semanas, ou até terminares a sessão.",
+            "csrftoken: impede outros sites de enviarem formulários em teu nome. Dura até um ano.",
+          ],
+          paragraphs: [
+            "O site não funciona em segurança sem eles, por isso a lei não nos pede um aviso de cookies.",
+          ],
+        },
+        {
+          heading: "Guardado no teu navegador",
+          paragraphs: [
+            "Estes não são cookies e nunca saem do teu dispositivo.",
+          ],
+          points: [
+            "As tuas definições de acessibilidade, para se manterem quando voltares.",
+            "Se o Smiley já disse olá, até fechares o separador.",
+          ],
+        },
+        {
+          heading: "Apagá-los",
+          paragraphs: [
+            "Podes apagar os cookies e os dados guardados nas definições do navegador. A tua sessão termina e as tuas definições voltam ao normal.",
+          ],
+        },
+      ],
+    },
+    DATA_RIGHTS: {
+      label: "Informação legal",
+      title: "RGPD e os teus direitos sobre os dados",
+      updated: "setembro de 2026",
+      intro: "A lei do Reino Unido (UK GDPR) dá-te direitos sobre os teus dados. Usá-los é gratuito.",
+      sections: [
+        {
+          heading: "Os teus direitos",
+          points: [
+            "Ver: pede uma cópia dos dados que temos sobre ti.",
+            "Corrigir: pede-nos para corrigir o que estiver errado.",
+            "Apagar: pede-nos para eliminar os teus dados.",
+            "Limitar: pede-nos para deixar de os usar durante algum tempo.",
+            "Levar: pede os teus dados num ficheiro que possas usar noutro lado.",
+            "Opor-te: diz-nos para deixarmos de os usar.",
+          ],
+        },
+        {
+          heading: "Como pedir",
+          paragraphs: [
+            "Usa o formulário de Contacto e diz que direito queres usar. Podemos pedir-te que confirmes que és tu. Respondemos no prazo de um mês.",
+            "Também podes corrigir os teus dados, ou desativar a tua conta, tu mesmo no teu Perfil.",
+          ],
+        },
+        {
+          heading: "Não estás satisfeito?",
+          paragraphs: [
+            "Podes apresentar queixa ao Information Commissioner's Office (ICO), que trata da proteção de dados no Reino Unido.",
+          ],
+          link: {
+            text: "Apresentar queixa ao ICO",
+          },
+        },
+      ],
+    },
   },
 };

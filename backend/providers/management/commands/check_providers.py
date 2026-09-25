@@ -1,33 +1,18 @@
-"""
-Says whether the near-you search has anything to search.
+"""Checks the near-you search has providers to search.
 
-    python manage.py check_providers          report, and fail if it is broken
-    python manage.py check_providers --quiet  only speak up when something is wrong
+    python manage.py check_providers          report, and fail if it's broken
+    python manage.py check_providers --quiet  only print if something's wrong
 
-Exists because of how the search failed the first time: the providers fixture
-was never loaded on the deployed site, so every search answered 200 with an
-empty list. Nothing was broken from the outside. The tests passed, the
-endpoint was healthy, the postcode resolved, the logs showed no error, and
-the only symptom was a visitor being told there are no colleges near them.
+Runs at the end of the pre-deploy command (see DEPLOYMENT.md), so a deploy
+that forgot to load the providers fails instead of going live empty.
 
-No unit test can catch that, because the fault is in what a deploy ran, not
-in the code. A check that runs after the data is loaded can. Put it at the
-end of the pre-deploy command (see DEPLOYMENT.md) and a deploy that forgets
-to seed providers stops instead of going live empty.
-
-WHY A HANDFUL OF UNPLACED PROVIDERS IS NOT A FAILURE.
-
-This used to fail if a single provider had no position, which was right when
-the list was 71 colleges typed in by hand. The official register is 360, and
-a few of its postcodes do not exist at any geocoder: some are plain typos,
-some are invalid on their face (a UK postcode never ends in C, I, K, M, O or
-V). Those cannot be fixed from here, and failing every deploy over them would
-train everyone to ignore this check, which is the one thing it cannot afford.
-
-So the bar is "is the search broken", not "is the data perfect": nothing
-loaded, nothing placed, or a big enough share unplaced that something has
-gone wrong in bulk. The unplaced are always listed either way, and
---max-unplaced sets the bar yourself.
+A few unplaced providers is NOT a failure. This used to fail on the first one,
+which suited 71 colleges typed in by hand. The official register is 360, and a
+few of its postcodes exist at no geocoder (some are typos, some are invalid on
+their face: a UK postcode never ends in C, I, K, M, O or V). Failing every
+deploy over those would just train everyone to ignore this check. So the bar is
+"is the search broken", not "is the data perfect". The unplaced are always
+listed; --max-unplaced sets the bar yourself.
 """
 from django.core.management.base import BaseCommand
 

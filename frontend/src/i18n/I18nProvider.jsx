@@ -5,17 +5,8 @@ import { DEFAULT_LANGUAGE, isSupported, languageFor } from "./languages.js";
 import en from "./messages/en.js";
 import { makeTranslate } from "./translate.js";
 
-// The site's translations.
-//
-// Every piece of interface text lives in messages/en.js under a key, e.g.
-// "nav.home", and components ask for it with t("nav.home"). The other nine
-// languages are separate files loaded only when somebody picks them, so an
-// English visitor never downloads them. A key missing from a translation
-// falls back to the English, so a half-finished language still works.
-//
-// The translations were written by machine, not by a translator, so every
-// page says so and offers the English (see TranslationNotice.jsx). English is
-// the version that counts.
+// Translations. All the interface text is in messages/en.js, and components use t("key").
+// Other languages only load when someone picks them. They were machine translated.
 
 // Where the choice is remembered in this browser. The account setting
 // (UserPreference.language) is updated too, for signed-in visitors.

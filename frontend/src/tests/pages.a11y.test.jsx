@@ -21,9 +21,7 @@ import TLevelsAtAmazon from "../pages/TLevelsAtAmazon.jsx";
 import { FAQS } from "../aboutContent.js";
 import { expectNoAxeViolations } from "./axe.js";
 
-// Automated WCAG 2.2 AA checks on the three information pages, the same
-// engine Lighthouse uses. Each page is wrapped in <main>, the way App.jsx
-// shows it, so landmarks are checked as a visitor meets them.
+// Accessibility checks (WCAG 2.2 AA) on each page, wrapped in <main> like App.jsx does.
 function renderPage(Page) {
   return render(
     <MemoryRouter>
@@ -53,10 +51,7 @@ const PAGES = [
   ["GDPR and data rights", DataRights],
 ];
 
-// One page here (Find T-Levels Near You) asks the API for the pathway filter as
-// soon as it renders. Answering that here keeps every page in this file
-// offline and the same on every run; the page's own behaviour is tested in
-// NearYou.test.jsx.
+// Find T-Levels Near You loads pathways straight away, so answer that here.
 beforeEach(() => {
   vi.stubGlobal(
     "fetch",

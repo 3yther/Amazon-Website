@@ -14,7 +14,7 @@ const pl = {
       "Ta strona została przetłumaczona maszynowo ({language}), więc niektóre sformułowania mogą być nieprecyzyjne. " +
       "Wiążąca jest wersja angielska.",
     showEnglish: "Czytaj po angielsku",
-    englishOnly: "Ta strona jest dostępna tylko po angielsku, aby jej treść była całkowicie dokładna.",
+    englishOnly: "Ta strona jest dostępna tylko po angielsku.",
   },
 
   pathways: {
@@ -79,7 +79,7 @@ const pl = {
       browse: { title: "Przeglądaj materiały", text: "Poradniki, materiały i filmy dla wszystkich pięciu ścieżek.", link: "Przeglądaj materiały" },
       register: { title: "Zgłoś zainteresowanie", text: "Napisz nam, którą ścieżkę chcesz poznać.", link: "Zgłoś zainteresowanie" },
       hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem." },
-      getInvolved: { title: "Dołącz", text: "Załóż konto, aby otworzyć więcej materiałów dla swojej ścieżki.", link: "Zarejestruj się" },
+      getInvolved: { title: "Dołącz", text: "Zarejestruj się, aby zadawać pytania i odpowiadać w Społeczności oraz mieć swoje ustawienia na każdym urządzeniu.", link: "Zarejestruj się" },
     },
   },
 
@@ -181,8 +181,6 @@ const pl = {
       lead: "Pytania ({count}) o T-Levels, praktyki w Amazon i tę stronę. Nic nie jest zapisywane i nikt nie widzi twojego wyniku.",
     },
     label: "Sprawdzian wiedzy",
-    title: "Co wiesz o T-Levels?",
-    lead: "Pytania ({count}), jedno po drugim. Błędna odpowiedź też się przydaje: Smiley zaproponuje, że ją wyjaśni.",
     scored: "Twój wynik: {score} z {total}",
     doneLead: "Jeśli czegoś nie jesteś pewien, zapytaj Smileya w rogu. Powie ci, jeśli nie wie.",
     questionOf: "Pytanie {number} z {total}",
@@ -212,6 +210,7 @@ const pl = {
     error404: "Błąd 404",
     notFound: "Nie znaleziono strony",
     toLibrary: "Przejdź do biblioteki materiałów",
+    loading: "Wczytywanie",
   },
 
   titles: {
@@ -248,7 +247,7 @@ const pl = {
   footer: {
     about: "O nas",
     aboutText:
-      "T-SMILE pomaga uczniom, rodzicom i nauczycielom poznać T-Levels oraz cyfrowy T-Level w Amazon, z darmowymi materiałami i materiałami dla zarejestrowanych w jednym miejscu.",
+      "T-Levels i praktyki w Amazon wyjaśnione dla uczniów, rodziców i nauczycieli. Projekt uczniowski dla Amazon Emerging Talent, a nie oficjalna strona Amazon.",
     navigation: "Nawigacja",
     support: "Wsparcie",
     legal: "Informacje prawne",
@@ -287,7 +286,7 @@ const pl = {
     signUp: "Zarejestruj się",
     signInOrUp: "Zaloguj się lub zarejestruj",
     notSignedIn: "Nie jesteś zalogowany",
-    needAccount: "Niektóre materiały wymagają konta",
+    needAccount: "Zarejestruj się, aby dołączyć do Społeczności",
     roles: {
       student: "Uczeń",
       parent: "Rodzic lub opiekun",
@@ -311,14 +310,13 @@ const pl = {
       quiz: "Quiz",
       community: "Społeczność",
       help: "Pomoc",
-      registerInterest: "Zgłoś zainteresowanie",
     },
   },
 
   login: {
     label: "Konto",
     title: "Witaj ponownie",
-    lead: "Zaloguj się, aby otworzyć materiały dla zarejestrowanych.",
+    lead: "Zaloguj się, aby dołączyć do Społeczności i mieć swoje ustawienia na każdym urządzeniu.",
     username: "Nazwa użytkownika",
     password: "Hasło",
     submitting: "Logowanie",
@@ -332,6 +330,8 @@ const pl = {
     hidePassword: "Ukryj hasło",
     showPassword: "Pokaż hasło",
     panelLine: "Darmowe materiały dla cyfrowej ścieżki T-Level w Amazon.",
+    somethingWrong: "Coś poszło nie tak. Spróbuj ponownie.",
+    noConnection: "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
   },
 
   register: {
@@ -407,6 +407,10 @@ const pl = {
     submit: "Zgłoś zainteresowanie",
     nextTitle: "Co dalej",
     underSixteen: "Masz mniej niż 16 lat? Zanim to wyślesz, zapytaj rodzica lub opiekuna.",
+    box: {
+      summary: "Chcesz odbyć praktyki w Amazon? Zgłoś zainteresowanie",
+      text: "Konto nie jest potrzebne. Powiedz nam, która ścieżka Cię interesuje, a przekażemy to zespołowi Amazon Emerging Talent. Masz mniej niż 16 lat? Najpierw zapytaj rodzica lub opiekuna.",
+    },
     thanks: {
       title: "Dziękujemy, jesteś na liście",
       lead: "Twoje zainteresowanie ścieżką {pathway} zostało wysłane do zespołu Amazon Emerging Talent.",
@@ -691,19 +695,18 @@ const pl = {
       amazonPathways: "Oto, co Amazon powiedział o każdej ścieżce:",
       pathwaysList: "Jest pięć ścieżek:",
       providerQuestions: "Dobre pytania do szkoły lub college'u:",
-      resources: "Na stronie Materiały są poradniki, pakiety i filmy. Niektóre wymagają darmowego konta.",
+      resources: "Na stronie Materiały są poradniki, pakiety i filmy, wszystkie do otwarcia za darmo.",
       quiz: "W quizie są krótkie pytania o T-Levels, a ja pomogę ci z tymi, na które odpowiesz źle.",
       community:
         "W Społeczności możesz zadać pytanie, a inni uczniowie, rodzice, nauczyciele i pracownicy Amazon mogą odpowiedzieć. " +
         "Wszystko, czego ja nie wiem, warto zapytać właśnie tam.",
       account:
-        "Możesz przeglądać stronę i rozmawiać ze mną bez konta. Darmowe konto otwiera materiały oznaczone jako dla zarejestrowanych " +
-        "i pozwala pytać i odpowiadać w Społeczności.",
+        "Bez konta możesz przeglądać stronę, otwierać wszystkie materiały i rozmawiać ze mną. Darmowe konto pozwala zadawać pytania i odpowiadać w Społeczności oraz zachowuje Twoje ustawienia na każdym urządzeniu.",
       contact: "Z zespołem T-SMILE skontaktujesz się przez stronę Kontakt.",
       accessibility:
         "W ustawieniach Dostępności możesz zmienić rozmiar tekstu, kolory, tryb ciemny, animacje i czytanie na głos.",
       language:
-        "Tak! Użyj menu z globusem na górze strony albo tego w menu bocznym. Do wyboru jest dziesięć języków.",
+        "Tak! Użyj menu języka pod przyciskiem konta u góry strony albo tego w menu bocznym. Do wyboru jest dziesięć języków.",
       privacy:
         "Zapisuję tylko pytania, które muszę sprawdzić, żebyśmy mogli wrócić do rozmowy. To, na co odpowiadam sam, i to, jak " +
         "poruszasz się po stronie, zostaje w twojej przeglądarce. Szczegóły są w Polityce prywatności.",
@@ -847,6 +850,354 @@ const pl = {
       areYouBot: "jesteś botem, jesteś robotem, jesteś człowiekiem, jesteś ai",
       whatCanYouDo: "co potrafisz, co umiesz, w czym pomożesz",
       joke: "żart, dowcip, kawał",
+    },
+  },
+
+  legalPage: {
+    updated: "Ostatnia aktualizacja: {date}. Wersja robocza, do sprawdzenia przed uruchomieniem.",
+  },
+
+  messageForm: {
+    about: "Czego to dotyczy?",
+    email: "E-mail (opcjonalnie)",
+    emailHint: "Podaj go, jeśli chcesz odpowiedzi.",
+    sending: "Wysyłanie",
+    empty: "Najpierw napisz wiadomość.",
+  },
+
+  contact: {
+    label: "Wsparcie",
+    title: "Kontakt",
+    leadBefore: "Wyślij wiadomość do zespołu. Coś nie działa? Użyj strony",
+    leadLink: "Zgłoś problem",
+    leadAfter: ".",
+    categories: {
+      general: "Pytanie lub coś innego",
+      feature: "Pomysł na stronę",
+    },
+    message: "Twoja wiadomość",
+    submit: "Wyślij wiadomość",
+    sent: "Dziękujemy, Twoja wiadomość dotarła do zespołu.",
+  },
+
+  reportIssue: {
+    label: "Wsparcie",
+    title: "Zgłoś problem",
+    lead: "Napisz, co poszło nie tak i na której stronie byłeś.",
+    categories: {
+      bug: "Coś nie działa",
+      accessibility: "Coś jest trudne w użyciu lub czytaniu",
+    },
+    message: "Co się stało?",
+    submit: "Wyślij zgłoszenie",
+    sent: "Dziękujemy, mamy Twoje zgłoszenie i sprawdzimy je.",
+  },
+
+  feedbackPage: {
+    label: "Opinie",
+    title: "Opinie",
+    lead: "Napisz, co działa, a co nie.",
+    category: "Kategoria",
+    categories: {
+      bug: "Zgłoszenie błędu",
+      feature: "Propozycja funkcji",
+      general: "Ogólna opinia",
+      accessibility: "Problem z dostępnością",
+    },
+    message: "Wiadomość",
+    email: "E-mail (opcjonalnie)",
+    emailHint: "Abyśmy mogli odpowiedzieć, jeśli chcesz.",
+    sending: "Wysyłanie",
+    submit: "Wyślij opinię",
+    thanksTitle: "Dziękujemy",
+    thanksLead: "Czytamy każdą wiadomość. Dziękujemy, że poświęciłeś czas.",
+  },
+
+  accessibilityHelp: {
+    label: "Wsparcie",
+    title: "Pomoc w dostępności",
+    lead: "Staramy się spełniać WCAG 2.2 AA, standard dostępnych stron internetowych.",
+    waysTitle: "Korzystaj ze strony po swojemu",
+    ways: {
+      settings: "Zmień rozmiar tekstu, kontrast, odstępy i kolory w ustawieniach dostępności.",
+      keyboard: "Wszystko działa z klawiatury. Tab przenosi dalej, Enter wybiera.",
+      skip: "Naciśnij Tab raz na dowolnej stronie, aby przejść prosto do głównej treści.",
+      screenReaders: "Strony są zbudowane tak, aby działały z czytnikami ekranu, takimi jak NVDA i VoiceOver.",
+      motion: "Ruchome napisy i animacje zatrzymują się, jeśli Twoje urządzenie ma ustawione ograniczenie ruchu.",
+      speech: "Smiley może czytać swoje odpowiedzi na głos. Włącz to w ustawieniach dostępności.",
+    },
+    openSettings: "Otwórz ustawienia dostępności",
+    problemTitle: "Coś Ci nie działa?",
+    problemLead: "Napisz, która strona i co przeszkadzało, a naprawimy to.",
+    report: "Zgłoś problem z dostępnością",
+  },
+
+  settings: {
+    label: "Ustawienia",
+    title: "Dostępność",
+    lead: "Zmień, jak T-SMILE wygląda i działa dla Ciebie. Po zalogowaniu te ustawienia działają na każdym urządzeniu; bez logowania zostają w tej przeglądarce.",
+    signInPrompt: "Zaloguj się, aby tym zarządzać.",
+    tabs: {
+      sightLoss: "Wzrok",
+      display: "Wygląd",
+      language: "Język",
+      security: "Bezpieczeństwo",
+      account: "Konto",
+    },
+    sight: {
+      fontSize: "Rozmiar czcionki",
+      highContrast: "Wysoki kontrast",
+      textSpacing: "Odstępy w tekście",
+      spacing: {
+        normal: "Normalne",
+        comfortable: "Wygodne",
+        relaxed: "Swobodne",
+        wide: "Szerokie",
+      },
+      colourBlindness: "Rodzaj daltonizmu",
+      colourBlindnessHint: "Powiedz nam, jak widzisz kolory, a strona dopasuje swoje, tak aby odcienie, które wyglądałyby dla Ciebie podobnie, były od siebie odsunięte.",
+      colours: {
+        none: "Brak",
+        protanopia: "Protanopia (nierozróżnianie czerwieni)",
+        deuteranopia: "Deuteranopia (nierozróżnianie zieleni)",
+        tritanopia: "Tritanopia (nierozróżnianie błękitu)",
+      },
+      speech: "Czytaj odpowiedzi asystenta na głos",
+      speechHint: "Czyta tylko odpowiedzi Smileya, głosem z tego urządzenia. Reszta strony nie jest jeszcze czytana na głos.",
+      reduceMotion: "Ogranicz ruch",
+      reduceMotionHint: "Wyłącza animacje strony, niezależnie od ustawienia systemu.",
+    },
+    display: {
+      theme: "Motyw",
+      themes: {
+        light: "Jasny",
+        dark: "Ciemny",
+        system: "Jak w systemie",
+      },
+      outline: "Styl obramowania fokusu",
+      outlines: {
+        default: "Domyślny",
+        thick: "Gruby",
+        dashed: "Przerywany",
+      },
+      background: "Tło strony",
+      backgrounds: {
+        white: "Białe",
+        cream: "Kremowe",
+        gray: "Szare",
+      },
+    },
+    security: {
+      lastChanged: "Hasło ostatnio zmienione: {date}.",
+      changed: "Hasło zmienione.",
+      current: "Obecne hasło",
+      new: "Nowe hasło",
+      strength: "Siła: {level}",
+      strengths: {
+        veryWeak: "Bardzo słabe",
+        weak: "Słabe",
+        fair: "Przeciętne",
+        good: "Dobre",
+        strong: "Silne",
+        veryStrong: "Bardzo silne",
+      },
+      minLength: "Co najmniej 8 znaków.",
+      confirm: "Potwierdź nowe hasło",
+      saving: "Zapisywanie",
+      submit: "Zmień hasło",
+    },
+    account: {
+      saved: "Profil zapisany.",
+      firstName: "Imię",
+      lastName: "Nazwisko",
+      email: "E-mail",
+      phone: "Telefon",
+      saving: "Zapisywanie",
+      save: "Zapisz",
+      cancel: "Anuluj",
+      signingOutLabel: "Wylogowanie",
+      signingOutText: "Kończy tę sesję na tym urządzeniu. Twoje ustawienia i konto pozostają bez zmian.",
+      loggingOut: "Wylogowywanie",
+      logOut: "Wyloguj się",
+      dangerLabel: "Strefa zagrożenia",
+      dangerText: "Dezaktywacja konta wylogowuje Cię i blokuje logowanie, dopóki konto nie zostanie ponownie aktywowane.",
+      deactivate: "Dezaktywuj konto",
+      confirmText: "Wpisz hasło, aby potwierdzić. Zostaniesz od razu wylogowany.",
+      password: "Hasło",
+      deactivating: "Dezaktywowanie",
+      wrongPassword: "Nieprawidłowe hasło.",
+    },
+  },
+
+  resources: {
+    label: "Materiały",
+    title: "Materiały o T-Levels",
+    lead: "Bezpłatne poradniki, filmy i pakiety z oficjalnych źródeł, takich jak gov.uk i UCAS.",
+    filters: "Filtruj materiały",
+    pathway: "Kierunek",
+    allPathways: "Wszystkie kierunki",
+    for: "Dla kogo",
+    anyone: "Dla każdego",
+    access: "Dostęp",
+    any: "Dowolny",
+    clear: "Wyczyść filtry",
+    loadError: "Nie udało się wczytać materiałów.",
+    serverError: "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+    tryAgain: "Spróbuj ponownie",
+    loading: "Wczytywanie",
+    noMatches: "Żadne materiały nie pasują do tych filtrów.",
+    oneItem: "1 materiał",
+    items: "Materiały: {count}",
+    loadMore: "Wczytaj więcej",
+    signUp: "Załóż konto, aby uzyskać dostęp",
+    openOn: "Otwórz na {site}",
+    anotherWebsite: "innej stronie",
+    open: "Otwórz",
+    types: {
+      guide: "Poradnik",
+      document: "Dokument",
+      video: "Film",
+      prep_pack: "Pakiet przygotowawczy",
+      class_pack: "Pakiet na lekcję",
+    },
+    audiences: {
+      all: "Wszyscy",
+      student: "Uczniowie",
+      parent: "Rodzice i opiekunowie",
+      teacher: "Nauczyciele i szkoły",
+    },
+    accessLevels: {
+      free: "Bezpłatne",
+      signup: "Z kontem",
+    },
+  },
+
+  nearYou: {
+    label: "Znajdź szkołę",
+    title: "Znajdź T-Levels w pobliżu",
+    lead: "Wpisz swój kod pocztowy, aby zobaczyć szkoły i college w pobliżu, które prowadzą T-Levels, od najbliższych.",
+    form: "Szukaj szkół z T-Levels",
+    postcode: "Kod pocztowy",
+    postcodeHint: "Na przykład SW1A 1AA.",
+    pathway: "Kierunek",
+    allPathways: "Wszystkie kierunki",
+    within: "W promieniu",
+    miles: "{miles} mil",
+    search: "Szukaj",
+    searching: "Szukanie",
+    error: "Nie udało się wyszukać szkół.",
+    tryAgain: "Spróbuj ponownie",
+    start: "Wpisz kod pocztowy, aby zobaczyć szkoły w pobliżu.",
+    none: "Brak szkół w promieniu {radius} mil od {postcode}. Spróbuj większego promienia.",
+    oneFound: "1 szkoła w promieniu {radius} mil od {postcode}.",
+    found: "Szkoły w promieniu {radius} mil od {postcode}: {count}.",
+    underTenth: "Mniej niż 0.1 mili",
+    oneMile: "1 mila",
+    distance: "{miles} mil",
+    pathways: "Kierunki",
+    askProvider: "Zapytaj szkołę",
+    website: "Odwiedź stronę",
+    type: "Typ",
+    foundationYear: "Rok przygotowawczy",
+    groupNear: "Szkoły w pobliżu",
+    groupOffering: "Prowadzą {pathway}",
+    unconfirmedTitle: "Przedmioty niepotwierdzone",
+    unconfirmedNote: "Oficjalny rejestr pokazuje, że te szkoły prowadzą T-Levels, ale nie mówi jakie. Są w pobliżu, więc zapytaj, czy prowadzą {pathway}.",
+    unconfirmedNoteOne: "Oficjalny rejestr pokazuje, że ta szkoła prowadzi T-Levels, ale nie mówi jakie. Jest w pobliżu, więc zapytaj, czy prowadzi {pathway}.",
+    notConfirmed: "Niepotwierdzone, zapytaj szkołę",
+    noneOfFive: "Żaden z naszych pięciu kierunków",
+    oneFoundOffering: "1 szkoła prowadząca {pathway} w promieniu {radius} mil od {postcode}.",
+    foundOffering: "Szkoły prowadzące {pathway} w promieniu {radius} mil od {postcode}: {count}.",
+    noneConfirmed: "Brak potwierdzonych szkół z kierunkiem {pathway} w promieniu {radius} mil od {postcode}.",
+    oneUnsure: "1 szkoła w pobliżu nie ma potwierdzonych przedmiotów.",
+    unsure: "Szkoły w pobliżu bez potwierdzonych przedmiotów: {count}.",
+    errors: {
+      empty: "Wpisz kod pocztowy.",
+      notFull: "Wpisz pełny brytyjski kod pocztowy, na przykład SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Przedmioty",
+    title: "Wszystkie T-Levels",
+    lead: "{subjects} przedmiotów w {routes} dziedzinach, od rolnictwa po marketing. Dwa kolejne pojawią się we wrześniu 2028.",
+    onGovUk: ", na tlevels.gov.uk",
+    comingIn: "Od września {year}",
+    notes: {
+      financeEnds: "Ostatni nabór we wrześniu 2026",
+    },
+    pathwayResources: "Materiały: {pathway}",
+    nextLabel: "Dalej",
+    nextTitle: "Znajdź szkołę w pobliżu",
+    nextLead: "Nie każda szkoła czy college prowadzi każdy przedmiot.",
+    searchHere: "Szukaj według kodu pocztowego na tej stronie",
+    searchEngland: "Szukaj wśród wszystkich szkół w Anglii",
+  },
+
+  getInvolvedPage: {
+    label: "Dołącz",
+    title: "Twój następny krok",
+    lead: "Wybierz, kim jesteś.",
+    everyone: "Wszyscy",
+    audiences: {
+      students: {
+        heading: "Uczniowie",
+        lead: "W wieku od 16 do 18 lat albo kończysz GCSE.",
+      },
+      parents: {
+        heading: "Rodzice i opiekunowie",
+        lead: "Pomagasz komuś zdecydować, co po GCSE.",
+      },
+      teachers: {
+        heading: "Nauczyciele i szkoły",
+        lead: "Amazon organizuje praktyki ze szkołami i college, a nie bezpośrednio z uczniami.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "Zobacz wszystkie przedmioty T-Level",
+        detail: "Wszystkie T-Levels",
+      },
+      nearYou: {
+        label: "Znajdź szkołę lub college w pobliżu",
+        detail: "Znajdź T-Levels w pobliżu",
+      },
+      interest: {
+        label: "Powiedz Amazonowi, że chcesz praktyki",
+        detail: "Zgłoś zainteresowanie",
+      },
+      quiz: {
+        label: "Sprawdź swoją wiedzę",
+        detail: "Quiz",
+      },
+      about: {
+        label: "Czym jest T-Level",
+        detail: "O T-Levels",
+      },
+      parentGuides: {
+        label: "Poradniki dla rodziców",
+        detail: "Materiały",
+      },
+      bursary: {
+        label: "Pomoc z dojazdami, książkami i sprzętem",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Zapytaj Amazon o praktyki dla swoich uczniów",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Pakiety na lekcje i poradniki dla nauczycieli",
+        detail: "Materiały",
+      },
+      guidance: {
+        label: "Co muszą obejmować praktyki",
+        detail: "Wytyczne dotyczące praktyk, gov.uk",
+      },
+      feedback: {
+        label: "Powiedz nam, co ulepszyłoby tę stronę",
+        detail: "Opinie",
+      },
     },
   },
 };

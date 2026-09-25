@@ -5,20 +5,13 @@ import studentsLibrary from "../assets/pexels-students-library.jpg";
 import studentsOutdoors from "../assets/pexels-students-outdoors.jpg";
 import warehouseTeam from "../assets/pexels-warehouse-team.jpg";
 
-// Photos from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
-// free to use, attribution not required. Credited here for the asset log.
-//   pexels-students-library.jpg: Kampus Production,
-//     https://www.pexels.com/photo/concentrated-young-diverse-students-using-laptops-during-lesson-in-library-5940711/
-//   pexels-students-outdoors.jpg: Keira Burton,
-//     https://www.pexels.com/photo/diverse-students-working-together-at-table-with-laptop-in-park-6147009/
-//   pexels-warehouse-team.jpg: Tiger Lily,
-//     https://www.pexels.com/photo/men-working-in-a-warehouse-4480797/
-//   pexels-office-meeting.jpg: Tima Miroshnichenko,
-//     https://www.pexels.com/photo/office-team-having-a-meeting-in-the-room-6914053/
+// Photos from Pexels (free to use):
+//   pexels-students-library.jpg: Kampus Production, https://www.pexels.com/photo/concentrated-young-diverse-students-using-laptops-during-lesson-in-library-5940711/
+//   pexels-students-outdoors.jpg: Keira Burton, https://www.pexels.com/photo/diverse-students-working-together-at-table-with-laptop-in-park-6147009/
+//   pexels-warehouse-team.jpg: Tiger Lily, https://www.pexels.com/photo/men-working-in-a-warehouse-4480797/
+//   pexels-office-meeting.jpg: Tima Miroshnichenko, https://www.pexels.com/photo/office-team-having-a-meeting-in-the-room-6914053/
 
-// Four, not six: the loop needs the row twice over, so every photo added
-// widens the animated layer by two cards. Four covers the three settings the
-// page talks about (study, warehouse, office) and keeps that layer small.
+// Only four photos because the loop needs them twice.
 const PHOTOS = [
   { src: studentsLibrary, id: "students-library" },
   { src: warehouseTeam, id: "warehouse-team" },
@@ -27,17 +20,8 @@ const PHOTOS = [
 ];
 
 /**
- * A slow, looping row of photographs. Purely decorative, so every image has
- * an empty alt and the row carries one group label instead.
- *
- * The loop is the same six photos twice over, sliding exactly half the
- * track's width, so it starts again at the point it began with no visible
- * jump. It pauses on hover and on keyboard focus.
- *
- * With reduced motion there is no animation at all: the same row becomes an
- * ordinary horizontally scrollable strip that the visitor moves themselves.
- * Either way the container clips its own overflow, so the page never gets a
- * horizontal scrollbar of its own.
+ * A slow scrolling row of photos (decoration). Pauses on hover and focus.
+ * With reduced motion it's a normal row you can scroll yourself.
  */
 export default function PhotoStrip() {
   const t = useT();

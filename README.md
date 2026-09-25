@@ -1,115 +1,62 @@
 # T-SMILE
 
-**Amazon Emerging Talent Digital T Level project** - information and advice about T Levels, free and gated digital content, and a way to register interest in Amazon's T Level opportunities, all in one place.
+Our website for the **Amazon Emerging Talent Digital T-Level project**. It explains T-Levels (in general and at Amazon), has a library of free resources, and lets people register interest in an Amazon placement.
 
 [![CI](https://github.com/3yther/Amazon-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/3yther/Amazon-Website/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.11-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-REST_Framework-092E20?logo=django&logoColor=white)
 ![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)
-![Node](https://img.shields.io/badge/node-20.19%2B-339933?logo=node.js&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-production-4169E1?logo=postgresql&logoColor=white)
+![Node](https://img.shields.io/badge/node-22%2B-339933?logo=node.js&logoColor=white)
 
-**Live preview:** https://frontend-production-2990.up.railway.app/ (temporary Railway preview)
+**Live preview:** https://tsmile.up.railway.app/ (temporary, on Railway)
 
-> Read [`CONTEXT.md`](CONTEXT.md) (stack, design rules, conventions) and [`MODELS.md`](MODELS.md) (the locked database schema) before changing anything.
+Read [`CONTEXT.md`](CONTEXT.md) (rules and conventions) and [`MODELS.md`](MODELS.md) (database) before changing anything.
 
-**Stack:** Python 3.11 + Django REST Framework, React + Vite, SQLite locally / PostgreSQL in production, AWS (EC2 + RDS + S3) with a Railway preview.
+## What it does
 
-## Contents
-
-- [About](#about)
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Project layout](#project-layout)
-- [Getting started](#getting-started)
-- [Running tests](#running-tests)
-- [Deployment](#deployment)
-- [API reference](#api-reference)
-- [Admin](#admin)
-- [How we work](#how-we-work)
-- [Troubleshooting](#troubleshooting)
-- [Design principles](#design-principles)
-- [Team](#team)
-- [Notes](#notes)
-- [Licence](#licence)
-
-## About
-
-T-SMILE is a Django REST API (`backend/`) with a React (Vite) front end (`frontend/`), built for four audiences: students (16-18), parents and guardians, schools and teachers, and Amazon staff, who manage content and review submissions.
-
-The site does three jobs:
-
-- Explains T Levels in general, and at Amazon, by pathway (Digital, Business, Media, Finance, Engineering).
-- Hosts a content library of guides, documents, videos and prep packs - some free, some gated behind sign-up.
-- Captures Expressions of Interest from students, parents and teachers.
-
-## Features
-
-- **T Level information** by pathway (Digital, Business, Media, Finance, Engineering), in general and at Amazon.
-- **Content library** of guides, documents, videos and prep packs, some free and some gated behind a sign-up.
-- **Accounts** with sign up and log in, so gated content unlocks for signed-in users.
-- **Expression of Interest** form, validated server side and rate limited.
-- **T Level Near You**: enter a postcode, optionally pick a pathway and a distance, and see the schools and colleges running T Levels near you, nearest first.
-- **Smiley, the guide**: answers most T Level questions by itself, in the browser, from the site's own checked copy (no API key needed). The AI only takes questions Smiley cannot match, and if it is not there Smiley says so honestly and points to the Community. It asks who you are, offers help when a page goes quiet or a quiz answer goes wrong, catches safeguarding messages and replies with checked helpline numbers (never sent to the server), and has a personality of its own: it blinks, watches your cursor, dozes off, peeks out from the edge of the page now and then, and hides a few easter eggs. Every animation stops under reduced motion.
-- **Community**: a place to ask about T Levels and Amazon placements and have students, parents, teachers and Amazon staff answer. Posts publish straight away but pass a filter first (personal details, links, strong language, and anything that sounds like someone is at risk is held back with support numbers). Answers can be marked helpful, the asker can mark the one that helped, and three reports hide a post for staff to review.
-- **Ten languages**: English plus the nine most spoken in England (Census 2021): Polish, Romanian, Panjabi, Urdu, Portuguese, Spanish, Arabic, Bengali and Gujarati, with right-to-left layouts for Arabic and Urdu. The interface, forms, Smiley, the Community and the About, T Levels at Amazon and Help pages are translated by machine and labelled as such; English stays the version that counts, and the legal pages stay in English only.
-- **Help, About and T Level at Amazon** information pages.
-- **Staff admin** where Amazon staff review submissions and manage content.
+- **T-Level info** for the five pathways: Digital, Business, Media, Finance and Engineering
+- **Resources** library of guides, videos and packs from gov.uk, UCAS and others
+- **Register interest** form for Amazon placements (no account needed)
+- **Find T-Levels near you** by postcode
+- **Community** where people ask and answer questions (posts are checked first)
+- **Smiley**, a chat helper that answers from the site's own content, and uses the AI only for questions it can't match
+- **10 languages**: English plus Polish, Romanian, Panjabi, Urdu, Portuguese, Spanish, Arabic, Bengali and Gujarati (machine translated)
+- **Accessibility settings** like font size, high contrast, dark mode and reduce motion
+- **Staff page** where Amazon staff see interest submissions
 
 ## Screenshots
 
-**Homepage**
-
-![T-SMILE homepage hero](docs/screenshots/home-hero.png)
-
+![T-SMILE homepage](docs/screenshots/home-hero.png)
 ![Homepage audience cards](docs/screenshots/home-audiences.png)
-
-**Explore by pathway**
-
-![Pathway selector showing the five Amazon pathways](docs/screenshots/pathways.png)
-
-**Help page**
-
-![Help page with links to the main tasks](docs/screenshots/help.png)
-
-**Sign up**
-
-![Sign up form](docs/screenshots/signup.png)
-
-<!-- Add these when you have them:
-![Content library with filters](docs/screenshots/resources.png)
-![Expression of Interest form](docs/screenshots/eoi.png)
-![Find Near You](docs/screenshots/find-near-you.png)
--->
+![The five pathways](docs/screenshots/pathways.png)
+![Help page](docs/screenshots/help.png)
+![Sign up page](docs/screenshots/signup.png)
 
 ## Project layout
 
 ```
 backend/
-  config/      settings, root URLs
-  accounts/    Profile (extends Django's built-in User)
-  content/     Pathway, ContentItem, content API
-  interest/    ExpressionOfInterest, submission API
-  providers/   Provider, the near-you search API and the geocoding command
-  chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI provider
-  community/   Questions, answers, helpful votes, reports and the posting filter (moderation.py)
-frontend/
-  src/api.js                    all calls to the Django API
-  src/assistant/                Smiley: the chat widget, its face, moods, easter eggs and script
-  src/assistant/answers/        Smiley's own answers: topics, matching and safeguarding
-  src/community/                shared parts of the Community pages
-  src/i18n/                     languages: messages/<code>.js for the interface, content/<code>.js for page copy
-  src/pages/ContentLibrary.jsx  example page: lists content from the API
-  src/styles.css                colour tokens and styles
+  config/      settings and URLs
+  accounts/    profiles, settings, feedback, staff permission
+  content/     pathways and resources
+  interest/    Expressions of Interest
+  providers/   schools and colleges for the near-you search
+  chatbot/     Smiley's API and checked facts
+  community/   questions, answers, reports and the post filter
+frontend/src/
+  api.js       every call to the Django API
+  pages/       one file per page
+  components/  shared parts
+  assistant/   Smiley
+  i18n/        translations
+  tests/       frontend tests
 ```
 
-## Getting started
+## Running it locally
 
-Needs **Python 3.11** and **Node 20.19+** (or 22.12+).
+You need **Python 3.11** and **Node 22 or newer**.
 
-### Backend
-
-In one terminal:
+Backend (first terminal):
 
 ```bash
 cd backend
@@ -118,16 +65,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 python -c "from django.core.management.utils import get_random_secret_key as k; print(k())"
-# paste the printed key into .env as DJANGO_SECRET_KEY
+# put that key in .env as DJANGO_SECRET_KEY
 python manage.py migrate
-python manage.py loaddata pathways resources   # optional: the five pathways and starter resources
+python manage.py loaddata pathways resources providers
 python manage.py createsuperuser
 python manage.py runserver
 ```
 
-### Frontend
-
-In a second terminal:
+Frontend (second terminal):
 
 ```bash
 cd frontend
@@ -135,133 +80,83 @@ npm install
 npm run dev
 ```
 
-### Open it
+Then go to **http://localhost:5173**. Vite sends `/api` and `/media` to Django on port 8000. The admin is at **http://localhost:8000/admin/**.
 
-Visit **http://localhost:5173**. The Vite dev server forwards `/api` and `/media` to Django on port 8000. Add content at **http://localhost:8000/admin/**.
+### Environment variables
 
-### Configuration
+Copy `backend/.env.example` to `backend/.env`. Never commit a real `.env`.
 
-Both `backend/` and `frontend/` ship an `.env.example` file. Copy each one and fill it in. Never commit a real `.env` file.
-
-**Backend** (`cp backend/.env.example backend/.env`):
-
-| Variable | Needed | Purpose |
+| Variable | When | What for |
 | --- | --- | --- |
-| `DJANGO_SECRET_KEY` | Always | Signs sessions and CSRF tokens. Generate one with the command in the backend setup above. |
-| `DJANGO_DEBUG` | Local only | `True` for local development, `False` (or unset) in production. |
-| `DJANGO_ALLOWED_HOSTS` | Always | Comma-separated hostnames Django will serve. Defaults to `localhost,127.0.0.1`. |
-| `CORS_ALLOWED_ORIGINS` | If cross-origin | Only when the React app is served from a different origin than the API. The Vite proxy makes them the same origin locally, so you can leave the default. |
-| `CSRF_TRUSTED_ORIGINS` | If cross-origin | Same as above, for CSRF. |
-| `DATABASE_URL` | Deployed only | A `postgres://` URL. When set, it replaces SQLite. Leave unset locally. |
-| `DJANGO_BEHIND_HTTPS_PROXY` | Deployed only | `true` when a proxy in front ends HTTPS (Railway does). |
-| `ANTHROPIC_API_KEY` | Optional | Lets Smiley use the AI for questions it cannot answer by itself. Without it Smiley still answers from the site's checked copy and says honestly when it does not know. Key from console.anthropic.com. Server side only, never sent to the browser. Never commit it. |
-| `ANTHROPIC_SERVER_SIDE_FALLBACK` | Rarely | Set to `false` if the API rejects the server-side fallback option. |
+| `DJANGO_SECRET_KEY` | Always | Signs sessions. Make one with the command above |
+| `DJANGO_DEBUG` | Local | `True` locally, leave unset when deployed |
+| `DJANGO_ALLOWED_HOSTS` | Always | e.g. `localhost,127.0.0.1` |
+| `DATABASE_URL` | Deployed | PostgreSQL URL. Leave unset locally to use SQLite |
+| `DJANGO_BEHIND_HTTPS_PROXY` | Deployed | `true` on Railway |
+| `CSRF_TRUSTED_ORIGINS`, `CORS_ALLOWED_ORIGINS` | Sometimes | Only if the front end is on a different address from the API |
+| `ANTHROPIC_API_KEY` | Optional | Lets Smiley use the AI. Server only, never commit it |
+| `ANTHROPIC_SERVER_SIDE_FALLBACK` | Rarely | `false` if the API rejects the fallback option |
 
-Production also has commented-out `POSTGRES_*` and `AWS_*` variables for RDS and S3. See the comments in `backend/config/settings.py`.
+The frontend usually needs nothing. `VITE_API_BASE_URL` is only for hosting the front end somewhere other than the API. Deployment variables are in [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
-**Frontend** (`cp frontend/.env.example frontend/.env.local`, only if you need it):
-
-| Variable | Needed | Purpose |
-| --- | --- | --- |
-| `VITE_API_BASE_URL` | Rarely | Leave empty for local dev and the Railway preview, where a proxy sends `/api` to Django. Only set it to the API's full origin if the front end is ever hosted on a different site from the API. |
-
-For preview and production variables, see [`DEPLOYMENT.md`](DEPLOYMENT.md).
-
-## Running tests
-
-Backend (Django):
+## Tests
 
 ```bash
 cd backend && python manage.py test
-```
-
-Frontend (Vitest and React Testing Library, with axe for automated WCAG 2.2 AA checks):
-
-```bash
 cd frontend && npm test
 ```
 
-`npm run test:watch` re-runs the tests as you save. The frontend tests live in `frontend/src/tests/` and cover the About, Help and T-Levels at Amazon pages: the FAQ, the pathway tabs and the quiz by mouse and keyboard, an axe scan of each page, and checks that copy and styles follow the rules in `CONTEXT.md`. Colour contrast is not part of the automated scan (the test browser does not draw the page), so it is still checked by hand.
+The frontend tests use Vitest, Testing Library and axe (for WCAG 2.2 AA checks). Colour contrast still has to be checked by hand. CI runs both on every pull request and every push to `main`.
 
-CI runs both on every pull request and every push to `main`.
-
-## Deployment
-
-A preview build runs on [Railway](https://railway.com) so the team and mentor can use the site at a public URL - see [`DEPLOYMENT.md`](DEPLOYMENT.md) for the full setup and environment variables. The final deployment target is AWS (EC2 + RDS + S3).
-
-The Railway preview is temporary and has known limits: the Django admin is unstyled, and uploaded content files are not kept between deploys. These are expected, not bugs. Full list in [`DEPLOYMENT.md`](DEPLOYMENT.md).
-
-## API reference
+## API
 
 | Method | URL | Notes |
 | --- | --- | --- |
-| GET | `/api/pathways/` | All pathways (not paginated) |
-| GET | `/api/pathways/<slug>/` | One pathway |
-| GET | `/api/content/` | Paginated. Filters: `pathway=<slug>`, `audience=student|parent|teacher`, `access_level=free|signup` |
-| GET | `/api/content/<slug>/` | One item |
-| POST | `/api/interest/` | Expression of Interest. Validated server side, rate limited |
-| GET | `/api/providers/search/` | Schools and colleges near a postcode, nearest first. `postcode=` required; `pathway=<slug>` and `radius=<miles>` (default 15) optional |
-| GET | `/api/chat/` | The visitor's recent messages with Smiley |
-| POST | `/api/chat/` | Ask Smiley something. Rate limited. `503` when the AI is unavailable |
-| GET | `/api/community/questions/` | Paginated. Filters: `topic=`, `pathway=<slug>`, `q=` (search), `sort=new|helpful|unanswered` |
-| POST | `/api/community/questions/` | Ask a question. Signed in, rate limited, filtered before it is published |
-| GET, DELETE | `/api/community/questions/<id>/` | One question with its answers. Only the asker can delete it (staff hide posts in the admin) |
-| POST | `/api/community/questions/<id>/answers/` | Answer a question. Signed in, rate limited, filtered |
-| DELETE | `/api/community/answers/<id>/` | Delete your own answer |
-| POST | `/api/community/<questions|answers>/<id>/helpful/` | Toggle "helpful". Signed in |
-| POST | `/api/community/answers/<id>/accept/` | The asker marks the answer that helped |
-| POST | `/api/community/<questions|answers>/<id>/report/` | Report a post. Three reports, or one from staff, hide it for review |
-
-Filtering by pathway also returns items for all pathways; filtering by audience also returns items for everyone. Sign-up content is listed for everyone, but its `file` link is only sent to signed-in users (`locked: true` otherwise).
-
-The provider search answers `{ postcode, radius_miles, count, results }`. It geocodes the visitor's postcode with [postcodes.io](https://postcodes.io) (free, no key) and measures the distance itself; the providers already carry their coordinates, so one search is one lookup however many providers there are. An unknown postcode, pathway or radius is a `400` naming the field; a `503` means postcodes.io itself is down.
+| GET | `/api/pathways/` | All pathways |
+| GET | `/api/content/` | Resources. Filters: `pathway`, `audience`, `access_level` |
+| POST | `/api/interest/` | Register interest. Rate limited |
+| GET | `/api/interest/submissions/` | Amazon staff only |
+| GET | `/api/providers/search/` | `postcode` (required), `pathway`, `radius` (default 15 miles) |
+| GET, POST | `/api/chat/` | Smiley. `503` if the AI is down |
+| GET, POST | `/api/community/questions/` | List or ask. Filters: `topic`, `pathway`, `q`, `sort` |
+| POST | `/api/community/questions/<id>/answers/` | Answer a question |
+| POST | `/api/community/<questions or answers>/<id>/helpful/` | Mark helpful |
+| POST | `/api/community/<questions or answers>/<id>/report/` | Report a post |
+| various | `/api/accounts/...` | Sign up, log in, log out, profile, settings, passwords, feedback |
 
 ## Admin
 
-Amazon staff review Expressions of Interest at `/admin/`. Submissions are read-only there. A staff account needs "Staff status" plus the "Can view expression of interest" permission (or be a superuser).
-
-Community posts and reports are there too: staff can hide or restore a question or answer, and work through open reports.
+Staff use `/admin/` to read interest submissions, manage resources, and hide or restore Community posts. Staff accounts are made by hand in the admin (you can't sign up as staff).
 
 ## How we work
 
-- Branch and pull request workflow on GitHub. No direct commits to `main`.
-- Branch names use a `feat/` prefix, for example `feat/auth`, `feat/resources`, `feat/eoi`.
-- Never commit secrets, `.env` files or `*.pem` keys. Check `.gitignore` first.
+- Branch off `main` (`feat/<thing>` or `fix/<thing>`), push, open a pull request
+- Nothing goes straight to `main`
+- Never commit secrets, `.env` files or `*.pem` keys
 
-## Troubleshooting
+## Problems we hit
 
-- **Wrong Python or Node version.** The backend needs Python 3.11 and the frontend needs Node 20.19+ (or 22.12+). Check with `python3.11 --version` and `node --version`.
-- **The Resources filter is empty.** The five pathways are not loaded. Run `python manage.py loaddata pathways resources` in the backend.
-- **`/api` requests fail in the browser.** Make sure Django is running on port 8000 in a second terminal. The Vite dev server on 5173 forwards `/api` and `/media` to it.
-- **Django will not start.** Usually a missing `DJANGO_SECRET_KEY`. Generate one and paste it into `.env` (see [Getting started](#getting-started)).
-
-## Design principles
-
-- Amazon Orange `#FF9900` and Amazon Dark Blue `#232F3E` on warm off-white `#FAFAF7`. No purple, no gradients.
-- Squared buttons, no pill shapes. SVG line icons, no emoji.
-- Minimal, punchy copy. No filler, no fake reviews or metrics.
-- WCAG 2.2 AA, and `prefers-reduced-motion` respected for any animation.
-
-Full rules in [`CONTEXT.md`](CONTEXT.md).
-
-## Team
-
-Built by five T Level students:
-
-- **Amir** - framework for the entire website
-- **Aaron** - AI chatbot
-- **Micha** - About, Help and T-Level at Amazon pages
-- **Jakub** - sign up and log in pages
-- **Lloyd** - Find Near You page
+- **Wrong Python or Node version:** check with `python3.11 --version` and `node --version`
+- **Resources filter is empty:** run `python manage.py loaddata pathways resources`
+- **`/api` fails in the browser:** Django isn't running on port 8000
+- **Django won't start:** `DJANGO_SECRET_KEY` is missing from `.env`
 
 ## Notes
 
-- The pathway summaries in `backend/content/fixtures/pathways.json` are draft copy. Check them against gov.uk before launch.
-- Production swaps SQLite for PostgreSQL on RDS and local files for S3. See the comments in `backend/config/settings.py`.
-- Never commit `.env` files or `*.pem` keys.
-- Translations live in `frontend/src/i18n/`. To change wording, change `messages/en.js` (or the English content file) first, then each language. A test checks every language has every string, keeps every `{placeholder}` and every figure (hours, points, pounds, phone numbers), and that each quiz answer still matches an option.
-- Smiley only answers from facts a person has checked, most quoted word for word from `frontend/src/aboutContent.js` (a test fails if the two drift apart). See what it still cannot answer with `cd backend && python manage.py check_chat_facts`.
+- Translations are in `frontend/src/i18n/`. Change `messages/en.js` first, then the other languages. A test checks they all match.
+- Smiley's facts are copied from `frontend/src/aboutContent.js`, and a test fails if they don't match. Run `python manage.py check_chat_facts` to see what it can't answer yet.
+- The pathway summaries in `backend/content/fixtures/pathways.json` are drafts. Check them against gov.uk before launch.
+
+## Team
+
+Made by five T-Level students:
+
+- **Amir**: the framework for the whole site
+- **Aaron**: Smiley, the AI chatbot
+- **Micha**: About, Help and T-Levels at Amazon pages, and accessibility
+- **Jakub**: sign up and log in pages
+- **Lloyd**: Find T-Levels Near You page
 
 ## Licence
 
-This is a student project built for the Amazon Emerging Talent Digital T Level programme, published for viewing and assessment only. All rights reserved. See [`LICENSE`](LICENSE) for details. "Amazon" and related marks belong to Amazon.com, Inc. or its affiliates; this is not an official Amazon product.
+A student project for the Amazon Emerging Talent Digital T-Level programme, for viewing and assessment only. All rights reserved, see [`LICENSE`](LICENSE). "Amazon" belongs to Amazon.com, Inc. and this is not an official Amazon product.

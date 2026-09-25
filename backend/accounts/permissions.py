@@ -5,17 +5,10 @@ from .models import Profile
 
 
 class IsAmazonStaff(BasePermission):
-    """
-    Only a signed-in Amazon staff account passes.
+    """Only lets signed-in Amazon staff through.
 
-    Staff is a Profile.user_type, and it can only ever be set by hand in
-    Django admin: RegisterSerializer's REGISTRATION_USER_TYPES deliberately
-    leaves AMAZON_STAFF out, so nobody can sign themselves up as staff.
-
-    Fails closed. A user with no Profile row is denied rather than raising:
-    Django's reverse one-to-one accessor raises RelatedObjectDoesNotExist,
-    which subclasses AttributeError, so getattr() returns None here instead
-    of turning a missing profile into a 500.
+    Staff can only be set in Django admin (sign up doesn't offer it).
+    A user with no Profile is refused instead of causing an error.
     """
 
     message = "Only Amazon staff can see this."

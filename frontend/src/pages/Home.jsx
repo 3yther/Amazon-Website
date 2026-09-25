@@ -6,22 +6,14 @@ import { AudienceCards, HowItWorks, PathwayTiles, StatsRow } from "../components
 import { ArrowIcon } from "../components/Icons.jsx";
 import RisingSubjects from "../components/RisingSubjects.jsx";
 
-/**
- * The homepage: the hero, then short sections on who the site is for and how
- * it works. The content library itself lives at /resources.
- */
+// The homepage.
 export default function Home() {
   const [audience, setAudience] = useState(null); // null shows the general subhead
   const subhead = useRef(null);
   const reducedMotion = useReducedMotion();
 
-  /**
-   * Picking an audience card retargets the hero subhead. The cards sit well
-   * below it, so the page brings the subhead into view and outlines it
-   * briefly in orange, making the link plain. With reduced motion it jumps
-   * there instead and skips the outline. Picking the chosen card again goes
-   * back to the general line.
-   */
+  // Picking an audience card changes the hero subhead, so scroll up to it and
+  // flash an orange outline. Picking the same card again goes back to normal.
   function chooseAudience(value) {
     setAudience((current) => (current === value ? null : value));
 
@@ -58,11 +50,7 @@ export default function Home() {
 // The subhead for each audience card, and the general line when none is
 // chosen, are home.subheads.<audience> in i18n/messages.
 
-/**
- * Opening band: the page's h1, a subhead that the audience cards further down
- * can retarget, and a way into the library. The rising subjects drift behind
- * it, and a mouse pointer lights up the ones nearby.
- */
+// The hero at the top of the homepage.
 function Hero({ audience, subheadRef }) {
   const t = useT();
   const hero = useRef(null);
@@ -97,13 +85,7 @@ const SPOTLIGHT_RADIUS = 200; // px from the pointer to the edge of its reach
 const SPOTLIGHT_PEAK = 0.14; // opacity of a name right under the pointer (normally 0.03 to 0.05)
 const TEXT_CLEARANCE = 24; // px around the hero text where names are never lit
 
-/**
- * Lights up the drifting subject names near a mouse pointer, by setting --lit
- * on each one (see .hero .rising-subjects__item in styles.css). Names that
- * touch the hero's text stay at their normal strength, so the text keeps its
- * contrast. Mouse only: touch has no pointer to follow. Off with reduced
- * motion, where the names are not shown at all.
- */
+// Lights up the floating subject names near the mouse (mouse only, off with reduced motion).
 function useSpotlight(heroRef) {
   const reducedMotion = useReducedMotion();
 

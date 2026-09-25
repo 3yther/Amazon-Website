@@ -116,10 +116,7 @@ export function TextareaField({ id, label, hint, error, ...textareaProps }) {
   );
 }
 
-/**
- * A single tick box with its label beside it. The label takes markup as well
- * as text, so it can hold a link, and clicking any of it ticks the box.
- */
+/** A checkbox with its label. The label can include a link. */
 export function CheckboxField({ id, label, hint, error, ...inputProps }) {
   return (
     <div className="field">

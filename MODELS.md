@@ -1,133 +1,127 @@
-# T-SMILE: Database Schema
+# T-SMILE database
 
-> Agreed as a team before features were built. Everything depends on it.
-> Change a model only by team agreement, because it breaks other people's work,
-> and update this file in the same pull request.
-> This maps to the ERD in the proposal. Last checked against the code: 24 September 2026.
+We agreed this as a team before building features. Only change a model if the team agrees, and update this file in the same pull request. Last checked against the code on 25 September 2026.
 
-## Core models (Django)
+## accounts
 
-### User  (Django's built-in auth User, extended with Profile and UserPreference)
-Django gives you username, email, password (salted and hashed), etc. for free. Do not rebuild auth.
+**User** is Django's built-in user (username, email, hashed password). Don't rebuild it.
 
-### Profile  (`accounts` app, one-to-one with User)
-- user                  -> OneToOne(User), deleted with the user
-- user_type             -> choice: student | parent | teacher | amazon_staff
-- pathway_interest      -> choice: Digital | Business | Media | Finance | Engineering (nullable)
-- phone                 -> text (optional)
-- is_deactivated        -> true/false (default false)
-- deactivated_at        -> datetime (nullable)
-- last_password_changed -> datetime (set at sign up, updated when the password changes)
-- created_at            -> datetime (auto)
+**Profile** (one per User)
+- user_type: student, parent, teacher or amazon_staff
+- pathway_interest: Digital, Business, Media, Finance or Engineering (optional)
+- phone (optional)
+- is_deactivated, deactivated_at
+- last_password_changed
+- created_at
 
-### UserPreference  (`accounts` app, one-to-one with User)
-The settings on the Accessibility page, saved for signed-in users.
-- user                  -> OneToOne(User), deleted with the user
-- font_size_scale       -> whole number, 80 to 150 (percent, default 100)
-- high_contrast         -> true/false
-- text_spacing_level    -> whole number, 0 to 3
-- color_blindness_type  -> choice: none | protanopia | deuteranopia | tritanopia
-- text_to_speech        -> true/false
-- reduce_motion         -> true/false
-- theme                 -> choice: light | dark | system (default system)
-- button_outline_style  -> text (default "default")
-- page_background       -> text (default "white")
-- language              -> text (default "en")
-- date_format           -> text (default "MM/DD/YYYY")
-- number_format         -> text (default "US")
-- created_at, updated_at -> datetime (auto)
+**UserPreference** (one per User, the settings on the Accessibility page)
+- font_size_scale: 80 to 150 (default 100)
+- high_contrast, text_to_speech, reduce_motion: true/false
+- text_spacing_level: 0 to 3
+- color_blindness_type: none, protanopia, deuteranopia or tritanopia
+- theme: light, dark or system
+- button_outline_style, page_background
+- language (default "en")
+- date_format, number_format: not used any more (the site is always UK format), kept until the team agrees to drop them
+- created_at, updated_at
 
-### Pathway  (`content` app)
-- name            -> choice: Digital | Business | Media | Finance | Engineering (unique)
-- slug            -> short url-safe name (unique)
-- summary         -> short text (up to 255 characters)
-- description     -> long text
-The five rows are loaded from `backend/content/fixtures/pathways.json`.
-The starter resources (ContentItems linking to official pages) load from
-`backend/content/fixtures/resources.json`.
+**Feedback** (from the Feedback, Contact and Report an issue pages)
+- category: bug, feature, general or accessibility
+- message
+- email (optional)
+- user (optional, set if they were signed in)
+- created_at
 
-### ContentItem  (`content` app, the resources library)
-- title           -> text
-- slug            -> url-safe (unique)
-- description     -> text
-- content_type    -> choice: guide | document | video | prep_pack | class_pack
-- access_level    -> choice: free | signup   (signup = gated, needs an account)
-- pathway         -> ForeignKey(Pathway, nullable)  # null = applies to all
-- audience        -> choice: all | student | parent | teacher
-- file            -> uploaded file (nullable); local disk in development, S3 in production
-- link            -> web address of a resource on another site (optional); use this or file
-- created_at      -> datetime (auto)
+## content
 
-### Provider  (`providers` app, the "T Level near you" search)
-A school or college that offers T Levels, with the position the search measures from.
-- name            -> text
-- address         -> text (street and town, one line; may be blank)
-- postcode        -> text (up to 10 characters)
-- region          -> choice: one of the nine English regions the DfE list uses
-- provider_type   -> choice: General FE and Tertiary College, Academy, University
-                     Technical College, Sixth Form College, and the rest of the
-                     DfE list's own categories
-- foundation_year -> true when the provider also runs the T Level Foundation Year
-- latitude        -> decimal, 6 places
-- longitude       -> decimal, 6 places
-- website_url     -> web address of the provider's own site (optional)
-- pathways        -> ManyToMany(Pathway)  # the pathways this provider offers
-- pathways_confirmed -> true when somebody has actually checked the line above
-- created_at      -> datetime (auto)
+**Pathway**
+- name: Digital, Business, Media, Finance or Engineering
+- slug, summary, description
 
-The providers load from `backend/providers/fixtures/providers.json`, built from the
-Department for Education's "T Level registered providers" spreadsheet (360 providers,
-January 2026 version, for 2026/27).
+Loaded from `backend/content/fixtures/pathways.json`.
 
-`address` is a locality ("ward, district") for most providers, because the official
-list carries a postcode and no street. Where a street address was already known by
-hand it is kept. It is blank for the few whose postcode resolves nowhere.
+**ContentItem** (a resource in the library)
+- title, slug, description
+- content_type: guide, document, video, prep_pack or class_pack
+- access_level: free or signup
+- pathway (empty means all pathways)
+- audience: all, student, parent or teacher
+- file (an upload) or link (another website)
+- created_at
 
-`pathways_confirmed` EXISTS BECAUSE AN EMPTY `pathways` LIST IS AMBIGUOUS. The
-official register says only THAT a provider runs T Levels, never which subjects, so
-for most of the list we do not know. Unticked, an empty list means "not checked";
-ticked, it means "checked, and it offers none of our five". The search answers those
-two groups separately (`results` and `unconfirmed`) so the page never claims a
-provider teaches something nobody looked up.
+Starter resources are in `backend/content/fixtures/resources.json`.
 
-Latitude and longitude are filled in ONCE by `python manage.py geocode_providers`,
-which looks each postcode up on postcodes.io, falling back to its retired-postcode
-record when a postcode has been withdrawn. A provider still at 0, 0 has not been
-looked up yet, or has a postcode that exists nowhere, and is left out of the search.
-A visitor's search geocodes only their own postcode, so it never costs one outside
-call per provider.
+## providers
 
-### ExpressionOfInterest  (`interest` app)
-- full_name       -> text
-- email           -> email
-- user_type       -> choice: student | parent | teacher
-- pathway         -> ForeignKey(Pathway)
-- message         -> text (optional)
-- submitted_at    -> datetime (auto)
-- user            -> ForeignKey(User, nullable); set when the visitor was signed in
+**Provider** (a school or college that runs T-Levels)
+- name, address (a locality for most; may be blank), postcode
+- region: one of the nine English regions the DfE list uses
+- provider_type: General FE and Tertiary College, Academy, University Technical College, and the rest of the DfE list's categories
+- foundation_year (also runs the one-year T-Level Foundation Year)
+- latitude, longitude (0, 0 means not looked up yet)
+- website_url (optional)
+- pathways (many to many)
+- pathways_confirmed (someone has actually checked the line above)
+- created_at
 
-### ChatMessage  (`chatbot` app, the AI assistant)
-- session_id      -> text, groups one conversation (every visitor, signed in or not)
-- user            -> ForeignKey(User, nullable); set when signed in, deleted with the user
-- role            -> choice: user | assistant
-- message         -> text
-- created_at      -> datetime (auto)
+Loaded from `backend/providers/fixtures/providers.json`, built from the Department for Education's "T Level registered providers" spreadsheet (360 providers, January 2026 version, for 2026/27). `python manage.py geocode_providers` fills in the positions from postcodes.io, falling back to its retired-postcode record when Royal Mail has withdrawn one.
 
-## Relationships (the ERD in words)
-- One User has one Profile and one UserPreference.
-- One Pathway has many ContentItems.
-- One Pathway has many ExpressionsOfInterest.
-- A Provider offers many Pathways; a Pathway is offered by many Providers.
-- A User may submit many ExpressionsOfInterest (or submit anonymously).
-- ChatMessages belong to a session, and to a User when they are signed in.
+`address` is a locality ("ward, district") for most providers, because the official list carries a postcode and no street. Hand-written street addresses are kept where we had them.
 
-## Delete rules (what happens when a row is removed)
-- Deleting a User deletes their Profile, UserPreference and ChatMessages.
-- Deleting a User keeps their ExpressionsOfInterest but unlinks them (user set to null).
-- A Pathway cannot be deleted while any ContentItem or ExpressionOfInterest points at it.
-- Deleting a Provider only removes its links to Pathways, never the Pathways themselves.
+`pathways_confirmed` exists because an empty `pathways` list is ambiguous. The register says only THAT a provider runs T-Levels, never which subjects, so for most of the list we do not know. Unticked, empty means "not checked"; ticked, it means "checked, and it offers none of our five". The search answers the two groups separately (`results` and `unconfirmed`) so the page never claims a provider teaches something nobody looked up.
+
+## interest
+
+**ExpressionOfInterest**
+- full_name, email
+- user_type: student, parent or teacher
+- pathway
+- message (optional)
+- user (optional, set if they were signed in)
+- submitted_at
+
+## chatbot
+
+**ChatMessage**
+- session_id (groups one conversation)
+- user (optional)
+- role: user or assistant
+- message
+- created_at
+
+## community
+
+**Question**
+- author, title, body
+- topic: tlevels, placements, amazon, choosing, study or other
+- pathway (optional)
+- hidden, hidden_reason
+- created_at
+
+**Answer**
+- author, question, body
+- is_accepted (the asker marked it as the answer that helped)
+- hidden, hidden_reason
+- created_at
+
+**Helpful** (someone marking a question or answer helpful)
+- user, question or answer, created_at
+
+**Report** (someone flagging a question or answer)
+- reporter, question or answer
+- reason: personal, unkind, unsafe, wrong, spam or other
+- note (optional)
+- resolved (ticked by staff)
+- created_at
+
+## What happens when something is deleted
+
+- Deleting a user deletes their Profile, UserPreference, chat messages and Community posts.
+- Their Expressions of Interest and feedback are kept, but unlinked from them.
+- A Pathway can't be deleted while resources or interest submissions use it.
+- Deleting a Pathway only unlinks Community questions and providers from it.
 
 ## Notes
-- Store FILES in S3, store the LINK to them in ContentItem.file. Do not put files in the DB.
-- Keep personal data minimal (mentor: safeguarding for under-18s).
-- Amazon staff view EoI submissions through Django admin to start (free, built in).
+
+- Files go in S3 in production, and the database only stores the link.
+- Keep personal data to a minimum, because most users are under 18.

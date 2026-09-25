@@ -1,16 +1,8 @@
-// Every T-Level subject, grouped into the routes gov.uk uses, from
-// tlevels.gov.uk/students/subjects (checked 24 September 2026). Used by the
-// All T-Levels page and the homepage background. Update here if subjects are
-// added or renamed.
-//
-// Each subject's `page` is its address on tlevels.gov.uk, copied from the
-// links on that page, not guessed. Two subjects arrive in September 2028,
-// Social Care and Sport; they have no page yet, so `comingIn` is set instead.
-// The Finance T-Level takes its last enrolments in September 2026, but it is
-// still being studied for the next two years, so it stays in.
-//
-// `pathway` links a route to one of the five pathways on this site (see
-// PATHWAYS in aboutContent.js), so the page can point to it.
+// Every T-Level subject, grouped by route, from tlevels.gov.uk/students/subjects
+// (checked 24 September 2026). `page` is the subject's page on tlevels.gov.uk.
+// Social Care and Sport start in September 2028 so they have `comingIn` (the year) instead.
+// `note` is a key in i18n/messages under tLevelsPage.notes.
+// `pathway` links a route to one of our five pathways.
 
 const GOV_SUBJECTS = "https://www.tlevels.gov.uk/students/subjects/";
 
@@ -78,7 +70,7 @@ export const T_LEVEL_ROUTES = [
     subjects: [
       { name: "Health", page: "health" },
       { name: "Science", page: "science" },
-      { name: "Social Care", comingIn: "September 2028" },
+      { name: "Social Care", comingIn: 2028 },
     ],
   },
   {
@@ -86,7 +78,7 @@ export const T_LEVEL_ROUTES = [
     pathway: "finance",
     subjects: [
       { name: "Accounting", page: "accounting" },
-      { name: "Finance", page: "finance", note: "Last enrolments September 2026" },
+      { name: "Finance", page: "finance", note: "financeEnds" },
       { name: "Legal Services", page: "legal-services" },
     ],
   },
@@ -96,7 +88,7 @@ export const T_LEVEL_ROUTES = [
   },
   {
     name: "Sport",
-    subjects: [{ name: "Sport", comingIn: "September 2028" }],
+    subjects: [{ name: "Sport", comingIn: 2028 }],
   },
 ];
 

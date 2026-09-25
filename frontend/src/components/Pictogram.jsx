@@ -1,14 +1,6 @@
-// Picture icons for the About, T-Levels at Amazon and Help pages. Each point
-// on those pages gets one, so someone who finds reading hard can still follow
-// the page from the pictures and the short headings.
-//
-// Same line style as Icons.jsx (square ends, 2px lines), drawn larger and set
-// on an orange tile. Decorative for screen readers: the text next to each
-// picture already says the same thing, so reading both would repeat it.
-//
-// NEW CONCEPT: a lookup object. The content files say which picture they want
-// by name (icon: "book"), and this object turns the name into the drawing, so
-// the copy never has to contain any SVG.
+// Picture icons for the About, T-Levels at Amazon and Help pages, so the pages
+// are easier to follow if reading is hard. The content files pick one by name
+// (e.g. icon: "book"). Hidden from screen readers because the text says the same.
 
 const PATHS = {
   book: (

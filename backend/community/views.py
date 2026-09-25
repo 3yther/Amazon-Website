@@ -68,15 +68,10 @@ def answers_for(question, user):
 
 
 class QuestionListView(SignedInForWrites, PostThrottle, generics.ListCreateAPIView):
-    """
-    GET  /api/community/questions/   the questions, newest first
-         ?topic=<topic>              one topic (see models.Topic)
-         ?pathway=<slug>             one pathway
-         ?sort=new|helpful|unanswered
-         ?q=<words>                  search titles and questions
-    POST /api/community/questions/   ask one: title, body (optional), topic,
-                                     pathway (a slug, optional). Checked by
-                                     moderation.py before it is published.
+    """GET  /api/community/questions/   questions, newest first
+         ?topic=  ?pathway=  ?sort=new|helpful|unanswered  ?q=search
+    POST /api/community/questions/   ask one (title, body, topic, pathway).
+                                     Checked by moderation.py first.
     """
 
     serializer_class = QuestionSerializer
@@ -190,12 +185,10 @@ class PostActionView(PostThrottle, APIView):
 
 
 class HelpfulView(PostActionView):
-    """
-    POST /api/community/questions/<id>/helpful/
+    """POST /api/community/questions/<id>/helpful/
     POST /api/community/answers/<id>/helpful/
 
-    Marks the post helpful, or takes the mark back if it was already given.
-    Nobody can mark their own. Returns { found_helpful, helpful_count }.
+    Marks a post helpful, or unmarks it. You can't mark your own.
     """
 
     def post(self, request, pk):
@@ -215,11 +208,9 @@ class HelpfulView(PostActionView):
 
 
 class AcceptView(PostActionView):
-    """
-    POST /api/community/answers/<id>/accept/
+    """POST /api/community/answers/<id>/accept/
 
-    The person who asked marks the answer that helped them, or unmarks it.
-    One accepted answer per question. Returns { is_accepted }.
+    The person who asked marks the answer that helped (one per question).
     """
 
     kind = "answer"
@@ -238,13 +229,11 @@ class AcceptView(PostActionView):
 
 
 class ReportView(PostActionView):
-    """
-    POST /api/community/questions/<id>/report/
+    """POST /api/community/questions/<id>/report/
     POST /api/community/answers/<id>/report/
 
-    Body: reason (see Report.Reason), note (optional). Reporting twice counts
-    once. Three people reporting a post hides it until staff review it; a
-    report from staff hides it straight away. Returns 201 { reported: true }.
+    Body: reason, note (optional). 3 reports hide a post until staff check it.
+    A report from staff hides it straight away.
     """
 
     def post(self, request, pk):

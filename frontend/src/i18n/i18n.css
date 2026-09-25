@@ -43,27 +43,13 @@
   cursor: pointer;
 }
 
-/* In the header it sits on the dark band beside the account button. */
-.language-picker--header .language-picker__control {
-  color: var(--ink-inverse);
+/* In the account menu (AccountDropdown.jsx), under the links. */
+.dropdown-language {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
 }
 
-.language-picker--header .language-picker__select {
-  width: auto;
-  max-width: 11rem;
-  border-color: var(--ink-inverse);
-  background: var(--surface-inverse);
-  color: var(--ink-inverse);
-}
-
-/* On a phone the header has no room: the menu drawer has the same control. */
-@media (max-width: 40rem) {
-  .language-picker--header {
-    display: none;
-  }
-}
-
-/* The header's third column: language, then the account menu. */
+/* The header's third column: the account menu. */
 .site-header__end {
   display: flex;
   align-items: center;

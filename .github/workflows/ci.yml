@@ -18,10 +18,10 @@ jobs:
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
       DJANGO_SECURE_SSL_REDIRECT: "false"
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -40,12 +40,12 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - name: Set up Node 20
-        uses: actions/setup-node@v5
+      - name: Set up Node 24
+        uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "24"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 

@@ -4,10 +4,8 @@ import { LANGUAGES } from "../i18n/languages.js";
 import { mergeContent } from "../i18n/content.js";
 import { TOPICS_BY_ID } from "../assistant/answers/topics.js";
 
-// Every translation is checked against the English it was made from. The
-// words can change; the facts cannot. So each string must keep the same
-// {placeholders} and the same figures (hours, points, pounds, phone numbers),
-// and every key the English has must be there.
+// Checks every translation has every English key, and keeps the same
+// {placeholders} and numbers.
 
 const CATALOGS = import.meta.glob("../i18n/messages/*.js", { eager: true });
 const CONTENT = import.meta.glob("../i18n/content/*.js", { eager: true });
@@ -113,7 +111,9 @@ describe.each(OTHERS)("%s page copy", (code) => {
     const strip = (list) => JSON.stringify(list, (key, value) => (typeof value === "string" && !/^(icon|slug|value|to|href|number|points|id|year)$/.test(key) && key !== "" ? "" : value));
     for (const [module, lists] of Object.entries(ENGLISH_CONTENT)) {
       for (const [name, value] of Object.entries(lists)) {
-        if (Array.isArray(value)) expect(strip(merged[module][name]), `${module}.${name}`).toBe(strip(value));
+        if (value !== null && typeof value === "object") {
+          expect(strip(merged[module][name]), `${module}.${name}`).toBe(strip(value));
+        }
       }
     }
   });

@@ -2,59 +2,30 @@ import { useEffect, useState } from "react";
 import { ApiError, getPathways, searchProviders } from "../api.js";
 import { formErrors } from "../formErrors.js";
 import { SelectField, TextField } from "../components/FormFields.jsx";
-import {
-  AlertIcon,
-  ArrowIcon,
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "../components/Icons.jsx";
+import { AlertIcon, ArrowIcon, PATHWAY_ICONS } from "../components/Icons.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
+import { makeTranslate } from "../i18n/translate.js";
 
-// The T-Level finder (/t-level-near-you): a postcode, an optional pathway and
-// a distance go to GET /api/providers/search/, which measures every provider
-// it holds and answers with the ones inside the radius, nearest first.
+// Find T-Levels near you. Searches GET /api/providers/search/ when you press Search.
 //
-// It searches when the button is pressed, not as you type. A search costs a
-// postcode lookup on the server, and half a postcode is not a place.
-//
-// TWO LISTS WHEN A PATHWAY IS CHOSEN. The official register of T-Level
-// providers says only THAT a school runs T-Levels, not which subjects, so for
-// most of the 360 we hold nobody has checked. The server answers those
-// separately (results and unconfirmed) and this page keeps them apart, under
-// headings that say which is which. Showing them as one list would tell a
-// visitor a college teaches something we never looked up; dropping them would
-// empty the page the moment anyone touched the filter.
+// Two lists when a pathway is chosen: the register says only THAT a school runs
+// T-Levels, not which subjects, so the server sends the ones we have checked
+// separately from the ones we have not (results and unconfirmed). Merging them
+// would claim a college teaches something nobody looked up.
 
-// The distances offered. 15 matches the server's default, so an untouched
-// form and a bare request agree.
+// 15 is the server's default too.
 const RADIUS_OPTIONS = [5, 10, 15, 25, 50];
 const DEFAULT_RADIUS = "15";
 
-// The same pathway icons the homepage tiles and the resources cards use.
-const PATHWAY_ICONS = {
-  digital: DigitalIcon,
-  business: BusinessIcon,
-  media: MediaIcon,
-  finance: FinanceIcon,
-  engineering: EngineeringIcon,
-};
+const english = makeTranslate();
 
-/**
- * The loosest shape a UK postcode takes, so an obvious typo is caught before
- * anything is sent. Matches POSTCODE_PATTERN in backend/providers/postcodes.py
- * on purpose. Whether a postcode really exists is the server's answer, not
- * this one.
- */
+// Rough UK postcode check (same as POSTCODE_PATTERN in backend/providers/postcodes.py).
 const POSTCODE_PATTERN = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\d[A-Za-z]{2}$/;
 
-export function checkPostcode(postcode) {
+export function checkPostcode(postcode, t = english) {
   const typed = postcode.trim();
-  if (!typed) return "Enter a postcode.";
-  if (!POSTCODE_PATTERN.test(typed.replace(/\s+/g, ""))) {
-    return "Enter a full UK postcode, for example SW1A 1AA.";
-  }
+  if (!typed) return t("nearYou.errors.empty");
+  if (!POSTCODE_PATTERN.test(typed.replace(/\s+/g, ""))) return t("nearYou.errors.notFull");
   return "";
 }
 
@@ -64,45 +35,29 @@ function focusPostcode() {
   document.getElementById(POSTCODE_FIELD_ID)?.focus();
 }
 
-/**
- * What to tell the visitor when a search fails.
- *
- * formErrors() handles the shared cases: a 400 comes back keyed by field, and
- * anything else lands under "form" as a general apology. The one thing it
- * cannot know about is our 503, which carries its own explanation in "detail"
- * (the postcode lookup service being down, rather than us), and saying that
- * is more use than "something went wrong".
- */
-function searchError(error) {
-  const found = formErrors(error);
+// Error message for a failed search. A 503 comes with its own message in "detail".
+function searchError(error, t) {
+  const found = formErrors(error, t);
   const detail = error instanceof ApiError ? error.body?.detail : null;
   return detail ? { ...found, form: detail } : found;
 }
 
-/**
- * "1 mile", "8.4 miles", and "Under 0.1 miles" for a provider on the doorstep,
- * because a chip reading "0 miles" looks like missing data rather than a
- * college at the end of the road.
- */
-export function formatDistance(miles) {
-  if (miles === 0) return "Under 0.1 miles";
-  return `${miles} ${miles === 1 ? "mile" : "miles"}`;
-}
-
-/** "provider" or "providers", so no sentence here reads "1 providers". */
-function countOf(number, thing = "provider") {
-  return `${number} ${thing}${number === 1 ? "" : "s"}`;
+// "Under 0.1 miles" looks better than "0 miles".
+export function formatDistance(miles, t = english) {
+  if (miles === 0) return t("nearYou.underTenth");
+  if (miles === 1) return t("nearYou.oneMile");
+  return t("nearYou.distance", { miles });
 }
 
 export default function NearYou() {
+  const t = useT();
   const [pathways, setPathways] = useState([]);
   const [fields, setFields] = useState({ postcode: "", pathway: "", radius: DEFAULT_RADIUS });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | loading | ready | error
   const [search, setSearch] = useState(null); // the answer to the last search
 
-  // For the pathway filter. A dead pathways call leaves the filter empty
-  // rather than breaking the page: a postcode on its own is still a search.
+  // For the pathway filter. If this fails the filter is just empty.
   useEffect(() => {
     const controller = new AbortController();
     getPathways({ signal: controller.signal })
@@ -119,10 +74,9 @@ export default function NearYou() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const problem = checkPostcode(fields.postcode);
+    const problem = checkPostcode(fields.postcode, t);
     if (problem) {
       setErrors({ postcode: problem });
-      // Land the visitor on the field to fix, rather than making them find it.
       focusPostcode();
       return;
     }
@@ -133,13 +87,10 @@ export default function NearYou() {
       setSearch(await searchProviders(fields));
       setStatus("ready");
     } catch (error) {
-      // A 400 names the field it is about (a postcode that does not exist, an
-      // unknown pathway); anything else lands under "form".
-      const found = searchError(error);
+      // A 400 names the field (e.g. a postcode that doesn't exist), anything else goes under "form".
+      const found = searchError(error, t);
       setErrors(found);
-      // Drop the last answer too. Leaving it would put a summary and a list
-      // for one postcode under an error about a different one.
-      setSearch(null);
+      setSearch(null); // don't leave old results under the error
       setStatus(found.postcode ? "idle" : "error");
       if (found.postcode) focusPostcode();
     }
@@ -147,33 +98,27 @@ export default function NearYou() {
 
   const results = search?.results ?? [];
   const unconfirmed = search?.unconfirmed ?? [];
-  // The name to put in a heading, from the slug the search was made with, so
-  // it keeps saying "Digital" even after the filter is changed but not sent.
-  const searchedPathway = pathways.find((pathway) => pathway.slug === search?.pathway);
+  // The slug the last search was made with, so the headings keep saying
+  // "Digital" even after the filter is changed but not sent. The name comes
+  // from the catalogue, not the pathways call, so it is there either way.
+  const searched = search?.pathway || "";
+  const pathwayName = searched ? t(`pathways.${searched}`) : "";
   const showLists = status !== "error" && (results.length > 0 || unconfirmed.length > 0);
 
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Find a provider</p>
-        <h1 id="page-title">Find T-Levels Near You</h1>
-        <p className="lead">
-          Enter your postcode to see the schools and colleges running T-Levels near you, closest
-          first.
-        </p>
+        <p className="label">{t("nearYou.label")}</p>
+        <h1 id="page-title">{t("nearYou.title")}</h1>
+        <p className="lead">{t("nearYou.lead")}</p>
       </section>
 
-      <form
-        className="filters near-you__form"
-        aria-label="Search for T-Level providers"
-        onSubmit={handleSubmit}
-        noValidate
-      >
+      <form className="filters near-you__form" aria-label={t("nearYou.form")} onSubmit={handleSubmit} noValidate>
         <TextField
           id={POSTCODE_FIELD_ID}
-          label="Postcode"
+          label={t("nearYou.postcode")}
           name="postcode"
-          hint="For example SW1A 1AA."
+          hint={t("nearYou.postcodeHint")}
           value={fields.postcode}
           onChange={updateField}
           autoComplete="postal-code"
@@ -185,23 +130,23 @@ export default function NearYou() {
 
         <SelectField
           id="near-you-pathway"
-          label="Pathway"
+          label={t("nearYou.pathway")}
           name="pathway"
           value={fields.pathway}
           onChange={updateField}
           error={errors.pathway}
         >
-          <option value="">All pathways</option>
+          <option value="">{t("nearYou.allPathways")}</option>
           {pathways.map((pathway) => (
             <option key={pathway.slug} value={pathway.slug}>
-              {pathway.name}
+              {t(`pathways.${pathway.slug}`)}
             </option>
           ))}
         </SelectField>
 
         <SelectField
           id="near-you-radius"
-          label="Within"
+          label={t("nearYou.within")}
           name="radius"
           value={fields.radius}
           onChange={updateField}
@@ -209,17 +154,13 @@ export default function NearYou() {
         >
           {RADIUS_OPTIONS.map((miles) => (
             <option key={miles} value={String(miles)}>
-              {miles} miles
+              {t("nearYou.miles", { miles })}
             </option>
           ))}
         </SelectField>
 
-        <button
-          type="submit"
-          className="button button--primary near-you__submit"
-          disabled={status === "loading"}
-        >
-          {status === "loading" ? "Searching" : "Search"}
+        <button type="submit" className="button button--primary near-you__submit" disabled={status === "loading"}>
+          {status === "loading" ? t("nearYou.searching") : t("nearYou.search")}
         </button>
       </form>
 
@@ -227,17 +168,17 @@ export default function NearYou() {
         <div className="notice" role="alert">
           <AlertIcon />
           <div>
-            <p className="notice__title">Could not search for providers.</p>
+            <p className="notice__title">{t("nearYou.error")}</p>
             <p>{errors.form}</p>
             {import.meta.env.DEV && <p>Check the Django API is running on port 8000.</p>}
             <button type="button" className="button" onClick={handleSubmit}>
-              Try again
+              {t("nearYou.tryAgain")}
             </button>
           </div>
         </div>
       ) : (
         <p className="label results-status" role="status">
-          <SearchStatus status={status} search={search} pathway={searchedPathway} />
+          {searchStatus(status, search, t)}
         </p>
       )}
 
@@ -246,7 +187,9 @@ export default function NearYou() {
           {results.length > 0 && (
             <ProviderList
               heading={
-                searchedPathway ? `Offering ${searchedPathway.name}` : "Providers near you"
+                searched
+                  ? t("nearYou.groupOffering", { pathway: pathwayName })
+                  : t("nearYou.groupNear")
               }
               providers={results}
               busy={status === "loading"}
@@ -255,15 +198,11 @@ export default function NearYou() {
 
           {unconfirmed.length > 0 && (
             <ProviderList
-              heading="Subjects not confirmed"
-              description={
-                `The official register shows ${
-                  unconfirmed.length === 1 ? "this provider runs" : "these providers run"
-                } T-Levels, but not which subjects. ` +
-                `${unconfirmed.length === 1 ? "It is" : "They are"} near you, so ${
-                  searchedPathway ? `ask whether ${searchedPathway.name} is offered` : "ask what is offered"
-                }.`
-              }
+              heading={t("nearYou.unconfirmedTitle")}
+              description={t(
+                unconfirmed.length === 1 ? "nearYou.unconfirmedNoteOne" : "nearYou.unconfirmedNote",
+                { pathway: pathwayName },
+              )}
               providers={unconfirmed}
               busy={status === "loading"}
             />
@@ -274,42 +213,40 @@ export default function NearYou() {
   );
 }
 
-/**
- * The one line under the form, read out as it changes (its parent is a live
- * region). Every state says something: a blank line would leave a screen
- * reader user with no idea whether the search had run.
- */
-function SearchStatus({ status, search, pathway }) {
-  if (status === "loading") return "Searching";
-  // Also the state after a search that could not run, which is why this does
-  // not say "to start": the error beside the field says what went wrong.
-  if (!search) return "Enter a postcode to see providers near you.";
+// The line under the form. It's a live region so screen readers hear it change.
+function searchStatus(status, search, t) {
+  if (status === "loading") return t("nearYou.searching");
+  if (!search) return t("nearYou.start");
 
-  const { count, radius_miles: radius, postcode, unconfirmed_count: unknown } = search;
-  const where = `within ${radius} miles of ${postcode}`;
+  const { count, radius_miles: radius, postcode, pathway, unconfirmed_count: unknown } = search;
 
   // Nothing at all, filtered or not: the one message that suggests a fix.
-  if (count === 0 && !unknown) {
-    return `No providers found ${where}. Try a wider radius.`;
+  if (count === 0 && !unknown) return t("nearYou.none", { radius, postcode });
+
+  if (!pathway) {
+    if (count === 1) return t("nearYou.oneFound", { radius, postcode });
+    return t("nearYou.found", { count, radius, postcode });
   }
 
-  if (!pathway) return `${countOf(count)} ${where}.`;
+  const name = t(`pathways.${pathway}`);
+  const unsure = unknown
+    ? " " +
+      (unknown === 1
+        ? t("nearYou.oneUnsure")
+        : t("nearYou.unsure", { count: unknown }))
+    : "";
 
-  const unsure = `${countOf(unknown)} nearby ${
-    unknown === 1 ? "has" : "have"
-  } not had their subjects confirmed.`;
-
-  if (count === 0) return `No confirmed ${pathway.name} providers ${where}. ${unsure}`;
-  return `${countOf(count)} offering ${pathway.name} ${where}. ${unsure}`;
+  if (count === 0) return t("nearYou.noneConfirmed", { pathway: name, radius, postcode }) + unsure;
+  if (count === 1) return t("nearYou.oneFoundOffering", { pathway: name, radius, postcode }) + unsure;
+  return t("nearYou.foundOffering", { count, pathway: name, radius, postcode }) + unsure;
 }
 
-/** One headed group of provider cards. */
+// One headed group of provider cards.
 function ProviderList({ heading, description, providers, busy }) {
   return (
     <section className="near-you__group">
-      {/* h2: the groups sit straight under the page's h1, and the provider
-          names below them are h3, so the outline holds whether the visitor
-          filtered by pathway or not. */}
+      {/* h2 for the group, so the provider names below can be h3 and the
+          outline holds whether the visitor filtered by pathway or not. */}
       <h2 className="near-you__group-title">{heading}</h2>
       {description && <p className="near-you__group-note">{description}</p>}
       <ul className="card-grid" aria-busy={busy}>
@@ -322,39 +259,39 @@ function ProviderList({ heading, description, providers, busy }) {
 }
 
 function ProviderCard({ provider }) {
+  const t = useT();
   return (
     <li className="card">
       <div className="card__tags">
-        <span className="tag tag--distance">{formatDistance(provider.distance_miles)}</span>
-        {provider.foundation_year && <span className="tag">Foundation year</span>}
+        <span className="tag tag--distance">{formatDistance(provider.distance_miles, t)}</span>
+        {provider.foundation_year && <span className="tag">{t("nearYou.foundationYear")}</span>}
       </div>
 
       <h3 className="card__title">{provider.name}</h3>
       <p className="card__text">
-        {/* The address is a locality for most of the register, and blank for
-            the few whose postcode resolves nowhere. Leaving it out beats
-            printing a stray comma in front of the postcode. */}
+        {/* address is a locality for most of the register, and blank for the few
+            whose postcode resolves nowhere: no stray comma in that case. */}
         {provider.address ? `${provider.address}, ${provider.postcode}` : provider.postcode}
       </p>
 
       <dl className="card__meta">
         {provider.provider_type && (
           <div>
-            <dt className="label">Type</dt>
+            <dt className="label">{t("nearYou.type")}</dt>
             <dd>{provider.provider_type}</dd>
           </div>
         )}
         <div>
-          <dt className="label">Pathways</dt>
+          <dt className="label">{t("nearYou.pathways")}</dt>
           <dd>
-            <ProviderPathways provider={provider} />
+            <ProviderPathways provider={provider} t={t} />
           </dd>
         </div>
       </dl>
 
       {provider.website_url && (
         <a className="button button--primary card__action" href={provider.website_url}>
-          Visit website
+          {t("nearYou.website")}
           <span className="sr-only">, {provider.name}</span>
           <ArrowIcon />
         </a>
@@ -363,16 +300,12 @@ function ProviderCard({ provider }) {
   );
 }
 
-/**
- * What a card says about subjects.
- *
- * An empty list means two different things, and the card has to tell them
- * apart: pathways_confirmed says whether anybody has actually checked. Saying
- * "none" about a provider nobody asked would be inventing an answer.
- */
-function ProviderPathways({ provider }) {
+// An empty pathways list means two different things, so pathways_confirmed
+// decides the wording. Saying "none" about a provider nobody asked would be
+// inventing an answer.
+function ProviderPathways({ provider, t }) {
   if (provider.pathways.length === 0) {
-    return provider.pathways_confirmed ? "None of the five we cover" : "Not confirmed, ask the provider";
+    return provider.pathways_confirmed ? t("nearYou.noneOfFive") : t("nearYou.notConfirmed");
   }
 
   return (
@@ -382,7 +315,7 @@ function ProviderPathways({ provider }) {
         return (
           <li key={pathway.slug}>
             {PathwayIcon && <PathwayIcon />}
-            {pathway.name}
+            {t(`pathways.${pathway.slug}`)}
           </li>
         );
       })}

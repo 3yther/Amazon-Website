@@ -6,17 +6,10 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 import helpPhoto from "../assets/help-hero.jpg";
 
-// Hero photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
-// free to use, attribution not required. Credited here for the asset log.
-// Saved at 720px wide from Pexels' own image server.
-//   help-hero.jpg: RDNE Stock project,
-//     https://www.pexels.com/photo/a-teacher-talking-to-his-student-8419636/
+// Hero photo from Pexels (free to use): help-hero.jpg by RDNE Stock project,
+// https://www.pexels.com/photo/a-teacher-talking-to-his-student-8419636/
 
-/**
- * Help: where to go next, by what the person is trying to do. Everything here
- * links to a page that exists on this site or to a real national service. No
- * invented contact details, and nothing promising a feature we have not built.
- */
+// Help page: where to go depending on what you need.
 export default function Help() {
   const t = useT();
   // helpContent.js, in the visitor's language.

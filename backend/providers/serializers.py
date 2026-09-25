@@ -6,16 +6,11 @@ from .models import Provider
 
 
 class ProviderSearchResultSerializer(serializers.ModelSerializer):
-    """
-    One provider in a search result.
+    """One provider in a search result. distance_miles is worked out by the view,
+    it isn't stored.
 
-    distance_miles is not a model field: the view works it out for this
-    search and hangs it on each provider before serialising, because how far
-    away a college is depends on who is asking.
-
-    pathways_confirmed travels with the row because an empty pathways list on
-    its own is ambiguous, and the card has to word itself differently for
-    "offers none of the five" than for "we have not checked this one".
+    pathways_confirmed comes too: an empty pathways list is ambiguous on its own,
+    so the card needs to know "offers none of the five" from "not checked yet".
     """
 
     pathways = PathwaySummarySerializer(many=True, read_only=True)

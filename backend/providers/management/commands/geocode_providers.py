@@ -1,37 +1,21 @@
-"""
-Fills in each provider's position from its postcode, using postcodes.io.
+"""Fills in each provider's position from its postcode, using postcodes.io.
 
     python manage.py geocode_providers              only the ones that need it
-    python manage.py geocode_providers --refresh    look every one up again
-    python manage.py geocode_providers --strict     do not fall back to retired postcodes
+    python manage.py geocode_providers --refresh    look them all up again
+    python manage.py geocode_providers --strict     no retired-postcode fallback
 
-Safe to run as often as you like. By default it only touches providers still
-sitting at 0, 0 (the "never looked up" marker), so a second run does nothing
-and costs nothing. That is what makes it safe in the pre-deploy step, after
-`loaddata providers` (see DEPLOYMENT.md).
+Safe to run any time: by default it only looks up providers still at 0, 0.
+Runs in the pre-deploy step after `loaddata providers` (see DEPLOYMENT.md).
+Providers it can't place are listed but it still exits 0.
 
-Why this exists at all: the search must never call an outside service once per
-provider. Doing the lookups here, once, means a visitor's search costs one
-call for their own postcode and no more.
+The report at the end matters as much as the lookup. The register is retyped
+once a year, and the postcode is the one field that can be checked for free
+against an authority, so this splits the outcome three ways:
 
-THE REPORT AT THE END IS THE POINT AS MUCH AS THE LOOKUP IS.
-
-The provider list is retyped from a spreadsheet once a year, and a postcode is
-the one field in it that can be checked for free, automatically, against an
-authority. So this says out loud which ones did not check out, in three
-groups, because they mean three different things:
-
-  placed                 a live postcode, nothing to see here
-  placed from a retired postcode   real, but withdrawn by Royal Mail, so the
-                         address behind it may have moved; worth a look
-  not found              no such postcode, live or retired: a typo, or an
-                         invalid one (UK postcodes never end in C, I, K, M, O
-                         or V), and the provider stays out of the search
-
-A provider that cannot be placed is left alone and named in the output, and
-the command still exits 0. The seed fixture ships real coordinates, so a
-deploy is never blocked by somebody else's API being down; anything left
-unplaced is simply left out of the search until the next run.
+  placed         a live postcode
+  from retired   real, but Royal Mail withdrew it, so the address may be stale
+  not found      no such postcode at all: a typo, or invalid on its face
+                 (a UK postcode never ends in C, I, K, M, O or V)
 """
 from django.core.management.base import BaseCommand
 

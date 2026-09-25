@@ -1,10 +1,5 @@
-// Copy and data for the T-Levels at Amazon page. Same idea as aboutContent.js:
-// the wording lives here, the components stay about behaviour.
-//
-// Everything below comes from Amazon's own T Level Placements page or the
-// Department for Education employer case study on Amazon, both listed in
-// AMAZON_SOURCES. Nothing here is invented. If a claim cannot be traced to one
-// of those two, it should not go on this page.
+// Words and data for the T-Levels at Amazon page. Everything comes from Amazon's
+// T Level Placements page or the DfE case study (see AMAZON_SOURCES).
 
 /** The opening facts about the placement itself. */
 export const PLACEMENT_SHAPE = [
@@ -51,11 +46,7 @@ export const ROUTE_IN = [
   },
 ];
 
-/**
- * How the programme has grown, from the Department for Education case study.
- * Each figure is tied to its year on purpose, so the page never reads as a
- * claim about right now. The bars on the page are drawn from `value`.
- */
+// How the programme has grown (DfE case study). The bars use `value`.
 export const GROWTH = [
   { year: "2023", value: 6, caption: "students in the first year" },
   { year: "2024", value: 24, caption: "students, four times as many" },

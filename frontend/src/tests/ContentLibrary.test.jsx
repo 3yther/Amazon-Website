@@ -83,8 +83,8 @@ describe("siteName", () => {
     expect(siteName("https://tlevelinfo.org.uk/")).toBe("tlevelinfo.org.uk");
   });
 
-  it("falls back for text that is not a link", () => {
-    expect(siteName("not a link")).toBe("another website");
+  it("returns null for text that is not a link", () => {
+    expect(siteName("not a link")).toBeNull();
   });
 });
 

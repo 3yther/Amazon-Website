@@ -1,19 +1,12 @@
 import axe from "axe-core";
 
-// NEW CONCEPT: axe-core is the accessibility engine inside Lighthouse. Given
-// some rendered HTML, it reports anything that breaks a WCAG rule, such as a
-// button with no name, a broken aria-controls, or headings that skip a level.
+// axe-core checks rendered HTML for WCAG problems (it's what Lighthouse uses).
 
 // Only the WCAG 2.2 A and AA rules, because that is the target we claim.
 const WCAG_22_AA = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
-/**
- * Runs axe over an element and fails the test with a readable list if it
- * finds anything.
- *
- * Colour contrast is switched off here because jsdom does not draw the page,
- * so it cannot measure colours. Contrast is checked by hand in a real browser.
- */
+// Runs axe and fails the test with a list of problems.
+// Colour contrast is off because jsdom can't draw the page, so we check that by hand.
 export async function expectNoAxeViolations(element) {
   const results = await axe.run(element, {
     runOnly: { type: "tag", values: WCAG_22_AA },

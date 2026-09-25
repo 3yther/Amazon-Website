@@ -6,14 +6,8 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import LanguagePicker from "../i18n/LanguagePicker.jsx";
 import { CloseIcon, MenuIcon, PersonIcon } from "./Icons.jsx";
 
-// Site navigation: at every screen width, a menu button in the header opens a
-// drawer from the left edge. The drawer is a modal <dialog>, so the page
-// behind is inert and Escape closes it.
-//
-// Pages only. Signing in, signing out and the settings all live behind the
-// account button in the header (see AccountDropdown.jsx), so there is one
-// place to look for them rather than two that have to agree. The Hello band
-// at the top only greets, from the same session the header reads.
+// The side menu. The menu button opens a <dialog> drawer from the left.
+// Only page links go here, sign in and settings are in the account menu.
 
 // Labels are translation keys (see i18n/messages/en.js, menu.pages).
 const PAGES = [
@@ -25,9 +19,8 @@ const PAGES = [
   { to: "/quiz", label: "menu.pages.quiz" },
   { to: "/community", label: "menu.pages.community" },
   { to: "/help", label: "menu.pages.help" },
-  // The Expression of Interest form, a core client requirement, so it is
-  // one tap away on every page.
-  { to: "/register-interest", label: "menu.pages.registerInterest" },
+  // Register interest is not a tab: it is a box on the Sign up page, and
+  // linked from the homepage, the footer and the pathway pages.
 ];
 
 export default function SiteNav() {
@@ -70,9 +63,7 @@ export default function SiteNav() {
       menuButton.current?.focus();
     }
 
-    // Play the closing animation, then close. With reduced motion there is no
-    // animation, so it closes straight away. The timer is a backstop in case
-    // the animation never reports finishing (e.g. the tab is hidden).
+    // Play the closing animation then close. The timer is a backup in case it never finishes.
     dialog.classList.add(closing);
     const animations = dialog.getAnimations();
     if (animations.length === 0) {
@@ -123,9 +114,6 @@ export default function SiteNav() {
           }}
           onClose={closeMenu}
         >
-          {/* No RisingSubjects here any more: its names are position: fixed,
-              so inside a part-width drawer they escaped the panel and drifted
-              across the blurred page behind it. */}
           <Hello onNavigate={closeMenu} />
 
           <nav className="container menu-overlay__nav" aria-label={t("menu.main")}>
@@ -133,7 +121,7 @@ export default function SiteNav() {
           </nav>
 
           <div className="container menu-overlay__language">
-            <LanguagePicker variant="menu" />
+            <LanguagePicker />
           </div>
         </dialog>,
         document.body,
@@ -142,12 +130,7 @@ export default function SiteNav() {
   );
 }
 
-/**
- * The dark band at the top of the drawer, the way Amazon's menu greets you:
- * "Hello, sam" once signed in, or "Hello, sign in" as a link to the login
- * page. The close button sits at its far end, where the menu button was.
- * It never signs anyone out: that stays behind the account button.
- */
+// The dark "Hello" bar at the top of the drawer, with the close button.
 function Hello({ onNavigate }) {
   const t = useT();
   // Without an AuthProvider (some tests render the nav on its own) there is
@@ -185,15 +168,7 @@ function Hello({ onNavigate }) {
   );
 }
 
-/**
- * The page links, and nothing else.
- *
- * Sign up, Login and Log out used to sit at the bottom of this list. They are
- * all behind the account button in the header now: the drawer was showing a
- * different answer to "am I signed in?" in a second place, and Log out in
- * particular was one press from every page, which is what moving it onto the
- * Account tab was meant to stop.
- */
+// The page links.
 function NavList({ onNavigate }) {
   const t = useT();
 

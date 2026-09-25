@@ -2,20 +2,9 @@ import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { onEasterEgg } from "./assistantBus.js";
 
-// Smiley's easter eggs: the little surprises that give it a personality.
-// This hook only NOTICES them and calls onEgg(type); ChatWidget decides what
-// Smiley does about each one.
-//
-//   "peek"      now and then, while you are browsing, Smiley pops its head
-//               in from the side of the screen
-//   "bottom"    you scrolled all the way to the bottom of a long page
-//   "party"     the Konami code: up up down down left right left right B A
-//   "offline"   the connection dropped, and "online" when it comes back
-//   "wordmark"  the T-SMILE name in the header clicked five times quickly
-//
-// Everything here is read in the browser and forgotten. None of it is sent
-// or stored. Peeks are rare on purpose (at most three a visit), because a
-// surprise that happens every minute stops being one.
+// Easter eggs: peek, bottom of page, party (Konami code), offline/online and
+// clicking the logo 5 times. This hook spots them and ChatWidget reacts.
+// Nothing is sent or saved.
 
 const KONAMI = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
 

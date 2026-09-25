@@ -3,11 +3,7 @@ import { useEffect, useMemo } from "react";
 const PIECES = 36;
 const LASTS_MS = 3200;
 
-/**
- * Party mode (the Konami code easter egg): a short shower of squares in the
- * two brand colours, then gone. Decorative, pointer-transparent, hidden from
- * screen readers, and never rendered under reduced motion (see ChatWidget).
- */
+// Party mode confetti (Konami code easter egg). Decoration only.
 export default function Confetti({ onDone }) {
   const pieces = useMemo(
     () =>

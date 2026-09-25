@@ -1,11 +1,5 @@
-// How the rest of the site tells Smiley something happened.
-//
-// Smiley lives once, in App.jsx, so a quiz sitting inside a page has no way to
-// reach it through props. Rather than have the quiz know what a chat widget
-// is, it announces what happened and Smiley listens.
-//
-// Nothing here is sent anywhere. Messages only reach the server when the
-// visitor types (or picks) one themselves.
+// Lets other parts of the site (like the quiz) tell Smiley something happened.
+// Nothing here is sent to the server.
 
 const listeners = new Set();
 
@@ -13,17 +7,7 @@ function emit(event) {
   for (const listener of listeners) listener(event);
 }
 
-/**
- * Called by a quiz when somebody answers a question wrong.
- *
- * question      the question as it was asked
- * correctAnswer the answer that was right
- * chosenAnswer  the answer they picked
- * explanation   the quiz's own explanation, when it has one
- *
- * These go to Smiley as context if the visitor asks for help, so its answer
- * explains the quiz's own content instead of a version it made up.
- */
+/** Called by a quiz when someone gets a question wrong, so Smiley can offer to explain it. */
 export function reportIncorrectAnswer({ question, correctAnswer, chosenAnswer = "", explanation = "" }) {
   emit({ type: "incorrect", question, correctAnswer, chosenAnswer, explanation });
 }

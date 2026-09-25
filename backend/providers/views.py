@@ -25,12 +25,7 @@ MAX_RADIUS_MILES = 200
 
 
 class PostcodeLookupUnavailable(APIException):
-    """
-    postcodes.io is down, so we cannot place the visitor on the map.
-
-    Deliberately a 503 rather than the 400 a wrong postcode gets: nothing the
-    visitor typed is at fault, and trying again later may well work.
-    """
+    """postcodes.io is down. A 503 because it isn't the visitor's fault."""
 
     status_code = status.HTTP_503_SERVICE_UNAVAILABLE
     default_detail = (
@@ -40,58 +35,30 @@ class PostcodeLookupUnavailable(APIException):
 
 
 class ProviderSearchView(APIView):
-    """
-    GET /api/providers/search/   schools and colleges near a postcode
+    """GET /api/providers/search/   schools and colleges near a postcode
 
-    Query string:
-      ?postcode=<postcode>   required, a UK postcode
-      ?pathway=<slug>        optional, only providers offering that pathway
-      ?radius=<miles>        optional, default 15, up to 200
+    ?postcode=  required
+    ?pathway=   optional slug
+    ?radius=    optional, miles, default 15, max 200
 
-    Answers { postcode, radius_miles, pathway, count, results,
-    unconfirmed_count, unconfirmed }, each list nearest first. Every unusable
-    value is rejected with a 400 naming the field, the same shape
-    ContentItemViewSet.filter_list uses, so the front end can show the message
-    against the control it belongs to.
+    Returns { postcode, radius_miles, pathway, count, results,
+    unconfirmed_count, unconfirmed }, each list nearest first.
+    A bad value gives a 400 naming the field. No account needed.
 
-    TWO LISTS, AND WHY.
+    TWO LISTS when a pathway is chosen. The official register says only THAT a
+    school runs T-Levels, not which subjects, and for most of the 360 we hold
+    nobody has checked (see Provider.pathways_confirmed). So:
 
-    The official register of T-Level providers says only THAT a school runs
-    T-Levels in 2026/27. It does not say which subjects, and for most of the
-    360 providers we hold nobody has checked (see Provider.pathways_confirmed).
+      results      checked, and they offer this pathway
+      unconfirmed  near you, but we do not know their subjects
 
-    So a search filtered by pathway has two honest answers, not one:
+    Merging them would claim a college teaches something nobody looked up.
+    Dropping them would empty the page the moment anyone used the filter.
+    With no pathway chosen there is nothing to be unsure about: everything
+    inside the radius is in "results" and "unconfirmed" is empty.
 
-      results      providers we have checked, that offer this pathway
-      unconfirmed  providers near you whose subjects we do not know
-
-    Putting the second group in the first would claim they teach something we
-    never looked up. Dropping them would hide most of the real colleges near
-    a visitor the moment they touch the filter, which is worse: the page
-    would look like there is nothing around, when in fact there is plenty and
-    we simply have not asked. Keeping them apart lets the page say exactly
-    that, and lets a visitor go and ask the provider themselves.
-
-    With no pathway chosen there is nothing to be unsure about, so everything
-    inside the radius comes back in "results" and "unconfirmed" is empty.
-
-    Public: which colleges run T-Levels is public information, so no account
-    is needed, the same as pathways and the content library.
-
-    NOT PAGINATED, ON PURPOSE. This is an APIView answering with its own
-    envelope, so it never touches the project-wide PageNumberPagination the
-    content library and the staff submissions list use. Every provider inside
-    the radius comes back. Do not turn this into a generic list view without
-    dealing with that: it would quietly start returning one page, and
-    NearYou.jsx reads results straight out of the body with nothing to follow
-    a next link with. There are tests pinning both halves of that down.
-
-    The radius is what bounds the answer, and with a few hundred providers the
-    widest search returns a few hundred rows. If the table ever grows into the
-    thousands, the fix is real pagination the page knows about, or a cap the
-    response ADMITS to. Not a silent one: a search that quietly returns the
-    first few looks exactly like a thin list of colleges, which is how long
-    it took anyone to question this the first time.
+    Not paginated on purpose: every provider inside the radius comes back,
+    because NearYou.jsx reads them all at once. There are tests for this.
     """
 
     permission_classes = [AllowAny]
@@ -125,15 +92,8 @@ class ProviderSearchView(APIView):
         )
 
     def explain_empty(self):
-        """
-        Say in the log WHY a search found nothing.
-
-        "No providers near you" and "this site has no providers loaded" look
-        identical to a visitor, and the second one is a broken deploy. That is
-        exactly how this went unnoticed the first time: the fixture was never
-        loaded on the server, every search answered 200 with an empty list,
-        and nothing anywhere said so. One line here turns that back into
-        something you can find. See also: manage.py check_providers.
+        """Logs why a search found nothing, so an empty providers table (a broken
+        deploy) isn't mistaken for "no colleges near you". See also check_providers.
         """
         searchable = Provider.objects.geocoded().count()
         if searchable:
@@ -195,14 +155,8 @@ class ProviderSearchView(APIView):
         return point
 
     def within(self, providers, origin, radius):
-        """
-        The providers inside the radius, nearest first, each carrying the
-        distance the serializer reports.
-
-        Measured in Python rather than in the database: every provider has to
-        be measured whatever we do, and at this size that is cheaper than
-        asking PostgreSQL for trigonometry it would need an extension to do
-        well.
+        """The providers inside the radius, nearest first, each with its distance.
+        Worked out in Python because there aren't many providers.
         """
         latitude, longitude = origin
         near = []

@@ -1,13 +1,11 @@
+import { useT } from "../../i18n/I18nProvider.jsx";
 import { CheckboxField } from "../FormFields.jsx";
 
-const COLOR_BLINDNESS_TYPES = {
-  none: "None",
-  protanopia: "Protanopia (red-blind)",
-  deuteranopia: "Deuteranopia (green-blind)",
-  tritanopia: "Tritanopia (blue-blind)",
-};
+// The stored values; their names are in i18n/messages (settings.sight).
+const COLOR_BLINDNESS_TYPES = ["none", "protanopia", "deuteranopia", "tritanopia"];
 
-const TEXT_SPACING_LABELS = ["Normal", "Comfortable", "Relaxed", "Wide"];
+// text_spacing_level 0 to 3, in order.
+const TEXT_SPACING_KEYS = ["normal", "comfortable", "relaxed", "wide"];
 
 function RangeField({ id, label, value, valueLabel, ...inputProps }) {
   return (
@@ -23,20 +21,17 @@ function RangeField({ id, label, value, valueLabel, ...inputProps }) {
   );
 }
 
-/**
- * Font size, contrast, text spacing, colour-vision correction and the chat
- * assistant's voice: the settings someone with low vision or colour blindness
- * is most likely to need. Reduce motion lives here too, reusing the same
- * preference useReducedMotion.js already reads everywhere else on the site.
- */
+// Font size, contrast, spacing, colour blindness, reduce motion and text to speech.
 export default function SightLossSettings({ preferences, updatePreference }) {
+  const t = useT();
+
   return (
     <div className="settings-section">
-      <p className="label">Sight and vision</p>
+      <p className="label">{t("settings.tabs.sightLoss")}</p>
 
       <RangeField
         id="pref-font-scale"
-        label="Font size"
+        label={t("settings.sight.fontSize")}
         min={80}
         max={150}
         step={10}
@@ -47,29 +42,28 @@ export default function SightLossSettings({ preferences, updatePreference }) {
 
       <CheckboxField
         id="pref-high-contrast"
-        label="High contrast"
+        label={t("settings.sight.highContrast")}
         checked={preferences.high_contrast}
         onChange={(event) => updatePreference("high_contrast", event.target.checked)}
       />
 
       <RangeField
         id="pref-text-spacing"
-        label="Text spacing"
+        label={t("settings.sight.textSpacing")}
         min={0}
         max={3}
         step={1}
         value={preferences.text_spacing_level}
-        valueLabel={TEXT_SPACING_LABELS[preferences.text_spacing_level]}
+        valueLabel={t(`settings.sight.spacing.${TEXT_SPACING_KEYS[preferences.text_spacing_level]}`)}
         onChange={(event) => updatePreference("text_spacing_level", Number(event.target.value))}
       />
 
       <div className="field">
         <label className="label" htmlFor="pref-color-blindness">
-          Colour blindness type
+          {t("settings.sight.colourBlindness")}
         </label>
         <p className="field__hint" id="pref-color-blindness-hint">
-          Tell us how you see colour and the site adjusts its own, so shades that would look
-          alike to you are pulled apart.
+          {t("settings.sight.colourBlindnessHint")}
         </p>
         <select
           id="pref-color-blindness"
@@ -77,31 +71,27 @@ export default function SightLossSettings({ preferences, updatePreference }) {
           value={preferences.color_blindness_type}
           onChange={(event) => updatePreference("color_blindness_type", event.target.value)}
         >
-          {Object.entries(COLOR_BLINDNESS_TYPES).map(([value, label]) => (
+          {COLOR_BLINDNESS_TYPES.map((value) => (
             <option key={value} value={value}>
-              {label}
+              {t(`settings.sight.colours.${value}`)}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Named for what it actually does. It used to say "Read page content
-          aloud", which promised a screen reader for the whole site; all it
-          drives is Smiley's replies (assistant/useSpeech.js). Reading the
-          page itself is still to build, so the label says so rather than
-          leaving someone to find out by turning it on. */}
+      {/* This only reads out Smiley's replies, not the whole page. */}
       <CheckboxField
         id="pref-text-to-speech"
-        label="Read the chat assistant's replies aloud"
-        hint="Speaks Smiley's answers only, using a voice on this device. The rest of the page is not read aloud yet."
+        label={t("settings.sight.speech")}
+        hint={t("settings.sight.speechHint")}
         checked={preferences.text_to_speech}
         onChange={(event) => updatePreference("text_to_speech", event.target.checked)}
       />
 
       <CheckboxField
         id="pref-reduce-motion"
-        label="Reduce motion"
-        hint="Turns off the site's animations, on top of your system setting."
+        label={t("settings.sight.reduceMotion")}
+        hint={t("settings.sight.reduceMotionHint")}
         checked={preferences.reduce_motion}
         onChange={(event) => updatePreference("reduce_motion", event.target.checked)}
       />
