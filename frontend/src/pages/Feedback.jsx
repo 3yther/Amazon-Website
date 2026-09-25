@@ -8,16 +8,8 @@ import { useT } from "../i18n/I18nProvider.jsx";
 // Values from the backend's Feedback.Category; labels in i18n/messages (feedbackPage).
 const CATEGORIES = ["bug", "feature", "general", "accessibility"];
 
-/**
- * Always shown in dark mode, whatever the visitor's own saved theme is
- * elsewhere: the effect below reads whichever of .dark-mode/.light-mode
- * (set by useAccessibilityPreferences.js on <html>) was already there,
- * forces dark for as long as this page is mounted, then puts back exactly
- * what it found on the way out. It never touches localStorage or the
- * backend preference, so this is a page-local look, not a changed setting.
- * Everything else from useAccessibilityPreferences (font scale, text
- * spacing, high contrast) is untouched and keeps applying as normal.
- */
+// Makes this page dark mode while it's open, then puts the old theme back.
+// Doesn't change the saved setting.
 function useForcedDarkMode() {
   useEffect(() => {
     const html = document.documentElement;
@@ -60,7 +52,7 @@ export default function Feedback() {
       await submitFeedback(fields);
       setStatus("sent");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

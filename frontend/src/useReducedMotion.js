@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 
-// Where an in-app "Reduce motion" setting stores its answer. Nothing on the
-// site writes this yet; the hook reads it so that when Settings does get built,
-// every animation already follows it without being touched again. Write "true"
-// or "false" here and fire a "tsmile:reduce-motion" event to update live.
+// Where the site's own "Reduce motion" setting is saved.
 export const REDUCE_MOTION_KEY = "tsmile:reduce-motion";
 export const REDUCE_MOTION_EVENT = "tsmile:reduce-motion";
 
@@ -25,12 +22,7 @@ function currentValue() {
   return stored === null ? window.matchMedia(QUERY).matches : stored;
 }
 
-/**
- * True when the visitor has asked for reduced motion, either in their system
- * settings or in the site's own setting. The site's setting wins, because
- * somebody who turns it on here means it here. Follows both live, so turning
- * either on mid-visit stops the animations straight away.
- */
+// True if the visitor wants reduced motion, from their system or the site setting (the site setting wins).
 export function useReducedMotion() {
   const [reduced, setReduced] = useState(currentValue);
 

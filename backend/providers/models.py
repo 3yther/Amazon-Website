@@ -4,27 +4,13 @@ from django.db import models
 
 class ProviderQuerySet(models.QuerySet):
     def geocoded(self):
-        """
-        Only providers that have a real position on the map.
-
-        Latitude and longitude are both zero until geocode_providers has
-        resolved the postcode, so that pair is our "not looked up yet"
-        marker. Zero, zero is a point in the Atlantic, so leaving those rows
-        in would put them thousands of miles from every UK search anyway;
-        excluding them says why.
-        """
+        """Only providers that have been placed on the map (0, 0 means not looked up yet)."""
         return self.exclude(latitude=0, longitude=0)
 
 
 class Provider(models.Model):
-    """
-    One school or college offering T-Levels, with the position the "near you"
-    search measures from.
-
-    The position is worked out once by the geocode_providers management
-    command, not on the request path: a visitor's search then costs one
-    postcode lookup for their own postcode and no more, however many
-    providers we hold.
+    """A school or college that offers T-Levels, with its position for the search.
+    The position is filled in by the geocode_providers command.
     """
 
     name = models.CharField(max_length=200)

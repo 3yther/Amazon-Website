@@ -1,26 +1,7 @@
-// Everything Smiley can answer by itself, without the AI.
-//
-// Two kinds of topic:
-//
-// FACTS answer with the site's own checked copy, read straight from
-//   aboutContent.js, amazonContent.js and helpContent.js (or their
-//   translations). Smiley can never disagree with the pages, because it is
-//   reading the same words. Nothing here is written from memory.
-//
-// CHAT is small talk and the odd easter egg: greetings, thanks, jokes, "are
-//   you a robot", "do a flip". Scripted, in the translation files under
-//   smiley.chat, so it works in every language.
-//
-// Each topic:
-//   id        also the chip label key: smiley.topics.<id>
-//   patterns  ways of asking it (see scoreTopic in match.js)
-//   also      words that make a match more certain
-//   maxWords  only match short messages ("hi", not "hi, what is a T Level")
-//   related   topics offered as chips underneath the answer
-//   reply(ctx) -> { text, chips, mood, motion, link }
-//
-// ctx = { t, about, amazon, help, now } where about/amazon/help are the
-// content modules in the visitor's language.
+// Everything Smiley can answer without the AI.
+// Facts come from the site's own content files, and chat (hi, thanks, jokes)
+// is in the translation files under smiley.chat.
+// Each topic has: id, patterns, also, maxWords, related and reply(ctx).
 
 // --- words people use -------------------------------------------------------
 

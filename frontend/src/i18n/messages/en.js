@@ -19,7 +19,7 @@ const en = {
       "This page was translated into {language} by machine, so some wording may be off. " +
       "The English version is the one that counts.",
     showEnglish: "Read in English",
-    englishOnly: "This page is only available in English, so the wording is exactly right.",
+    englishOnly: "This page is only available in English.",
   },
 
   // The five pathway names, used wherever a pathway is named in the interface.
@@ -224,6 +224,7 @@ const en = {
     error404: "Error 404",
     notFound: "Page not found",
     toLibrary: "Go to the content library",
+    loading: "Loading",
   },
 
   // Browser tab titles, keyed by the English title each route passes to
@@ -346,6 +347,8 @@ const en = {
     hidePassword: "Hide password",
     showPassword: "Show password",
     panelLine: "Free resources for Amazon’s Digital T-Level pathway.",
+    somethingWrong: "Something went wrong. Try again.",
+    noConnection: "Could not reach the server. Check your connection and try again.",
   },
 
   register: {
@@ -998,6 +1001,164 @@ const en = {
       password: "Password",
       deactivating: "Deactivating",
       wrongPassword: "Incorrect password.",
+    },
+  },
+
+  resources: {
+    label: "Resources",
+    title: "T-Level Resources",
+    lead: "Free guides, videos and packs, linked from official sources such as gov.uk and UCAS.",
+    filters: "Filter content",
+    pathway: "Pathway",
+    allPathways: "All pathways",
+    for: "For",
+    anyone: "Anyone",
+    access: "Access",
+    any: "Any",
+    clear: "Clear filters",
+    loadError: "Could not load content.",
+    serverError: "Something went wrong on our side. Please try again in a moment.",
+    tryAgain: "Try again",
+    loading: "Loading",
+    noMatches: "No content matches these filters.",
+    oneItem: "1 item",
+    items: "{count} items",
+    loadMore: "Load more",
+    signUp: "Sign up to access",
+    openOn: "Open on {site}",
+    anotherWebsite: "another website",
+    open: "Open",
+    types: {
+      guide: "Guide",
+      document: "Document",
+      video: "Video",
+      prep_pack: "Prep pack",
+      class_pack: "Class pack",
+    },
+    audiences: {
+      all: "Everyone",
+      student: "Students",
+      parent: "Parents and guardians",
+      teacher: "Teachers and schools",
+    },
+    accessLevels: {
+      free: "Free",
+      signup: "Sign-up",
+    },
+  },
+
+  nearYou: {
+    label: "Find a provider",
+    title: "Find T-Levels Near You",
+    lead: "Enter your postcode to see the schools and colleges running T-Levels near you, closest first.",
+    form: "Search for T-Level providers",
+    postcode: "Postcode",
+    postcodeHint: "For example SW1A 1AA.",
+    pathway: "Pathway",
+    allPathways: "All pathways",
+    within: "Within",
+    miles: "{miles} miles",
+    search: "Search",
+    searching: "Searching",
+    error: "Could not search for providers.",
+    tryAgain: "Try again",
+    start: "Enter a postcode to see providers near you.",
+    none: "No providers found within {radius} miles of {postcode}. Try a wider radius.",
+    oneFound: "1 provider within {radius} miles of {postcode}.",
+    found: "{count} providers within {radius} miles of {postcode}.",
+    underTenth: "Under 0.1 miles",
+    oneMile: "1 mile",
+    distance: "{miles} miles",
+    pathways: "Pathways",
+    askProvider: "Ask the provider",
+    website: "Visit website",
+    errors: {
+      empty: "Enter a postcode.",
+      notFull: "Enter a full UK postcode, for example SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Subjects",
+    title: "All T-Levels",
+    lead: "{subjects} subjects across {routes} routes, from agriculture to marketing. Two more arrive in September 2028.",
+    onGovUk: ", on tlevels.gov.uk",
+    comingIn: "Coming September {year}",
+    notes: {
+      financeEnds: "Last enrolments September 2026",
+    },
+    pathwayResources: "{pathway} resources",
+    nextLabel: "Next",
+    nextTitle: "Find one near you",
+    nextLead: "Not every school or college runs every subject.",
+    searchHere: "Search by postcode on this site",
+    searchEngland: "Search every provider in England",
+  },
+
+  getInvolvedPage: {
+    label: "Get involved",
+    title: "Your next step",
+    lead: "Pick who you are.",
+    everyone: "Everyone",
+    audiences: {
+      students: {
+        heading: "Students",
+        lead: "Aged 16 to 18, or finishing your GCSEs.",
+      },
+      parents: {
+        heading: "Parents and carers",
+        lead: "Helping someone decide what comes after GCSEs.",
+      },
+      teachers: {
+        heading: "Teachers and schools",
+        lead: "Amazon arranges placements with schools and colleges, not with students directly.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "See every T-Level subject",
+        detail: "All T-Levels",
+      },
+      nearYou: {
+        label: "Find a school or college near you",
+        detail: "Find T-Levels Near You",
+      },
+      interest: {
+        label: "Tell Amazon you want a placement",
+        detail: "Register interest",
+      },
+      quiz: {
+        label: "Test what you know",
+        detail: "Quiz",
+      },
+      about: {
+        label: "What a T-Level is",
+        detail: "About T-Level",
+      },
+      parentGuides: {
+        label: "Guides written for parents",
+        detail: "Resources",
+      },
+      bursary: {
+        label: "Help with travel, books and kit",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Ask Amazon about placements for your students",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Class packs and teacher guides",
+        detail: "Resources",
+      },
+      guidance: {
+        label: "What a placement must include",
+        detail: "Placement guidance, gov.uk",
+      },
+      feedback: {
+        label: "Tell us what would make this site better",
+        detail: "Feedback",
+      },
     },
   },
 };

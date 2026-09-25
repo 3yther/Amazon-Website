@@ -14,13 +14,7 @@ import { TextareaField } from "../components/FormFields.jsx";
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-/**
- * One Community question with its answers (/community/:id).
- *
- * The answer that helped the asker comes first, then the most helpful. The
- * asker can mark the answer that helped; anyone signed in can mark posts
- * helpful or report them; authors can delete their own.
- */
+// One question with its answers. The accepted answer shows first, then the most helpful.
 export default function CommunityQuestion() {
   const t = useT();
   const { id } = useParams();

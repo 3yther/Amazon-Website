@@ -1,15 +1,8 @@
-"""
-The Community: questions about T Levels and Amazon placements, asked and
-answered by students, parents, teachers and Amazon staff.
+"""The Community: questions and answers about T-Levels and Amazon placements.
 
-Most people using it are 16 to 18, so safety is built into the models:
-posts can be hidden (by enough reports, or by staff) without being deleted,
-so staff can review them in admin, and everything a person posts goes when
-their account does (on_delete=CASCADE), in line with keeping personal data
-minimal.
-
-Answers here are other people's views, not checked facts, so Smiley never
-uses them as grounding.
+Most users are 16 to 18, so posts can be hidden (by reports or staff) and
+checked in admin. A user's posts are deleted with their account. Smiley
+never uses these answers as facts.
 """
 from django.conf import settings
 from django.db import models

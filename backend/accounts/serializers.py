@@ -39,11 +39,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-    """
-    Validates each preference against the ranges and choices defined on
-    UserPreference itself (ModelSerializer picks up the model's own
-    validators, so the 80-150 and 0-3 range checks live in one place).
-    """
+    """Checks each setting against the limits on the UserPreference model."""
 
     class Meta:
         model = UserPreference
@@ -104,14 +100,8 @@ class CurrentUserSerializer(AccountSerializer):
 
 
 class RegisterSerializer(serializers.Serializer):
-    """
-    Validates a sign-up server side and creates the User plus its Profile.
-
-    Django hashes the password. Passwords are write-only, so the response
-    never echoes them back.
-
-    Every check is field-level, so one 400 lists every problem at once. DRF
-    skips validate() while any field has an error, so nothing lives there.
+    """Checks a sign up and creates the User and its Profile.
+    Django hashes the password, and it's never sent back.
     """
 
     username = serializers.CharField(max_length=150, validators=[UnicodeUsernameValidator()])
@@ -135,9 +125,7 @@ class RegisterSerializer(serializers.Serializer):
         return username
 
     def validate_password(self, value):
-        # Runs AUTH_PASSWORD_VALIDATORS from settings. The unsaved User lets the
-        # similarity check compare the password with the submitted username,
-        # read from the raw input because field checks cannot see each other.
+        # Runs the password rules from settings (AUTH_PASSWORD_VALIDATORS).
         user = User(username=self.initial_data.get("username"))
         try:
             password_validation.validate_password(value, user=user)
@@ -242,9 +230,8 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        # authenticate() returns None for a wrong password, an unknown username
-        # or a deactivated account. All three get the same message, so the
-        # response never reveals which usernames exist.
+        # Same message for a wrong password, unknown username or deactivated
+        # account, so nobody can find out which usernames exist.
         user = authenticate(
             request=self.context.get("request"),
             username=attrs["username"],
@@ -257,11 +244,8 @@ class LoginSerializer(serializers.Serializer):
 
 
 class PasswordResetRequestSerializer(serializers.Serializer):
-    """
-    Looks up the account by username, the same identifier LoginSerializer
-    uses. save() is a no-op for an unknown username or one with no email on
-    file, so the view's response is identical either way - the same
-    no-enumeration principle LoginSerializer follows for a wrong password.
+    """Finds the account by username. Does nothing if it doesn't exist or has no
+    email, so the reply is the same either way.
     """
 
     username = serializers.CharField()
@@ -278,12 +262,8 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
-    """
-    Checks the uid and token from the emailed link, then the new password.
-
-    uid/token failures and a reused/expired token are reported under the
-    same "token" field with the same message, so the front end does not
-    need to tell them apart - both mean "get a new link".
+    """Checks the uid and token from the email link, then the new password.
+    Any problem with the link gives the same "token" error.
     """
 
     uid = serializers.CharField()
@@ -326,11 +306,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
-    """
-    Validates a feedback submission. category must be one of Feedback's
-    choices (ModelSerializer rejects anything else automatically); message is
-    required (the model field has no blank=True); email is optional.
-    """
+    """Checks a feedback message. Email is optional."""
 
     class Meta:
         model = Feedback

@@ -1,25 +1,11 @@
-"""
-The facts Smiley is allowed to answer from, and the rules it answers by.
+"""The facts Smiley can answer from.
 
-Grounding comes from two places:
+They come from the database (pathways and content) and from VERIFIED_FACTS
+below, which are copied word for word from frontend/src/aboutContent.js.
+A test fails if the site's wording changes and this file doesn't.
 
-1. The database. Pathway and ContentItem rows, which the team already edits in
-   admin, so Smiley stays right when the content changes.
-2. VERIFIED_FACTS below. Most are QUOTED WORD FOR WORD from the site's own
-   copy in frontend/src/aboutContent.js, which the team checked against gov.uk,
-   UCAS and Amazon in September 2026. A test (test_quoted_facts_match_the_site)
-   fails if the page copy changes and this file does not follow, so Smiley can
-   never drift from what the site itself says.
-
-A fact with text=None is a CONTENT GAP: nobody has written or checked that copy
-yet. Gaps are sent to the model as "not known", so Smiley says it does not know
-and points at the Help page rather than inventing an answer. That is the safety
-requirement in the proposal, and it is the reason no fact in this file was
-written from memory.
-
-List what is still missing with:
-
-    python manage.py check_chat_facts
+A fact with text=None hasn't been written yet, so Smiley says it doesn't know.
+See what's missing with: python manage.py check_chat_facts
 """
 from dataclasses import dataclass
 
@@ -42,9 +28,7 @@ class Fact:
     text: str | None
     source: str
     note: str = ""
-    # Set when the fact is quoted word for word from a file in this repo: the
-    # file, and the exact pieces of it the text is made from. A test checks
-    # every piece still appears in that file.
+    # The file this fact is copied from, and the exact pieces. A test checks they're still there.
     quoted_from: str = ""
     quoted_parts: tuple = ()
 
@@ -61,11 +45,7 @@ def quoted(topic, text):
 
 
 def quoted_parts(topic, parts, source=ABOUT_COPY, joiner=" "):
-    """
-    A fact made of several exact pieces of the page copy, e.g. a card's heading
-    and its line of text. Each piece is checked separately by the test, so the
-    wording can be shortened on the page without Smiley drifting from it.
-    """
+    """A fact made of a few exact pieces of the page (e.g. a heading and its text)."""
     parts = tuple(parts)
     return Fact(
         topic=topic,
@@ -92,12 +72,8 @@ def quoted_list(topic, items):
 
 # ---------------------------------------------------------------------------
 # The facts
-#
-# TEAM: to change what Smiley says, change the page copy in aboutContent.js and
-# paste the same sentence here. The test will tell you if the two disagree.
-# Do not paraphrase from memory, and do not let an AI write these: the whole
-# point is that a person checked them. Anything still None is answered with
-# "I do not know".
+# TEAM: to change what Smiley says, change aboutContent.js and paste the same
+# sentence here. Don't write these from memory. None means "I don't know".
 # ---------------------------------------------------------------------------
 
 VERIFIED_FACTS = (
@@ -425,11 +401,8 @@ def content_gaps():
 
 
 def build_grounding():
-    """
-    Every fact Smiley may use, as one block of text.
-
-    Hits the database, so call it per request rather than caching it at import
-    time: staff edit content in admin and Smiley should follow.
+    """All the facts as one block of text. Reads the database, so call it on each
+    request (staff can change content in admin).
     """
     known, gaps = _fact_lines()
     sections = [
@@ -457,9 +430,7 @@ AUDIENCES = {
 }
 
 
-# The languages the site is available in (frontend/src/i18n/languages.js).
-# English plus the nine most common main languages in England after English,
-# from the 2021 Census.
+# The site's languages (same as frontend/src/i18n/languages.js).
 LANGUAGES = {
     "en": "British English",
     "pl": "Polish",
@@ -475,13 +446,10 @@ LANGUAGES = {
 
 
 def build_system_prompt(quiz_context=None, audience=None, language=None):
-    """
-    Smiley's personality, its rules and its facts.
+    """Smiley's personality, rules and facts.
 
-    quiz_context is set when a visitor got a quiz question wrong, so the answer
-    is grounded in that question rather than written freehand. audience is who
-    the visitor said they are, so the answer can be pitched for them. language
-    is the site language they chose, so Smiley replies in it.
+    quiz_context is the quiz question they got wrong, audience is who they said
+    they are, and language is the site language so Smiley replies in it.
     """
     prompt = f"""You are Smiley, the guide on T-SMILE. T-SMILE is a website that explains \
 T-Levels, including T-Levels at Amazon, to students aged 16 to 18, to their parents and \
@@ -555,12 +523,8 @@ answering normally as Smiley under these rules."""
 
 
 def build_quiz_context(question, correct_answer, explanation="", chosen_answer=""):
-    """
-    Turn a wrong quiz answer into grounding text.
-
-    The question, its right answer and its explanation come from the quiz
-    itself, so Smiley explains the team's own content rather than inventing its
-    own version of the topic.
+    """Turns a wrong quiz answer into text for the AI, using the quiz's own
+    question, answer and explanation.
     """
     lines = [
         "The visitor just answered this quiz question incorrectly, and asked for help with it.",

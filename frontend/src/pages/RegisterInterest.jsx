@@ -6,9 +6,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import { useSiteContent } from "../i18n/content.js";
 import "../about.css";
 
-// The Register interest page (/register-interest): the Expression of Interest
-// form (InterestForm.jsx) with what happens next beside it. The same form also
-// sits in a box on the Sign up page.
+// Register interest page: the form (InterestForm.jsx) and what happens next.
 
 export default function RegisterInterest() {
   const t = useT();

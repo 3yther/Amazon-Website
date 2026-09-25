@@ -15,7 +15,7 @@ const pt = {
       "Esta página foi traduzida automaticamente ({language}), por isso algumas palavras podem não estar certas. " +
       "A versão em inglês é a que conta.",
     showEnglish: "Ler em inglês",
-    englishOnly: "Esta página só está disponível em inglês, para que o texto esteja exatamente certo.",
+    englishOnly: "Esta página só está disponível em inglês.",
   },
 
   pathways: {
@@ -213,6 +213,7 @@ const pt = {
     error404: "Erro 404",
     notFound: "Página não encontrada",
     toLibrary: "Ir para a biblioteca de conteúdos",
+    loading: "A carregar",
   },
 
   titles: {
@@ -332,6 +333,8 @@ const pt = {
     hidePassword: "Ocultar palavra-passe",
     showPassword: "Mostrar palavra-passe",
     panelLine: "Recursos gratuitos para o percurso do T-Level Digital da Amazon.",
+    somethingWrong: "Algo correu mal. Tenta de novo.",
+    noConnection: "Não foi possível ligar ao servidor. Verifica a tua ligação e tenta de novo.",
   },
 
   register: {
@@ -1026,6 +1029,164 @@ const pt = {
       password: "Palavra-passe",
       deactivating: "A desativar",
       wrongPassword: "Palavra-passe incorreta.",
+    },
+  },
+
+  resources: {
+    label: "Recursos",
+    title: "Recursos de T-Level",
+    lead: "Guias, vídeos e pacotes gratuitos, de fontes oficiais como o gov.uk e a UCAS.",
+    filters: "Filtrar conteúdo",
+    pathway: "Área",
+    allPathways: "Todas as áreas",
+    for: "Para",
+    anyone: "Qualquer pessoa",
+    access: "Acesso",
+    any: "Qualquer",
+    clear: "Limpar filtros",
+    loadError: "Não foi possível carregar o conteúdo.",
+    serverError: "Algo correu mal do nosso lado. Tenta de novo daqui a pouco.",
+    tryAgain: "Tentar de novo",
+    loading: "A carregar",
+    noMatches: "Nenhum conteúdo corresponde a estes filtros.",
+    oneItem: "1 item",
+    items: "{count} itens",
+    loadMore: "Carregar mais",
+    signUp: "Cria uma conta para aceder",
+    openOn: "Abrir em {site}",
+    anotherWebsite: "outro site",
+    open: "Abrir",
+    types: {
+      guide: "Guia",
+      document: "Documento",
+      video: "Vídeo",
+      prep_pack: "Pacote de preparação",
+      class_pack: "Pacote para a turma",
+    },
+    audiences: {
+      all: "Todos",
+      student: "Alunos",
+      parent: "Pais e encarregados de educação",
+      teacher: "Professores e escolas",
+    },
+    accessLevels: {
+      free: "Grátis",
+      signup: "Com conta",
+    },
+  },
+
+  nearYou: {
+    label: "Encontra uma escola",
+    title: "Encontra T-Levels perto de ti",
+    lead: "Escreve o teu código postal para veres as escolas e colégios perto de ti que têm T-Levels, dos mais próximos para os mais longe.",
+    form: "Procurar escolas com T-Levels",
+    postcode: "Código postal",
+    postcodeHint: "Por exemplo SW1A 1AA.",
+    pathway: "Área",
+    allPathways: "Todas as áreas",
+    within: "Num raio de",
+    miles: "{miles} milhas",
+    search: "Procurar",
+    searching: "A procurar",
+    error: "Não foi possível procurar escolas.",
+    tryAgain: "Tentar de novo",
+    start: "Escreve um código postal para veres as escolas perto de ti.",
+    none: "Nenhuma escola num raio de {radius} milhas de {postcode}. Experimenta um raio maior.",
+    oneFound: "1 escola num raio de {radius} milhas de {postcode}.",
+    found: "{count} escolas num raio de {radius} milhas de {postcode}.",
+    underTenth: "Menos de 0.1 milhas",
+    oneMile: "1 milha",
+    distance: "{miles} milhas",
+    pathways: "Áreas",
+    askProvider: "Pergunta à escola",
+    website: "Visitar o site",
+    errors: {
+      empty: "Escreve um código postal.",
+      notFull: "Escreve um código postal completo do Reino Unido, por exemplo SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Disciplinas",
+    title: "Todos os T-Levels",
+    lead: "{subjects} disciplinas em {routes} áreas, da agricultura ao marketing. Chegam mais duas em setembro de 2028.",
+    onGovUk: ", em tlevels.gov.uk",
+    comingIn: "A partir de setembro de {year}",
+    notes: {
+      financeEnds: "Últimas inscrições em setembro de 2026",
+    },
+    pathwayResources: "Recursos de {pathway}",
+    nextLabel: "A seguir",
+    nextTitle: "Encontra um perto de ti",
+    nextLead: "Nem todas as escolas ou colégios têm todas as disciplinas.",
+    searchHere: "Procurar por código postal neste site",
+    searchEngland: "Procurar em todas as escolas de Inglaterra",
+  },
+
+  getInvolvedPage: {
+    label: "Participa",
+    title: "O teu próximo passo",
+    lead: "Escolhe quem és.",
+    everyone: "Todos",
+    audiences: {
+      students: {
+        heading: "Alunos",
+        lead: "Tens entre 16 e 18 anos ou estás a acabar os GCSE.",
+      },
+      parents: {
+        heading: "Pais e encarregados de educação",
+        lead: "Estás a ajudar alguém a decidir o que fazer depois dos GCSE.",
+      },
+      teachers: {
+        heading: "Professores e escolas",
+        lead: "A Amazon combina os estágios com as escolas e colégios, não diretamente com os alunos.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "Vê todas as disciplinas T-Level",
+        detail: "Todos os T-Levels",
+      },
+      nearYou: {
+        label: "Encontra uma escola ou colégio perto de ti",
+        detail: "Encontra T-Levels perto de ti",
+      },
+      interest: {
+        label: "Diz à Amazon que queres um estágio",
+        detail: "Registar interesse",
+      },
+      quiz: {
+        label: "Testa o que sabes",
+        detail: "Questionário",
+      },
+      about: {
+        label: "O que é um T-Level",
+        detail: "Sobre os T-Levels",
+      },
+      parentGuides: {
+        label: "Guias escritos para pais",
+        detail: "Recursos",
+      },
+      bursary: {
+        label: "Ajuda com transporte, livros e material",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Pergunta à Amazon sobre estágios para os teus alunos",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Pacotes para a turma e guias para professores",
+        detail: "Recursos",
+      },
+      guidance: {
+        label: "O que um estágio tem de incluir",
+        detail: "Orientações para estágios, gov.uk",
+      },
+      feedback: {
+        label: "Diz-nos o que tornaria este site melhor",
+        detail: "Opinião",
+      },
     },
   },
 };

@@ -1,15 +1,6 @@
-// What Smiley says on its own: greetings, the questions it asks, suggested
-// replies and nudges. The words themselves are in the translation files
-// (i18n/messages, under smiley), so every function here takes t().
-//
-// Each suggested reply ("chip") has a label and an action:
-//   { type: "topic", id }        answered by the answer engine, in any language
-//   { type: "ask", text }        sent to the AI as the visitor's question
-//   { type: "audience", value }  answers "who's visiting?" (kept in the browser)
-//   { type: "local", key }       a scripted reply below, no AI needed
-//   { type: "link", to }         goes to a page on this site
-//   { type: "quiz", mode }       explains the quiz question just got wrong
-//   { type: "retry" }            sends the last question again
+// The things Smiley says by itself: greetings, questions, suggestion chips and nudges.
+// The words are in i18n/messages under "smiley".
+// Chip types: topic, ask, audience, local, link, quiz, retry.
 
 import { topicChip } from "./answers/topics.js";
 
@@ -41,11 +32,7 @@ const AUDIENCE_TOPICS = {
   teacher: ["resources", "tlevelAssessment", "amazonPlacement"],
 };
 
-/**
- * Smiley's follow-up once it knows who it is talking to. With an opener
- * ("Nice one.") straight after the visitor answers; without one when the
- * answer is remembered from earlier, where "Nice one" would reply to nothing.
- */
+/** What Smiley says after it knows who it's talking to. */
 export function audienceReply(t, audience, { opener = true } = {}) {
   const who = AUDIENCE_TOPICS[audience] ? audience : "student";
   const text = t(`smiley.audience.replies.${who}.text`);
@@ -110,10 +97,7 @@ export function quizNudge(t, question) {
   };
 }
 
-/**
- * Explaining a quiz question without the AI: the quiz's own right answer and
- * explanation, which are checked content, so nothing is made up.
- */
+/** Explains a quiz question using the quiz's own answer, no AI needed. */
 export function quizExplanation(t, quiz) {
   const values = {
     question: quiz.question,
@@ -124,9 +108,7 @@ export function quizExplanation(t, quiz) {
   return quiz.chosenAnswer ? t("smiley.quizLocalChosen", values) : t("smiley.quizLocal", values);
 }
 
-// What Smiley opens with when a page goes quiet. Specific to the page, because
-// "Need any help?" on every page is just noise. Chips are topics the answer
-// engine can answer in any language.
+// What Smiley says when a page has gone quiet, different for each page.
 const NUDGES = {
   "/": ["home", ["whatIsTLevel", "amazonPlacement"]],
   "/about": ["about", ["placementLength", "tlevelVsApprenticeship"]],

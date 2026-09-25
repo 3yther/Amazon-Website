@@ -7,9 +7,7 @@ import CommunityAsk from "../pages/CommunityAsk.jsx";
 import CommunityQuestion from "../pages/CommunityQuestion.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
-// The Community pages, with the signed-in user and the API stood in for.
-// What the server allows (who can post, what gets blocked) is tested in
-// backend/community/tests.py; these check what the pages do with it.
+// The Community pages with a fake user and API. The server rules are tested in backend/community/tests.py.
 
 const api = vi.hoisted(() => {
   class ApiError extends Error {

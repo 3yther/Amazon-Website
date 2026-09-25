@@ -2,15 +2,8 @@ import { useState } from "react";
 import { useSiteContent } from "../i18n/content.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-// Expandable FAQ for the About T-Level page.
-//
-// NEW CONCEPT: this is the "disclosure" pattern. Each question is a real
-// <button>, so the keyboard and screen readers get Enter, Space and focus for
-// free. Two attributes do the rest:
-//   aria-expanded  says whether the answer below is open or closed
-//   aria-controls  points at the id of the answer it opens
-// The answer itself uses the hidden attribute, so a closed answer is out of
-// the page for everyone, not just hidden visually.
+// FAQ list for the About page. Each question is a button with aria-expanded,
+// and the answer uses the hidden attribute when it's closed.
 
 /** Local chevron so this page does not have to edit the shared Icons.jsx. */
 function ChevronIcon() {

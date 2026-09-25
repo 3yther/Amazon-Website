@@ -1,12 +1,8 @@
-"""
-Lists the facts the assistant still has no answer for.
+"""Lists the facts Smiley still has no answer for.
 
     python manage.py check_chat_facts
 
-Every gap is a question a visitor can ask that the assistant will answer with
-"I do not know, try the Help page". Fill them in chatbot/knowledge.py using our
-own checked copy. Exits 1 when anything is missing, so it can go in a build
-check later if the team wants one.
+Fill them in chatbot/knowledge.py. Exits 1 if anything is missing.
 """
 from django.core.management.base import BaseCommand
 

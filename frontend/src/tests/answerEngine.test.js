@@ -7,9 +7,8 @@ import { normalise } from "../assistant/answers/match.js";
 import { TOPICS } from "../assistant/answers/topics.js";
 import { makeTranslate } from "../i18n/translate.js";
 
-// Smiley's answer engine: what it says without the AI. Every fact it gives
-// must be the site's own copy, and every safeguarding message must be caught
-// and kept in the browser.
+// Tests for Smiley's answers without the AI. Facts must come from the site's
+// own content, and safety messages must be caught.
 
 const ctx = {
   t: makeTranslate(),

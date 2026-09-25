@@ -1,30 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * Smiley's behaviour: what it feels, where it looks, when it blinks, when it
- * dozes off. One engine for all of it, so behaviours never fight: at any
- * moment there is exactly one mood, picked by the rules in resolveMood below.
- *
- *   Always        eyes follow the cursor, blinks at natural random intervals
- *   When quiet    glances around, gets sleepy after 2 minutes, falls asleep
- *                 after 3, and wakes with a start when you come back
- *   Reactions     happy, surprised, sympathetic, dizzy, celebrating: short
- *                 moods triggered by what happens (see ChatWidget)
- *   Busy states   listening while you type, thinking while it waits, curious
- *                 while you hover over it
- *   Extras        follows the page up and down as you scroll, says hello
- *                 when you come back to the tab, gets dizzy if poked too much,
- *                 gets shy if you hover over it for five seconds
- *   Tricks        dance, flip, barrel roll, a nap and a fashion show, when
- *                 asked in the chat (perform)
- *   Outfits       a seasonal hat by the visitor's calendar (seasonalOutfit)
- *
- * PRIVACY: every signal here (cursor, scrolling, idle time, tab switches) is
- * read in the browser and forgotten. None of it is sent or stored.
- *
- * REDUCED MOTION: with reduced motion on (system or site setting) nothing
- * moves: no tracking, no blinking, no glances, no hops. Moods still change,
- * instantly, because the face still has to say something.
+ * Smiley's behaviour: its mood, where it looks, blinking, falling asleep,
+ * reactions and tricks. Only one mood at a time (see resolveMood).
+ * Nothing moves when reduced motion is on, and nothing is sent anywhere.
  */
 
 const ORIGIN = { x: 0, y: 0 };
@@ -72,14 +51,8 @@ const NAP_MS = 5000;
 // Every outfit, in the order the "outfits" trick shows them off.
 export const OUTFITS = ["bobble", "witch", "party", "gradcap"];
 
-/**
- * What Smiley wears today, by the visitor's own calendar:
- *   party hat    31 December to 2 January
- *   bobble hat   the rest of December to the end of February
- *   witch's hat  24 to 31 October
- *   mortarboard  10 to 20 August, results season
- * None otherwise. Nothing religious, so it suits everyone.
- */
+// Seasonal hats: party hat at new year, bobble hat in winter,
+// witch's hat for Halloween and a grad cap on results day.
 export function seasonalOutfit(date = new Date()) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -197,12 +170,7 @@ export function useSmiley({ reducedMotion }) {
     [react],
   );
 
-  /**
-   * A trick asked for in the chat: "dance", "flip", "spin", "nap", "outfits",
-   * "wiggle", or any reaction's movement. Under reduced motion the moves are
-   * skipped; the nap and the outfits still happen, because they are changes
-   * of face and clothes rather than movement.
-   */
+  // A trick asked for in the chat, like "dance" or "flip". Moves are skipped with reduced motion.
   const perform = useCallback(
     (trick) => {
       if (!trick) return;

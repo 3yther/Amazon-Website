@@ -117,9 +117,7 @@ export function AlertIcon() {
   );
 }
 
-// Stands in for the circular initial when nobody is signed in, so the header's
-// account button is still something to aim at on a narrow screen where its
-// label is hidden. The menu's Hello band uses it as its avatar too.
+// Used on the account button when nobody is signed in.
 export function PersonIcon() {
   return (
     <Icon>
@@ -129,7 +127,7 @@ export function PersonIcon() {
   );
 }
 
-// One per pathway, for the homepage pathway tiles.
+// One per pathway (see PATHWAY_ICONS at the bottom).
 
 export function DigitalIcon() {
   return (
@@ -173,3 +171,12 @@ export function EngineeringIcon() {
     </Icon>
   );
 }
+
+// Pathway slug -> icon, so every page uses the same picture for a pathway.
+export const PATHWAY_ICONS = {
+  digital: DigitalIcon,
+  business: BusinessIcon,
+  media: MediaIcon,
+  finance: FinanceIcon,
+  engineering: EngineeringIcon,
+};

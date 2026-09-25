@@ -5,9 +5,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
-# Same CSRF handling as register and login: DRF exempts its views from Django's
-# check, so signed-out POSTs would not be checked at all. The mixin puts the
-# check back. See the long comment at the top of accounts/views.py.
+# Puts the CSRF check back for signed-out POSTs (see the comment at the top of accounts/views.py).
 from accounts.views import CsrfCheckedMixin
 
 from .knowledge import build_quiz_context, build_system_prompt
@@ -21,12 +19,8 @@ HISTORY_LIMIT = 12
 
 
 def get_session_id(request):
-    """
-    The id that groups one conversation.
-
-    Django's own session key, so guests get a conversation without an account
-    and without us inventing another identifier to follow them around. A guest
-    who has never had a session yet gets one here.
+    """The id for one conversation. Uses Django's session key, so guests can chat
+    without an account.
     """
     if not request.session.session_key:
         request.session.create()
@@ -34,11 +28,8 @@ def get_session_id(request):
 
 
 def conversation_queryset(request, session_id):
-    """
-    This visitor's messages.
-
-    Signed in, the conversation follows the account, so it is still there on
-    another day or another device. Signed out, it belongs to the session alone.
+    """This visitor's messages. Signed in they follow the account, signed out they
+    belong to the session.
     """
     if request.user.is_authenticated:
         return ChatMessage.objects.filter(user=request.user)
@@ -52,19 +43,12 @@ def recent_messages(queryset, limit=HISTORY_LIMIT):
 
 
 class ChatView(CsrfCheckedMixin, APIView):
-    """
-    GET  /api/chat/   the last few messages of this visitor's conversation
-    POST /api/chat/   send a message, get the assistant's reply
+    """GET  /api/chat/   the visitor's recent messages
+    POST /api/chat/   send a message and get Smiley's reply
 
-    Open to everyone: guests chat without an account, and a signed-in visitor
-    gets their conversation attached to their account so it keeps.
-
-    POST body: message, plus optional audience (student | parent | teacher,
-    from the question Smiley opens with), and quiz_question,
-    quiz_correct_answer, quiz_chosen_answer and quiz_explanation when a wrong
-    quiz answer started the conversation. Only message is ever stored.
-    Returns 200 with {"reply": "..."}, 400 with field errors, 429 when rate
-    limited, or 503 when the assistant itself is unavailable.
+    Anyone can use it. POST body: message, and optionally audience and the quiz
+    fields. Only the message is saved. Returns 200 {"reply": "..."}, 400, 429
+    (rate limited) or 503 (AI unavailable).
     """
 
     permission_classes = [AllowAny]
@@ -72,13 +56,8 @@ class ChatView(CsrfCheckedMixin, APIView):
     throttle_scope = "chat"
 
     def get(self, request):
-        # Deliberately does not start a session. Reading an empty history is not
-        # a reason to give somebody a cookie; sending a message is, and POST
-        # below does that. Data minimisation, same as the interest form.
-        #
-        # ai_available tells the widget whether an AI is set up at all. Without
-        # one, Smiley answers from its own checked copy in the browser and does
-        # not send (or store) questions nothing here could answer.
+        # Doesn't start a session just for reading (only sending does).
+        # ai_available tells the widget if the AI is set up.
         ai_available = bool(settings.ANTHROPIC_API_KEY)
         session_id = request.session.session_key
         if not session_id and not request.user.is_authenticated:

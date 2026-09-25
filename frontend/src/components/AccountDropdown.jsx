@@ -5,9 +5,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import LanguagePicker from "../i18n/LanguagePicker.jsx";
 import { PersonIcon } from "./Icons.jsx";
 
-// Same choices as labels.js USER_TYPES, plus the staff role that only exists
-// through Django admin, so a signed-in staff member still gets a label here.
-// The words are under account.roles in the language files.
+// Role names (words are under account.roles). Includes staff, which is only set in Django admin.
 const ROLES = ["student", "parent", "teacher", "amazon_staff"];
 
 // Labels are translation keys (see i18n/messages/en.js, account).
@@ -17,27 +15,14 @@ const MENU_ITEMS = [
   { to: "/contact", label: "account.contact" },
 ];
 
-// Logging out is NOT here on purpose. It used to be the last item in this
-// menu, one press from the header on every page, which is a long way to fall
-// from "I wanted my settings". It lives on the Account tab of
-// /accessibility now (see accessibility/AccountSettings.jsx), which the
-// first item here goes to.
+// Log out isn't in this menu, it's on the Account tab of /accessibility.
 
-// Shown only to Amazon staff. Hiding it is a convenience, not a control:
-// /staff redirects anyone else away and its API refuses them (see
-// accounts/permissions.py).
+// Only shown to Amazon staff. The API does the real check.
 const STAFF_ITEM = { to: "/staff", label: "account.submissions" };
 
 /**
- * The account button in the header, and the menu it opens.
- *
- * Signed in it greets you by name and offers your account pages; signed out
- * it says "Hello, sign in" and offers the two ways to get an account. It used
- * to render nothing at all when nobody was signed in, which left the corner
- * empty and signing in reachable only from the nav drawer.
- *
- * Both states are the same menu: the same outside-click and Escape handling,
- * the same trigger, the same roles. Only what is inside it changes.
+ * The account button in the header and its menu.
+ * Signed in it shows your name and account links, signed out it shows sign in and sign up.
  */
 export default function AccountDropdown() {
   const t = useT();
@@ -106,12 +91,7 @@ export default function AccountDropdown() {
       </button>
 
       {open && (
-        // role="menu" sits on the list, not on this box. It used to be on the
-        // box, which also holds the name and role heading, and a menu is only
-        // allowed to contain menu items: axe rejected it for
-        // aria-required-children, and the links inside for
-        // aria-required-parent. The heading is a label for the menu, not an
-        // item in it, so it stays outside.
+        // role="menu" goes on the list, not the box, because a menu can only hold menu items.
         <div className="account-dropdown">
           {signedIn ? (
             <div className="dropdown-header">
@@ -145,11 +125,7 @@ export default function AccountDropdown() {
                     {t("account.signIn")}
                   </NavLink>
                 </li>
-                {/* The one item in either menu that is a button rather than a
-                    row: creating an account is what we want a new visitor to
-                    do, and orange is how the rest of the site says "press
-                    this". Contact Us is deliberately left out; the footer has
-                    it on every page already. */}
+                {/* Sign up is a button so it stands out. */}
                 <li role="none" className="dropdown-links__cta">
                   <NavLink
                     to="/register"
@@ -164,9 +140,7 @@ export default function AccountDropdown() {
             )}
           </ul>
 
-          {/* The language menu, for everyone, signed in or not. Outside the
-              list, because a menu may only hold menu items, and a <select>
-              is not one. The side menu has the same control. */}
+          {/* The language picker. It sits outside the list because a select isn't a menu item. */}
           <div className="dropdown-language">
             <LanguagePicker variant="menu" />
           </div>

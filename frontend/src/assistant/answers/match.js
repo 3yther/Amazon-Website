@@ -1,7 +1,5 @@
-// Small, predictable text matching for Smiley's answer engine. No AI and no
-// fuzzy magic: a question matches a topic when it contains a word from each
-// of the topic's word groups. That makes every answer explainable ("it
-// matched 'placement' and 'long'"), which matters for a safety-reviewed site.
+// Simple word matching for Smiley. A question matches a topic if it has a
+// word from each of the topic's word groups.
 
 // Spellings people really type, folded into one form before matching.
 const SPELLINGS = [
@@ -38,11 +36,8 @@ function escape(term) {
   return term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-// Short words must match a whole word, so "hi" never matches "his" and "ta"
-// (thanks) never matches "take". Longer words (6 letters or more) may match
-// the start of a longer word, so "placement" still finds "placements". Latin
-// script only: other alphabets are matched as plain substrings, because word
-// boundaries in them do not work the same way.
+// Short words have to match a whole word ("hi" shouldn't match "his").
+// Words of 6+ letters can match the start of a word ("placement" -> "placements").
 const LATIN = /^[\p{Script=Latin}\p{N}\s]+$/u;
 const PREFIX_FROM = 6;
 const cache = new Map();
@@ -66,20 +61,7 @@ export function hasAny(clean, terms) {
   return terms.some((term) => hasTerm(clean, term));
 }
 
-/**
- * How well a normalised question fits a topic.
- *
- * topic.patterns  ways of asking about the topic. Each pattern is a list of
- *                 word groups, and a pattern matches when the question has a
- *                 word from EVERY group. A two-group pattern ("placement" +
- *                 "how long") scores 2, a one-group pattern scores 1, so the
- *                 more specific topic wins.
- * topic.also      extra words that make a match more certain (+0.5 each)
- * extraTerms      words in the visitor's own language, from smiley.keywords in
- *                 their translation file. One of them scores 1.25, a best
- *                 guess like a one-group pattern; each extra one adds 0.5, so
- *                 "how long" + "placement" beats "how long" on its own.
- */
+// Scores how well a question fits a topic. More matching word groups = higher score.
 export function scoreTopic(clean, topic, extraTerms = []) {
   let score = 0;
 

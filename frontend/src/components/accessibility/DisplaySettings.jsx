@@ -4,9 +4,7 @@ import { SelectField } from "../FormFields.jsx";
 // The stored values; their names are in i18n/messages (settings.display).
 const THEMES = ["light", "dark", "system"];
 const OUTLINE_STYLES = ["default", "thick", "dashed"];
-// Kept to light neutrals: --blue stays the text colour whatever background is
-// picked here, and a dark background would leave dark text unreadable on it.
-// Use the dark-mode theme above for a dark page.
+// Light colours only, because the text stays dark. Use dark mode for a dark page.
 const PAGE_BACKGROUNDS = ["white", "cream", "gray"];
 
 /** Theme, focus outline style, and page background. */

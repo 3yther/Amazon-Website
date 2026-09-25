@@ -15,26 +15,15 @@ CONTROL_CHARACTERS = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
 
 
 def sanitise(text):
-    """
-    Clean text coming from the browser before we store it or send it on.
-
-    React escapes everything it renders, so this is not the only thing standing
-    between us and XSS, but the brief asks for server-side stripping and the
-    admin transcript reads better without stray markup either way.
-    """
+    """Cleans text from the browser (strips HTML tags) before saving it."""
     text = strip_tags(text)
     text = CONTROL_CHARACTERS.sub("", text)
     return text.strip()
 
 
 class ChatRequestSerializer(serializers.Serializer):
-    """
-    One message from a visitor, plus context that shapes the answer.
-
-    The quiz fields are only sent when the visitor got a question wrong and
-    asked for help, so the answer can be grounded in that question. audience is
-    who the visitor told Smiley they are. None of these extra fields is stored:
-    only the message is.
+    """One message from a visitor. The quiz fields and audience help the answer,
+    but only the message itself is saved.
     """
 
     message = serializers.CharField(max_length=MAX_MESSAGE_LENGTH, trim_whitespace=True)

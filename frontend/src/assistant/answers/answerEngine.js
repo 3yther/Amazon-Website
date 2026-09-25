@@ -2,19 +2,11 @@ import { normalise, scoreTopic, termList, wordCount } from "./match.js";
 import { checkSafety } from "./safety.js";
 import { POPULAR, TOPICS, TOPICS_BY_ID, topicChip } from "./topics.js";
 
-// Smiley's answer engine: how it replies without the AI.
-//
-// In order:
-//   1. SAFETY  wellbeing worries and personal details. Answered here, never
-//              sent to the server, whatever else the message says.
-//   2. TOPICS  facts from the site's own copy, small talk and easter eggs.
-//              A confident match is answered straight away: instant, free,
-//              and word for word what the pages say.
-//   3. AI      only for what is left, and only if the site has a key.
-//   4. HONEST  if all of that fails: "I don't know that one yet", with the
-//              questions Smiley can answer as chips.
-//
-// ctx: { t, about, amazon, help, language, now } (see useSmileyContext)
+// How Smiley answers without the AI:
+// 1. safety checks (never sent to the server)
+// 2. topics from the site's own pages
+// 3. the AI, if there is one
+// 4. "I don't know that one yet"
 
 const RELATED_CHIPS = 3;
 
@@ -60,13 +52,7 @@ export function dontKnow(ctx) {
   };
 }
 
-/**
- * Replies to a typed message, or returns null when the AI should take it.
- *
- * The result has confident: true when Smiley is sure enough to answer
- * without the AI. A result with confident: false is its best guess, used
- * only if the AI cannot be reached.
- */
+// Answers a typed message, or returns null if the AI should answer it.
 export function answerLocally(text, ctx) {
   const safety = checkSafety(text);
   if (safety) {

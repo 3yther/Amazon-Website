@@ -14,7 +14,7 @@ const ro = {
       "Această pagină a fost tradusă automat ({language}), așa că unele formulări pot fi inexacte. " +
       "Versiunea în engleză este cea care contează.",
     showEnglish: "Citește în engleză",
-    englishOnly: "Această pagină este disponibilă doar în engleză, ca formularea să fie exact cea corectă.",
+    englishOnly: "Această pagină este disponibilă doar în engleză.",
   },
 
   pathways: {
@@ -212,6 +212,7 @@ const ro = {
     error404: "Eroare 404",
     notFound: "Pagina nu a fost găsită",
     toLibrary: "Mergi la biblioteca de conținut",
+    loading: "Se încarcă",
   },
 
   titles: {
@@ -331,6 +332,8 @@ const ro = {
     hidePassword: "Ascunde parola",
     showPassword: "Arată parola",
     panelLine: "Resurse gratuite pentru parcursul T-Level Digital de la Amazon.",
+    somethingWrong: "Ceva nu a mers bine. Încearcă din nou.",
+    noConnection: "Serverul nu a putut fi contactat. Verifică-ți conexiunea și încearcă din nou.",
   },
 
   register: {
@@ -1025,6 +1028,164 @@ const ro = {
       password: "Parolă",
       deactivating: "Se dezactivează",
       wrongPassword: "Parolă greșită.",
+    },
+  },
+
+  resources: {
+    label: "Resurse",
+    title: "Resurse T-Level",
+    lead: "Ghiduri, videoclipuri și pachete gratuite, din surse oficiale precum gov.uk și UCAS.",
+    filters: "Filtrează conținutul",
+    pathway: "Traseu",
+    allPathways: "Toate traseele",
+    for: "Pentru",
+    anyone: "Oricine",
+    access: "Acces",
+    any: "Oricare",
+    clear: "Șterge filtrele",
+    loadError: "Conținutul nu a putut fi încărcat.",
+    serverError: "Ceva nu a mers bine la noi. Încearcă din nou peste puțin timp.",
+    tryAgain: "Încearcă din nou",
+    loading: "Se încarcă",
+    noMatches: "Niciun conținut nu se potrivește cu aceste filtre.",
+    oneItem: "1 element",
+    items: "{count} elemente",
+    loadMore: "Încarcă mai mult",
+    signUp: "Creează un cont pentru acces",
+    openOn: "Deschide pe {site}",
+    anotherWebsite: "alt site",
+    open: "Deschide",
+    types: {
+      guide: "Ghid",
+      document: "Document",
+      video: "Video",
+      prep_pack: "Pachet de pregătire",
+      class_pack: "Pachet pentru clasă",
+    },
+    audiences: {
+      all: "Toată lumea",
+      student: "Elevi",
+      parent: "Părinți și tutori",
+      teacher: "Profesori și școli",
+    },
+    accessLevels: {
+      free: "Gratuit",
+      signup: "Cu cont",
+    },
+  },
+
+  nearYou: {
+    label: "Găsește o școală",
+    title: "Găsește T-Levels lângă tine",
+    lead: "Introdu codul poștal ca să vezi școlile și colegiile de lângă tine care oferă T-Levels, începând cu cele mai apropiate.",
+    form: "Caută școli cu T-Levels",
+    postcode: "Cod poștal",
+    postcodeHint: "De exemplu SW1A 1AA.",
+    pathway: "Traseu",
+    allPathways: "Toate traseele",
+    within: "Pe o rază de",
+    miles: "{miles} mile",
+    search: "Caută",
+    searching: "Se caută",
+    error: "Căutarea școlilor nu a reușit.",
+    tryAgain: "Încearcă din nou",
+    start: "Introdu un cod poștal ca să vezi școlile de lângă tine.",
+    none: "Nicio școală pe o rază de {radius} mile de {postcode}. Încearcă o rază mai mare.",
+    oneFound: "1 școală pe o rază de {radius} mile de {postcode}.",
+    found: "{count} școli pe o rază de {radius} mile de {postcode}.",
+    underTenth: "Sub 0.1 mile",
+    oneMile: "1 milă",
+    distance: "{miles} mile",
+    pathways: "Trasee",
+    askProvider: "Întreabă școala",
+    website: "Vizitează site-ul",
+    errors: {
+      empty: "Introdu un cod poștal.",
+      notFull: "Introdu un cod poștal complet din Marea Britanie, de exemplu SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Materii",
+    title: "Toate T-Levels",
+    lead: "{subjects} materii în {routes} domenii, de la agricultură la marketing. Încă două apar în septembrie 2028.",
+    onGovUk: ", pe tlevels.gov.uk",
+    comingIn: "Din septembrie {year}",
+    notes: {
+      financeEnds: "Ultimele înscrieri în septembrie 2026",
+    },
+    pathwayResources: "Resurse {pathway}",
+    nextLabel: "Mai departe",
+    nextTitle: "Găsește una lângă tine",
+    nextLead: "Nu orice școală sau colegiu predă fiecare materie.",
+    searchHere: "Caută după codul poștal pe acest site",
+    searchEngland: "Caută printre toate școlile din Anglia",
+  },
+
+  getInvolvedPage: {
+    label: "Implică-te",
+    title: "Următorul tău pas",
+    lead: "Alege cine ești.",
+    everyone: "Toată lumea",
+    audiences: {
+      students: {
+        heading: "Elevi",
+        lead: "Ai între 16 și 18 ani sau îți termini GCSE-urile.",
+      },
+      parents: {
+        heading: "Părinți și tutori",
+        lead: "Ajuți pe cineva să aleagă ce urmează după GCSE.",
+      },
+      teachers: {
+        heading: "Profesori și școli",
+        lead: "Amazon organizează stagiile cu școlile și colegiile, nu direct cu elevii.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "Vezi toate materiile T-Level",
+        detail: "Toate T-Levels",
+      },
+      nearYou: {
+        label: "Găsește o școală sau un colegiu lângă tine",
+        detail: "Găsește T-Levels lângă tine",
+      },
+      interest: {
+        label: "Spune-i Amazon că vrei un stagiu",
+        detail: "Înregistrează interesul",
+      },
+      quiz: {
+        label: "Testează-ți cunoștințele",
+        detail: "Chestionar",
+      },
+      about: {
+        label: "Ce este un T-Level",
+        detail: "Despre T-Levels",
+      },
+      parentGuides: {
+        label: "Ghiduri scrise pentru părinți",
+        detail: "Resurse",
+      },
+      bursary: {
+        label: "Ajutor pentru transport, cărți și echipament",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Întreabă Amazon despre stagii pentru elevii tăi",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Pachete pentru clasă și ghiduri pentru profesori",
+        detail: "Resurse",
+      },
+      guidance: {
+        label: "Ce trebuie să includă un stagiu",
+        detail: "Ghid pentru stagii, gov.uk",
+      },
+      feedback: {
+        label: "Spune-ne ce ar face acest site mai bun",
+        detail: "Păreri",
+      },
     },
   },
 };

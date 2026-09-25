@@ -17,11 +17,7 @@
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   --radius: 2px;
-  /* One underline treatment for the whole site, so a link in a paragraph, in
-     the footer and in a card all sit the same distance from their text. Any
-     context that wants something else overrides these two rather than
-     inventing its own offset, and high contrast thickens them everywhere at
-     once. */
+  /* Link underline settings used everywhere (high contrast makes them thicker). */
   --underline-offset: 0.2em;
   --underline-thickness: 1px;
   --underline-thickness-hover: 2px;
@@ -29,40 +25,25 @@
   --gutter: clamp(16px, 4vw, 32px);
   --control-h: 44px;
 
-  /* Semantic tokens for dark mode: still only orange, blue and paper, just
-     with blue and paper swapping which one is "page" and which is "ink".
-     Written as literals matching --blue/--paper above, not var(--blue) /
-     var(--paper): html.dark-mode redefines --blue and --paper in the same
-     rule it uses these in, so a var() reference here would resolve back to
-     itself (a cycle), which CSS treats as invalid rather than swapped. */
+  /* Dark mode colours. Written out as values, not var(--blue), because dark
+     mode redefines --blue and --paper and var() would point at itself. */
   --paper-dark: #1a2430;
   --text-dark: #fafaf7;
   --border-dark-mode: rgb(250 250 247 / 0.2);
 
-  /* Chrome that is dark in BOTH themes, and the ink that sits on it: the
-     header, the footer, the photo scrim on the audience cards, table heads.
-     These deliberately do NOT flip with the theme.
-     --blue/--paper are the page's ink and page's background, so dark mode
-     swaps them. Anything that used them to mean "dark panel with light text
-     on it" swapped too and came out dark-on-dark, which is what made the
-     audience-card text unreadable in dark mode. Use these instead whenever a
-     surface is meant to stay dark whatever the theme. */
+  /* For things that stay dark in both themes (header, footer, photo panels).
+     Don't use --blue/--paper for these because dark mode swaps them. */
   --surface-inverse: #232f3e;
   --ink-inverse: #fafaf7;
 
-  /* Orange is a light chip in both themes, so its ink is always the dark
-     navy. var(--blue) here would turn light in dark mode and drop the
-     contrast to about 2:1. */
+  /* Text on orange is always dark navy. */
   --ink-on-orange: #232f3e;
 
   /* The one sanctioned non-brand colour, for destructive actions only. The
      light-mode red is too dark to read on the dark page, so it lightens. */
   --danger: #b3261e;
 
-  /* A flat dark panel behind text laid over a photo. Stronger than
-     --overlay: it has to carry text contrast over whatever the photo does,
-     so it holds 6:1 for light text even over a white patch. Flat, not a
-     gradient (see the design rules in CONTEXT.md). */
+  /* Dark panel behind text on top of a photo, dark enough for 6:1 contrast. */
   --scrim: rgb(35 47 62 / 0.82);
 
   /* A lighter tint behind the open menu drawer, so the blurred page still
@@ -73,9 +54,7 @@
   --shadow-soft: 0 8px 24px rgb(35 47 62 / 0.14);
   --shadow-raised: 0 10px 30px rgb(35 47 62 / 0.18);
 
-  /* How strongly the drifting subject names show through (RisingSubjects).
-     Light ink on a dark page needs more alpha than dark ink on a light one
-     to read as the same subtle watermark, so dark mode raises this. */
+  /* How visible the floating subject names are (higher in dark mode). */
   --subject-strength: 1;
 
   /* How far a preference has moved something, applied by
@@ -84,9 +63,7 @@
   --text-spacing: normal;
 }
 
-/* Fallback for the "system" theme before useAccessibilityPreferences.js has
-   run (e.g. the first paint, or with JavaScript disabled). Once it runs it
-   sets .dark-mode or .light-mode explicitly and those win instead. */
+/* "System" theme before the JavaScript has run. */
 @media (prefers-color-scheme: dark) {
   :root:not(.light-mode) {
     --paper: var(--paper-dark);
@@ -119,28 +96,17 @@ body {
   letter-spacing: var(--text-spacing, normal);
 }
 
-/* A stronger version of the same two colours: heavier borders, heavier
-   underlines and no muted mid-tone text, so everything reads at full
-   contrast.
-
-   WRITTEN AS LITERALS, NOT var(--blue) / var(--paper). Those two swap
-   meaning between the themes (see html.dark-mode above), so a reference to
-   either follows the theme and lands on the wrong side of it. That is
-   exactly what broke this: in dark mode --ink-muted was set to var(--paper),
-   which dark mode had already redefined as the dark PAGE colour, so every
-   .label, .card__text and .results-status turned background-on-background
-   and the words disappeared. The same trap in reverse waits in light mode
-   for anything sitting on the always-dark chrome, so each theme gets its own
-   pair and neither is derived from the other. */
+/* High contrast: thicker borders and underlines, no grey text.
+   Each theme has its own colour values written out, NOT var(--blue) or
+   var(--paper), because those swap in dark mode (that bug once made grey
+   text disappear in dark mode). */
 body.high-contrast {
   --ink-muted: #232f3e; /* the brand navy, 13.6:1 on paper */
   --line: rgb(35 47 62 / 0.55);
   --underline-thickness: 2px;
 }
 
-/* Dark mode's own pair. Both selectors set the same values: the class is
-   there once the theme has been applied, the media query covers the moment
-   before that on a dark system. */
+/* Dark mode high contrast (class, or a dark system before the JS runs). */
 html.dark-mode body.high-contrast {
   --ink-muted: #fafaf7; /* the paper colour as INK, 14.9:1 on the dark page */
   --line: rgb(250 250 247 / 0.6);
@@ -157,15 +123,8 @@ html.dark-mode body.high-contrast {
 
 /* ---------- Motion and colour vision (set by useAccessibilityPreferences) ---------- */
 
-/* @media (prefers-reduced-motion) only ever hears the operating system. The
-   site has its own Reduce motion setting too, and it wins, so
-   useReducedMotion works out the answer from both and it is written here as
-   data-motion. Every rule that asks the media query alone kept animating
-   after the site's own toggle was turned on, which is what left the
-   homepage's drifting subject names moving.
-
-   The blanket rule catches animations added later as well, so nothing new
-   has to remember to ask. */
+/* Reduce motion. data-motion comes from useReducedMotion, which checks the
+   site setting as well as the system one. This stops every animation. */
 html[data-motion="reduced"] *,
 html[data-motion="reduced"] *::before,
 html[data-motion="reduced"] *::after {
@@ -177,10 +136,8 @@ html[data-motion="reduced"] *::after {
   scroll-behavior: auto !important;
 }
 
-/* The one filter the colour-vision setting applies, on <html> so nothing can
-   sit outside it: the menu drawer and the chat widget both render through a
-   portal into <body>, so a filter on #root would have missed them. The
-   filters themselves are drawn by components/ColourVisionFilters.jsx. */
+/* Colour blindness filter. It's on <html> so it covers the menu and chat too.
+   The filters are in components/ColourVisionFilters.jsx. */
 html[data-colour-vision="protanopia"] {
   filter: url("#colour-vision-protanopia");
 }
@@ -328,16 +285,8 @@ main:focus {
 
 /* ---------- Header and footer ---------- */
 
-/* Sticky at every width, so the menu, brand and account button are reachable
-   from any scroll position. The background is opaque (--surface-inverse, not
-   a translucent value) because page content now scrolls underneath it.
-
-   Stacking order, lowest first: page content, .account-dropdown (5, inside
-   this header's own stacking context), .site-header (20), .modal-overlay
-   (30, so a confirmation dialog still covers the header rather than leaving
-   it live above the dim), .skip-link (40, so focusing it is never hidden
-   behind the header). The menu overlay is a native <dialog> opened with
-   showModal(), which the browser puts in the top layer above all of these. */
+/* Sticky header. Stacking order: account dropdown 5, header 20,
+   modal overlay 30, skip link 40. The menu <dialog> sits above all of these. */
 .site-header {
   position: sticky;
   top: 0;
@@ -347,10 +296,7 @@ main:focus {
   border-bottom: 3px solid var(--orange);
 }
 
-/* Three columns: menu button on the left, brand in the middle, and an empty
-   right column that balances the left one so the brand sits in the true
-   centre. Columns never overlap, so the brand cannot collide with the button;
-   on very narrow screens it shifts right slightly instead. */
+/* Three columns so the brand stays in the middle. */
 .site-header__inner {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -418,17 +364,8 @@ main:focus {
   height: 24px;
 }
 
-/* The two boxes ARE centred on each other: align-items: center on
-   .site-header__brand does that correctly, and both boxes measure the same
-   centre line. What does not line up is the ink inside them. The approved
-   logo file keeps the lower third of its box for the smile, so the "amazon"
-   lettering spans rows 31 to 62 of the image's 106, putting its optical
-   centre 3px above the box centre at the 53px height we show it at. The
-   wordmark comes up by the same 3px so the two read as one line.
-
-   A transform rather than a margin, so this stays a purely visual nudge and
-   does not change what the flex row measures. The logo is a fixed 95px at
-   every width, so the 3px holds at every breakpoint. */
+/* Nudges the wordmark up 3px so it lines up with the "amazon" text in the logo
+   (the logo image has the smile under it). */
 .wordmark {
   display: inline-block;
   color: var(--ink-inverse);
@@ -448,9 +385,7 @@ main {
   padding-block: clamp(40px, 7vw, 80px);
 }
 
-/* Dark blue background so the footer reads as a distinct band, using only the
-   two site colours: orange for the small mono labels (6.34:1 on blue, see the
-   step__number comment above) and paper for body text and links (>10:1). */
+/* Footer: dark blue band, orange labels, off-white text. */
 .site-footer {
   background: var(--surface-inverse);
   color: var(--ink-inverse);
@@ -532,9 +467,7 @@ main {
   justify-self: end;
 }
 
-/* "Hello, Ada" beside a circular initial, or "Hello, sign in" beside a person
-   icon. The button itself is transparent on the dark header; only the
-   initial keeps the orange chip. */
+/* Account button: "Hello, Ada" with an initial, or "Hello, sign in" with an icon. */
 .account-button {
   display: inline-flex;
   align-items: center;
@@ -579,10 +512,7 @@ main {
   white-space: nowrap;
 }
 
-/* The header is three columns and the middle one holds the brand. Past this
-   width the greeting starts pushing the brand off centre, so it goes and the
-   initial (or the icon) speaks for it. The button keeps its accessible name
-   either way, so nothing is lost to a screen reader. */
+/* On narrow screens hide the greeting so the brand stays centred. */
 @media (max-width: 720px) {
   .account-button__greeting {
     display: none;
@@ -652,10 +582,7 @@ main {
   text-decoration-thickness: var(--underline-thickness-hover);
 }
 
-/* The Sign up button at the foot of the signed-out menu. A button, not
-   another row, because it is the thing a new visitor is meant to press.
-   .button--primary carries the orange fill and the dark ink that always goes
-   on it; this only has to stretch it across the menu. */
+/* Sign up button at the bottom of the signed-out menu. */
 .dropdown-links__cta {
   margin-top: 8px;
 }
@@ -667,13 +594,7 @@ main {
 
 /* ---------- Menu overlay ---------- */
 
-/* A modal <dialog> drawer: full height, part of the width, anchored to the
-   left edge because that is the corner the menu button sits in, so the panel
-   opens from where you pressed. The rest of the page stays visible (and
-   blurred) behind it.
-
-   A dialog opened with showModal() is centred by the UA's `margin: auto`;
-   `margin-right: auto` alone pins it to the left instead. */
+/* The side menu drawer, full height and pinned to the left. */
 .menu-overlay {
   width: min(420px, 88vw);
   height: 100%;
@@ -694,26 +615,19 @@ main {
   flex-direction: column;
 }
 
-/* The page behind stays readable in outline but clearly out of focus: a blur
-   plus a tint dark enough to keep the drawer's own edge obvious. Tinted with
-   the fixed dark navy rather than --blue, which flips light in dark mode. */
+/* Blur and darken the page behind the drawer. */
 .menu-overlay::backdrop {
   background: var(--backdrop);
   backdrop-filter: blur(8px);
 }
 
-/* The nav was sized for a full-screen surface: at the old size the longest
-   label wrapped inside a 420px drawer, so the type steps down. It stays
-   vertically centred, which still reads well at this width. */
+/* Smaller nav text so the longest label fits in the drawer. */
 .menu-overlay__nav a,
 .menu-overlay__nav .nav-button {
   font-size: clamp(1.125rem, 4vw, 1.5rem);
 }
 
-/* The drawer slides in from the edge it is anchored to, and the backdrop
-   fades its blur in behind it. Closing plays the same motion in reverse.
-   Only for visitors who have not asked for reduced motion; everyone else
-   gets an instant open and close. */
+/* Drawer slides in and the backdrop fades in (not with reduced motion). */
 @media (prefers-reduced-motion: no-preference) {
   .menu-overlay[open] {
     animation: menu-slide-in 220ms cubic-bezier(0.2, 0, 0, 1);
@@ -731,10 +645,7 @@ main {
     animation: menu-backdrop-in 200ms ease-in reverse forwards;
   }
 
-  /* Then the links climb in one after another, top to bottom: each fades in
-     while rising 16px, starting 40ms after the one above it (--i is set per
-     item in SiteNav.jsx). The eighth link lands 540ms after opening. Closing
-     stays one quick fade of the whole overlay, so leaving is never slowed. */
+  /* Links fade in one after another (--i is set in SiteNav.jsx). */
   .menu-overlay[open] .menu-overlay__nav li {
     animation: menu-link-rise 200ms cubic-bezier(0.2, 0, 0, 1) both;
     animation-delay: calc(60ms + var(--i, 0) * 40ms);
@@ -773,10 +684,7 @@ main {
   overflow: hidden;
 }
 
-/* The greeting band at the top of the drawer, the way Amazon's menu opens:
-   dark navy, a person icon, then "Hello, sam" (or "Hello, sign in" as a link
-   to the login page). Uses the same fixed dark surface as the header, so it
-   reads as the header continuing into the drawer, in both themes. */
+/* The "Hello" bar at the top of the drawer. */
 .menu-hello {
   background: var(--surface-inverse);
   color: var(--ink-inverse);
@@ -1007,10 +915,7 @@ a.menu-hello__text:hover {
   }
 }
 
-/* Audience cards: the photo fills the card and the text sits on a flat dark
-   panel (--overlay, as on the sign-up page) so it stays readable over any
-   part of the photo. Dark blue shows while a photo loads. Each card is also
-   a toggle for the hero subhead (see AudienceCards in HomeSections.jsx). */
+/* Audience cards: photo fills the card, text sits on a dark panel. */
 .audience-grid {
   display: grid;
   gap: 16px;
@@ -1081,9 +986,7 @@ a.menu-hello__text:hover {
   inset: 0;
 }
 
-/* Focus shows on the whole card, outside it, where the blue ring always has
-   the page colour behind it. Browsers without :has() keep the button's own
-   focus ring instead. */
+/* Focus ring around the whole card. */
 @supports selector(:has(*)) {
   .audience-card__button:focus-visible {
     outline: none;
@@ -1105,9 +1008,7 @@ a.menu-hello__text:hover {
   object-position: center 30%;
 }
 
-/* The scrim, not --overlay: this panel is the only thing guaranteeing the
-   text's contrast over an arbitrary photo, so it stays dark enough to hold
-   about 6:1 for the light text even where the photo underneath is white. */
+/* Dark enough for 6:1 contrast even over a white bit of photo. */
 .audience-card__body {
   display: grid;
   gap: 8px;
@@ -1219,10 +1120,7 @@ a.menu-hello__text:hover {
   text-decoration-thickness: var(--underline-thickness-hover);
 }
 
-/* How it works: numbered step cards. On desktop they climb left to right
-   like a staircase, each one step (--rise) higher than the last, joined along
-   their top edges by a hairline. Below that they stack in order, joined by
-   a short line down the left. Plain bordered boxes: no shadows, no fills. */
+/* How it works: the numbered step cards. Stairs on desktop, a stack on mobile. */
 .steps {
   --rise: 28px;
   --gap: 24px;
@@ -1286,10 +1184,7 @@ a.menu-hello__text:hover {
 }
 
 @media (min-width: 960px) {
-  /* Each card starts one step lower than the one before, so Step 01 is
-     highest (--drop is how many steps below the top card it starts, set in
-     HomeSections.jsx). Every top is exactly --rise apart, whatever the text
-     length, so the connecting line always meets them. */
+  /* Each card starts one step lower (--drop is set in HomeSections.jsx). */
   .steps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -1403,10 +1298,7 @@ a.menu-hello__text:hover {
   gap: 6px;
 }
 
-/* Selects carry the same border, radius, height, padding and background as
-   the text inputs above, so a form holding both reads as one control set.
-   appearance: none drops the native control, which means the arrow, the
-   hover and the focus ring below are all ours to provide. */
+/* Selects look the same as text inputs. */
 select {
   appearance: none;
   width: 100%;
@@ -1424,10 +1316,7 @@ select:hover {
   border-color: var(--blue);
 }
 
-/* The arrow is a background image, and a data URI cannot read a CSS
-   variable, so the stroke colour is baked into each one and the theme picks
-   the matching file. Before this, one dark-navy arrow was used in both
-   themes, which left it invisible against the dark surface. */
+/* The select arrow is an image, so there's one for each theme. */
 :root {
   --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23232f3e' stroke-width='2'/%3E%3C/svg%3E");
 }
@@ -1442,9 +1331,7 @@ html.dark-mode {
   --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23fafaf7' stroke-width='2'/%3E%3C/svg%3E");
 }
 
-/* The open list is drawn by the OS and mostly cannot be styled, but naming
-   the colours here stops it falling back to dark-on-dark where the platform
-   does honour them. */
+/* Colours for the open dropdown list, where the browser lets us. */
 select option {
   background: var(--surface);
   color: var(--blue);
@@ -1544,9 +1431,7 @@ textarea {
   color: var(--ink-muted);
 }
 
-/* Tick box beside its label, both clickable. The box itself takes the page's
-   dark blue, and the shared focus ring and invalid ring apply to it as they
-   do to the other controls. */
+/* Checkbox and its label. */
 .checkbox {
   display: flex;
   align-items: flex-start;
@@ -1598,9 +1483,7 @@ textarea {
 
 /* ---------- Log in and sign up ---------- */
 
-/* Both auth pages are a branded panel beside the form. <main> is normally a
-   padded container; these two pages run edge to edge instead so the panel
-   reaches the sides. */
+/* Login and sign up pages go full width. */
 main:has(.auth-layout) {
   max-width: none;
   padding: 0;
@@ -1611,9 +1494,7 @@ main:has(.auth-layout) {
   min-height: 100%;
 }
 
-/* Two columns from the same 1024px step the footer and the settings tabs
-   already use. Below it the panel collapses to a short banner above the
-   form, so a phone still gets the branding without losing the fold. */
+/* Two columns from 1024px. Smaller than that, the photo becomes a banner. */
 @media (min-width: 1024px) {
   .auth-layout {
     grid-template-columns: 1fr 1fr;
@@ -1821,17 +1702,12 @@ main:has(.auth-layout) {
 
 /* ---------- Find T-Levels Near You (NearYou.jsx) ---------- */
 
-/* .filters lays the three controls out on a grid and aligns everything to
-   the bottom edge. The submit button is a grid item like the rest, so it
-   only needs to not stretch across its cell. */
+/* Filter form. */
 .near-you__submit {
   justify-self: start;
 }
 
-/* How far away, on the provider card. Orange fill with the dark ink that
-   always goes on it, the same treatment .tag--signup uses: the distance is
-   the one thing a visitor scans for, and the colour is decoration, never the
-   only thing carrying the meaning (the miles are written out). */
+/* Distance tag on the provider card. */
 .tag--distance {
   background: var(--orange);
   border-color: var(--orange);
@@ -1895,9 +1771,7 @@ main:has(.auth-layout) {
 
 /* ---------- Rising subjects (homepage background) ---------- */
 
-/* Fixed behind the page content (z-index -1) and never takes clicks. Only
-   shown to visitors who have not asked for reduced motion; everyone else
-   gets no effect at all. */
+/* Floating subject names behind the page. Never clickable. */
 .rising-subjects {
   display: none;
   position: fixed;
@@ -1908,21 +1782,12 @@ main:has(.auth-layout) {
   user-select: none;
 }
 
-/* Hidden until we know motion is wanted: before the preference has been
-   read, still is the safe answer. data-motion already folds in the system
-   setting (see useReducedMotion), so this is the whole condition.
-
-   display: none rather than a stopped animation on purpose. Each name
-   recycles itself on animationend, so an animation cut to nothing would
-   spin through replacements forever; a hidden element runs no animation at
-   all. */
+/* Hidden unless motion is allowed. display: none so the animation doesn't run at all. */
 html[data-motion="full"] .rising-subjects {
   display: block;
 }
 
-/* Dark blue at 3% to 5% opacity (set per subject in RisingSubjects.jsx)
-   keeps small muted text in front of it at 4.5:1 or better, even where two
-   subjects overlap. */
+/* Very faint (3% to 5%) so text on top still has enough contrast. */
 .rising-subjects__item {
   position: absolute;
   bottom: 0;
@@ -1942,9 +1807,7 @@ html[data-motion="full"] .rising-subjects {
   content: attr(data-subject);
 }
 
-/* On the homepage the subjects stay inside the hero band rather than covering
-   the whole page, so the library below stays calm. The layer reaches up to
-   the header (through main's top padding), so names slide away under it. */
+/* On the homepage the names stay inside the hero. */
 .hero .rising-subjects {
   position: absolute;
   top: calc(-1 * clamp(40px, 7vw, 80px)); /* matches main's top padding */
@@ -1967,11 +1830,7 @@ html[data-motion="full"] .rising-subjects {
   }
 }
 
-/* Cursor spotlight (useSpotlight in Home.jsx). In the hero the name's own
-   animation only fades it in and out (0 to 1), and its text carries the
-   strength (--opacity), so the two multiply to exactly the usual look. The
-   spotlight then raises just the text, through --lit, without fighting the
-   animation. */
+/* Mouse spotlight (useSpotlight in Home.jsx) raises --lit on nearby names. */
 .hero .rising-subjects__item {
   animation-name: rise-up-envelope;
 }
@@ -2048,10 +1907,7 @@ html[data-motion="full"] .rising-subjects {
   cursor: pointer;
 }
 
-/* The indicator is dark blue, not orange: it is the only thing marking the
-   selected tab besides the text colour, so it needs 3:1 against the page
-   (WCAG 1.4.11). Orange is about 2:1 there. Dark blue flips to off-white in
-   dark mode, so it passes in both themes. */
+/* Selected tab marker is dark blue, because orange doesn't have enough contrast. */
 .tab-nav__tab[aria-selected="true"] {
   color: var(--blue);
   border-bottom-color: var(--blue);
@@ -2157,10 +2013,7 @@ input[type="range"] {
   }
 }
 
-/* A section of the settings tab that is not part of the form above it: its
-   own bordered block, so pressing something in here plainly does not save
-   what is typed up there. Used by Signing out; the danger zone below is the
-   same shape with a heavier border. */
+/* A separate box in a settings tab (used for Log out). */
 .settings-block,
 .danger-zone {
   display: grid;

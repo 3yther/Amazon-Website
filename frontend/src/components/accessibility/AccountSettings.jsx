@@ -15,17 +15,7 @@ function fieldsFrom(user) {
   };
 }
 
-/**
- * Editable profile details, signing out, and account deactivation behind a
- * password confirmation. Deactivating signs the user out at once: a
- * deactivated account can no longer authenticate (see DeactivateAccountView).
- *
- * Logging out lives here rather than in the header's account menu, where it
- * used to sit one press away on every page. It gets its own section between
- * the profile form and the danger zone: not part of the form, since it
- * throws away whatever is typed there, and not in the danger zone either,
- * since logging out costs nothing and needs no confirmation.
- */
+// Profile details, log out, and deactivating the account (needs the password).
 export default function AccountSettings() {
   const t = useT();
   const { user, refresh } = useAuth();
@@ -55,7 +45,7 @@ export default function AccountSettings() {
       await refresh();
       setStatus("saved");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }
@@ -86,7 +76,7 @@ export default function AccountSettings() {
       await refresh();
       navigate("/login", { replace: true });
     } catch (error) {
-      setDeactivateError(formErrors(error).form ?? t("settings.account.wrongPassword"));
+      setDeactivateError(formErrors(error, t).form ?? t("settings.account.wrongPassword"));
       setDeactivating(false);
     }
   }

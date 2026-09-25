@@ -4,9 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import ForgotPassword from "../pages/ForgotPassword.jsx";
 
-// Same fake-server approach as RegisterInterest.test.jsx and NearYou.test.jsx
-// (see their top comments for why: isolate: false in vitest.config.js makes
-// per-file api.js mocks fight over one shared module).
+// Uses a fake fetch, same as RegisterInterest.test.jsx.
 function fakeServer(replyStatus = 200) {
   const sent = [];
   vi.stubGlobal(

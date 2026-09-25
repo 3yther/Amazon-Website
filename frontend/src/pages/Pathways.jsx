@@ -2,10 +2,7 @@ import PathwaySwitcher from "../components/PathwaySwitcher.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
-/**
- * Learning Pathways: the five pathways Amazon offers, on their own page. Uses
- * the same tab switcher as the About page, so the detail is written once.
- */
+// Learning Pathways page. Uses the same tabs as the About page.
 export default function Pathways() {
   const t = useT();
   return (

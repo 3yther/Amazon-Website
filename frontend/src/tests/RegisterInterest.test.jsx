@@ -4,9 +4,8 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import RegisterInterest from "../pages/RegisterInterest.jsx";
 
-// NEW CONCEPT: a fake server. vi.stubGlobal swaps the browser's fetch for a
-// function we control, so the form's real code runs (CSRF token, POST, error
-// handling) without a Django server. `sent` records what the form posted.
+// vi.stubGlobal swaps fetch for a fake server, so the real form code runs
+// without Django. `sent` records what was posted.
 function fakeServer(interestReply) {
   const sent = [];
   vi.stubGlobal(

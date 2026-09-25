@@ -5,9 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import PathwaySwitcher from "../components/PathwaySwitcher.jsx";
 import { PATHWAYS } from "../aboutContent.js";
 
-// NEW CONCEPT: MemoryRouter. The switcher contains a <Link>, and a Link only
-// works inside a router. MemoryRouter is a router that lives in memory instead
-// of the address bar, which is all a test needs.
+// MemoryRouter because the switcher has a <Link>, which needs a router.
 function renderSwitcher() {
   return render(
     <MemoryRouter>

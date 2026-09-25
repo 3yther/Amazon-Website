@@ -2,14 +2,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import { useSiteContent } from "../i18n/content.js";
 import "../about.css";
 
-/**
- * Lays out one of the policy pages from legalContent.js: a heading, when it
- * was last updated, then short sections of paragraphs and bullet points.
- * Terms, Privacy, Cookies and Data Rights all use it, so they read the same.
- *
- * `name` is the page's export in legalContent.js (TERMS, PRIVACY, COOKIES or
- * DATA_RIGHTS). The words come in the visitor's language (i18n/content.js).
- */
+// Shows one of the policy pages from legalContent.js (TERMS, PRIVACY, COOKIES or DATA_RIGHTS).
 export default function LegalPage({ name }) {
   const t = useT();
   const page = useSiteContent().legal[name];

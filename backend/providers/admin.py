@@ -4,12 +4,8 @@ from .models import Provider
 
 
 class GeocodedFilter(admin.SimpleListFilter):
-    """
-    Whether a provider can be returned by the near-you search at all.
-
-    A provider still at 0, 0 is left out of every search, and nothing on the
-    old list page said so: the two decimal columns read as data rather than as
-    "this one is invisible to visitors".
+    """Whether the near-you search can find this provider. One still at 0, 0
+    hasn't been looked up yet, so it's left out of searches.
     """
 
     title = "in the search"

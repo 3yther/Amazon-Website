@@ -5,19 +5,10 @@ import { formErrors } from "../formErrors.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { FormError, SelectField, TextareaField, TextField } from "./FormFields.jsx";
 
-// A short message form for the Contact us and Report an Issue pages. Both send
-// to the same backend endpoint as the Feedback page (POST /api/accounts/feedback/),
-// which saves the message for the team to read in Django admin. No email
-// address is needed on the site, and none is invented.
-//
-// NEW CONCEPT: one component, two pages. The page passes in which categories
-// to offer and what to call things, so the form logic is written once.
+// Message form used on the Contact us and Report an issue pages.
+// Sends to the same place as the Feedback page (POST /api/accounts/feedback/).
 
-/**
- * categories: [{ value, label }], values from the backend's Feedback.Category
- * (bug, feature, general, accessibility). The page passes every label already
- * translated; the form's own words are in i18n/messages (messageForm).
- */
+// categories: [{ value, label }] with values from Feedback.Category in the backend.
 export default function MessageForm({ idPrefix, categories, messageLabel, submitLabel, sentText }) {
   const t = useT();
   // Nobody signed in (or no sign-in check yet) just means no email to prefill.
@@ -51,7 +42,7 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
       await submitFeedback(fields);
       setStatus("sent");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

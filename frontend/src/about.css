@@ -1,20 +1,6 @@
-/* Styles for the three information pages: About T-Level, T-Levels at Amazon
-   and Help. Kept in its own file so it does not collide with anyone else's
-   work in styles.css. Imported by each of those three pages.
-
-   Only classes that belong to these pages live here. Shared classes such as
-   .label and .section-intro are styled once in styles.css; redefining them
-   here would change every page on the site, because Vite bundles all CSS
-   together.
-
-   Focus rings are left to the site-wide :focus-visible rule in styles.css.
-   That keeps them dark blue (orange is only about 2:1 on the page colour, too
-   faint for WCAG 2.2) and keeps the thick and dashed outline options on the
-   Accessibility page working.
-
-   No new colours are defined here. Everything below reuses the tokens from
-   styles.css (--orange, --blue, --paper, --surface, --ink-muted, --line,
-   --radius, --control-h), so a change there still changes this page. */
+/* Styles for the About, T-Levels at Amazon and Help pages.
+   Only classes for these pages go here. Shared ones like .label are in
+   styles.css. Use the colour variables from styles.css, no new colours. */
 
 /* ---------- Page rhythm & visual hierarchy ---------- */
 
@@ -94,10 +80,7 @@
   list-style: none;
 }
 
-/* Each step is a number in the left column and the text in the right, with a
-   hairline between rows. The numbers run down the page in a straight line,
-   which is the descending route from the design doc. Enhanced spacing for
-   better visual rhythm. */
+/* Each step: number on the left, text on the right. */
 .route__step {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -240,10 +223,7 @@
   border-bottom-color: var(--orange);
 }
 
-/* Selected state is unmistakable without relying on colour alone: the tab
-   fills with dark blue and its label flips to the page colour (13:1), with
-   aria-selected for screen readers. The orange underline is decoration on
-   top; on its own it would only be 2:1, which fails WCAG 1.4.11. */
+/* Selected tab fills dark blue, so it doesn't rely on the orange line. */
 .pathways__tab[aria-selected="true"] {
   background: var(--surface-inverse);
   border-color: var(--surface-inverse);
@@ -780,9 +760,7 @@
   margin-bottom: 4px;
 }
 
-/* On a card with a picture, the orange tile is the accent, so the card's
-   orange top edge goes back to a plain line to keep the orange from
-   shouting. */
+/* Cards with a picture get a plain top line instead of orange. */
 .info-card:has(.pictogram) {
   border-top: 1px solid var(--line);
 }
@@ -799,9 +777,7 @@
   align-items: center;
 }
 
-/* On a phone there is not room for number, picture and words side by side:
-   the number and picture share the top row, the words go underneath, and
-   cards put the picture beside the words instead of above them. */
+/* On phones the number and picture go on top and the words underneath. */
 @media (max-width: 599px) {
   .route__step {
     grid-template-columns: auto 1fr;
