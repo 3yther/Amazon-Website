@@ -698,20 +698,16 @@ main {
   padding-block: 10px; /* puts the close button where the menu button was */
 }
 
+/* Holds the header's account picture (.account-button__initial or the icon). */
 .menu-hello__avatar {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
   flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--ink-inverse);
-  color: var(--surface-inverse);
+  color: var(--ink-inverse);
 }
 
-.menu-hello__avatar .icon {
-  width: 1.25rem;
-  height: 1.25rem;
+.menu-hello__avatar > .icon {
+  width: 24px;
+  height: 24px;
 }
 
 .menu-hello__text {

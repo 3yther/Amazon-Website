@@ -351,6 +351,40 @@ const en = {
     noConnection: "Could not reach the server. Check your connection and try again.",
   },
 
+  // Messages the API sends in English, shown in the visitor's language
+  // (i18n/serverMessages.js matches them to these keys).
+  serverErrors: {
+    requiredField: "This field is required.",
+    blankField: "This field may not be blank.",
+    passwordCommon: "This password is too common.",
+    passwordNumeric: "This password is entirely numeric.",
+    passwordSimilar: "The password is too similar to the username.",
+    passwordTooShort: "This password is too short. It must contain at least {min} characters.",
+    invalidEmail: "Enter a valid email address.",
+    tooLong: "Ensure this field has no more than {max} characters.",
+    invalidChoice: "\"{value}\" is not a valid choice.",
+    usernameTaken: "A user with that username already exists.",
+    invalidCredentials: "Invalid username or password.",
+    wrongCurrentPassword: "Current password is incorrect.",
+    wrongPassword: "Incorrect password.",
+    passwordsDontMatch: "Passwords do not match.",
+    resetLinkInvalid: "This password reset link is invalid or has expired. Request a new one.",
+    choosePathway: "Choose a valid pathway.",
+    nameCharacters: "Use letters, spaces, hyphens or apostrophes only.",
+    writeAnswer: "Write an answer first.",
+    questionTooShort: "Make the question a little longer so people know what you mean.",
+    deleteOwn: "You can only delete your own question.",
+    awaitingReview: "This question is waiting for a staff review.",
+    onlyAsker: "Only the person who asked can mark the answer that helped.",
+    typeQuestion: "Type a question first.",
+    enterPostcode: "Enter a postcode.",
+    postcodeServiceDown: "The postcode lookup service is unavailable right now. Please try again shortly.",
+    postcodeNotFound: "We could not find the postcode \"{postcode}\". Check it and try again.",
+    chooseDistance: "Choose a distance between 1 and {max} miles.",
+    unknownPathway: "Unknown pathway \"{pathway}\".",
+    chooseOneOf: "Choose one of: {choices}.",
+  },
+
   register: {
     title: "Create your account",
     lead: "It takes a minute, and it is free.",
@@ -1160,6 +1194,31 @@ const en = {
         detail: "Feedback",
       },
     },
+  },
+
+  // The Amazon staff page of interest submissions (/staff).
+  staff: {
+    title: "Expression of Interest submissions",
+    lead: "Everyone who has registered their interest, newest first. These are real people’s contact details, so treat them accordingly.",
+    loadError: "Could not load submissions. Refresh to try again.",
+    loading: "Loading submissions.",
+    empty: "No submissions yet.",
+    count: "{count} submissions, showing {shown} on this page.",
+    countOne: "{count} submission, showing {shown} on this page.",
+    caption: "Expression of Interest submissions, newest first",
+    columns: {
+      name: "Name",
+      email: "Email",
+      type: "Type",
+      pathway: "Pathway",
+      message: "Message",
+      submitted: "Submitted",
+    },
+    pages: "Submission pages",
+    previous: "Previous",
+    page: "Page {page}",
+    next: "Next",
+    none: "None",
   },
 };
 

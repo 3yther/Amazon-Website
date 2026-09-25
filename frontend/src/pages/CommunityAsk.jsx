@@ -6,6 +6,7 @@ import { Guidelines, TOPICS, moderationMessage } from "../community/CommunityPar
 import { SelectField, TextareaField, TextField } from "../components/FormFields.jsx";
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
+import { translateServerMessage } from "../i18n/serverMessages.js";
 
 // Ask a question (/community/ask). Needs an account.
 // The server checks each question (backend/community/moderation.py).
@@ -58,7 +59,7 @@ export default function CommunityAsk() {
     }
   }
 
-  const firstError = (name) => fieldErrors[name]?.[0];
+  const firstError = (name) => translateServerMessage(fieldErrors[name]?.[0], t);
 
   return (
     <section aria-labelledby="page-title">
@@ -121,7 +122,7 @@ export default function CommunityAsk() {
             <option value="">{t("community.allPathways")}</option>
             {pathways.map((pathway) => (
               <option key={pathway.slug} value={pathway.slug}>
-                {pathway.name}
+                {t(`pathways.${pathway.slug}`)}
               </option>
             ))}
           </SelectField>

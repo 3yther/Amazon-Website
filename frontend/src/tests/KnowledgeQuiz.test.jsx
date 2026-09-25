@@ -120,6 +120,24 @@ describe("Knowledge check", () => {
     expect(optionLabels()).toEqual(["Blue", "Green", "Red", "Yellow"]);
   });
 
+  it("shows the translated options when the translation arrives after the quiz has drawn", () => {
+    // In another language the page first draws with the English, then the
+    // translation loads. The options have to follow the question into it.
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const { rerender } = render(<KnowledgeQuiz questions={QUESTIONS} />);
+    expect(optionLabels()).toEqual(["Green", "Red", "Yellow", "Blue"]);
+
+    const polish = QUESTIONS.map((question, index) =>
+      index === 0
+        ? { ...question, question: "Jakiego koloru jest niebo?", options: ["Niebieskie", "Zielone", "Czerwone", "Żółte"], correctAnswer: "Niebieskie" }
+        : question,
+    );
+    rerender(<KnowledgeQuiz questions={polish} />);
+
+    expect(screen.getByText("Jakiego koloru jest niebo?")).toBeInTheDocument();
+    expect(optionLabels()).toEqual(["Zielone", "Czerwone", "Żółte", "Niebieskie"]);
+  });
+
   it("has no accessibility problems, before and after checking an answer", async () => {
     const user = userEvent.setup({ delay: null });
     const { container } = renderQuiz();

@@ -423,7 +423,7 @@ export default {
             "Registrar tu interés: tu nombre, correo electrónico, si eres estudiante, familia o docente, un itinerario y un mensaje opcional. Para que el equipo de Amazon Emerging Talent vea que te interesa y se ponga en contacto.",
             "Una cuenta: un nombre de usuario, una contraseña (guardada cifrada, nunca legible), tu rol y tu itinerario. Más adelante, si los añades, tu nombre, correo electrónico y teléfono. Para que puedas iniciar sesión, preguntar y responder en la Comunidad y tener tus ajustes en cualquier dispositivo.",
             "Ajustes de accesibilidad: tamaño del texto, contraste, tema y opciones parecidas. Para que la web se vea como la configuraste.",
-            "Chat con Smiley: lo que escribes y las respuestas de Smiley. Para que Smiley pueda seguir la conversación.",
+            "Chat con Smiley: las preguntas que Smiley tiene que consultar y sus respuestas. Para que Smiley pueda seguir la conversación. Las preguntas que responde por sí solo se quedan en tu navegador.",
             "Publicaciones en la Comunidad: las preguntas y respuestas que publicas, con tu nombre de usuario. Para que otras personas puedan leerlas y responder.",
             "Comentarios y mensajes de contacto: tu mensaje y tu correo electrónico, si lo das. Para poder arreglar cosas y responderte.",
           ],
@@ -432,7 +432,7 @@ export default {
           heading: "Quién los ve",
           points: [
             "El equipo de T-SMILE y, en los formularios de interés, el personal de Amazon Emerging Talent.",
-            "Anthropic, la empresa cuya IA escribe las respuestas de Smiley. Tus mensajes del chat se le envían para obtener una respuesta.",
+            "Anthropic, la empresa cuya IA escribe algunas de las respuestas de Smiley. Las preguntas que Smiley no puede responder por sí solo se le envían para obtener una respuesta.",
             "La empresa que aloja la web (Railway para la versión de prueba, Amazon Web Services más adelante).",
             "Nadie más. No vendemos datos ni los usamos para publicidad.",
           ],
@@ -479,7 +479,7 @@ export default {
             "Esto no son cookies y nunca sale de tu dispositivo.",
           ],
           points: [
-            "Tus ajustes de accesibilidad, para que sigan ahí cuando vuelvas.",
+            "Tus ajustes de accesibilidad y el idioma que elegiste, para que se mantengan cuando vuelvas.",
             "Si Smiley ya te ha saludado, hasta que cierres la pestaña.",
           ],
         },

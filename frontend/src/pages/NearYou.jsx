@@ -4,6 +4,7 @@ import { formErrors } from "../formErrors.js";
 import { SelectField, TextField } from "../components/FormFields.jsx";
 import { AlertIcon, ArrowIcon, PATHWAY_ICONS } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
+import { translateServerMessage } from "../i18n/serverMessages.js";
 import { makeTranslate } from "../i18n/translate.js";
 
 // Find T-Levels near you. Searches GET /api/providers/search/ when you press Search.
@@ -34,7 +35,7 @@ function focusPostcode() {
 function searchError(error, t) {
   const found = formErrors(error, t);
   const detail = error instanceof ApiError ? error.body?.detail : null;
-  return detail ? { ...found, form: detail } : found;
+  return detail ? { ...found, form: translateServerMessage(detail, t) } : found;
 }
 
 // "Under 0.1 miles" looks better than "0 miles".

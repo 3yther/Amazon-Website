@@ -71,6 +71,9 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     # Must sit above CommonMiddleware so CORS headers are added to every response.
     "corsheaders.middleware.CorsMiddleware",
+    # Answers in the language the site asks for (Accept-Language), where Django
+    # and DRF have their own translations. Between sessions and Common, as Django asks.
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -161,6 +164,21 @@ if TESTING:
 LANGUAGE_CODE = "en-gb"
 TIME_ZONE = "Europe/London"
 USE_I18N = True
+
+# The site's ten languages. Django uses this list to pick one from the
+# browser's Accept-Language header.
+LANGUAGES = [
+    ("en-gb", "English"),
+    ("pl", "Polski"),
+    ("ro", "Română"),
+    ("pa", "ਪੰਜਾਬੀ"),
+    ("ur", "اردو"),
+    ("pt", "Português"),
+    ("es", "Español"),
+    ("ar", "العربية"),
+    ("bn", "বাংলা"),
+    ("gu", "ગુજરાતી"),
+]
 USE_TZ = True
 
 

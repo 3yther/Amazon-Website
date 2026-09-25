@@ -18,9 +18,11 @@ function shuffle(list) {
   return copy;
 }
 
-/** Each question's options in a fresh random order, keyed by question id. */
+// Each question's option positions in a fresh random order, keyed by question
+// id. Positions, not the words: in another language the words arrive a moment
+// after the quiz first draws, and the order has to carry over to them.
 function shuffleOptions(questions) {
-  return Object.fromEntries(questions.map((q) => [q.id, shuffle(q.options)]));
+  return Object.fromEntries(questions.map((q) => [q.id, shuffle(q.options.map((_, i) => i))]));
 }
 
 /**
@@ -132,10 +134,11 @@ export default function KnowledgeQuiz({
             {question.question}
           </legend>
 
-          {(optionOrder[question.id] ?? question.options).map((option) => {
-            const optionId = `${groupId}-${question.id}-${option}`;
+          {(optionOrder[question.id] ?? question.options.map((_, i) => i)).map((position) => {
+            const option = question.options[position];
+            const optionId = `${groupId}-${question.id}-${position}`;
             return (
-              <div className="knowledge-quiz__option" key={option}>
+              <div className="knowledge-quiz__option" key={position}>
                 <input
                   type="radio"
                   id={optionId}

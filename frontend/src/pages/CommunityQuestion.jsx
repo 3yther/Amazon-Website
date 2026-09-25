@@ -13,6 +13,7 @@ import {
 import { TextareaField } from "../components/FormFields.jsx";
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
+import { translateServerMessage } from "../i18n/serverMessages.js";
 
 // One question with its answers. The accepted answer shows first, then the most helpful.
 export default function CommunityQuestion() {
@@ -69,7 +70,7 @@ export default function CommunityQuestion() {
       setAnnouncement(t("community.answerPosted"));
       setAttempt((n) => n + 1); // reload, so the new answer shows in its place
     } catch (error) {
-      setAnswerError(moderationMessage(t, error) ?? error.body?.body?.[0] ?? t("community.somethingWrong"));
+      setAnswerError(moderationMessage(t, error) ?? translateServerMessage(error.body?.body?.[0], t) ?? t("community.somethingWrong"));
       requestAnimationFrame(() => errorRef.current?.focus());
     } finally {
       setPosting(false);
@@ -161,7 +162,7 @@ export default function CommunityQuestion() {
         {question.hidden && <p className="community-hidden">{t("community.hiddenNotice")}</p>}
         {question.body && <p className="community-question__body">{question.body}</p>}
         <p className="community-card__meta">
-          {question.pathway && <span className="tag">{question.pathway.name}</span>}
+          {question.pathway && <span className="tag">{t(`pathways.${question.pathway.slug}`)}</span>}
           <Author author={question.author} />
           <span className="community-meta">{t("community.askedOn", { date: formatDate(question.created_at) })}</span>
         </p>

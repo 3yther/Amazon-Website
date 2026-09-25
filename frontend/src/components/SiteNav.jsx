@@ -4,7 +4,8 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import LanguagePicker from "../i18n/LanguagePicker.jsx";
-import { CloseIcon, MenuIcon, PersonIcon } from "./Icons.jsx";
+import { AccountAvatar, greetingName } from "./AccountDropdown.jsx";
+import { CloseIcon, MenuIcon } from "./Icons.jsx";
 
 // The side menu. The menu button opens a <dialog> drawer from the left.
 // Only page links go here, sign in and settings are in the account menu.
@@ -158,14 +159,15 @@ function Hello({ onNavigate }) {
   return (
     <div className="menu-hello">
       <div className="container menu-hello__inner">
+        {/* The same picture as the account button in the header. */}
         <span className="menu-hello__avatar" aria-hidden="true">
-          <PersonIcon />
+          <AccountAvatar user={checked ? user : null} />
         </span>
 
         {/* Nothing until the first session check, so "sign in" never flashes
             up for somebody who is already signed in. */}
         {checked && user && (
-          <p className="menu-hello__text">{t("menu.helloUser", { name: user.username })}</p>
+          <p className="menu-hello__text">{t("menu.helloUser", { name: greetingName(user) })}</p>
         )}
         {checked && !user && (
           <Link className="menu-hello__text" to="/login" onClick={onNavigate}>
