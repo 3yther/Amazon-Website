@@ -1,18 +1,19 @@
+import { useT } from "../i18n/I18nProvider.jsx";
+import { useSiteContent } from "../i18n/content.js";
 import "../about.css";
 
-/**
- * Lays out one of the policy pages from legalContent.js: a heading, when it
- * was last updated, then short sections of paragraphs and bullet points.
- * Terms, Privacy, Cookies and Data Rights all use it, so they read the same.
- */
-export default function LegalPage({ page }) {
+// Shows one of the policy pages from legalContent.js (TERMS, PRIVACY, COOKIES or DATA_RIGHTS).
+export default function LegalPage({ name }) {
+  const t = useT();
+  const page = useSiteContent().legal[name];
+
   return (
     <article className="legal">
       <header className="intro">
         <p className="label">{page.label}</p>
         <h1 id="page-title">{page.title}</h1>
         <p className="lead">{page.intro}</p>
-        <p className="label">Last updated {page.updated}. Draft, to be checked before launch.</p>
+        <p className="label">{t("legalPage.updated", { date: page.updated })}</p>
       </header>
 
       {page.sections.map((section) => (

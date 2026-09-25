@@ -21,14 +21,10 @@ class PathwayViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ContentItemViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    GET /api/content/          paginated list, newest first
+    """GET /api/content/          list, newest first
     GET /api/content/<slug>/   one item
 
-    Optional list filters (combine freely):
-      ?pathway=<slug>          that pathway plus items for all pathways
-      ?audience=<value>        student | parent | teacher, plus items for everyone
-      ?access_level=<value>    free | signup
+    Filters: ?pathway=<slug>, ?audience=student|parent|teacher, ?access_level=free|signup
     """
 
     serializer_class = ContentItemSerializer

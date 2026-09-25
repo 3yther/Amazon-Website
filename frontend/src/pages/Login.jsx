@@ -29,7 +29,7 @@ export default function Login() {
       await refresh();
       navigate("/", { replace: true });
     } catch (error) {
-      setErrors(formErrors(error)); // what the user typed stays in place
+      setErrors(formErrors(error, t)); // what the user typed stays in place
       setStatus("idle");
     }
   }
@@ -76,6 +76,9 @@ export default function Login() {
             </button>
           </form>
 
+          <p className="account-switch">
+            <Link to="/forgot-password">{t("login.forgotPassword")}</Link>
+          </p>
           <p className="account-switch">
             {t("login.noAccount")} <Link to="/register">{t("login.register")}</Link>
           </p>

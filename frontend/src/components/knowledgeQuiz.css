@@ -1,8 +1,4 @@
-/* The knowledge check at /quiz.
- *
- * Class names start with knowledge-quiz so they cannot clash with the .quiz
- * styles arriving with the About page work on the other branches. Colours come
- * from the variables in styles.css: no new ones. */
+/* The quiz at /quiz. Classes start with knowledge-quiz so they don't clash with .quiz. */
 
 .knowledge-quiz {
   max-width: 40rem;

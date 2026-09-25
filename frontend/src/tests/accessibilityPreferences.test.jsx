@@ -10,26 +10,11 @@ import {
 import { AuthProvider } from "../auth.jsx";
 import { REDUCE_MOTION_EVENT, REDUCE_MOTION_KEY } from "../useReducedMotion.js";
 
-// What the settings actually DO to the page, which is the part that kept
-// going wrong. These check the flags the stylesheets read: the classes on
-// <html> and <body> and the data attributes on <html>.
-//
-// MANUAL CHECK, NOT AUTOMATED HERE: jsdom does not load the stylesheets or
-// draw anything, so it cannot measure a colour contrast ratio. High contrast
-// was therefore verified by hand in a real browser, in all four
-// combinations (light, light + high contrast, dark, dark + high contrast),
-// across the homepage, the resources library, all five Accessibility tabs,
-// About, Help, Pathways, FAQs, Register interest, Login, Feedback, the
-// footer and the open menu drawer, by computing every text node's contrast
-// against its real background. All four combinations came back clean. What
-// these tests lock in is the thing that broke: which token each theme's
-// high-contrast rule is built from.
+// Checks the classes and attributes the settings put on <html> and <body>.
+// jsdom can't measure colour contrast, so high contrast was checked by hand in
+// a browser (light, dark, and both with high contrast).
 
-// A fake server rather than a vi.mock of api.js: vitest shares one module
-// registry across these files (isolate: false in vitest.config.js), so two
-// files mocking api.js differently fight over which version is cached and one
-// of them silently gets the wrong module. Signed out is all these need, since
-// the provider then reads localStorage and the account never comes into it.
+// Fake fetch instead of vi.mock because the test files share modules (isolate: false).
 function fakeServer() {
   vi.stubGlobal(
     "fetch",
@@ -97,9 +82,7 @@ afterEach(() => {
 
 describe("Applying preferences to the page", () => {
   it("applies them without the settings page being open", () => {
-    // The whole point of the provider: it used to live inside the settings
-    // page, so every preference stopped applying the moment you left it (and
-    // never came back on a reload).
+    // The settings need to apply on every page, not just the settings page.
     window.localStorage.setItem(
       "tsmile:accessibility-preferences",
       JSON.stringify({ ...DEFAULT_PREFERENCES, high_contrast: true, font_size_scale: 130 }),
@@ -127,10 +110,7 @@ describe("Applying preferences to the page", () => {
   });
 
   it("puts high contrast and the theme on at the same time", async () => {
-    // The pair that erased the page: dark mode's high-contrast rule set the
-    // muted ink to the PAGE colour, so all the secondary text vanished. The
-    // rule is CSS, but both switches have to reach the document for either
-    // side of it to apply at all.
+    // Dark mode with high contrast once hid all the grey text, so check both get applied.
     const user = userEvent.setup({ delay: null });
     renderSettings();
 
@@ -172,9 +152,7 @@ describe("Reduce motion", () => {
 
     await user.click(screen.getByRole("checkbox", { name: /Reduce motion/ }));
 
-    // This is what the homepage's drifting names now answer to. Before, the
-    // only thing that could stop them was the system setting, so turning
-    // this on left them moving.
+    // The homepage floating names should stop when this is on.
     expect(document.documentElement.dataset.motion).toBe("reduced");
   });
 
@@ -210,7 +188,7 @@ describe("Reduce motion", () => {
 describe("Saying what the settings actually do", () => {
   it("describes text to speech as the chat assistant only", () => {
     renderSettings();
-    // It used to say "Read page content aloud", which it has never done.
+    // It only reads the chat, so it shouldn't say it reads the page.
     expect(screen.getByRole("checkbox", { name: /chat assistant/i })).toBeInTheDocument();
     expect(screen.queryByRole("checkbox", { name: /Read page content aloud/i })).toBeNull();
   });

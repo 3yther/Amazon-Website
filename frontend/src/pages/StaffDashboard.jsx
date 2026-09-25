@@ -4,25 +4,16 @@ import { getInterestSubmissions } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { FormError } from "../components/FormFields.jsx";
 import { formatDate, formatNumber } from "../formats.js";
-import { useAccessibilityPreferences } from "../hooks/useAccessibilityPreferences.jsx";
 import { USER_TYPES } from "../labels.js";
 
 // How much of a message shows before it is folded away. Long ones open in
 // place rather than truncating with no way to read the rest.
 const MESSAGE_PREVIEW = 90;
 
-/**
- * Expression of Interest submissions, for Amazon staff.
- *
- * The redirect below is for a sensible experience, not for security: the
- * real gate is the server's IsAmazonStaff permission on
- * /api/interest/submissions/, which is what actually decides whether these
- * personal details are ever sent. Someone typing the URL in without a staff
- * account gets bounced here and would get a 403 from the API anyway.
- */
+// Interest submissions, for Amazon staff. The redirect is just for convenience,
+// the API is what actually blocks non-staff.
 export default function StaffDashboard() {
   const { user, checked } = useAuth();
-  const { preferences } = useAccessibilityPreferences();
   const [page, setPage] = useState(1);
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("loading"); // loading | ready | error
@@ -81,7 +72,7 @@ export default function StaffDashboard() {
       {status === "ready" && results.length > 0 && (
         <>
           <p className="results-status" role="status">
-            {formatNumber(data.count, preferences.number_format)} submission
+            {formatNumber(data.count)} submission
             {data.count === 1 ? "" : "s"}, showing {results.length} on this page.
           </p>
 
@@ -114,7 +105,7 @@ export default function StaffDashboard() {
                     <td>
                       <SubmissionMessage message={row.message} />
                     </td>
-                    <td>{formatDate(row.submitted_at, preferences.date_format)}</td>
+                    <td>{formatDate(row.submitted_at)}</td>
                   </tr>
                 ))}
               </tbody>

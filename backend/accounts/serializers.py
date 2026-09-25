@@ -1,13 +1,17 @@
 from django.contrib.auth import authenticate, password_validation
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from rest_framework import serializers
 
 from content.models import PathwayName
 
+from .emails import send_password_reset_email
 from .models import Feedback, Profile, UserPreference
 
 # Staff accounts are created in Django admin only, never through sign-up.
@@ -21,6 +25,7 @@ USERNAME_TAKEN = "A user with that username already exists."
 INVALID_CREDENTIALS = "Invalid username or password."
 INCORRECT_PASSWORD = "Current password is incorrect."
 INCORRECT_DEACTIVATE_PASSWORD = "Incorrect password."
+RESET_LINK_INVALID = "This password reset link is invalid or has expired. Request a new one."
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -34,11 +39,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class UserPreferenceSerializer(serializers.ModelSerializer):
-    """
-    Validates each preference against the ranges and choices defined on
-    UserPreference itself (ModelSerializer picks up the model's own
-    validators, so the 80-150 and 0-3 range checks live in one place).
-    """
+    """Checks each setting against the limits on the UserPreference model."""
 
     class Meta:
         model = UserPreference
@@ -99,14 +100,8 @@ class CurrentUserSerializer(AccountSerializer):
 
 
 class RegisterSerializer(serializers.Serializer):
-    """
-    Validates a sign-up server side and creates the User plus its Profile.
-
-    Django hashes the password. Passwords are write-only, so the response
-    never echoes them back.
-
-    Every check is field-level, so one 400 lists every problem at once. DRF
-    skips validate() while any field has an error, so nothing lives there.
+    """Checks a sign up and creates the User and its Profile.
+    Django hashes the password, and it's never sent back.
     """
 
     username = serializers.CharField(max_length=150, validators=[UnicodeUsernameValidator()])
@@ -130,9 +125,7 @@ class RegisterSerializer(serializers.Serializer):
         return username
 
     def validate_password(self, value):
-        # Runs AUTH_PASSWORD_VALIDATORS from settings. The unsaved User lets the
-        # similarity check compare the password with the submitted username,
-        # read from the raw input because field checks cannot see each other.
+        # Runs the password rules from settings (AUTH_PASSWORD_VALIDATORS).
         user = User(username=self.initial_data.get("username"))
         try:
             password_validation.validate_password(value, user=user)
@@ -237,9 +230,8 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        # authenticate() returns None for a wrong password, an unknown username
-        # or a deactivated account. All three get the same message, so the
-        # response never reveals which usernames exist.
+        # Same message for a wrong password, unknown username or deactivated
+        # account, so nobody can find out which usernames exist.
         user = authenticate(
             request=self.context.get("request"),
             username=attrs["username"],
@@ -251,12 +243,70 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """Finds the account by username. Does nothing if it doesn't exist or has no
+    email, so the reply is the same either way.
+    """
+
+    username = serializers.CharField()
+
+    def save(self):
+        try:
+            user = User.objects.get(username__iexact=self.validated_data["username"], is_active=True)
+        except User.DoesNotExist:
+            return None
+        if not user.email:
+            return None  # nothing to send it to; registration does not require one
+        send_password_reset_email(user)
+        return user
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """Checks the uid and token from the email link, then the new password.
+    Any problem with the link gives the same "token" error.
+    """
+
+    uid = serializers.CharField()
+    token = serializers.CharField()
+    new_password = serializers.CharField(
+        write_only=True, trim_whitespace=False, style={"input_type": "password"}
+    )
+    confirm_password = serializers.CharField(
+        write_only=True, trim_whitespace=False, style={"input_type": "password"}
+    )
+
+    def validate(self, attrs):
+        user = None
+        try:
+            uid = force_str(urlsafe_base64_decode(attrs["uid"]))
+            user = User.objects.get(pk=uid, is_active=True)
+        except (User.DoesNotExist, ValueError, TypeError, OverflowError):
+            user = None
+
+        if user is None or not default_token_generator.check_token(user, attrs["token"]):
+            raise serializers.ValidationError({"token": [RESET_LINK_INVALID]})
+
+        if attrs["confirm_password"] != attrs["new_password"]:
+            raise serializers.ValidationError({"confirm_password": ["Passwords do not match."]})
+
+        try:
+            password_validation.validate_password(attrs["new_password"], user=user)
+        except DjangoValidationError as error:
+            raise serializers.ValidationError({"new_password": list(error.messages)})
+
+        attrs["user"] = user
+        return attrs
+
+    def save(self):
+        user = self.validated_data["user"]
+        user.set_password(self.validated_data["new_password"])
+        user.save()
+        Profile.objects.filter(user=user).update(last_password_changed=timezone.now())
+        return user
+
+
 class FeedbackSerializer(serializers.ModelSerializer):
-    """
-    Validates a feedback submission. category must be one of Feedback's
-    choices (ModelSerializer rejects anything else automatically); message is
-    required (the model field has no blank=True); email is optional.
-    """
+    """Checks a feedback message. Email is optional."""
 
     class Meta:
         model = Feedback

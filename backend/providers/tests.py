@@ -17,21 +17,12 @@ LONDON = (51.515419, -0.141099)
 
 
 def stub_lookup(point=LONDON):
-    """
-    Stand in for the one postcodes.io call a search makes.
-
-    Every endpoint test patches this: the tests must not depend on somebody
-    else's API being up, and we are testing our search, not their lookup.
-    """
+    """Fakes the postcodes.io call so the tests don't need the internet."""
     return patch("providers.views.lookup", return_value=point)
 
 
 class HaversineTests(TestCase):
-    """
-    Checked against known great-circle distances. The tolerances are wide
-    enough for the sphere the formula assumes, and tight enough to catch a
-    swapped argument or degrees left unconverted.
-    """
+    """Checked against known distances."""
 
     def test_same_point_is_zero(self):
         self.assertEqual(haversine_miles(51.5, -0.1, 51.5, -0.1), 0)
@@ -353,20 +344,9 @@ class GeocodeProvidersCommandTests(TestCase):
 
 
 class SeededSearchEndToEndTests(APITestCase):
-    """
-    The search, from the shipped fixture to a non-empty answer, with nothing
-    mocked but the visitor's own postcode lookup.
-
-    Written after the live site answered every search with an empty list for
-    days. The existing tests all passed throughout, because they build their
-    own providers: none of them ever asked "does the data we actually ship
-    produce a result?", so the one thing that was wrong was the one thing
-    nothing looked at.
-
-    These load providers.json exactly as the deploy does, and measure real
-    distances between real coordinates. Only postcodes.io is stood in for,
-    and only for the visitor's postcode, because a test suite must not depend
-    on somebody else's API being up.
+    """Searches using the real providers.json fixture, with only the visitor's
+    postcode lookup faked. Added after the live site returned no results for
+    days because the fixture wasn't loaded.
     """
 
     fixtures = ["pathways", "providers"]
@@ -399,10 +379,8 @@ class SeededSearchEndToEndTests(APITestCase):
         self.assertLess(miles[0], 10, miles[:3])
 
     def test_every_seeded_provider_can_be_found_from_somewhere(self):
-        """
-        A provider left at 0, 0 is silently dropped from every search. This
-        walks the whole fixture and searches from each one's own position, so
-        a row that cannot be found fails by name rather than by absence.
+        """Searches from every provider's own position, so one that can't be found
+        fails by name.
         """
         for provider in Provider.objects.all():
             with self.subTest(provider=provider.name):
@@ -430,11 +408,7 @@ class SeededSearchEndToEndTests(APITestCase):
 
 
 class UngeocodedProvidersTests(APITestCase):
-    """
-    The failure mode this whole batch is about: rows in the table that no
-    search can return. It has to be loud somewhere, because to a visitor it
-    looks exactly like "no colleges near you".
-    """
+    """Providers that no search can return should be obvious."""
 
     def setUp(self):
         self.provider = Provider.objects.create(
@@ -531,19 +505,7 @@ class CheckProvidersCommandTests(TestCase):
 
 
 class ResultsAreNotCappedTests(APITestCase):
-    """
-    Every match inside the radius comes back, however many there are.
-
-    The report behind these was "the search only ever shows about five".
-    It was not a cap: the endpoint is a plain APIView, which has no
-    pagination to inherit, and the project's page size is 20 rather than 5
-    anyway. It was that the fixture held fifteen colleges spread across the
-    whole of England, so at the widest radius the page offers nobody could
-    ever see more than four.
-
-    These pin both halves down: nothing truncates, and the data we ship is
-    dense enough to prove it.
-    """
+    """Every match inside the radius comes back, not just the first few."""
 
     @classmethod
     def setUpTestData(cls):
@@ -583,12 +545,7 @@ class ResultsAreNotCappedTests(APITestCase):
                 self.assertEqual(response.data["count"], len(response.data["results"]))
 
     def test_the_answer_is_not_a_paginated_one(self):
-        """
-        Locks the shape down. If this view is ever rewritten as a generic list
-        view it will pick up the project-wide PageNumberPagination and start
-        truncating silently, and NearYou.jsx reads results straight out of the
-        body with nothing to follow a next link with.
-        """
+        """The search isn't paginated, because NearYou.jsx reads all the results at once."""
         response = self.search(radius="25")
 
         self.assertEqual(
@@ -604,14 +561,7 @@ class ResultsAreNotCappedTests(APITestCase):
 
 
 class SeedCoverageTests(APITestCase):
-    """
-    The shipped fixture has to be dense enough to be worth searching.
-
-    With the fifteen it started with, six of a spread of ordinary UK postcodes
-    returned NOTHING at the default fifteen miles, and no postcode anywhere
-    could return more than four at the widest radius the page offers. The
-    search worked perfectly and still looked broken.
-    """
+    """The fixture should have enough providers that normal postcodes find some."""
 
     fixtures = ["pathways", "providers"]
 

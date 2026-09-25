@@ -1,32 +1,31 @@
 import { Link } from "react-router-dom";
 import MessageForm from "../components/MessageForm.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 
-const CATEGORIES = [
-  { value: "general", label: "A question or anything else" },
-  { value: "feature", label: "An idea for the site" },
-];
+// Values from the backend's Feedback.Category; labels in i18n/messages (contact).
+const CATEGORIES = ["general", "feature"];
 
-/**
- * Contact us: a short form that sends a message to the team. Problems with
- * the site go to Report an Issue instead, so each page has one job.
- */
+// Contact us page. Problems with the site go to Report an issue instead.
 export default function Contact() {
+  const t = useT();
+
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Support</p>
-        <h1 id="page-title">Contact us</h1>
+        <p className="label">{t("contact.label")}</p>
+        <h1 id="page-title">{t("contact.title")}</h1>
         <p className="lead">
-          Send the team a message. Something broken? Use <Link to="/report-issue">Report an issue</Link>.
+          {t("contact.leadBefore")} <Link to="/report-issue">{t("contact.leadLink")}</Link>
+          {t("contact.leadAfter")}
         </p>
       </section>
 
       <MessageForm
         idPrefix="contact"
-        categories={CATEGORIES}
-        messageLabel="Your message"
-        submitLabel="Send message"
-        sentText="Thanks, your message has reached the team."
+        categories={CATEGORIES.map((value) => ({ value, label: t(`contact.categories.${value}`) }))}
+        messageLabel={t("contact.message")}
+        submitLabel={t("contact.submit")}
+        sentText={t("contact.sent")}
       />
     </>
   );

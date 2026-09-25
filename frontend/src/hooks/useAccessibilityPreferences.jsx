@@ -6,9 +6,7 @@ import { REDUCE_MOTION_EVENT, REDUCE_MOTION_KEY, useReducedMotion } from "../use
 
 const STORAGE_KEY = "tsmile:accessibility-preferences";
 
-// Mirrors backend/accounts/models.py UserPreference, minus reduce_motion:
-// that one keeps living in useReducedMotion.js's own key (see updatePreference
-// below), so there is still exactly one place that stores it.
+// Same as UserPreference in backend/accounts/models.py, except reduce motion (see useReducedMotion.js).
 export const DEFAULT_PREFERENCES = {
   font_size_scale: 100,
   high_contrast: false,
@@ -19,14 +17,6 @@ export const DEFAULT_PREFERENCES = {
   button_outline_style: "default",
   page_background: "white",
   language: "en",
-  // These two match UserPreference's own defaults in
-  // backend/accounts/models.py. They have to: a signed-out visitor reads
-  // these, and the same person signed in reads the server's, so a
-  // difference would change the dates on screen just by logging in.
-  // TEAM NOTE: both default to the US forms on a UK site. Changing them is a
-  // model change, so it is left for the team rather than done here.
-  date_format: "MM/DD/YYYY",
-  number_format: "US",
 };
 
 const TEXT_SPACING_VALUES = ["normal", "0.02em", "0.05em", "0.1em"];
@@ -53,16 +43,7 @@ function writeStored(preferences) {
   }
 }
 
-/**
- * Puts every preference where the rest of the site can see it: CSS custom
- * properties and classes on <html> and <body>, which the stylesheets then
- * read. Runs before the backend has confirmed anything, so the page always
- * feels instant.
- *
- * reduceMotion is passed separately because it has its own store (see
- * useReducedMotion.js) and its own answer, the site's setting or the
- * system's.
- */
+// Puts the settings onto <html> and <body> as classes and CSS variables for the stylesheets.
 function applyToDocument(preferences, reduceMotion) {
   const root = document.documentElement;
 
@@ -83,9 +64,7 @@ function applyToDocument(preferences, reduceMotion) {
   // prefers-color-scheme fallback in styles.css while the OS itself is dark.
   root.classList.toggle("light-mode", !isDark);
 
-  // Which colour-correction filter the page wears, read by styles.css. An
-  // attribute rather than an inline filter so the stylesheet keeps saying
-  // what the page looks like.
+  // Which colour blindness filter to use (read by styles.css).
   const vision = preferences.color_blindness_type;
   if (COLOUR_VISION_TYPES.has(vision)) {
     root.dataset.colourVision = vision;
@@ -93,15 +72,11 @@ function applyToDocument(preferences, reduceMotion) {
     delete root.dataset.colourVision;
   }
 
-  // The one switch every animation on the site answers to. CSS can only ask
-  // the operating system through @media; this is how it gets told about the
-  // site's own Reduce motion setting as well.
+  // So CSS knows about the site's own Reduce motion setting, not just the system one.
   root.dataset.motion = reduceMotion ? "reduced" : "full";
 }
 
-// Used by any page rendered without the provider (older tests, and anything
-// mounted outside it): real defaults, and changing a preference is a no-op
-// rather than a crash.
+// Defaults for anything rendered without the provider (like some tests).
 const FALLBACK = {
   preferences: { ...DEFAULT_PREFERENCES, reduce_motion: false },
   updatePreference: () => {},
@@ -111,20 +86,8 @@ const FALLBACK = {
 const AccessibilityPreferencesContext = createContext(null);
 
 /**
- * Holds the accessibility preferences for the whole app and keeps the
- * document in step with them.
- *
- * It lives at the root (main.jsx), not on the settings page, because the
- * settings have to apply on every page and survive a reload. While it was
- * mounted only inside the Accessibility page, a change took effect until you
- * refreshed and then quietly disappeared: the stored preference was still
- * right, but nothing was reading it any more.
- *
- * Every change applies to the page and saves to localStorage at once; a
- * signed-in user's changes also sync to their account, so the same
- * preferences follow them to another device. On load, a signed-in user's
- * saved preferences replace whatever localStorage had; signed out,
- * localStorage (or the defaults) is all there is.
+ * Holds the accessibility settings for the whole site. Changes save to
+ * localStorage straight away, and to the account if you're signed in.
  */
 export function AccessibilityPreferencesProvider({ children }) {
   const { user, checked } = useAuth();
@@ -209,13 +172,7 @@ export function AccessibilityPreferencesProvider({ children }) {
   );
 }
 
-/**
- * The current preferences, and a way to change one.
- *
- * Outside the provider it answers with the defaults and a no-op, so a
- * component (or a test) that renders on its own still works rather than
- * throwing.
- */
+// The current settings and a way to change one.
 export function useAccessibilityPreferences() {
   return useContext(AccessibilityPreferencesContext) ?? FALLBACK;
 }

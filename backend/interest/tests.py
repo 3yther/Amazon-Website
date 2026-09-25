@@ -83,10 +83,8 @@ class ExpressionOfInterestApiTests(APITestCase):
         self.assertEqual(ExpressionOfInterest.objects.get().user, user)
 
     def test_submissions_cannot_be_listed(self):
-        # The public create endpoint still refuses to list, for everyone,
-        # with no exception for staff. Staff read submissions through the
-        # separate endpoint below, which has its own permission check, so
-        # this rule stays as strict as it always was.
+        # The public endpoint never lists submissions, even for staff.
+        # Staff use the separate submissions endpoint.
         response = self.client.get(URL)
         self.assertEqual(response.status_code, 405)
 

@@ -4,17 +4,8 @@ import { useSiteContent } from "../i18n/content.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { AlertIcon } from "./Icons.jsx";
 
-// "Is a T-Level right for me?" quiz, six questions, one screen.
-//
-// NEW CONCEPT: a group of radio buttons needs a group label, and the way to
-// give it one is <fieldset> with a <legend>. A screen reader then reads the
-// question before each option, instead of five stray labels. Native radios
-// also bring their own keyboard behaviour: arrow keys move between options and
-// Tab jumps past the whole group.
-//
-// NEW CONCEPT: role="status" on the result. The browser reads out anything
-// that appears inside it, so a screen reader user hears the result without
-// having to go hunting for it. "polite" behaviour, so it waits its turn.
+// "Is a T-Level right for me?" quiz. Each question is a fieldset with a legend
+// so screen readers read the question, and the result is in a role="status".
 
 /** Adds up the scores of the chosen options and picks a result band. */
 function scoreAnswers(answers, questions, results) {

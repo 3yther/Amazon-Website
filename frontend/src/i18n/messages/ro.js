@@ -14,7 +14,7 @@ const ro = {
       "Această pagină a fost tradusă automat ({language}), așa că unele formulări pot fi inexacte. " +
       "Versiunea în engleză este cea care contează.",
     showEnglish: "Citește în engleză",
-    englishOnly: "Această pagină este disponibilă doar în engleză, ca formularea să fie exact cea corectă.",
+    englishOnly: "Această pagină este disponibilă doar în engleză.",
   },
 
   pathways: {
@@ -75,11 +75,11 @@ const ro = {
     steps: {
       label: "Cum funcționează",
       title: "Începe în patru pași",
-      level: "Nivel",
+      step: "Pasul",
       browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
       register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
       hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },
-      getInvolved: { title: "Implică-te", text: "Creează un cont ca să deschizi mai multe resurse pentru parcursul tău.", link: "Creează cont" },
+      getInvolved: { title: "Implică-te", text: "Creează un cont ca să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.", link: "Creează cont" },
     },
   },
 
@@ -212,6 +212,7 @@ const ro = {
     error404: "Eroare 404",
     notFound: "Pagina nu a fost găsită",
     toLibrary: "Mergi la biblioteca de conținut",
+    loading: "Se încarcă",
   },
 
   titles: {
@@ -248,7 +249,7 @@ const ro = {
   footer: {
     about: "Despre",
     aboutText:
-      "T-SMILE îi ajută pe elevi, părinți și profesori să exploreze T-Levels și T-Level-ul Digital la Amazon, cu resurse gratuite și pentru utilizatori înregistrați într-un singur loc.",
+      "T-Levels și stagiile la Amazon, explicate pentru elevi, părinți și profesori. Un proiect al elevilor pentru Amazon Emerging Talent, nu un site oficial Amazon.",
     navigation: "Navigare",
     support: "Asistență",
     legal: "Informații legale și conformitate",
@@ -287,7 +288,7 @@ const ro = {
     signUp: "Creează cont",
     signInOrUp: "Autentifică-te sau creează un cont",
     notSignedIn: "Nu ești autentificat",
-    needAccount: "Unele resurse au nevoie de un cont",
+    needAccount: "Creează un cont ca să intri în Comunitate",
     roles: {
       student: "Elev",
       parent: "Părinte sau tutore",
@@ -311,18 +312,18 @@ const ro = {
       quiz: "Chestionar",
       community: "Comunitate",
       help: "Ajutor",
-      registerInterest: "Înregistrează interesul",
     },
   },
 
   login: {
     label: "Cont",
     title: "Bine ai revenit",
-    lead: "Autentifică-te ca să deschizi resursele pentru utilizatori înregistrați.",
+    lead: "Autentifică-te ca să intri în Comunitate și să îți păstrezi setările pe orice dispozitiv.",
     username: "Nume de utilizator",
     password: "Parolă",
     submitting: "Se autentifică",
     submit: "Autentificare",
+    forgotPassword: "Ai uitat parola?",
     noAccount: "Nu ai încă un cont?",
     register: "Creează cont",
   },
@@ -331,6 +332,8 @@ const ro = {
     hidePassword: "Ascunde parola",
     showPassword: "Arată parola",
     panelLine: "Resurse gratuite pentru parcursul T-Level Digital de la Amazon.",
+    somethingWrong: "Ceva nu a mers bine. Încearcă din nou.",
+    noConnection: "Serverul nu a putut fi contactat. Verifică-ți conexiunea și încearcă din nou.",
   },
 
   register: {
@@ -367,6 +370,27 @@ const ro = {
     },
   },
 
+  forgotPassword: {
+    title: "Parolă uitată",
+    lead: "Introdu numele de utilizator și, dacă există un email asociat contului, îți vom trimite un link pentru resetarea parolei.",
+    submitting: "Se trimite",
+    submit: "Trimite linkul de resetare",
+    sent: "Dacă acel cont are un email asociat, i-am trimis instrucțiuni de resetare a parolei. Linkul funcționează o singură dată și expiră după câteva zile.",
+    backToLogin: "Până la urmă ți-ai amintit?",
+  },
+
+  resetPassword: {
+    title: "Alege o parolă nouă",
+    newPassword: "Parolă nouă",
+    passwordHint: "Cel puțin 8 caractere. Nu doar cifre și nu o parolă comună.",
+    confirmPassword: "Confirmă parola nouă",
+    submitting: "Se salvează",
+    submit: "Salvează parola nouă",
+    backToLogin: "Până la urmă ți-ai amintit?",
+    requestNewLink: "Solicită un link nou",
+    linkMissing: "Acestui link de resetare a parolei îi lipsesc informații. Solicită unul nou mai jos.",
+  },
+
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "Înregistrează-ți interesul",
@@ -385,6 +409,10 @@ const ro = {
     submit: "Înregistrează interesul",
     nextTitle: "Ce urmează",
     underSixteen: "Ai sub 16 ani? Întreabă un părinte sau un tutore înainte să trimiți.",
+    box: {
+      summary: "Vrei un stagiu la Amazon? Înregistrează-ți interesul",
+      text: "Nu ai nevoie de cont. Spune-ne ce parcurs te interesează și îl transmitem echipei Amazon Emerging Talent. Ai sub 16 ani? Întreabă mai întâi un părinte sau un tutore.",
+    },
     thanks: {
       title: "Mulțumim, ești pe listă",
       lead: "Interesul tău pentru parcursul {pathway} a fost trimis echipei Amazon Emerging Talent.",
@@ -669,19 +697,18 @@ const ro = {
       amazonPathways: "Iată ce a spus Amazon despre fiecare parcurs:",
       pathwaysList: "Există cinci parcursuri:",
       providerQuestions: "Întrebări bune pentru o școală sau un colegiu:",
-      resources: "Pagina Resurse are ghiduri, pachete și videoclipuri. Unele au nevoie de un cont gratuit ca să se deschidă.",
+      resources: "Pagina Resurse are ghiduri, pachete și videoclipuri, toate gratuite.",
       quiz: "Chestionarul are întrebări scurte despre T-Levels, iar eu te ajut cu cele greșite.",
       community:
         "În Comunitate poți pune o întrebare, iar alți elevi, părinți, profesori și angajați Amazon pot răspunde. " +
         "Tot ce nu știu eu merită întrebat acolo.",
       account:
-        "Poți naviga pe site și vorbi cu mine fără cont. Un cont gratuit deschide resursele marcate pentru utilizatori înregistrați " +
-        "și îți permite să întrebi și să răspunzi în Comunitate.",
+        "Poți naviga pe site, poți deschide orice resursă și poți vorbi cu mine fără cont. Un cont gratuit îți permite să pui întrebări și să răspunzi în Comunitate și îți păstrează setările pe orice dispozitiv.",
       contact: "Poți lua legătura cu echipa T-SMILE prin pagina de Contact.",
       accessibility:
         "Poți schimba mărimea textului, culorile, modul întunecat, animațiile și citirea cu voce tare din setările de Accesibilitate.",
       language:
-        "Da! Folosește meniul cu globul din partea de sus a paginii sau pe cel din meniul lateral. Poți alege dintre zece limbi.",
+        "Da! Folosește meniul de limbă de sub butonul contului, sus pe pagină, sau pe cel din meniul lateral. Poți alege dintre zece limbi.",
       privacy:
         "Salvez doar întrebările pe care trebuie să le caut, ca să putem continua de unde am rămas. Ce răspund singur și felul în care " +
         "te miști pe site rămân în browserul tău. Politica de confidențialitate are detaliile.",
@@ -825,6 +852,340 @@ const ro = {
       areYouBot: "ești robot, esti robot, ești bot, ești om, ești ai",
       whatCanYouDo: "ce poți face, ce poti face, cu ce mă ajuți",
       joke: "glumă, gluma, banc, bancuri",
+    },
+  },
+
+  legalPage: {
+    updated: "Ultima actualizare: {date}. Versiune de lucru, de verificat înainte de lansare.",
+  },
+
+  messageForm: {
+    about: "Despre ce este vorba?",
+    email: "Email (opțional)",
+    emailHint: "Adaugă-l dacă vrei un răspuns.",
+    sending: "Se trimite",
+    empty: "Scrie mai întâi un mesaj.",
+  },
+
+  contact: {
+    label: "Asistență",
+    title: "Contact",
+    leadBefore: "Trimite un mesaj echipei. Ceva nu merge? Folosește pagina",
+    leadLink: "Raportează o problemă",
+    leadAfter: ".",
+    categories: {
+      general: "O întrebare sau altceva",
+      feature: "O idee pentru site",
+    },
+    message: "Mesajul tău",
+    submit: "Trimite mesajul",
+    sent: "Mulțumim, mesajul tău a ajuns la echipă.",
+  },
+
+  reportIssue: {
+    label: "Asistență",
+    title: "Raportează o problemă",
+    lead: "Spune-ne ce nu a mers și pe ce pagină erai.",
+    categories: {
+      bug: "Ceva nu funcționează",
+      accessibility: "Ceva e greu de folosit sau de citit",
+    },
+    message: "Ce s-a întâmplat?",
+    submit: "Trimite raportul",
+    sent: "Mulțumim, am primit raportul tău și ne vom uita la el.",
+  },
+
+  feedbackPage: {
+    label: "Păreri",
+    title: "Păreri",
+    lead: "Spune-ne ce merge bine și ce nu.",
+    category: "Categorie",
+    categories: {
+      bug: "Raportare de eroare",
+      feature: "Sugestie de funcție",
+      general: "Părere generală",
+      accessibility: "Problemă de accesibilitate",
+    },
+    message: "Mesaj",
+    email: "Email (opțional)",
+    emailHint: "Ca să îți putem răspunde, dacă vrei.",
+    sending: "Se trimite",
+    submit: "Trimite părerea",
+    thanksTitle: "Mulțumim",
+    thanksLead: "Citim fiecare mesaj. Mulțumim că ți-ai făcut timp.",
+  },
+
+  accessibilityHelp: {
+    label: "Asistență",
+    title: "Ajutor pentru accesibilitate",
+    lead: "Ne propunem să respectăm WCAG 2.2 AA, standardul pentru site-uri accesibile.",
+    waysTitle: "Folosește site-ul în felul tău",
+    ways: {
+      settings: "Schimbă mărimea textului, contrastul, spațierea și culorile din setările de accesibilitate.",
+      keyboard: "Totul funcționează cu tastatura. Apasă Tab ca să te muți, Enter ca să alegi.",
+      skip: "Apasă Tab o dată pe orice pagină ca să sari direct la conținutul principal.",
+      screenReaders: "Paginile sunt făcute să funcționeze cu cititoare de ecran precum NVDA și VoiceOver.",
+      motion: "Textele în mișcare și animațiile se opresc dacă dispozitivul tău e setat să reducă mișcarea.",
+      speech: "Smiley își poate citi răspunsurile cu voce tare. Pornește asta din setările de accesibilitate.",
+    },
+    openSettings: "Deschide setările de accesibilitate",
+    problemTitle: "Ceva nu merge pentru tine?",
+    problemLead: "Spune-ne ce pagină și ce te-a încurcat, și o reparăm.",
+    report: "Raportează o problemă de accesibilitate",
+  },
+
+  settings: {
+    label: "Setări",
+    title: "Accesibilitate",
+    lead: "Schimbă cum arată și cum se comportă T-SMILE pentru tine. Când ești autentificat, setările te urmează pe orice dispozitiv; altfel, rămân în acest browser.",
+    signInPrompt: "Autentifică-te ca să gestionezi asta.",
+    tabs: {
+      sightLoss: "Vedere",
+      display: "Afișare",
+      language: "Limbă",
+      security: "Securitate",
+      account: "Cont",
+    },
+    sight: {
+      fontSize: "Mărimea fontului",
+      highContrast: "Contrast ridicat",
+      textSpacing: "Spațierea textului",
+      spacing: {
+        normal: "Normală",
+        comfortable: "Confortabilă",
+        relaxed: "Aerisită",
+        wide: "Largă",
+      },
+      colourBlindness: "Tipul de daltonism",
+      colourBlindnessHint: "Spune-ne cum vezi culorile și site-ul își ajustează culorile, astfel încât nuanțele care ți s-ar părea la fel să fie separate.",
+      colours: {
+        none: "Niciunul",
+        protanopia: "Protanopie (fără roșu)",
+        deuteranopia: "Deuteranopie (fără verde)",
+        tritanopia: "Tritanopie (fără albastru)",
+      },
+      speech: "Citește cu voce tare răspunsurile asistentului",
+      speechHint: "Citește doar răspunsurile lui Smiley, cu o voce de pe acest dispozitiv. Restul paginii nu este încă citit cu voce tare.",
+      reduceMotion: "Reduce mișcarea",
+      reduceMotionHint: "Oprește animațiile site-ului, pe lângă setarea sistemului tău.",
+    },
+    display: {
+      theme: "Temă",
+      themes: {
+        light: "Luminoasă",
+        dark: "Întunecată",
+        system: "Ca sistemul",
+      },
+      outline: "Stilul conturului de focus",
+      outlines: {
+        default: "Implicit",
+        thick: "Gros",
+        dashed: "Întrerupt",
+      },
+      background: "Fundalul paginii",
+      backgrounds: {
+        white: "Alb",
+        cream: "Crem",
+        gray: "Gri",
+      },
+    },
+    security: {
+      lastChanged: "Parola a fost schimbată ultima dată pe {date}.",
+      changed: "Parola a fost schimbată.",
+      current: "Parola actuală",
+      new: "Parola nouă",
+      strength: "Putere: {level}",
+      strengths: {
+        veryWeak: "Foarte slabă",
+        weak: "Slabă",
+        fair: "Acceptabilă",
+        good: "Bună",
+        strong: "Puternică",
+        veryStrong: "Foarte puternică",
+      },
+      minLength: "Cel puțin 8 caractere.",
+      confirm: "Confirmă parola nouă",
+      saving: "Se salvează",
+      submit: "Schimbă parola",
+    },
+    account: {
+      saved: "Profil salvat.",
+      firstName: "Prenume",
+      lastName: "Nume",
+      email: "Email",
+      phone: "Telefon",
+      saving: "Se salvează",
+      save: "Salvează",
+      cancel: "Anulează",
+      signingOutLabel: "Deconectare",
+      signingOutText: "Încheie sesiunea pe acest dispozitiv. Setările și contul tău rămân exact cum sunt.",
+      loggingOut: "Se deconectează",
+      logOut: "Deconectează-te",
+      dangerLabel: "Zonă de pericol",
+      dangerText: "Dezactivarea contului te deconectează și blochează autentificarea până când contul este reactivat.",
+      deactivate: "Dezactivează contul",
+      confirmText: "Introdu parola ca să confirmi. Vei fi deconectat imediat.",
+      password: "Parolă",
+      deactivating: "Se dezactivează",
+      wrongPassword: "Parolă greșită.",
+    },
+  },
+
+  resources: {
+    label: "Resurse",
+    title: "Resurse T-Level",
+    lead: "Ghiduri, videoclipuri și pachete gratuite, din surse oficiale precum gov.uk și UCAS.",
+    filters: "Filtrează conținutul",
+    pathway: "Traseu",
+    allPathways: "Toate traseele",
+    for: "Pentru",
+    anyone: "Oricine",
+    access: "Acces",
+    any: "Oricare",
+    clear: "Șterge filtrele",
+    loadError: "Conținutul nu a putut fi încărcat.",
+    serverError: "Ceva nu a mers bine la noi. Încearcă din nou peste puțin timp.",
+    tryAgain: "Încearcă din nou",
+    loading: "Se încarcă",
+    noMatches: "Niciun conținut nu se potrivește cu aceste filtre.",
+    oneItem: "1 element",
+    items: "{count} elemente",
+    loadMore: "Încarcă mai mult",
+    signUp: "Creează un cont pentru acces",
+    openOn: "Deschide pe {site}",
+    anotherWebsite: "alt site",
+    open: "Deschide",
+    types: {
+      guide: "Ghid",
+      document: "Document",
+      video: "Video",
+      prep_pack: "Pachet de pregătire",
+      class_pack: "Pachet pentru clasă",
+    },
+    audiences: {
+      all: "Toată lumea",
+      student: "Elevi",
+      parent: "Părinți și tutori",
+      teacher: "Profesori și școli",
+    },
+    accessLevels: {
+      free: "Gratuit",
+      signup: "Cu cont",
+    },
+  },
+
+  nearYou: {
+    label: "Găsește o școală",
+    title: "Găsește T-Levels lângă tine",
+    lead: "Introdu codul poștal ca să vezi școlile și colegiile de lângă tine care oferă T-Levels, începând cu cele mai apropiate.",
+    form: "Caută școli cu T-Levels",
+    postcode: "Cod poștal",
+    postcodeHint: "De exemplu SW1A 1AA.",
+    pathway: "Traseu",
+    allPathways: "Toate traseele",
+    within: "Pe o rază de",
+    miles: "{miles} mile",
+    search: "Caută",
+    searching: "Se caută",
+    error: "Căutarea școlilor nu a reușit.",
+    tryAgain: "Încearcă din nou",
+    start: "Introdu un cod poștal ca să vezi școlile de lângă tine.",
+    none: "Nicio școală pe o rază de {radius} mile de {postcode}. Încearcă o rază mai mare.",
+    oneFound: "1 școală pe o rază de {radius} mile de {postcode}.",
+    found: "{count} școli pe o rază de {radius} mile de {postcode}.",
+    underTenth: "Sub 0.1 mile",
+    oneMile: "1 milă",
+    distance: "{miles} mile",
+    pathways: "Trasee",
+    askProvider: "Întreabă școala",
+    website: "Vizitează site-ul",
+    errors: {
+      empty: "Introdu un cod poștal.",
+      notFull: "Introdu un cod poștal complet din Marea Britanie, de exemplu SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Materii",
+    title: "Toate T-Levels",
+    lead: "{subjects} materii în {routes} domenii, de la agricultură la marketing. Încă două apar în septembrie 2028.",
+    onGovUk: ", pe tlevels.gov.uk",
+    comingIn: "Din septembrie {year}",
+    notes: {
+      financeEnds: "Ultimele înscrieri în septembrie 2026",
+    },
+    pathwayResources: "Resurse {pathway}",
+    nextLabel: "Mai departe",
+    nextTitle: "Găsește una lângă tine",
+    nextLead: "Nu orice școală sau colegiu predă fiecare materie.",
+    searchHere: "Caută după codul poștal pe acest site",
+    searchEngland: "Caută printre toate școlile din Anglia",
+  },
+
+  getInvolvedPage: {
+    label: "Implică-te",
+    title: "Următorul tău pas",
+    lead: "Alege cine ești.",
+    everyone: "Toată lumea",
+    audiences: {
+      students: {
+        heading: "Elevi",
+        lead: "Ai între 16 și 18 ani sau îți termini GCSE-urile.",
+      },
+      parents: {
+        heading: "Părinți și tutori",
+        lead: "Ajuți pe cineva să aleagă ce urmează după GCSE.",
+      },
+      teachers: {
+        heading: "Profesori și școli",
+        lead: "Amazon organizează stagiile cu școlile și colegiile, nu direct cu elevii.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "Vezi toate materiile T-Level",
+        detail: "Toate T-Levels",
+      },
+      nearYou: {
+        label: "Găsește o școală sau un colegiu lângă tine",
+        detail: "Găsește T-Levels lângă tine",
+      },
+      interest: {
+        label: "Spune-i Amazon că vrei un stagiu",
+        detail: "Înregistrează interesul",
+      },
+      quiz: {
+        label: "Testează-ți cunoștințele",
+        detail: "Chestionar",
+      },
+      about: {
+        label: "Ce este un T-Level",
+        detail: "Despre T-Levels",
+      },
+      parentGuides: {
+        label: "Ghiduri scrise pentru părinți",
+        detail: "Resurse",
+      },
+      bursary: {
+        label: "Ajutor pentru transport, cărți și echipament",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Întreabă Amazon despre stagii pentru elevii tăi",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Pachete pentru clasă și ghiduri pentru profesori",
+        detail: "Resurse",
+      },
+      guidance: {
+        label: "Ce trebuie să includă un stagiu",
+        detail: "Ghid pentru stagii, gov.uk",
+      },
+      feedback: {
+        label: "Spune-ne ce ar face acest site mai bun",
+        detail: "Păreri",
+      },
     },
   },
 };

@@ -13,11 +13,7 @@ function lookup(catalog, key) {
   return value;
 }
 
-/**
- * Builds t() for a catalog: t("smiley.greeting", { name: "Sam" }) returns
- * the translated string with {name} filled in, falling back to English, then
- * to the key itself (which makes a missing string obvious on the page).
- */
+// Makes t() for a catalog. Falls back to English, then to the key itself.
 export function makeTranslate(catalog = en) {
   return function t(key, values) {
     let text = lookup(catalog, key);

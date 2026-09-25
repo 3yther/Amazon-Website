@@ -13,11 +13,7 @@ function renderQuiz() {
   );
 }
 
-/**
- * Answers every question, picking the option worth the given score. For
- * example [2, 2, 1, 1, 0, 0] picks a 2-point answer for the first question,
- * a 2-point answer for the second, and so on.
- */
+// Answers every question with the option worth the given score, e.g. [2, 2, 1, 1, 0, 0].
 async function answerAll(user, scores) {
   // NEW CONCEPT: "group" is the role of a <fieldset>. There is one per
   // question, in the same order as QUIZ_QUESTIONS.
@@ -65,11 +61,7 @@ describe("Is a T-Level right for me? quiz", () => {
     expect(screen.getByText(`1 of ${QUIZ_QUESTIONS.length} answered`)).toBeInTheDocument();
   });
 
-  // One test per result band, plus the scores either side of each boundary,
-  // so a change to the scoring cannot quietly move people into the wrong band.
-  //
-  // NEW CONCEPT: it.each runs the same test once per row of the table, so six
-  // cases need one test body instead of six copies.
+  // One test per result band plus the scores either side of each boundary.
   it.each([
     [[2, 2, 2, 2, 2, 2], STRONG.heading],
     [[2, 2, 2, 1, 1, 1], STRONG.heading], // 9, the lowest strong score

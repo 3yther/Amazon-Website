@@ -195,10 +195,8 @@ class ChatApiTests(APITestCase):
 
 class KnowledgeTests(APITestCase):
     def test_quoted_facts_match_the_site(self):
-        """
-        Every quoted fact must still appear word for word in the page it came
-        from. If this fails, the site's copy changed: paste the new wording into
-        VERIFIED_FACTS so Smiley says the same as the page.
+        """Every quoted fact must still be in the page it came from. If this fails,
+        copy the new wording into VERIFIED_FACTS.
         """
         repo_root = Path(settings.BASE_DIR).parent
         sources = {}

@@ -15,31 +15,17 @@ from .serializers import (
     DeactivateAccountSerializer,
     FeedbackSerializer,
     LoginSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
     RegisterSerializer,
     UserPreferenceSerializer,
 )
 
-# CSRF with session auth, and why these views do what they do:
-#
-# DRF wraps every API view in csrf_exempt, so Django's CSRF middleware never
-# checks them. SessionAuthentication checks the token instead, but only when the
-# request comes from a signed-in user. Signed-out requests are not checked.
-# That is why POST /api/interest/ works from React today without a token, and
-# why it will fail with 403 "CSRF Failed" for a signed-in user until the front
-# end sends one.
-#
-# Adding @method_decorator(csrf_exempt) would not help: DRF's check ignores that
-# decorator. Switching the check off would leave logout, and every future
-# signed-in POST, open to cross-site request forgery.
-#
-# So these endpoints use Django's standard token flow:
-#   1. The front end calls GET /api/accounts/csrf/ on load. That sets the
-#      csrftoken cookie and returns the token in the body.
-#   2. Every POST, PUT, PATCH or DELETE sends it in an X-CSRFToken header.
-#   3. Django issues a new token on login, so fetch it again after login or
-#      register.
-# Register and login are checked even though the visitor is signed out. That
-# blocks "login CSRF", where a hostile site signs a visitor into another account.
+# CSRF: DRF only checks the CSRF token for signed-in users.
+# So the front end gets a token from GET /api/accounts/csrf/ and sends it in
+# an X-CSRFToken header on every POST, PATCH or DELETE. Django makes a new
+# token on login, so it has to be fetched again after login or register.
+# Register and login are checked too, to stop "login CSRF".
 
 
 class CsrfCheckedMixin:
@@ -56,19 +42,12 @@ class SignedInMixin:
     permission_classes = [IsAuthenticated]
 
     def get_authenticate_header(self, request):
-        # DRF only answers 401 when it can name an auth scheme in the
-        # WWW-Authenticate header. Session auth has none, so without this a
-        # signed-out request would get 403.
+        # Makes signed-out requests get 401 instead of 403.
         return "Session"
 
 
 class CsrfTokenView(APIView):
-    """
-    GET /api/accounts/csrf/
-
-    Sets the csrftoken cookie and returns {"csrf_token": "..."}.
-    Send the token back in an X-CSRFToken header on every POST.
-    """
+    """GET /api/accounts/csrf/ sets the csrftoken cookie and returns {"csrf_token": "..."}."""
 
     permission_classes = [AllowAny]
 
@@ -78,13 +57,10 @@ class CsrfTokenView(APIView):
 
 
 class RegisterView(CsrfCheckedMixin, generics.CreateAPIView):
-    """
-    POST /api/accounts/register/
+    """POST /api/accounts/register/
 
-    Body: username, password, password_confirm,
-    user_type (student | parent | teacher), pathway_interest (optional).
-    Creates the account, signs the user in and returns 201 with id, username
-    and user_type, or 400 with field errors. Staff accounts are made in admin.
+    Body: username, password, password_confirm, user_type, pathway_interest (optional).
+    Creates the account and signs in. Staff accounts are made in admin.
     """
 
     serializer_class = RegisterSerializer
@@ -99,12 +75,9 @@ class RegisterView(CsrfCheckedMixin, generics.CreateAPIView):
 
 
 class LoginView(CsrfCheckedMixin, generics.GenericAPIView):
-    """
-    POST /api/accounts/login/
+    """POST /api/accounts/login/
 
-    Body: username, password.
-    Starts a session and returns 200 with id, username and user_type, or 400
-    with one generic error that never says whether the username exists.
+    Body: username, password. The error never says if the username exists.
     """
 
     serializer_class = LoginSerializer
@@ -119,11 +92,7 @@ class LoginView(CsrfCheckedMixin, generics.GenericAPIView):
 
 
 class LogoutView(SignedInMixin, APIView):
-    """
-    POST /api/accounts/logout/
-
-    Ends the session and returns 204. Needs a signed-in session and a CSRF token.
-    """
+    """POST /api/accounts/logout/ ends the session."""
 
     def post(self, request):
         logout(request)
@@ -131,17 +100,8 @@ class LogoutView(SignedInMixin, APIView):
 
 
 class MeView(SignedInMixin, generics.RetrieveUpdateAPIView):
-    """
-    GET /api/accounts/me/
-
-    Returns id, username, user_type, pathway_interest, first_name, last_name,
-    email, phone, last_password_changed and preferences for the signed-in
-    user, or 401 when signed out. The front end calls this on page load.
-
-    PATCH /api/accounts/me/
-
-    Body: any of first_name, last_name, email, phone. Partial update, so only
-    fields present in the body are changed.
+    """GET /api/accounts/me/ returns the signed-in user, or 401 if signed out.
+    PATCH /api/accounts/me/ updates first_name, last_name, email or phone.
     """
 
     serializer_class = CurrentUserSerializer
@@ -151,16 +111,8 @@ class MeView(SignedInMixin, generics.RetrieveUpdateAPIView):
 
 
 class UserPreferenceView(SignedInMixin, generics.RetrieveUpdateAPIView):
-    """
-    GET /api/accounts/user-preferences/
-
-    Returns the signed-in user's accessibility preferences, creating them
-    with defaults on first request.
-
-    PATCH /api/accounts/user-preferences/
-
-    Partial update: only fields present in the body are changed. Each field
-    is validated against the ranges and choices in models.py.
+    """GET /api/accounts/user-preferences/ returns the user's settings (made with defaults if new).
+    PATCH /api/accounts/user-preferences/ changes some of them.
     """
 
     serializer_class = UserPreferenceSerializer
@@ -171,13 +123,10 @@ class UserPreferenceView(SignedInMixin, generics.RetrieveUpdateAPIView):
 
 
 class ChangePasswordView(SignedInMixin, APIView):
-    """
-    POST /api/accounts/change-password/
+    """POST /api/accounts/change-password/
 
     Body: current_password, new_password, confirm_password.
-    Changing a password logs Django out of every other request carrying the
-    old session hash, so update_session_auth_hash keeps this one signed in.
-    Returns {"success": true}, or 400 with field errors.
+    update_session_auth_hash keeps this session signed in afterwards.
     """
 
     def post(self, request):
@@ -188,13 +137,54 @@ class ChangePasswordView(SignedInMixin, APIView):
         return Response({"success": True})
 
 
-class DeactivateAccountView(SignedInMixin, APIView):
-    """
-    POST /api/accounts/deactivate-account/
+class PasswordResetRequestView(CsrfCheckedMixin, generics.GenericAPIView):
+    """POST /api/accounts/password-reset/
 
-    Body: password. Deactivates the account (so it can no longer sign in)
-    and ends the session. Returns {"success": true}, or 400 with a wrong
-    password.
+    Body: username. Always gives the same message so nobody can check which
+    usernames exist. Rate limited per IP.
+    """
+
+    serializer_class = PasswordResetRequestSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "password_reset"
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {
+                "detail": "If that account has an email on file, we've sent password "
+                "reset instructions to it."
+            }
+        )
+
+
+class PasswordResetConfirmView(CsrfCheckedMixin, generics.GenericAPIView):
+    """POST /api/accounts/password-reset/confirm/
+
+    Body: uid, token (from the email link), new_password, confirm_password.
+    Signs the visitor in if it works.
+    """
+
+    serializer_class = PasswordResetConfirmSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "password_reset"
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        login(request, user)
+        return Response({"success": True})
+
+
+class DeactivateAccountView(SignedInMixin, APIView):
+    """POST /api/accounts/deactivate-account/
+
+    Body: password. Deactivates the account and ends the session.
     """
 
     def post(self, request):
@@ -206,18 +196,10 @@ class DeactivateAccountView(SignedInMixin, APIView):
 
 
 class FeedbackCreateView(generics.CreateAPIView):
-    """
-    POST /api/accounts/feedback/
+    """POST /api/accounts/feedback/
 
-    Body: category, message, email (optional). Open to anyone, signed in or
-    not: unlike the views above, this does not require a session, so it has
-    no CSRF token to check either (see the module comment at the top of this
-    file - the check only ever applies to signed-in requests). If the
-    request is signed in, the account is linked automatically. Rate limited
-    per IP (see DEFAULT_THROTTLE_RATES in settings) to keep the form from
-    being spammed.
-
-    Returns {"success": true}, or 400 with field errors.
+    Body: category, message, email (optional). Anyone can send it, signed in or
+    not. If signed in, it's linked to the account. Rate limited per IP.
     """
 
     serializer_class = FeedbackSerializer

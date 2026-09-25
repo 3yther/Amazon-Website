@@ -5,18 +5,8 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import AccountSettings from "../components/accessibility/AccountSettings.jsx";
 import { AuthProvider } from "../auth.jsx";
 
-// Logging out moved out of the header's account menu and onto the Account tab
-// of the settings page. This covers the control itself; that the header no
-// longer offers one is covered in AccountDropdown.test.jsx, along with the
-// rest of that menu.
-//
-// A fake server rather than a vi.mock of api.js, the same way
-// RegisterInterest.test.jsx and NearYou.test.jsx work. vitest shares one
-// module registry across these files (isolate: false in vitest.config.js), so
-// two files mocking api.js differently end up fighting over which version is
-// cached: whichever registered last wins, and the other file silently gets
-// the wrong module. Stubbing fetch keeps everything real and asserts the
-// request that actually goes out, which is the thing worth checking anyway.
+// Log out is on the Account tab of the settings page.
+// Uses a fake fetch instead of vi.mock because the test files share modules (isolate: false).
 
 const USER = {
   id: 1,

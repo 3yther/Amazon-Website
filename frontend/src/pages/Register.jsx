@@ -1,10 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import { PATHWAY_NAMES, USER_TYPES } from "../labels.js";
 import AuthPanel from "../components/AuthPanel.jsx";
+import InterestForm from "../components/InterestForm.jsx";
+import { ChevronDownIcon } from "../components/Icons.jsx";
+import "../about.css";
 import { CheckboxField, FormError, SelectField, TextField } from "../components/FormFields.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
@@ -18,14 +21,10 @@ const EMPTY_FIELDS = {
   pathway_interest: "",
 };
 
-// Front end only for now: the backend has no column for this, so it is not
-// sent anywhere. Values are ready for a field to be added later.
-// The words for each are under register.heardAbout in the language files.
+// Not saved yet, there's no field for it in the backend. Words are under register.heardAbout.
 const HEARD_ABOUT_OPTIONS = ["search_engine", "social_media", "friend_family", "advert", "influencer", "ai", "other"];
 
-// Both tick boxes are a condition of signing up, checked here and never sent:
-// the age one is a yes or no confirmation, not a date of birth, and neither
-// has anywhere to be stored.
+// Both boxes have to be ticked to sign up. They aren't sent to the server.
 const CONFIRMATION_ERRORS = {
   over_sixteen: "register.errors.overSixteen",
   terms: "register.errors.terms",
@@ -86,7 +85,7 @@ export default function Register() {
       await refresh();
       navigate("/", { replace: true });
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }
@@ -226,8 +225,44 @@ export default function Register() {
           <p className="account-switch">
             {t("register.haveAccount")} <Link to="/login">{t("login.submit")}</Link>
           </p>
+
+          <InterestBox />
         </div>
       </div>
     </div>
+  );
+}
+
+// Register interest box under the sign up form. Uses <details> so it opens and closes by itself.
+function InterestBox() {
+  const t = useT();
+  const [sentPathway, setSentPathway] = useState(null);
+  const thanks = useRef(null);
+
+  // Replace the form with a thank-you and put focus on it, as the Register
+  // interest page does.
+  useEffect(() => {
+    if (sentPathway) thanks.current?.focus();
+  }, [sentPathway]);
+
+  return (
+    <details className="interest-box">
+      <summary className="interest-box__summary">
+        {t("registerInterest.box.summary")}
+        <ChevronDownIcon />
+      </summary>
+      <div className="interest-box__body">
+        {sentPathway ? (
+          <p className="interest-box__thanks" tabIndex={-1} ref={thanks}>
+            {t("registerInterest.thanks.lead", { pathway: sentPathway.name })}
+          </p>
+        ) : (
+          <>
+            <p className="interest__note">{t("registerInterest.box.text")}</p>
+            <InterestForm onSent={setSentPathway} />
+          </>
+        )}
+      </div>
+    </details>
   );
 }

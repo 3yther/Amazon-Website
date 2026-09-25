@@ -1,19 +1,7 @@
-// The SVG filters behind the "Colour blindness type" setting.
-//
-// These CORRECT, they do not simulate. Someone who picks "Protanopia" is
-// telling us that is how they see, so making the page look the way they
-// already see it would help nobody. Each filter instead does what is called
-// daltonisation: it works out the colour information their eyes cannot pick
-// up, and moves that information into the channels they can.
-//
-// Each matrix is I + S(I - Sim), where Sim is the standard simulation matrix
-// for that type and S spreads the resulting error into the usable channels.
-// Every row adds up to 1, so greys, white and black come through untouched
-// and only hue separation changes.
-//
-// Rendered once, near the top of the tree, and referenced from CSS by id
-// (see the --colour-vision-filter rules in styles.css). Nothing is applied
-// until the setting asks for it.
+// SVG filters for the "Colour blindness type" setting. They correct colours
+// (daltonisation) instead of simulating the colour blindness.
+// Each row of a matrix adds up to 1 so greys stay the same.
+// Used from CSS by id (see --colour-vision-filter in styles.css).
 
 const MATRICES = {
   // Red-blind: red and green collapse together, so the difference between
@@ -59,9 +47,7 @@ export default function ColourVisionFilters() {
     >
       <defs>
         {Object.entries(MATRICES).map(([type, matrix]) => (
-          // sRGB, not the default linearRGB: the page's colours are authored
-          // in sRGB, and filtering in linear space shifts every mid-tone and
-          // quietly drops the contrast the rest of the site is built on.
+          // sRGB so the colours match the rest of the site
           <filter key={type} id={`colour-vision-${type}`} colorInterpolationFilters="sRGB">
             <feColorMatrix type="matrix" values={values(matrix)} />
           </filter>

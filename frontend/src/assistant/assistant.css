@@ -1,17 +1,6 @@
-/* Smiley, and the chat around it.
- *
- * Kept in its own file so it never collides with styles.css. Colours come only
- * from the tokens in styles.css, in two kinds:
- *
- *   Fixed brand tokens  --orange, --paper-dark (#1a2430), --text-dark (#fafaf7).
- *                       Used for Smiley itself and the chat header, which look
- *                       the same in light and dark mode.
- *   Theme tokens        --surface, --paper, --blue, --line, --ink-muted.
- *                       Used for everything else, so the chat follows dark mode
- *                       and high contrast from the Accessibility settings.
- *
- * Sizes are in rem, so the Accessibility font size setting and browser zoom
- * grow the chat with the text instead of spilling out of it. */
+/* Smiley and the chat. Colours come from styles.css.
+ * Smiley and the chat header use the fixed brand colours so they look the
+ * same in dark mode. Sizes are in rem so they grow with the font size setting. */
 
 /* ==========================================================================
    Smiley
@@ -816,12 +805,7 @@
 
 /* --- easter eggs --------------------------------------------------------------------- */
 
-/* Peekaboo: now and then Smiley pops its head in from the edge of the screen,
-   has a look round, and ducks away again. Meanwhile the corner Smiley ducks
-   out of sight, so it is clearly the same Smiley and never two at once. The
-   corner button stays where it is and keeps its label, so nothing moves
-   under a keyboard or screen reader user. None of this happens under
-   reduced motion (ChatWidget does not render it). */
+/* Smiley peeking in from the edge of the screen (not with reduced motion). */
 .smiley-cameo {
   position: fixed;
   z-index: 45;

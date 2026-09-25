@@ -19,10 +19,7 @@ export function useFormatDate() {
     );
 }
 
-/**
- * Who wrote something: their username and a role badge. Amazon staff and the
- * T-SMILE team stand out, so answers from them are easy to spot.
- */
+// Who wrote a post, with a badge for Amazon staff and the T-SMILE team.
 export function Author({ author }) {
   const t = useT();
   const official = author.role === "amazon_staff" || author.role === "team";
@@ -36,10 +33,7 @@ export function Author({ author }) {
   );
 }
 
-/**
- * "Helpful": a toggle button, so it says whether you have pressed it
- * (aria-pressed). Signed-out visitors just see the count.
- */
+// The "Helpful" button. Signed out you just see the count.
 export function HelpfulButton({ kind, post, signedIn, onChange }) {
   const t = useT();
   const [busy, setBusy] = useState(false);
@@ -83,10 +77,7 @@ export function HelpfulButton({ kind, post, signedIn, onChange }) {
   );
 }
 
-/**
- * "Report": opens a short set of reasons in place, rather than a pop-up, so
- * nothing jumps and the keyboard stays where it was.
- */
+// "Report" opens a list of reasons in place.
 export function ReportControl({ kind, postId }) {
   const t = useT();
   const id = useId();
@@ -180,10 +171,7 @@ export function Guidelines() {
   );
 }
 
-/**
- * Why a post was not published, from the server's moderation code, in the
- * poster's own language. Returns null when the error was something else.
- */
+// Why a post wasn't published (from the moderation code), or null.
 export function moderationMessage(t, error) {
   const reason = error?.body?.moderation?.[0];
   return reason ? t(`community.blocked.${reason}`) : null;

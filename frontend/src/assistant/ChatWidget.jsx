@@ -56,23 +56,9 @@ function writeSession(key, value) {
 const between = (min, max) => Math.round(min + Math.random() * (max - min));
 
 /**
- * Smiley, the T-SMILE guide, sitting in the corner of every page.
- *
- * It does three things the brief asks for:
- *   1. answers questions people type (reactive)
- *   2. offers help when a page has gone quiet for a minute (proactive)
- *   3. offers to explain a quiz question somebody just got wrong (proactive)
- * and it asks questions of its own: who is visiting, which pathway interests
- * them, and it suggests what to ask next.
- *
- * How it answers (see answers/answerEngine.js):
- *   safeguarding first, in the browser, never sent anywhere;
- *   then the site's own checked copy, instantly, in the visitor's language;
- *   then the AI, only for what is left and only if the site has one;
- *   then an honest "I don't know that one yet".
- *
- * Personality lives in useSmiley.js (behaviour), SmileyFace.jsx (drawing)
- * and useEasterEggs.js (surprises). Words live in i18n/messages.
+ * Smiley, the chat helper in the corner of every page.
+ * Answers questions, checks in if a page goes quiet, and offers to explain
+ * quiz questions you got wrong. See answers/answerEngine.js for how it answers.
  */
 export default function ChatWidget() {
   const { pathname } = useLocation();
@@ -234,9 +220,7 @@ export default function ChatWidget() {
   }, [pathname, stopSpeech]);
 
   useEffect(() => {
-    // Focus the box only when the visitor opened the chat. A nudge that moved
-    // focus would interrupt somebody mid-sentence, so a nudge announces itself
-    // through the live region instead and leaves focus alone.
+    // Only focus the input if the visitor opened the chat themselves.
     if (open && openedByVisitor) inputRef.current?.focus();
   }, [open, openedByVisitor]);
 
@@ -361,9 +345,7 @@ export default function ChatWidget() {
   // --- talking to the API --------------------------------------------------
 
   useEffect(() => {
-    // Earlier messages, fetched the first time the chat opens rather than on
-    // page load, so a visitor who never opens it is never given a session.
-    // The same call says whether an AI is set up at all.
+    // Load old messages the first time the chat opens. This also tells us if the AI is set up.
     if (!open || historyLoaded.current) return;
     historyLoaded.current = true;
 
@@ -539,9 +521,7 @@ export default function ChatWidget() {
   // --- speaking and scrolling ------------------------------------------------
 
   useEffect(() => {
-    // Read out everything new Smiley has said (a greeting and its question
-    // arrive together), if the visitor turned text to speech on. Earlier
-    // messages restored from history are not re-read.
+    // Read out new messages if text to speech is on.
     if (!open) return;
     const unread = messages.filter(
       (message) => message.id > spokenId.current && message.role === "assistant" && !message.restored,
@@ -687,10 +667,7 @@ export default function ChatWidget() {
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
       >
-        {/* One Smiley at a time: in the corner while closed, in the header
-            while open, so there are never two pairs of eyes following you.
-            While it peeks in from the edge of the screen, the corner one
-            ducks out of sight. */}
+        {/* Only one Smiley shows at a time. */}
         {open ? <ChevronDownIcon /> : <SmileyFace ref={smiley.faceRef} {...smiley.face} size={64} grounded />}
         <span className="sr-only">{open ? t("smiley.close") : t("smiley.open")}</span>
       </button>

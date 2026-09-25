@@ -1,10 +1,8 @@
-"""
-Django settings for T-SMILE.
+"""Django settings for T-SMILE.
 
-Secrets and anything that changes between machines are read from environment
-variables. Locally they come from backend/.env (copy .env.example, never commit
-.env). Deployed, they are set on the host instead: Railway for the team
-preview (see DEPLOYMENT.md), EC2 later.
+Secrets and anything that changes between machines come from environment
+variables: backend/.env locally (copy .env.example), and the host's settings
+when deployed (see DEPLOYMENT.md).
 """
 import os
 import sys
@@ -105,11 +103,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ---------------------------------------------------------------------------
 
 def database_from_url(url):
-    """
-    Turn a postgres:// connection URL, the form Railway (and most hosts) give
-    in DATABASE_URL, into a Django DATABASES entry. Anything in the query
-    string, e.g. ?sslmode=require, is passed on to the driver.
-    """
+    """Turns a postgres:// DATABASE_URL into a Django DATABASES entry."""
     parts = urlsplit(url)
     if parts.scheme not in {"postgres", "postgresql"}:
         raise ImproperlyConfigured(
@@ -128,9 +122,7 @@ def database_from_url(url):
     }
 
 
-# With DATABASE_URL set (Railway sets it when a PostgreSQL database is attached)
-# Django uses that database. Without it, local development uses SQLite, which
-# needs no setup.
+# Uses DATABASE_URL if it's set (Railway sets it), otherwise SQLite for local development.
 if os.environ.get("DATABASE_URL"):
     DATABASES = {"default": database_from_url(os.environ["DATABASE_URL"])}
 else:
@@ -141,24 +133,7 @@ else:
         }
     }
 
-# PRODUCTION: PostgreSQL on AWS RDS (UK/EU region) plugs in here. Setting
-# DATABASE_URL (as above, with ?sslmode=require) also works for RDS.
-# 1. Add "psycopg[binary]" to requirements.txt.
-# 2. Set the POSTGRES_* variables on the server (see .env.example).
-# 3. Replace the block above with:
-#
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.environ["POSTGRES_DB"],
-#         "USER": os.environ["POSTGRES_USER"],
-#         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-#         "HOST": os.environ["POSTGRES_HOST"],  # the RDS endpoint, never public
-#         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-#         "CONN_MAX_AGE": 60,
-#         "OPTIONS": {"sslmode": "require"},
-#     }
-# }
+# PRODUCTION: for AWS RDS just set DATABASE_URL (with ?sslmode=require).
 
 
 # ---------------------------------------------------------------------------
@@ -172,9 +147,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Tests only: a fast hasher. PBKDF2 is slow on purpose, which is what makes it
-# safe, but the tests create hundreds of throwaway users and pay that cost
-# every time. Real passwords, locally and deployed, still use PBKDF2.
+# Tests only: a fast password hasher, because the tests make lots of users.
+# Real passwords still use PBKDF2.
 TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 if TESTING:
     PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
@@ -201,17 +175,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# PRODUCTION: files go to S3, and only the link is kept in the database.
-# Add "django-storages[s3]" to requirements.txt, set AWS_STORAGE_BUCKET_NAME and
-# AWS_S3_REGION_NAME, then:
-#
-# STORAGES = {
-#     "default": {"BACKEND": "storages.backends.s3.S3Storage"},
-#     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
-# }
-# AWS_STORAGE_BUCKET_NAME = os.environ["AWS_STORAGE_BUCKET_NAME"]
-# AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "eu-west-2")
-# AWS_QUERYSTRING_AUTH = True  # private bucket, signed links that expire
+# PRODUCTION: store uploaded files on S3 with django-storages[s3]
+# (set STORAGES and AWS_STORAGE_BUCKET_NAME, region eu-west-2).
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -233,19 +198,18 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
-    # Limits anonymous spam on the Expression of Interest form.
-    # PRODUCTION: throttling uses the cache, so point CACHES at a shared cache
-    # (e.g. Redis) and set NUM_PROXIES when running behind a load balancer.
+    # Rate limits for anonymous forms. PRODUCTION: use a shared cache like Redis.
     "DEFAULT_THROTTLE_RATES": {
         "interest": "10/hour",
         "feedback": "10/hour",
-        # Every chat message costs us an AI call, so this caps what one visitor
-        # can spend. Generous enough for a real conversation.
+        # Each chat message costs an AI call, so this limits it.
         "chat": "60/hour",
-        # The Community. Enough for a real conversation, not enough to flood it.
+        # The Community.
         "community_ask": "10/hour",
         "community_answer": "30/hour",
         "community_action": "120/hour",
+        # Both password reset endpoints share this.
+        "password_reset": "5/hour",
     },
 }
 
@@ -257,18 +221,29 @@ if DEBUG:
 
 
 # ---------------------------------------------------------------------------
+# Email (password reset)
+# ---------------------------------------------------------------------------
+
+# No email account for the prototype, so emails are printed to the console
+# (including the reset link). PRODUCTION: point EMAIL_BACKEND at Amazon SES.
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+)
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@t-smile.example")
+
+# The front end address, used for the link in the password reset email.
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
+
+
+# ---------------------------------------------------------------------------
 # AI assistant (the chatbot, Task 4)
 # ---------------------------------------------------------------------------
 
-# The key for Anthropic's API, which the chatbot app calls. It stays on the
-# server: the browser never sees it, because React talks to /api/chat/ and
-# Django makes the call. Without a key the site still works and the widget
-# shows its fallback message, so nobody needs one to run the rest of T-SMILE.
+# Anthropic API key for the chatbot. Only the server uses it. Without a key
+# the site still works and Smiley answers from the site's own content.
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
-# Lets Anthropic retry a declined message on another model inside the same
-# call. Set ANTHROPIC_SERVER_SIDE_FALLBACK=false if the account does not have
-# the feature and the API rejects the option.
+# Lets Anthropic try another model if one declines. Set to false if the account doesn't support it.
 ANTHROPIC_SERVER_SIDE_FALLBACK = env_bool("ANTHROPIC_SERVER_SIDE_FALLBACK", default=True)
 
 
@@ -276,12 +251,8 @@ ANTHROPIC_SERVER_SIDE_FALLBACK = env_bool("ANTHROPIC_SERVER_SIDE_FALLBACK", defa
 # CORS and CSRF (the React front end is a separate app)
 # ---------------------------------------------------------------------------
 
-# Locally the Vite dev server passes /api to Django, and on the Railway preview
-# the frontend service does the same (frontend/Caddyfile), so the browser sees
-# one origin and CORS is not needed. CSRF_TRUSTED_ORIGINS still matters on
-# Railway: Django is reached on its own domain while the browser's Origin
-# header is the frontend's, so the frontend's https:// origin goes there.
-# CORS only matters if the front end ever calls the API from another domain.
+# Vite (locally) and Caddy (on Railway) pass /api to Django, so CORS isn't needed.
+# CSRF_TRUSTED_ORIGINS still needs the frontend's https:// address on Railway.
 CORS_ALLOWED_ORIGINS = env_list("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
@@ -295,11 +266,8 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
-    # Behind a proxy that ends HTTPS and passes plain HTTP on (Railway, an AWS
-    # load balancer), Django only knows a request was HTTPS from the proxy's
-    # X-Forwarded-Proto header. Without this the redirect above would loop.
-    # Only switch it on where such a proxy always sets that header, since
-    # otherwise a client could fake it.
+    # Behind a proxy that handles HTTPS (Railway, AWS), Django reads
+    # X-Forwarded-Proto to know the request was HTTPS. Only turn on behind such a proxy.
     if env_bool("DJANGO_BEHIND_HTTPS_PROXY"):
         SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
@@ -308,10 +276,7 @@ if not DEBUG:
 # Logging
 # ---------------------------------------------------------------------------
 
-# Prints the traceback of every server error (a 500) to the console, even with
-# DEBUG off. Deployed, that console is the host's log (`railway logs` on the
-# preview), so a 500 always leaves a trace we can read. Visitors still only
-# see a plain error: the traceback never goes into the response.
+# Print 500 error tracebacks to the console (the host's log), even with DEBUG off.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

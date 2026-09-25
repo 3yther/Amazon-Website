@@ -1,23 +1,13 @@
-"""
-Checks every Community post before it is published.
+"""Checks every Community post before it goes up.
 
-Most people posting are 16 to 18, so three things are stopped at the door,
-each with a clear reason the front end shows in the poster's own language:
+A post is stopped for:
+  wellbeing         sounds like someone is at risk (they get support numbers instead)
+  personal_details  an email, phone number, postcode or social handle
+  link              links to anything except a few official sites
+  strong_language   swearing and slurs
 
-  wellbeing         the post sounds like somebody is at risk. Not published;
-                    they get support numbers instead (the same checked ones
-                    Smiley gives: Childline, Shout, Samaritans, 999).
-  personal_details  an email, phone number, postcode or social handle.
-                    Nobody here needs one, and they are how people get
-                    contacted off the site.
-  link              a link to anywhere except a few official sites
-                    (gov.uk, UCAS, the NHS, Amazon's own pages, the
-                    support services).
-  strong_language   swearing and slurs.
-
-Anything that gets past these can still be reported (3 reports hide a post)
-or hidden by staff in admin. The word list is deliberately short and
-ordinary; staff should add to STRONG_WORDS as they see what gets through.
+3 reports hide a post, and staff can hide posts in admin.
+Staff can add words to STRONG_WORDS.
 """
 import re
 
@@ -80,9 +70,7 @@ STRONG_WORDS = [
 STRONG = re.compile(r"\b(" + "|".join(re.escape(word) for word in STRONG_WORDS) + r")\b", re.IGNORECASE)
 
 
-# Links are allowed only to these official sites, which is where the useful
-# answers come from anyway. Any other link could lead somebody off the site
-# to a stranger, so it is stopped.
+# Links are only allowed to these official sites.
 ALLOWED_SITES = (
     "gov.uk",
     "ucas.com",
@@ -104,12 +92,7 @@ def has_outside_link(text):
 
 
 def check_post(*texts):
-    """
-    Returns the reason a post cannot be published, or None if it is fine.
-    Takes every field the person wrote (a question's title and body, say).
-
-    Reasons: "wellbeing", "personal_details", "link", "strong_language".
-    """
+    """Returns why a post can't be published, or None if it's fine."""
     text = " ".join(part for part in texts if part)
     lower = text.lower()
 

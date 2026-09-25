@@ -32,10 +32,8 @@ def moderate(*texts):
 
 
 class CountsMixin:
-    """
-    The numbers the views add to each post (see with_counts in views.py).
-    Read with a fallback, so a freshly created post, which has none of them
-    yet, still serialises.
+    """The counts the views add to each post (see with_counts in views.py).
+    Falls back to 0 for a brand new post.
     """
 
     def get_answer_count(self, post):

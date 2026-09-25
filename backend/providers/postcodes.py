@@ -1,19 +1,7 @@
-"""
-The only place T-SMILE talks to postcodes.io.
+"""The only file that calls postcodes.io (a free UK postcode lookup, no key needed).
 
-postcodes.io is the standard free UK postcode lookup. It needs no API key and
-no account, which is why it is here rather than a paid geocoder.
-
-Two callers, doing two different jobs:
-
-  * the geocode_providers command, once, in bulk, to place our providers on
-    the map;
-  * the search view, once per visitor search, to turn the postcode they typed
-    into a point to measure from.
-
-Nothing else calls it, and a search never looks up a provider's postcode: the
-providers already carry their coordinates. Moving to another lookup service
-means rewriting this one file.
+Used by the geocode_providers command to place providers, and by the search
+to find the visitor's postcode.
 """
 import json
 import logging
@@ -32,10 +20,8 @@ BULK_LIMIT = 100
 # A visitor is waiting on the single lookup, so fail fast rather than hang.
 TIMEOUT_SECONDS = 10
 
-# The loosest shape a UK postcode can take: one or two letters, then the rest.
-# This is a cheap sanity check, not validation. postcodes.io decides whether a
-# postcode really exists; this only stops obvious rubbish (and anything long
-# or odd enough to be an attempt at a different URL) leaving our server.
+# Rough UK postcode shape, just to stop obvious rubbish being sent.
+# postcodes.io decides if it really exists.
 POSTCODE_PATTERN = re.compile(r"^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$")
 
 
@@ -44,12 +30,7 @@ class PostcodeServiceUnavailable(Exception):
 
 
 def normalise(postcode):
-    """
-    Upper case with the spaces taken out, e.g. " sw1a 1aa " -> "SW1A1AA".
-
-    Used both as the cache key for a bulk lookup and as the value we send, so
-    the same postcode typed three different ways is looked up once.
-    """
+    """Upper case with no spaces, e.g. " sw1a 1aa " -> "SW1A1AA"."""
     return re.sub(r"\s+", "", str(postcode)).upper()
 
 
@@ -82,12 +63,8 @@ def _call(path, payload=None):
 
 
 def lookup(postcode):
-    """
-    One postcode to (latitude, longitude), or None when it does not exist.
-
-    Raises PostcodeServiceUnavailable if postcodes.io itself is unreachable,
-    which is a different thing from a postcode that is simply wrong: the
-    caller tells the visitor a different story for each.
+    """One postcode to (latitude, longitude), or None if it doesn't exist.
+    Raises PostcodeServiceUnavailable if postcodes.io is down.
     """
     cleaned = normalise(postcode)
     if not looks_like_a_postcode(cleaned):
@@ -98,13 +75,7 @@ def lookup(postcode):
 
 
 def lookup_many(postcodes):
-    """
-    Several postcodes at once: { normalised postcode: (lat, lon) or None }.
-
-    Sent in batches of BULK_LIMIT, which is postcodes.io's own cap. Duplicates
-    are collapsed first, so a hundred providers sharing a postcode cost one
-    entry, not a hundred.
-    """
+    """Several postcodes at once, in batches of BULK_LIMIT. Duplicates are only looked up once."""
     unique = sorted({normalise(postcode) for postcode in postcodes})
     found = {}
 

@@ -19,7 +19,7 @@ const en = {
       "This page was translated into {language} by machine, so some wording may be off. " +
       "The English version is the one that counts.",
     showEnglish: "Read in English",
-    englishOnly: "This page is only available in English, so the wording is exactly right.",
+    englishOnly: "This page is only available in English.",
   },
 
   // The five pathway names, used wherever a pathway is named in the interface.
@@ -81,11 +81,11 @@ const en = {
     steps: {
       label: "How it works",
       title: "Start in four steps",
-      level: "Level",
+      step: "Step",
       browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways.", link: "Browse resources" },
       register: { title: "Register interest", text: "Tell us which pathway you want to explore.", link: "Register interest" },
       hearBack: { title: "Hear back", text: "We review each submission and reply by email." },
-      getInvolved: { title: "Get involved", text: "Sign up to open more resources for your pathway.", link: "Sign up" },
+      getInvolved: { title: "Get involved", text: "Sign up to ask and answer in the Community, and keep your settings on any device.", link: "Sign up" },
     },
   },
 
@@ -224,6 +224,7 @@ const en = {
     error404: "Error 404",
     notFound: "Page not found",
     toLibrary: "Go to the content library",
+    loading: "Loading",
   },
 
   // Browser tab titles, keyed by the English title each route passes to
@@ -262,7 +263,7 @@ const en = {
   footer: {
     about: "About",
     aboutText:
-      "T-SMILE helps students, parents and teachers explore T-Levels and the Digital T-Level at Amazon, with free and sign-up resources in one place.",
+      "T-Levels and Amazon placements, explained for students, parents and teachers. A student project for Amazon Emerging Talent, not an official Amazon website.",
     navigation: "Navigation",
     support: "Support",
     legal: "Legal & Compliance",
@@ -301,7 +302,7 @@ const en = {
     signUp: "Sign up",
     signInOrUp: "Sign in or sign up",
     notSignedIn: "Not signed in",
-    needAccount: "Some resources need an account",
+    needAccount: "Sign up to join the Community",
     roles: {
       student: "Student",
       parent: "Parent or guardian",
@@ -325,18 +326,18 @@ const en = {
       quiz: "Quiz",
       community: "Community",
       help: "Help",
-      registerInterest: "Register interest",
     },
   },
 
   login: {
     label: "Account",
     title: "Welcome back",
-    lead: "Log in to open sign-up resources.",
+    lead: "Log in to join the Community and keep your settings on any device.",
     username: "Username",
     password: "Password",
     submitting: "Logging in",
     submit: "Log in",
+    forgotPassword: "Forgotten your password?",
     noAccount: "No account yet?",
     register: "Register",
   },
@@ -346,6 +347,8 @@ const en = {
     hidePassword: "Hide password",
     showPassword: "Show password",
     panelLine: "Free resources for Amazon’s Digital T-Level pathway.",
+    somethingWrong: "Something went wrong. Try again.",
+    noConnection: "Could not reach the server. Check your connection and try again.",
   },
 
   register: {
@@ -384,6 +387,27 @@ const en = {
     },
   },
 
+  forgotPassword: {
+    title: "Forgotten password",
+    lead: "Enter your username and, if there is an email on the account, we will send a link to reset your password.",
+    submitting: "Sending",
+    submit: "Send reset link",
+    sent: "If that account has an email on file, we’ve sent password reset instructions to it. The link works once and expires after a few days.",
+    backToLogin: "Remembered it after all?",
+  },
+
+  resetPassword: {
+    title: "Choose a new password",
+    newPassword: "New password",
+    passwordHint: "At least 8 characters. Not all numbers, not a common password.",
+    confirmPassword: "Confirm new password",
+    submitting: "Saving",
+    submit: "Save new password",
+    backToLogin: "Remembered it after all?",
+    requestNewLink: "Request a new link",
+    linkMissing: "This password reset link is missing some information. Request a new one below.",
+  },
+
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "Register your interest",
@@ -402,6 +426,10 @@ const en = {
     submit: "Register interest",
     nextTitle: "What happens next",
     underSixteen: "Under 16? Ask a parent or carer before you send this.",
+    box: {
+      summary: "Want an Amazon placement? Register your interest",
+      text: "No account needed. Tell us your pathway and we pass it to the Amazon Emerging Talent team. Under 16? Ask a parent or carer first.",
+    },
     thanks: {
       title: "Thanks, you are on the list",
       lead: "Your interest in the {pathway} pathway has been sent to the Amazon Emerging Talent team.",
@@ -695,19 +723,18 @@ const en = {
       amazonPathways: "Here's what Amazon has said about each pathway:",
       pathwaysList: "There are five pathways:",
       providerQuestions: "Good questions to ask a school or college:",
-      resources: "The Resources page has guides, packs and videos. Some need a free account to open.",
+      resources: "The Resources page has guides, packs and videos, all free to open.",
       quiz: "The quiz has quick questions about T-Levels, and I'll help with any you get wrong.",
       community:
         "In the Community you can ask a question and other students, parents, teachers and Amazon staff can answer. " +
         "Anything I don't know is a good one to ask there.",
       account:
-        "You can browse the site and talk to me without an account. A free account opens the resources marked sign-up, " +
-        "and lets you ask and answer in the Community.",
+        "You can browse the site, open every resource and talk to me without an account. A free account lets you ask and answer in the Community, and keeps your settings on any device.",
       contact: "You can reach the T-SMILE team through the Contact page.",
       accessibility:
         "You can change the text size, colours, dark mode, motion and text to speech in the Accessibility settings.",
       language:
-        "Yes! Use the globe menu at the top of the page, or the one in the side menu. There are ten languages to choose from.",
+        "Yes! Use the language menu under the account button at the top of the page, or the one in the side menu. There are ten languages to choose from.",
       privacy:
         "I only save questions I have to look up, so we can pick up where we left off. Anything I answer myself, and anything " +
         "about how you move around the site, stays in your browser. The Privacy Policy has the details.",
@@ -798,6 +825,340 @@ const en = {
       personal:
         "Quick tip: you don't need to share personal details like your email, phone number or address with me, and it's safest " +
         "not to. I haven't sent that message anywhere. What would you like to know about T-Levels?",
+    },
+  },
+
+  legalPage: {
+    updated: "Last updated {date}. Draft, to be checked before launch.",
+  },
+
+  messageForm: {
+    about: "What is it about?",
+    email: "Email (optional)",
+    emailHint: "Add it if you want a reply.",
+    sending: "Sending",
+    empty: "Write a message first.",
+  },
+
+  contact: {
+    label: "Support",
+    title: "Contact us",
+    leadBefore: "Send the team a message. Something broken? Use",
+    leadLink: "Report an issue",
+    leadAfter: ".",
+    categories: {
+      general: "A question or anything else",
+      feature: "An idea for the site",
+    },
+    message: "Your message",
+    submit: "Send message",
+    sent: "Thanks, your message has reached the team.",
+  },
+
+  reportIssue: {
+    label: "Support",
+    title: "Report an issue",
+    lead: "Tell us what went wrong and which page you were on.",
+    categories: {
+      bug: "Something is broken",
+      accessibility: "Something is hard to use or read",
+    },
+    message: "What happened?",
+    submit: "Send report",
+    sent: "Thanks, we have your report and will look into it.",
+  },
+
+  feedbackPage: {
+    label: "Feedback",
+    title: "Feedback",
+    lead: "Tell us what’s working and what isn’t.",
+    category: "Category",
+    categories: {
+      bug: "Bug report",
+      feature: "Feature suggestion",
+      general: "General feedback",
+      accessibility: "Accessibility issue",
+    },
+    message: "Message",
+    email: "Email (optional)",
+    emailHint: "So we can follow up, if you’d like.",
+    sending: "Sending",
+    submit: "Send feedback",
+    thanksTitle: "Thank you",
+    thanksLead: "We read every message. Thanks for taking the time.",
+  },
+
+  accessibilityHelp: {
+    label: "Support",
+    title: "Accessibility help",
+    lead: "We aim to meet WCAG 2.2 AA, the standard for accessible websites.",
+    waysTitle: "Use the site your way",
+    ways: {
+      settings: "Change text size, contrast, spacing and colours in Accessibility settings.",
+      keyboard: "Everything works with a keyboard. Press Tab to move, Enter to choose.",
+      skip: "Press Tab once on any page to skip straight to the main content.",
+      screenReaders: "Pages are built to work with screen readers such as NVDA and VoiceOver.",
+      motion: "Moving words and animations stop if your device is set to reduce motion.",
+      speech: "Smiley can read its answers out loud. Switch it on in Accessibility settings.",
+    },
+    openSettings: "Open Accessibility settings",
+    problemTitle: "Something not working for you?",
+    problemLead: "Tell us which page and what got in the way, and we will fix it.",
+    report: "Report an accessibility issue",
+  },
+
+  settings: {
+    label: "Settings",
+    title: "Accessibility",
+    lead: "Change how T-SMILE looks and behaves for you. Signed in, these settings follow you to any device; signed out, they stay on this browser.",
+    signInPrompt: "Log in to manage this.",
+    tabs: {
+      sightLoss: "Sight and vision",
+      display: "Display",
+      language: "Language",
+      security: "Security",
+      account: "Account",
+    },
+    sight: {
+      fontSize: "Font size",
+      highContrast: "High contrast",
+      textSpacing: "Text spacing",
+      spacing: {
+        normal: "Normal",
+        comfortable: "Comfortable",
+        relaxed: "Relaxed",
+        wide: "Wide",
+      },
+      colourBlindness: "Colour blindness type",
+      colourBlindnessHint: "Tell us how you see colour and the site adjusts its own, so shades that would look alike to you are pulled apart.",
+      colours: {
+        none: "None",
+        protanopia: "Protanopia (red-blind)",
+        deuteranopia: "Deuteranopia (green-blind)",
+        tritanopia: "Tritanopia (blue-blind)",
+      },
+      speech: "Read the chat assistant’s replies aloud",
+      speechHint: "Speaks Smiley’s answers only, using a voice on this device. The rest of the page is not read aloud yet.",
+      reduceMotion: "Reduce motion",
+      reduceMotionHint: "Turns off the site’s animations, on top of your system setting.",
+    },
+    display: {
+      theme: "Theme",
+      themes: {
+        light: "Light",
+        dark: "Dark",
+        system: "Match system",
+      },
+      outline: "Focus outline style",
+      outlines: {
+        default: "Default",
+        thick: "Thick",
+        dashed: "Dashed",
+      },
+      background: "Page background",
+      backgrounds: {
+        white: "White",
+        cream: "Cream",
+        gray: "Grey",
+      },
+    },
+    security: {
+      lastChanged: "Password last changed {date}.",
+      changed: "Password changed.",
+      current: "Current password",
+      new: "New password",
+      strength: "Strength: {level}",
+      strengths: {
+        veryWeak: "Very weak",
+        weak: "Weak",
+        fair: "Fair",
+        good: "Good",
+        strong: "Strong",
+        veryStrong: "Very strong",
+      },
+      minLength: "At least 8 characters.",
+      confirm: "Confirm new password",
+      saving: "Saving",
+      submit: "Change password",
+    },
+    account: {
+      saved: "Profile saved.",
+      firstName: "First name",
+      lastName: "Last name",
+      email: "Email",
+      phone: "Phone",
+      saving: "Saving",
+      save: "Save",
+      cancel: "Cancel",
+      signingOutLabel: "Signing out",
+      signingOutText: "Ends this session on this device. Your settings and your account stay exactly as they are.",
+      loggingOut: "Logging out",
+      logOut: "Log out",
+      dangerLabel: "Danger zone",
+      dangerText: "Deactivating your account signs you out and disables sign-in until it is reactivated.",
+      deactivate: "Deactivate account",
+      confirmText: "Enter your password to confirm. This signs you out immediately.",
+      password: "Password",
+      deactivating: "Deactivating",
+      wrongPassword: "Incorrect password.",
+    },
+  },
+
+  resources: {
+    label: "Resources",
+    title: "T-Level Resources",
+    lead: "Free guides, videos and packs, linked from official sources such as gov.uk and UCAS.",
+    filters: "Filter content",
+    pathway: "Pathway",
+    allPathways: "All pathways",
+    for: "For",
+    anyone: "Anyone",
+    access: "Access",
+    any: "Any",
+    clear: "Clear filters",
+    loadError: "Could not load content.",
+    serverError: "Something went wrong on our side. Please try again in a moment.",
+    tryAgain: "Try again",
+    loading: "Loading",
+    noMatches: "No content matches these filters.",
+    oneItem: "1 item",
+    items: "{count} items",
+    loadMore: "Load more",
+    signUp: "Sign up to access",
+    openOn: "Open on {site}",
+    anotherWebsite: "another website",
+    open: "Open",
+    types: {
+      guide: "Guide",
+      document: "Document",
+      video: "Video",
+      prep_pack: "Prep pack",
+      class_pack: "Class pack",
+    },
+    audiences: {
+      all: "Everyone",
+      student: "Students",
+      parent: "Parents and guardians",
+      teacher: "Teachers and schools",
+    },
+    accessLevels: {
+      free: "Free",
+      signup: "Sign-up",
+    },
+  },
+
+  nearYou: {
+    label: "Find a provider",
+    title: "Find T-Levels Near You",
+    lead: "Enter your postcode to see the schools and colleges running T-Levels near you, closest first.",
+    form: "Search for T-Level providers",
+    postcode: "Postcode",
+    postcodeHint: "For example SW1A 1AA.",
+    pathway: "Pathway",
+    allPathways: "All pathways",
+    within: "Within",
+    miles: "{miles} miles",
+    search: "Search",
+    searching: "Searching",
+    error: "Could not search for providers.",
+    tryAgain: "Try again",
+    start: "Enter a postcode to see providers near you.",
+    none: "No providers found within {radius} miles of {postcode}. Try a wider radius.",
+    oneFound: "1 provider within {radius} miles of {postcode}.",
+    found: "{count} providers within {radius} miles of {postcode}.",
+    underTenth: "Under 0.1 miles",
+    oneMile: "1 mile",
+    distance: "{miles} miles",
+    pathways: "Pathways",
+    askProvider: "Ask the provider",
+    website: "Visit website",
+    errors: {
+      empty: "Enter a postcode.",
+      notFull: "Enter a full UK postcode, for example SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Subjects",
+    title: "All T-Levels",
+    lead: "{subjects} subjects across {routes} routes, from agriculture to marketing. Two more arrive in September 2028.",
+    onGovUk: ", on tlevels.gov.uk",
+    comingIn: "Coming September {year}",
+    notes: {
+      financeEnds: "Last enrolments September 2026",
+    },
+    pathwayResources: "{pathway} resources",
+    nextLabel: "Next",
+    nextTitle: "Find one near you",
+    nextLead: "Not every school or college runs every subject.",
+    searchHere: "Search by postcode on this site",
+    searchEngland: "Search every provider in England",
+  },
+
+  getInvolvedPage: {
+    label: "Get involved",
+    title: "Your next step",
+    lead: "Pick who you are.",
+    everyone: "Everyone",
+    audiences: {
+      students: {
+        heading: "Students",
+        lead: "Aged 16 to 18, or finishing your GCSEs.",
+      },
+      parents: {
+        heading: "Parents and carers",
+        lead: "Helping someone decide what comes after GCSEs.",
+      },
+      teachers: {
+        heading: "Teachers and schools",
+        lead: "Amazon arranges placements with schools and colleges, not with students directly.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "See every T-Level subject",
+        detail: "All T-Levels",
+      },
+      nearYou: {
+        label: "Find a school or college near you",
+        detail: "Find T-Levels Near You",
+      },
+      interest: {
+        label: "Tell Amazon you want a placement",
+        detail: "Register interest",
+      },
+      quiz: {
+        label: "Test what you know",
+        detail: "Quiz",
+      },
+      about: {
+        label: "What a T-Level is",
+        detail: "About T-Level",
+      },
+      parentGuides: {
+        label: "Guides written for parents",
+        detail: "Resources",
+      },
+      bursary: {
+        label: "Help with travel, books and kit",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Ask Amazon about placements for your students",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Class packs and teacher guides",
+        detail: "Resources",
+      },
+      guidance: {
+        label: "What a placement must include",
+        detail: "Placement guidance, gov.uk",
+      },
+      feedback: {
+        label: "Tell us what would make this site better",
+        detail: "Feedback",
+      },
     },
   },
 };

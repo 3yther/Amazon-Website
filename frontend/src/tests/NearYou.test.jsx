@@ -34,11 +34,7 @@ const RESULTS = [
   },
 ];
 
-/**
- * A fake server, as in ContentLibrary.test.jsx. `queries` records the query
- * string of each search, so tests can check what was sent. `search` decides
- * what comes back: a body, or { status, body } for a failure.
- */
+// Fake server. `queries` records each search, and `search` decides the reply.
 function fakeServer({ search = { count: 2, radius_miles: 15, postcode: "W1D 3QU", results: RESULTS } } = {}) {
   const queries = [];
   vi.stubGlobal(

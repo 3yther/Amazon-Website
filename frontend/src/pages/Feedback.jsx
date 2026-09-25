@@ -3,24 +3,13 @@ import { submitFeedback } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import { FormError, SelectField, TextareaField, TextField } from "../components/FormFields.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 
-const CATEGORIES = {
-  bug: "Bug report",
-  feature: "Feature suggestion",
-  general: "General feedback",
-  accessibility: "Accessibility issue",
-};
+// Values from the backend's Feedback.Category; labels in i18n/messages (feedbackPage).
+const CATEGORIES = ["bug", "feature", "general", "accessibility"];
 
-/**
- * Always shown in dark mode, whatever the visitor's own saved theme is
- * elsewhere: the effect below reads whichever of .dark-mode/.light-mode
- * (set by useAccessibilityPreferences.js on <html>) was already there,
- * forces dark for as long as this page is mounted, then puts back exactly
- * what it found on the way out. It never touches localStorage or the
- * backend preference, so this is a page-local look, not a changed setting.
- * Everything else from useAccessibilityPreferences (font scale, text
- * spacing, high contrast) is untouched and keeps applying as normal.
- */
+// Makes this page dark mode while it's open, then puts the old theme back.
+// Doesn't change the saved setting.
 function useForcedDarkMode() {
   useEffect(() => {
     const html = document.documentElement;
@@ -38,6 +27,7 @@ function useForcedDarkMode() {
 }
 
 export default function Feedback() {
+  const t = useT();
   const { user } = useAuth();
   useForcedDarkMode();
 
@@ -62,7 +52,7 @@ export default function Feedback() {
       await submitFeedback(fields);
       setStatus("sent");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }
@@ -70,9 +60,9 @@ export default function Feedback() {
   if (status === "sent") {
     return (
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Feedback</p>
-        <h1 id="page-title">Thank you</h1>
-        <p className="lead">We read every message. Thanks for taking the time.</p>
+        <p className="label">{t("feedbackPage.label")}</p>
+        <h1 id="page-title">{t("feedbackPage.thanksTitle")}</h1>
+        <p className="lead">{t("feedbackPage.thanksLead")}</p>
       </section>
     );
   }
@@ -80,9 +70,9 @@ export default function Feedback() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Feedback</p>
-        <h1 id="page-title">Feedback</h1>
-        <p className="lead">Tell us what&rsquo;s working and what isn&rsquo;t.</p>
+        <p className="label">{t("feedbackPage.label")}</p>
+        <h1 id="page-title">{t("feedbackPage.title")}</h1>
+        <p className="lead">{t("feedbackPage.lead")}</p>
       </section>
 
       <form className="account-form" onSubmit={handleSubmit} noValidate>
@@ -90,22 +80,22 @@ export default function Feedback() {
 
         <SelectField
           id="feedback-category"
-          label="Category"
+          label={t("feedbackPage.category")}
           name="category"
           value={fields.category}
           onChange={updateField}
           error={errors.category}
         >
-          {Object.entries(CATEGORIES).map(([value, label]) => (
+          {CATEGORIES.map((value) => (
             <option key={value} value={value}>
-              {label}
+              {t(`feedbackPage.categories.${value}`)}
             </option>
           ))}
         </SelectField>
 
         <TextareaField
           id="feedback-message"
-          label="Message"
+          label={t("feedbackPage.message")}
           name="message"
           value={fields.message}
           onChange={updateField}
@@ -115,10 +105,10 @@ export default function Feedback() {
 
         <TextField
           id="feedback-email"
-          label="Email (optional)"
+          label={t("feedbackPage.email")}
           name="email"
           type="email"
-          hint="So we can follow up, if you'd like."
+          hint={t("feedbackPage.emailHint")}
           value={fields.email}
           onChange={updateField}
           autoComplete="email"
@@ -126,7 +116,7 @@ export default function Feedback() {
         />
 
         <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-          {status === "submitting" ? "Sending" : "Send feedback"}
+          {status === "submitting" ? t("feedbackPage.sending") : t("feedbackPage.submit")}
         </button>
       </form>
     </>

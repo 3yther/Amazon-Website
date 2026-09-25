@@ -3,18 +3,16 @@ import { Link } from "react-router-dom";
 import parentPhoto from "../assets/audience-parent.jpg";
 import studentPhoto from "../assets/audience-student.jpg";
 import teacherPhoto from "../assets/audience-teacher.jpg";
+import businessPhoto from "../assets/pathway-business.jpg";
+import digitalPhoto from "../assets/pathway-digital.jpg";
+import engineeringPhoto from "../assets/pathway-engineering.jpg";
+import financePhoto from "../assets/pathway-finance.jpg";
+import mediaPhoto from "../assets/pathway-media.jpg";
 import { AUDIENCES, CONTENT_TYPES, PATHWAY_NAMES } from "../labels.js";
 import { T_LEVEL_SUBJECTS } from "../tlevelSubjects.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
-import {
-  ArrowIcon,
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "./Icons.jsx";
+import { ArrowIcon } from "./Icons.jsx";
 
 // Homepage sections below the hero (see pages/Home.jsx), in page order.
 
@@ -31,12 +29,7 @@ const STATS = [
 
 const COUNT_UP_MS = 1200;
 
-/**
- * 0 to 1 over COUNT_UP_MS, starting the first time the element is at least
- * half in view. It runs once only, so scrolling away and back leaves the
- * numbers alone. With reduced motion, or no IntersectionObserver, it is 1
- * straight away.
- */
+// Goes from 0 to 1 once the stats scroll into view. Straight to 1 with reduced motion.
 function useCountUp(ref) {
   const reducedMotion = useReducedMotion();
   const [progress, setProgress] = useState(reducedMotion ? 1 : 0);
@@ -105,28 +98,17 @@ export function StatsRow() {
 
 /* ---------- Audience cards ---------- */
 
-// Photos from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
-// free to use, attribution not required. Credited here for the asset log.
-// Saved at 720px wide from Pexels' own image server.
-//   audience-teacher.jpg: Antoni Shkraba,
-//     https://www.pexels.com/photo/a-female-professor-teaching-her-student-5306457/
-//   audience-parent.jpg: cottonbro studio,
-//     https://www.pexels.com/photo/a-mother-and-daughter-looking-at-the-paper-6471429/
-//   audience-student.jpg: Julia M Cameron,
-//     https://www.pexels.com/photo/boy-wearing-yellow-shirt-while-writing-on-white-paper-4144100/
-// Each card's words are home.audiences.<audience> in i18n/messages.
+// Photos from Pexels (free to use):
+//   audience-teacher.jpg: Antoni Shkraba, https://www.pexels.com/photo/a-female-professor-teaching-her-student-5306457/
+//   audience-parent.jpg: cottonbro studio, https://www.pexels.com/photo/a-mother-and-daughter-looking-at-the-paper-6471429/
+//   audience-student.jpg: Julia M Cameron, https://www.pexels.com/photo/boy-wearing-yellow-shirt-while-writing-on-white-paper-4144100/
 const AUDIENCE_CARDS = [
   { audience: "teacher", photo: teacherPhoto },
   { audience: "parent", photo: parentPhoto },
   { audience: "student", photo: studentPhoto },
 ];
 
-/**
- * The three audience cards double as the audience choice for the hero
- * subhead (see Home.jsx). Each card's headline is a real toggle button,
- * inside the h3 so the heading stays a heading, and its click area is
- * stretched over the whole card in styles.css.
- */
+// The three audience cards. Picking one changes the hero subhead (see Home.jsx).
 export function AudienceCards({ selected, onSelect }) {
   const t = useT();
   return (
@@ -155,9 +137,7 @@ export function AudienceCards({ selected, onSelect }) {
                 loading="lazy"
                 decoding="async"
               />
-              {/* A visible "Selected" as well as the orange border, so the
-                  choice never rests on colour alone. Screen readers get the
-                  button's pressed state instead. */}
+              {/* "Selected" text so it isn't shown by colour only */}
               {isSelected && (
                 <span className="audience-card__selected" aria-hidden="true">
                   {t("home.audiences.selected")}
@@ -187,15 +167,19 @@ export function AudienceCards({ selected, onSelect }) {
 
 /* ---------- Pathway tiles ---------- */
 
-// Slugs match backend/content/fixtures/pathways.json. Names and summaries
-// are pathways.<slug> and home.pathways.<slug> in i18n/messages. Each tile
-// opens the library already filtered to its pathway.
+// Each tile opens the resources page filtered to that pathway.
+// Photos from Pexels (free to use):
+//   pathway-digital.jpg: ThisIsEngineering, https://www.pexels.com/photo/female-software-engineer-coding-on-computer-3861951/
+//   pathway-business.jpg: Pavel Danilyuk, https://www.pexels.com/photo/three-people-working-in-the-office-7654168/
+//   pathway-media.jpg: cottonbro studio, https://www.pexels.com/photo/a-cameraman-recording-a-scene-6883811/
+//   pathway-finance.jpg: Mikhail Nilov, https://www.pexels.com/photo/woman-in-black-long-sleeve-shirt-8297043/
+//   pathway-engineering.jpg: Rizky Rafael, https://www.pexels.com/photo/man-in-green-uniform-holding-a-machine-4281613/
 const PATHWAYS = [
-  { slug: "digital", Icon: DigitalIcon },
-  { slug: "business", Icon: BusinessIcon },
-  { slug: "media", Icon: MediaIcon },
-  { slug: "finance", Icon: FinanceIcon },
-  { slug: "engineering", Icon: EngineeringIcon },
+  { slug: "digital", photo: digitalPhoto },
+  { slug: "business", photo: businessPhoto },
+  { slug: "media", photo: mediaPhoto },
+  { slug: "finance", photo: financePhoto },
+  { slug: "engineering", photo: engineeringPhoto },
 ];
 
 export function PathwayTiles() {
@@ -209,10 +193,17 @@ export function PathwayTiles() {
       </div>
 
       <ul className="pathway-grid">
-        {PATHWAYS.map(({ slug, Icon }) => (
+        {PATHWAYS.map(({ slug, photo }) => (
           <li key={slug}>
             <Link className="pathway-tile" to={`/resources?pathway=${slug}`}>
-              <Icon />
+              {/* Decorative: the pathway's name beside it carries the meaning. */}
+              <img
+                className="pathway-tile__photo"
+                src={photo}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
               <span className="pathway-tile__name">{t(`pathways.${slug}`)}</span>
               <span className="pathway-tile__summary">{t(`home.pathways.${slug}`)}</span>
               <ArrowIcon />
@@ -226,9 +217,7 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
-// Each step's words are home.steps.<key> in i18n/messages. `link` goes to the
-// page a step talks about, and its label is home.steps.<key>.link. "Hear back"
-// has none: it is something we do, not somewhere to go.
+// The four steps. "Hear back" has no link because there's nowhere to go.
 const STEPS = [
   { key: "browse", link: "/resources" },
   { key: "register", link: "/register-interest" },
@@ -236,10 +225,7 @@ const STEPS = [
   { key: "getInvolved", link: "/register" },
 ];
 
-/**
- * Four "Level" cards, a nod to T-Levels. On desktop they step down left to
- * right like a staircase, Level 01 highest (see .steps in styles.css); on smaller screens they stack.
- */
+// Four numbered step cards that step down like stairs on desktop and stack on mobile.
 export function HowItWorks() {
   const t = useT();
   return (
@@ -254,7 +240,7 @@ export function HowItWorks() {
           // --drop: how many steps below the top card this one starts.
           <li key={step.key} className="step" style={{ "--drop": index }}>
             <p className="label">
-              {t("home.steps.level")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
+              {t("home.steps.step")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
             </p>
             <h3 className="step__title">{t(`home.steps.${step.key}.title`)}</h3>
             <p className="step__text">{t(`home.steps.${step.key}.text`)}</p>

@@ -1,4 +1,9 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.core import mail
+from django.core.cache import cache
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from rest_framework.test import APIClient, APITestCase
 
 from .models import Feedback, Profile, UserPreference
@@ -10,6 +15,8 @@ LOGOUT_URL = "/api/accounts/logout/"
 ME_URL = "/api/accounts/me/"
 PREFERENCES_URL = "/api/accounts/user-preferences/"
 CHANGE_PASSWORD_URL = "/api/accounts/change-password/"
+PASSWORD_RESET_URL = "/api/accounts/password-reset/"
+PASSWORD_RESET_CONFIRM_URL = "/api/accounts/password-reset/confirm/"
 DEACTIVATE_URL = "/api/accounts/deactivate-account/"
 FEEDBACK_URL = "/api/accounts/feedback/"
 
@@ -465,3 +472,282 @@ class FeedbackApiTests(APITestCase):
             FEEDBACK_URL, {"category": "general", "message": "Works without a token."}, format="json"
         )
         self.assertEqual(response.status_code, 201)
+
+
+class PasswordResetRequestApiTests(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user("ada", password=PASSWORD, email="ada@example.com")
+        Profile.objects.create(user=cls.user, user_type="student")
+
+    def setUp(self):
+        cache.clear()  # reset the rate limit between tests
+
+    def test_known_username_with_email_sends_one_message(self):
+        response = self.client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["ada@example.com"])
+        self.assertIn("/reset-password?uid=", mail.outbox[0].body)
+
+    def test_username_is_case_insensitive(self):
+        response = self.client.post(PASSWORD_RESET_URL, {"username": "ADA"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_unknown_username_sends_nothing_but_answers_the_same_way(self):
+        known = self.client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+        mail.outbox.clear()
+        unknown = self.client.post(PASSWORD_RESET_URL, {"username": "nobody-here"}, format="json")
+
+        self.assertEqual(known.status_code, unknown.status_code)
+        self.assertEqual(known.data, unknown.data)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_username_with_no_email_on_file_sends_nothing_but_answers_the_same_way(self):
+        User.objects.create_user("noemail", password=PASSWORD)
+        # Profile is optional here; the view only needs the User to exist.
+        response = self.client.post(PASSWORD_RESET_URL, {"username": "noemail"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_deactivated_account_sends_nothing(self):
+        self.user.is_active = False
+        self.user.save()
+
+        response = self.client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_missing_username_is_a_400(self):
+        response = self.client.post(PASSWORD_RESET_URL, {}, format="json")
+        self.assertEqual(response.status_code, 400)
+
+    def test_rate_limit(self):
+        for _ in range(5):
+            self.client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+        response = self.client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+        self.assertEqual(response.status_code, 429)
+
+    def test_no_csrf_token_needed_check_is_still_enforced_when_signed_out(self):
+        # Unlike feedback, this follows register/login: CSRF is checked even
+        # for a signed-out visitor, to block the same "login CSRF" style abuse.
+        client = APIClient(enforce_csrf_checks=True)
+        response = client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+        self.assertEqual(response.status_code, 403)
+
+
+class PasswordResetConfirmApiTests(APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user("ada", password=PASSWORD, email="ada@example.com")
+        Profile.objects.create(user=cls.user, user_type="student")
+
+    def setUp(self):
+        cache.clear()  # reset the rate limit between tests, shared with the request endpoint
+
+    def link_for(self, user):
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        return uid, token
+
+    def test_valid_link_resets_the_password_and_signs_in(self):
+        uid, token = self.link_for(self.user)
+
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": uid,
+                "token": token,
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "new-harbour-lantern-9",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"success": True})
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("new-harbour-lantern-9"))
+        # The visitor is signed in as themselves, same as after register/login.
+        self.assertEqual(self.client.get(ME_URL).status_code, 200)
+
+    def test_token_can_only_be_used_once(self):
+        uid, token = self.link_for(self.user)
+        payload = {
+            "uid": uid,
+            "token": token,
+            "new_password": "new-harbour-lantern-9",
+            "confirm_password": "new-harbour-lantern-9",
+        }
+        first = self.client.post(PASSWORD_RESET_CONFIRM_URL, payload, format="json")
+        self.assertEqual(first.status_code, 200)
+
+        second = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {**payload, "new_password": "another-one-2", "confirm_password": "another-one-2"},
+            format="json",
+        )
+        self.assertEqual(second.status_code, 400)
+        self.assertIn("token", second.data)
+
+    def test_wrong_token_rejected(self):
+        uid, _ = self.link_for(self.user)
+
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": uid,
+                "token": "not-a-real-token",
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "new-harbour-lantern-9",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("token", response.data)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(PASSWORD))
+
+    def test_unreadable_uid_rejected_not_500(self):
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": "not-base64!!",
+                "token": "whatever",
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "new-harbour-lantern-9",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("token", response.data)
+
+    def test_mismatched_passwords_rejected(self):
+        uid, token = self.link_for(self.user)
+
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": uid,
+                "token": token,
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "does-not-match",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("confirm_password", response.data)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(PASSWORD))
+
+    def test_weak_password_rejected(self):
+        uid, token = self.link_for(self.user)
+
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {"uid": uid, "token": token, "new_password": "123", "confirm_password": "123"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("new_password", response.data)
+
+    def test_a_password_change_since_the_link_was_sent_invalidates_it(self):
+        # The reset token includes the password hash, so changing the password
+        # makes old links stop working.
+        uid, token = self.link_for(self.user)
+        self.user.set_password("a-different-password-1")
+        self.user.save()
+
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": uid,
+                "token": token,
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "new-harbour-lantern-9",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_deactivated_account_rejected(self):
+        uid, token = self.link_for(self.user)
+        self.user.is_active = False
+        self.user.save()
+
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": uid,
+                "token": token,
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "new-harbour-lantern-9",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_no_csrf_token_needed_check_is_still_enforced_when_signed_out(self):
+        uid, token = self.link_for(self.user)
+        client = APIClient(enforce_csrf_checks=True)
+
+        response = client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": uid,
+                "token": token,
+                "new_password": "new-harbour-lantern-9",
+                "confirm_password": "new-harbour-lantern-9",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
+
+
+class PasswordResetEndToEndApiTests(APITestCase):
+    """The request and confirm endpoints wired together, uid/token straight from the email."""
+
+    def setUp(self):
+        cache.clear()  # reset the rate limit between tests
+
+    def test_full_flow_reaches_a_working_password(self):
+        user = User.objects.create_user("ada", password=PASSWORD, email="ada@example.com")
+        Profile.objects.create(user=user, user_type="student")
+
+        self.client.post(PASSWORD_RESET_URL, {"username": "ada"}, format="json")
+        self.assertEqual(len(mail.outbox), 1)
+
+        body = mail.outbox[0].body
+        query = body.split("/reset-password?", 1)[1].split("\n", 1)[0]
+        params = dict(pair.split("=", 1) for pair in query.split("&"))
+
+        self.client.logout()
+        response = self.client.post(
+            PASSWORD_RESET_CONFIRM_URL,
+            {
+                "uid": params["uid"],
+                "token": params["token"],
+                "new_password": "picked-a-new-one-3",
+                "confirm_password": "picked-a-new-one-3",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+        self.client.logout()
+        login_response = self.client.post(
+            LOGIN_URL, {"username": "ada", "password": "picked-a-new-one-3"}, format="json"
+        )
+        self.assertEqual(login_response.status_code, 200)

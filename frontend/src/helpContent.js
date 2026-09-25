@@ -1,6 +1,4 @@
-// Copy and data for the Help page. Everything here points at a real service or
-// a page that exists on this site. Nothing promises a feature we have not
-// built, and no contact details are invented.
+// Words and links for the Help page. Every link goes to a real page or service.
 
 /** Free, national services a student or parent can use today. */
 export const SERVICES = [

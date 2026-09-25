@@ -6,13 +6,8 @@ import AccountDropdown from "../components/AccountDropdown.jsx";
 import { AuthProvider } from "../auth.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
-// The header's account button, in both states. Signed in it greets you by
-// name; signed out it offers the two ways to get an account, where it used to
-// render nothing at all and leave the corner empty.
-//
-// A fake server rather than a vi.mock of api.js or auth.jsx: these files share
-// one module registry (isolate: false in vitest.config.js), so two files
-// mocking the same module fight over which version is cached.
+// The account button in the header, signed in and signed out.
+// Uses a fake fetch instead of vi.mock because the test files share modules (isolate: false).
 
 const USER = {
   id: 1,
@@ -154,6 +149,17 @@ describe("Signed out", () => {
     }
     // Contact Us is left out on purpose: the footer carries it on every page.
     expect(screen.queryByRole("menuitem", { name: "Contact Us" })).toBeNull();
+  });
+
+  it("holds the language menu, outside the menu's own list", async () => {
+    // A <select> isn't a menu item, so it sits next to the list, not in it.
+    signedInAs(null);
+    renderHeader();
+    await openMenu("Sign in or sign up");
+
+    const picker = screen.getByLabelText("Language");
+    expect(picker.tagName).toBe("SELECT");
+    expect(picker.closest('[role="menu"]')).toBeNull();
   });
 
   it("has no accessibility problems axe can find", async () => {
