@@ -1,6 +1,12 @@
 # Railway preview deploy for the Django API. See DEPLOYMENT.md.
 #
-# !! CHECKED 24 September 2026: THIS FILE IS NOT IN USE ON THE PREVIEW. !!
+# !! CHECKED AGAIN 24 September 2026: THIS FILE IS STILL NOT IN USE, AND
+# !! CONFIG AS CODE IS NOW DEPRECATED BY RAILWAY ANYWAY (the CLI says existing
+# !! files keep working until 2026-12-01, and points at .railway/railway.ts
+# !! instead). So do NOT switch it on to fix something: the Pre-deploy Command
+# !! in Settings -> Deploy is the field that runs, and the one to edit.
+# !! The near-you search shipped empty for days because the loaddata and
+# !! geocode steps below were only ever written here.
 # The backend service has no Config File Path set (the API reports
 # railwayConfigFile: null), so Railway never reads it, and the settings that
 # actually run come from the Railway dashboard: Settings -> Deploy. You can
@@ -26,7 +32,7 @@ builder = "RAILPACK"
 # geocode_providers is the one step that will not stop a deploy: it warns and
 # carries on if postcodes.io is unreachable, because the fixture already
 # carries correct coordinates and nothing is lost by trying again next time.
-preDeployCommand = "sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources providers && python manage.py geocode_providers'"
+preDeployCommand = "sh -c 'python manage.py migrate --noinput && python manage.py loaddata pathways resources providers && python manage.py geocode_providers && python manage.py check_providers'"
 
 # gunicorn rather than the Django dev server. Railway sets $PORT, and [::]
 # listens on both IPv4 and IPv6.
