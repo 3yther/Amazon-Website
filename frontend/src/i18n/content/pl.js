@@ -118,7 +118,7 @@ export default {
       {
         question: "Jak jestem oceniany?",
         answer:
-          "W dwóch częściach. Część główna (core) jest oceniana od A z gwiazdką do E i obejmuje wiedzę o twojej branży. Specjalizacja zawodowa (occupational specialism) jest oceniana jako pass, merit lub distinction i jest częścią praktyczną. Obie znajdą się na świadectwie, razem z jedną oceną końcową.",
+          "W dwóch częściach. Część główna (core) jest oceniana od A z gwiazdką do E i obejmuje wiedzę o twojej branży. Specjalizacja zawodowa (occupational specialism) jest oceniana jako pass, merit lub distinction i jest częścią praktyczną. Obie znajdą się na świadectwie, razem z jedną oceną końcową. Część główna obejmuje też projekt zlecony przez pracodawcę (employer-set project, ESP), a specjalizację zawodową często skraca się do OS.",
       },
       {
         question: "Czy nadal mogę iść na studia?",

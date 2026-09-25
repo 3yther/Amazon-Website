@@ -118,7 +118,7 @@ export default {
       {
         question: "Como sou avaliado?",
         answer:
-          "Em duas partes. O núcleo (core) tem notas de A estrela a E e cobre os conhecimentos do teu setor. A especialização profissional (occupational specialism) tem as notas pass, merit ou distinction e é a parte prática. As duas aparecem no teu certificado, junto com uma nota final.",
+          "Em duas partes. O núcleo (core) tem notas de A estrela a E e cobre os conhecimentos do teu setor. A especialização profissional (occupational specialism) tem as notas pass, merit ou distinction e é a parte prática. As duas aparecem no teu certificado, junto com uma nota final. O núcleo inclui também um projeto definido pelo empregador (employer-set project, ESP), e a especialização profissional é muitas vezes abreviada para OS.",
       },
       {
         question: "Ainda posso ir para a universidade?",

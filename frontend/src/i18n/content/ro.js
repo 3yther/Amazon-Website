@@ -118,7 +118,7 @@ export default {
       {
         question: "Cum sunt evaluat?",
         answer:
-          "În două părți. Partea de bază (core) se notează de la A cu steluță la E și acoperă cunoștințele domeniului tău. Specializarea ocupațională (occupational specialism) se notează cu pass, merit sau distinction și este partea practică. Ambele apar pe certificat, împreună cu o notă finală.",
+          "În două părți. Partea de bază (core) se notează de la A cu steluță la E și acoperă cunoștințele domeniului tău. Specializarea ocupațională (occupational specialism) se notează cu pass, merit sau distinction și este partea practică. Ambele apar pe certificat, împreună cu o notă finală. Partea de bază include și un proiect stabilit de angajator (employer-set project, ESP), iar specializarea ocupațională este adesea prescurtată OS.",
       },
       {
         question: "Mai pot merge la universitate?",

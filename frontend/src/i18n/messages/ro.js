@@ -710,9 +710,6 @@ const ro = {
       privacy:
         "Salvez doar întrebările pe care trebuie să le caut, ca să putem continua de unde am rămas. Ce răspund singur și felul în care " +
         "te miști pe site rămân în browserul tău. Politica de confidențialitate are detaliile.",
-      acronymGap:
-        "Întrebare bună și des întâlnită. Echipa nu a confirmat încă ce înseamnă {acronym}, așa că nu voi ghici. " +
-        "Școala sau colegiul tău îți poate spune, sau poți întreba în Comunitate.",
       dontKnow: "Nu știu asta încă și aș prefera să nu ghicesc. Iată cu ce te pot ajuta:",
       closest: "Nu sunt foarte sigur ce vrei să spui, dar asta e cel mai apropiat lucru pe care îl știu:",
     },
