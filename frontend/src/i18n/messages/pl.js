@@ -75,7 +75,7 @@ const pl = {
     steps: {
       label: "Jak to działa",
       title: "Zacznij w czterech krokach",
-      level: "Poziom",
+      step: "Krok",
       browse: { title: "Przeglądaj materiały", text: "Poradniki, materiały i filmy dla wszystkich pięciu ścieżek.", link: "Przeglądaj materiały" },
       register: { title: "Zgłoś zainteresowanie", text: "Napisz nam, którą ścieżkę chcesz poznać.", link: "Zgłoś zainteresowanie" },
       hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem." },

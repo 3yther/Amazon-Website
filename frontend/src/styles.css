@@ -1134,8 +1134,8 @@ a.menu-hello__text:hover {
   }
 }
 
-/* Pathway tiles: calmer than the cards above. White, hairline edge, line
-   icon, no photos. */
+/* Pathway tiles: a photo of the work behind each pathway, under a flat dark
+   panel so the words on top stay readable whatever the photo is doing. */
 .pathway-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
@@ -1146,20 +1146,46 @@ a.menu-hello__text:hover {
 }
 
 .pathway-tile {
+  position: relative;
+  /* Keeps the photo and its panel inside this tile's own stack, so their
+     negative z-index cannot slide behind the page. Same as .audience-card. */
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 8px;
   height: 100%;
   padding: 20px;
-  background: var(--surface);
+  /* Shows while the photo is still loading, and is what the text is
+     measured against, so the tile is never light-on-light. */
+  background: var(--surface-inverse);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  color: var(--ink-inverse);
   text-decoration: none;
+  overflow: hidden;
 }
 
-.pathway-tile > .icon:first-child {
-  width: 28px;
-  height: 28px;
+.pathway-tile__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The scrim, not --overlay: this panel is the only thing guaranteeing the
+   contrast of the name, the summary and the arrow over an arbitrary photo,
+   so it stays dark enough to hold about 6:1 for light text even where the
+   photo underneath is white. Flat, never a gradient (see CONTEXT.md).
+   Across the whole tile rather than a band at the foot, because unlike the
+   audience cards the arrow sits on the photo too. */
+.pathway-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--scrim);
 }
 
 /* The arrow sits at the foot of every tile, so they line up across the row. */
@@ -1175,11 +1201,16 @@ a.menu-hello__text:hover {
 
 .pathway-tile__summary {
   font-size: 0.9375rem;
-  color: var(--ink-muted);
+  /* Not --ink-muted: that is a mid tone for light backgrounds, and this text
+     sits on the dark panel above in both themes. */
+  color: var(--ink-inverse);
 }
 
+/* --ink-inverse, not --blue: the tile is dark in both themes now, and in
+   light mode --blue is the dark navy, which would leave the hover edge
+   invisible against it. */
 .pathway-tile:hover {
-  border-color: var(--blue);
+  border-color: var(--ink-inverse);
 }
 
 .pathway-tile:hover .pathway-tile__name {
@@ -1188,8 +1219,8 @@ a.menu-hello__text:hover {
   text-decoration-thickness: var(--underline-thickness-hover);
 }
 
-/* How it works: "Level" cards. On desktop they climb left to right like a
-   staircase, each one step (--rise) higher than the last, joined along
+/* How it works: numbered step cards. On desktop they climb left to right
+   like a staircase, each one step (--rise) higher than the last, joined along
    their top edges by a hairline. Below that they stack in order, joined by
    a short line down the left. Plain bordered boxes: no shadows, no fills. */
 .steps {
@@ -1223,7 +1254,7 @@ a.menu-hello__text:hover {
   border-left: 1px solid var(--line);
 }
 
-/* "LEVEL 01": the number in orange, on a dark blue chip because orange on
+/* "STEP 01": the number in orange, on a dark blue chip because orange on
    the page colour alone is 2.05:1 and fails contrast (on blue it is 6.34:1). */
 .step__number {
   display: inline-block;
@@ -1255,7 +1286,7 @@ a.menu-hello__text:hover {
 }
 
 @media (min-width: 960px) {
-  /* Each card starts one step lower than the one before, so Level 01 is
+  /* Each card starts one step lower than the one before, so Step 01 is
      highest (--drop is how many steps below the top card it starts, set in
      HomeSections.jsx). Every top is exactly --rise apart, whatever the text
      length, so the connecting line always meets them. */
