@@ -25,9 +25,8 @@ const PAGES = [
   { to: "/quiz", label: "menu.pages.quiz" },
   { to: "/community", label: "menu.pages.community" },
   { to: "/help", label: "menu.pages.help" },
-  // The Expression of Interest form, a core client requirement, so it is
-  // one tap away on every page.
-  { to: "/register-interest", label: "menu.pages.registerInterest" },
+  // Register interest is not a tab: it is a box on the Sign up page, and
+  // linked from the homepage, the footer and the pathway pages.
 ];
 
 export default function SiteNav() {

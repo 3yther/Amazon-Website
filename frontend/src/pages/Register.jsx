@@ -1,10 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import { PATHWAY_NAMES, USER_TYPES } from "../labels.js";
 import AuthPanel from "../components/AuthPanel.jsx";
+import InterestForm from "../components/InterestForm.jsx";
+import { ChevronDownIcon } from "../components/Icons.jsx";
+import "../about.css";
 import { CheckboxField, FormError, SelectField, TextField } from "../components/FormFields.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
@@ -226,8 +229,50 @@ export default function Register() {
           <p className="account-switch">
             {t("register.haveAccount")} <Link to="/login">{t("login.submit")}</Link>
           </p>
+
+          <InterestBox />
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Register interest without an account, in a box under the Sign up form.
+ *
+ * NEW CONCEPT: <details> and <summary>. The browser gives a box that opens
+ * and closes on its own, keyboard and screen reader support included, so the
+ * sign-up form is not buried under a second one until someone asks for it.
+ */
+function InterestBox() {
+  const t = useT();
+  const [sentPathway, setSentPathway] = useState(null);
+  const thanks = useRef(null);
+
+  // Replace the form with a thank-you and put focus on it, as the Register
+  // interest page does.
+  useEffect(() => {
+    if (sentPathway) thanks.current?.focus();
+  }, [sentPathway]);
+
+  return (
+    <details className="interest-box">
+      <summary className="interest-box__summary">
+        {t("registerInterest.box.summary")}
+        <ChevronDownIcon />
+      </summary>
+      <div className="interest-box__body">
+        {sentPathway ? (
+          <p className="interest-box__thanks" tabIndex={-1} ref={thanks}>
+            {t("registerInterest.thanks.lead", { pathway: sentPathway.name })}
+          </p>
+        ) : (
+          <>
+            <p className="interest__note">{t("registerInterest.box.text")}</p>
+            <InterestForm onSent={setSentPathway} />
+          </>
+        )}
+      </div>
+    </details>
   );
 }

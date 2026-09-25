@@ -50,7 +50,6 @@ describe("The nav drawer", () => {
       "Quiz",
       "Community",
       "Help",
-      "Register interest",
     ]);
   });
 

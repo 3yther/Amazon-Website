@@ -2,7 +2,6 @@ import { useState } from "react";
 import { changePassword } from "../../api.js";
 import { formatDate } from "../../formats.js";
 import { formErrors } from "../../formErrors.js";
-import { useAccessibilityPreferences } from "../../hooks/useAccessibilityPreferences.jsx";
 import { FormError, TextField } from "../FormFields.jsx";
 
 const EMPTY_FIELDS = { current_password: "", new_password: "", confirm_password: "" };
@@ -26,7 +25,6 @@ function passwordStrength(password) {
  * when the password was last changed.
  */
 export default function SecuritySettings({ lastChanged }) {
-  const { preferences } = useAccessibilityPreferences();
   const [fields, setFields] = useState(EMPTY_FIELDS);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting | success
@@ -59,7 +57,7 @@ export default function SecuritySettings({ lastChanged }) {
 
       {lastChanged && (
         <p className="field__hint">
-          Password last changed {formatDate(lastChanged, preferences.date_format)}.
+          Password last changed {formatDate(lastChanged)}.
         </p>
       )}
 

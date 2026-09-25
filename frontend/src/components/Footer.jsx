@@ -61,7 +61,6 @@ export default function Footer() {
       <div className="container footer-content">
         <div className="footer-column">
           <p className="label">{t("footer.about")}</p>
-          {/* TODO: copy review - placeholder description */}
           <p>{t("footer.aboutText")}</p>
         </div>
 

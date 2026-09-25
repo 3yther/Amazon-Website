@@ -249,7 +249,7 @@ const pt = {
   footer: {
     about: "Sobre",
     aboutText:
-      "O T-SMILE ajuda estudantes, pais e professores a explorar os T-Levels e o T-Level Digital na Amazon, com recursos gratuitos e para utilizadores registados num só lugar.",
+      "T-Levels e estágios na Amazon, explicados para estudantes, pais e professores. Um projeto de estudantes para a Amazon Emerging Talent, não um site oficial da Amazon.",
     navigation: "Navegação",
     support: "Apoio",
     legal: "Informação legal e conformidade",
@@ -312,7 +312,6 @@ const pt = {
       quiz: "Questionário",
       community: "Comunidade",
       help: "Ajuda",
-      registerInterest: "Registar interesse",
     },
   },
 
@@ -408,6 +407,10 @@ const pt = {
     submit: "Registar interesse",
     nextTitle: "O que acontece a seguir",
     underSixteen: "Tens menos de 16 anos? Pergunta a um pai, mãe ou encarregado de educação antes de enviares.",
+    box: {
+      summary: "Queres um estágio na Amazon? Regista o teu interesse",
+      text: "Não precisas de conta. Diz-nos o teu percurso e passamo-lo à equipa Amazon Emerging Talent. Tens menos de 16 anos? Pergunta primeiro a um pai, mãe ou encarregado de educação.",
+    },
     thanks: {
       title: "Obrigado, estás na lista",
       lead: "O teu interesse no percurso {pathway} foi enviado à equipa Amazon Emerging Talent.",

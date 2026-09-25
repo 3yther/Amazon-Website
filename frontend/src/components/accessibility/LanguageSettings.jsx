@@ -6,30 +6,16 @@ import { SelectField } from "../FormFields.jsx";
 // header and the side menu (see i18n/I18nProvider.jsx), so changing it in any
 // of the three changes all of them, and it is saved to the account too.
 
-const DATE_FORMATS = {
-  "DD/MM/YYYY": "31/01/2026 (DD/MM/YYYY)",
-  "MM/DD/YYYY": "01/31/2026 (MM/DD/YYYY)",
-  "YYYY-MM-DD": "2026-01-31 (YYYY-MM-DD)",
-};
-
-const NUMBER_FORMATS = {
-  UK: "1,234.56 (UK)",
-  US: "1,234.56 (US)",
-  EU: "1.234,56 (EU)",
-};
-
 /**
- * Interface language, date format and number format.
- *
- * Date and number format reach real output through formats.js, and the
- * language through i18n/ (see the note at the top of this file).
+ * Interface language. Dates and numbers are always written the UK way (see
+ * formats.js), so they have no setting.
  */
-export default function LanguageSettings({ preferences, updatePreference }) {
+export default function LanguageSettings() {
   const { language, setLanguage, t } = useI18n();
 
   return (
     <div className="settings-section">
-      <p className="label">Language and region</p>
+      <p className="label">{t("language.label")}</p>
 
       <SelectField
         id="pref-language"
@@ -42,34 +28,6 @@ export default function LanguageSettings({ preferences, updatePreference }) {
           <option key={option.code} value={option.code} lang={option.htmlLang}>
             {option.native}
             {option.code !== "en" ? ` (${option.name})` : ""}
-          </option>
-        ))}
-      </SelectField>
-
-      <SelectField
-        id="pref-date-format"
-        label="Date format"
-        hint="Used wherever T-SMILE shows a date: when your password last changed, and the dates on staff submissions."
-        value={preferences.date_format}
-        onChange={(event) => updatePreference("date_format", event.target.value)}
-      >
-        {Object.entries(DATE_FORMATS).map(([value, label]) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </SelectField>
-
-      <SelectField
-        id="pref-number-format"
-        label="Number format"
-        hint="Changes how thousands and decimals are written. Most numbers on T-SMILE are small, so you will only see this on larger counts."
-        value={preferences.number_format}
-        onChange={(event) => updatePreference("number_format", event.target.value)}
-      >
-        {Object.entries(NUMBER_FORMATS).map(([value, label]) => (
-          <option key={value} value={value}>
-            {label}
           </option>
         ))}
       </SelectField>

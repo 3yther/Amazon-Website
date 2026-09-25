@@ -248,7 +248,7 @@ const ro = {
   footer: {
     about: "Despre",
     aboutText:
-      "T-SMILE îi ajută pe elevi, părinți și profesori să exploreze T-Levels și T-Level-ul Digital la Amazon, cu resurse gratuite și pentru utilizatori înregistrați într-un singur loc.",
+      "T-Levels și stagiile la Amazon, explicate pentru elevi, părinți și profesori. Un proiect al elevilor pentru Amazon Emerging Talent, nu un site oficial Amazon.",
     navigation: "Navigare",
     support: "Asistență",
     legal: "Informații legale și conformitate",
@@ -311,7 +311,6 @@ const ro = {
       quiz: "Chestionar",
       community: "Comunitate",
       help: "Ajutor",
-      registerInterest: "Înregistrează interesul",
     },
   },
 
@@ -407,6 +406,10 @@ const ro = {
     submit: "Înregistrează interesul",
     nextTitle: "Ce urmează",
     underSixteen: "Ai sub 16 ani? Întreabă un părinte sau un tutore înainte să trimiți.",
+    box: {
+      summary: "Vrei un stagiu la Amazon? Înregistrează-ți interesul",
+      text: "Nu ai nevoie de cont. Spune-ne ce parcurs te interesează și îl transmitem echipei Amazon Emerging Talent. Ai sub 16 ani? Întreabă mai întâi un părinte sau un tutore.",
+    },
     thanks: {
       title: "Mulțumim, ești pe listă",
       lead: "Interesul tău pentru parcursul {pathway} a fost trimis echipei Amazon Emerging Talent.",

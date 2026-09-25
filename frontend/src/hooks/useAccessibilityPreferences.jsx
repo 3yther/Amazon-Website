@@ -19,14 +19,6 @@ export const DEFAULT_PREFERENCES = {
   button_outline_style: "default",
   page_background: "white",
   language: "en",
-  // These two match UserPreference's own defaults in
-  // backend/accounts/models.py. They have to: a signed-out visitor reads
-  // these, and the same person signed in reads the server's, so a
-  // difference would change the dates on screen just by logging in.
-  // TEAM NOTE: both default to the US forms on a UK site. Changing them is a
-  // model change, so it is left for the team rather than done here.
-  date_format: "MM/DD/YYYY",
-  number_format: "US",
 };
 
 const TEXT_SPACING_VALUES = ["normal", "0.02em", "0.05em", "0.1em"];

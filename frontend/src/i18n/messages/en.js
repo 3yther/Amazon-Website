@@ -262,7 +262,7 @@ const en = {
   footer: {
     about: "About",
     aboutText:
-      "T-SMILE helps students, parents and teachers explore T-Levels and the Digital T-Level at Amazon, with free and sign-up resources in one place.",
+      "T-Levels and Amazon placements, explained for students, parents and teachers. A student project for Amazon Emerging Talent, not an official Amazon website.",
     navigation: "Navigation",
     support: "Support",
     legal: "Legal & Compliance",
@@ -325,7 +325,6 @@ const en = {
       quiz: "Quiz",
       community: "Community",
       help: "Help",
-      registerInterest: "Register interest",
     },
   },
 
@@ -424,6 +423,10 @@ const en = {
     submit: "Register interest",
     nextTitle: "What happens next",
     underSixteen: "Under 16? Ask a parent or carer before you send this.",
+    box: {
+      summary: "Want an Amazon placement? Register your interest",
+      text: "No account needed. Tell us your pathway and we pass it to the Amazon Emerging Talent team. Under 16? Ask a parent or carer first.",
+    },
     thanks: {
       title: "Thanks, you are on the list",
       lead: "Your interest in the {pathway} pathway has been sent to the Amazon Emerging Talent team.",
