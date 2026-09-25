@@ -193,8 +193,6 @@ const en = {
       lead: "{count} questions about T-Levels, Amazon placements and this site. Nothing is saved, and nobody sees your score.",
     },
     label: "Knowledge check",
-    title: "What do you know about T-Levels?",
-    lead: "{count} questions, one at a time. Getting one wrong is useful: Smiley will offer to talk it through.",
     scored: "You scored {score} out of {total}",
     doneLead: "Anything you are not sure about, ask Smiley in the corner. It will tell you if it does not know.",
     questionOf: "Question {number} of {total}",

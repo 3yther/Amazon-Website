@@ -181,8 +181,6 @@ const pl = {
       lead: "Pytania ({count}) o T-Levels, praktyki w Amazon i tę stronę. Nic nie jest zapisywane i nikt nie widzi twojego wyniku.",
     },
     label: "Sprawdzian wiedzy",
-    title: "Co wiesz o T-Levels?",
-    lead: "Pytania ({count}), jedno po drugim. Błędna odpowiedź też się przydaje: Smiley zaproponuje, że ją wyjaśni.",
     scored: "Twój wynik: {score} z {total}",
     doneLead: "Jeśli czegoś nie jesteś pewien, zapytaj Smileya w rogu. Powie ci, jeśli nie wie.",
     questionOf: "Pytanie {number} z {total}",
