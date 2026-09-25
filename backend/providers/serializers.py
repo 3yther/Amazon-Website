@@ -12,6 +12,10 @@ class ProviderSearchResultSerializer(serializers.ModelSerializer):
     distance_miles is not a model field: the view works it out for this
     search and hangs it on each provider before serialising, because how far
     away a college is depends on who is asking.
+
+    pathways_confirmed travels with the row because an empty pathways list on
+    its own is ambiguous, and the card has to word itself differently for
+    "offers none of the five" than for "we have not checked this one".
     """
 
     pathways = PathwaySummarySerializer(many=True, read_only=True)
@@ -24,7 +28,11 @@ class ProviderSearchResultSerializer(serializers.ModelSerializer):
             "name",
             "address",
             "postcode",
+            "region",
+            "provider_type",
+            "foundation_year",
             "distance_miles",
             "website_url",
             "pathways",
+            "pathways_confirmed",
         ]

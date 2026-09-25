@@ -7,7 +7,7 @@ no account, which is why it is here rather than a paid geocoder.
 Two callers, doing two different jobs:
 
   * the geocode_providers command, once, in bulk, to place our providers on
-    the map;
+    the map, falling back to retired postcodes for the ones bulk misses;
   * the search view, once per visitor search, to turn the postcode they typed
     into a point to measure from.
 
@@ -95,6 +95,29 @@ def lookup(postcode):
 
     result = _call(f"/postcodes/{quote(cleaned)}")
     return _point(result)
+
+
+def lookup_terminated(postcode):
+    """
+    A postcode that has been RETIRED, as (latitude, longitude), or None.
+
+    Royal Mail withdraws a postcode when the building it covered is rebuilt or
+    renumbered, and postcodes.io then answers 404 for it on the ordinary
+    endpoint while still holding the position it used to have.
+
+    This matters here because the official provider register is retyped by
+    hand once a year and carries a fair number of these: a college that moved
+    or was rebuilt keeps its old postcode in the spreadsheet. Its position is
+    still the right part of the country, so placing it there is far better
+    than leaving it out of every search. The caller is expected to SAY it did
+    this rather than quietly treat it as a clean lookup, because the address
+    behind a retired postcode may well be stale.
+    """
+    cleaned = normalise(postcode)
+    if not looks_like_a_postcode(cleaned):
+        return None
+
+    return _point(_call(f"/terminated_postcodes/{quote(cleaned)}"))
 
 
 def lookup_many(postcodes):

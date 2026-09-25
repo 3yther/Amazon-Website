@@ -61,18 +61,41 @@ The starter resources (ContentItems linking to official pages) load from
 ### Provider  (`providers` app, the "T Level near you" search)
 A school or college that offers T Levels, with the position the search measures from.
 - name            -> text
-- address         -> text (street and town, one line)
+- address         -> text (street and town, one line; may be blank)
 - postcode        -> text (up to 10 characters)
+- region          -> choice: one of the nine English regions the DfE list uses
+- provider_type   -> choice: General FE and Tertiary College, Academy, University
+                     Technical College, Sixth Form College, and the rest of the
+                     DfE list's own categories
+- foundation_year -> true when the provider also runs the T Level Foundation Year
 - latitude        -> decimal, 6 places
 - longitude       -> decimal, 6 places
 - website_url     -> web address of the provider's own site (optional)
 - pathways        -> ManyToMany(Pathway)  # the pathways this provider offers
+- pathways_confirmed -> true when somebody has actually checked the line above
 - created_at      -> datetime (auto)
-The starter providers load from `backend/providers/fixtures/providers.json`.
+
+The providers load from `backend/providers/fixtures/providers.json`, built from the
+Department for Education's "T Level registered providers" spreadsheet (360 providers,
+January 2026 version, for 2026/27).
+
+`address` is a locality ("ward, district") for most providers, because the official
+list carries a postcode and no street. Where a street address was already known by
+hand it is kept. It is blank for the few whose postcode resolves nowhere.
+
+`pathways_confirmed` EXISTS BECAUSE AN EMPTY `pathways` LIST IS AMBIGUOUS. The
+official register says only THAT a provider runs T Levels, never which subjects, so
+for most of the list we do not know. Unticked, an empty list means "not checked";
+ticked, it means "checked, and it offers none of our five". The search answers those
+two groups separately (`results` and `unconfirmed`) so the page never claims a
+provider teaches something nobody looked up.
+
 Latitude and longitude are filled in ONCE by `python manage.py geocode_providers`,
-which looks each postcode up on postcodes.io. A provider still at 0, 0 has not been
-looked up yet and is left out of the search. A visitor's search geocodes only their
-own postcode, so it never costs one outside call per provider.
+which looks each postcode up on postcodes.io, falling back to its retired-postcode
+record when a postcode has been withdrawn. A provider still at 0, 0 has not been
+looked up yet, or has a postcode that exists nowhere, and is left out of the search.
+A visitor's search geocodes only their own postcode, so it never costs one outside
+call per provider.
 
 ### ExpressionOfInterest  (`interest` app)
 - full_name       -> text

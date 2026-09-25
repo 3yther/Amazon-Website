@@ -48,10 +48,32 @@ class ProviderSearchView(APIView):
       ?pathway=<slug>        optional, only providers offering that pathway
       ?radius=<miles>        optional, default 15, up to 200
 
-    Answers { postcode, radius_miles, count, results }, nearest first. Every
-    unusable value is rejected with a 400 naming the field, the same shape
+    Answers { postcode, radius_miles, pathway, count, results,
+    unconfirmed_count, unconfirmed }, each list nearest first. Every unusable
+    value is rejected with a 400 naming the field, the same shape
     ContentItemViewSet.filter_list uses, so the front end can show the message
     against the control it belongs to.
+
+    TWO LISTS, AND WHY.
+
+    The official register of T-Level providers says only THAT a school runs
+    T-Levels in 2026/27. It does not say which subjects, and for most of the
+    360 providers we hold nobody has checked (see Provider.pathways_confirmed).
+
+    So a search filtered by pathway has two honest answers, not one:
+
+      results      providers we have checked, that offer this pathway
+      unconfirmed  providers near you whose subjects we do not know
+
+    Putting the second group in the first would claim they teach something we
+    never looked up. Dropping them would hide most of the real colleges near
+    a visitor the moment they touch the filter, which is worse: the page
+    would look like there is nothing around, when in fact there is plenty and
+    we simply have not asked. Keeping them apart lets the page say exactly
+    that, and lets a visitor go and ask the provider themselves.
+
+    With no pathway chosen there is nothing to be unsure about, so everything
+    inside the radius comes back in "results" and "unconfirmed" is empty.
 
     Public: which colleges run T-Levels is public information, so no account
     is needed, the same as pathways and the content library.
@@ -64,8 +86,8 @@ class ProviderSearchView(APIView):
     NearYou.jsx reads results straight out of the body with nothing to follow
     a next link with. There are tests pinning both halves of that down.
 
-    The radius is what bounds the answer, and with a few dozen providers the
-    widest search returns a few dozen rows. If the table ever grows into the
+    The radius is what bounds the answer, and with a few hundred providers the
+    widest search returns a few hundred rows. If the table ever grows into the
     thousands, the fix is real pagination the page knows about, or a cap the
     response ADMITS to. Not a silent one: a search that quietly returns the
     first few looks exactly like a thin list of colleges, which is how long
@@ -79,18 +101,26 @@ class ProviderSearchView(APIView):
         origin = self.locate(postcode)
 
         providers = Provider.objects.geocoded().prefetch_related("pathways")
-        if pathway:
-            providers = providers.filter(pathways__slug=pathway)
 
-        results = self.within(providers, origin, radius)
-        if not results:
+        if pathway:
+            matching = self.within(providers.filter(pathways__slug=pathway), origin, radius)
+            unknown = self.within(providers.filter(pathways_confirmed=False), origin, radius)
+        else:
+            matching = self.within(providers, origin, radius)
+            unknown = []
+
+        if not matching and not unknown:
             self.explain_empty()
+
         return Response(
             {
                 "postcode": postcode,
                 "radius_miles": radius,
-                "count": len(results),
-                "results": ProviderSearchResultSerializer(results, many=True).data,
+                "pathway": pathway,
+                "count": len(matching),
+                "results": ProviderSearchResultSerializer(matching, many=True).data,
+                "unconfirmed_count": len(unknown),
+                "unconfirmed": ProviderSearchResultSerializer(unknown, many=True).data,
             }
         )
 

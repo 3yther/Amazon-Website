@@ -28,8 +28,23 @@ class GeocodedFilter(admin.SimpleListFilter):
 
 @admin.register(Provider)
 class ProviderAdmin(admin.ModelAdmin):
-    list_display = ["name", "postcode", "in_the_search", "latitude", "longitude", "website_url"]
-    list_filter = [GeocodedFilter, "pathways"]
+    list_display = [
+        "name",
+        "postcode",
+        "region",
+        "provider_type",
+        "in_the_search",
+        "pathways_confirmed",
+        "foundation_year",
+    ]
+    list_filter = [
+        GeocodedFilter,
+        "pathways_confirmed",
+        "region",
+        "provider_type",
+        "foundation_year",
+        "pathways",
+    ]
     search_fields = ["name", "address", "postcode"]
     filter_horizontal = ["pathways"]
     date_hierarchy = "created_at"
@@ -41,7 +56,31 @@ class ProviderAdmin(admin.ModelAdmin):
     # Saying so here saves the next person wondering why a provider added by
     # hand never shows up in the search until the command has run.
     fieldsets = [
-        (None, {"fields": ["name", "address", "postcode", "website_url", "pathways"]}),
+        (None, {"fields": ["name", "address", "postcode", "website_url"]}),
+        (
+            "From the official register",
+            {
+                "fields": ["region", "provider_type", "foundation_year"],
+                "description": (
+                    "Straight from the Department for Education's registered providers "
+                    "list. Change these only to correct a mistake in it."
+                ),
+            },
+        ),
+        (
+            "Subjects",
+            {
+                "fields": ["pathways", "pathways_confirmed"],
+                "description": (
+                    "The official register does not say which subjects a provider runs, "
+                    "only that it runs T-Levels, so most of the list is unconfirmed. "
+                    "Tick <strong>pathways confirmed</strong> once someone has actually "
+                    "checked: until then an empty list reads as \"not known yet\", and "
+                    "the provider is shown to visitors as one to ask rather than as a "
+                    "match or a miss."
+                ),
+            },
+        ),
         (
             "Position",
             {

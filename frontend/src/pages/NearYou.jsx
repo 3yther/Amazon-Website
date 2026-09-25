@@ -18,6 +18,14 @@ import {
 //
 // It searches when the button is pressed, not as you type. A search costs a
 // postcode lookup on the server, and half a postcode is not a place.
+//
+// TWO LISTS WHEN A PATHWAY IS CHOSEN. The official register of T-Level
+// providers says only THAT a school runs T-Levels, not which subjects, so for
+// most of the 360 we hold nobody has checked. The server answers those
+// separately (results and unconfirmed) and this page keeps them apart, under
+// headings that say which is which. Showing them as one list would tell a
+// visitor a college teaches something we never looked up; dropping them would
+// empty the page the moment anyone touched the filter.
 
 // The distances offered. 15 matches the server's default, so an untouched
 // form and a bare request agree.
@@ -81,6 +89,11 @@ export function formatDistance(miles) {
   return `${miles} ${miles === 1 ? "mile" : "miles"}`;
 }
 
+/** "provider" or "providers", so no sentence here reads "1 providers". */
+function countOf(number, thing = "provider") {
+  return `${number} ${thing}${number === 1 ? "" : "s"}`;
+}
+
 export default function NearYou() {
   const [pathways, setPathways] = useState([]);
   const [fields, setFields] = useState({ postcode: "", pathway: "", radius: DEFAULT_RADIUS });
@@ -133,6 +146,11 @@ export default function NearYou() {
   }
 
   const results = search?.results ?? [];
+  const unconfirmed = search?.unconfirmed ?? [];
+  // The name to put in a heading, from the slug the search was made with, so
+  // it keeps saying "Digital" even after the filter is changed but not sent.
+  const searchedPathway = pathways.find((pathway) => pathway.slug === search?.pathway);
+  const showLists = status !== "error" && (results.length > 0 || unconfirmed.length > 0);
 
   return (
     <>
@@ -219,16 +237,38 @@ export default function NearYou() {
         </div>
       ) : (
         <p className="label results-status" role="status">
-          <SearchStatus status={status} search={search} />
+          <SearchStatus status={status} search={search} pathway={searchedPathway} />
         </p>
       )}
 
-      {results.length > 0 && status !== "error" && (
-        <ul className="card-grid" aria-busy={status === "loading"}>
-          {results.map((provider) => (
-            <ProviderCard key={provider.id} provider={provider} />
-          ))}
-        </ul>
+      {showLists && (
+        <>
+          {results.length > 0 && (
+            <ProviderList
+              heading={
+                searchedPathway ? `Offering ${searchedPathway.name}` : "Providers near you"
+              }
+              providers={results}
+              busy={status === "loading"}
+            />
+          )}
+
+          {unconfirmed.length > 0 && (
+            <ProviderList
+              heading="Subjects not confirmed"
+              description={
+                `The official register shows ${
+                  unconfirmed.length === 1 ? "this provider runs" : "these providers run"
+                } T-Levels, but not which subjects. ` +
+                `${unconfirmed.length === 1 ? "It is" : "They are"} near you, so ${
+                  searchedPathway ? `ask whether ${searchedPathway.name} is offered` : "ask what is offered"
+                }.`
+              }
+              providers={unconfirmed}
+              busy={status === "loading"}
+            />
+          )}
+        </>
       )}
     </>
   );
@@ -239,17 +279,46 @@ export default function NearYou() {
  * region). Every state says something: a blank line would leave a screen
  * reader user with no idea whether the search had run.
  */
-function SearchStatus({ status, search }) {
+function SearchStatus({ status, search, pathway }) {
   if (status === "loading") return "Searching";
   // Also the state after a search that could not run, which is why this does
   // not say "to start": the error beside the field says what went wrong.
   if (!search) return "Enter a postcode to see providers near you.";
 
-  const { count, radius_miles: radius, postcode } = search;
-  if (count === 0) {
-    return `No providers found within ${radius} miles of ${postcode}. Try a wider radius.`;
+  const { count, radius_miles: radius, postcode, unconfirmed_count: unknown } = search;
+  const where = `within ${radius} miles of ${postcode}`;
+
+  // Nothing at all, filtered or not: the one message that suggests a fix.
+  if (count === 0 && !unknown) {
+    return `No providers found ${where}. Try a wider radius.`;
   }
-  return `${count} ${count === 1 ? "provider" : "providers"} within ${radius} miles of ${postcode}.`;
+
+  if (!pathway) return `${countOf(count)} ${where}.`;
+
+  const unsure = `${countOf(unknown)} nearby ${
+    unknown === 1 ? "has" : "have"
+  } not had their subjects confirmed.`;
+
+  if (count === 0) return `No confirmed ${pathway.name} providers ${where}. ${unsure}`;
+  return `${countOf(count)} offering ${pathway.name} ${where}. ${unsure}`;
+}
+
+/** One headed group of provider cards. */
+function ProviderList({ heading, description, providers, busy }) {
+  return (
+    <section className="near-you__group">
+      {/* h2: the groups sit straight under the page's h1, and the provider
+          names below them are h3, so the outline holds whether the visitor
+          filtered by pathway or not. */}
+      <h2 className="near-you__group-title">{heading}</h2>
+      {description && <p className="near-you__group-note">{description}</p>}
+      <ul className="card-grid" aria-busy={busy}>
+        {providers.map((provider) => (
+          <ProviderCard key={provider.id} provider={provider} />
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 function ProviderCard({ provider }) {
@@ -257,33 +326,28 @@ function ProviderCard({ provider }) {
     <li className="card">
       <div className="card__tags">
         <span className="tag tag--distance">{formatDistance(provider.distance_miles)}</span>
+        {provider.foundation_year && <span className="tag">Foundation year</span>}
       </div>
 
-      {/* h2: the cards sit straight under the page's h1. */}
-      <h2 className="card__title">{provider.name}</h2>
+      <h3 className="card__title">{provider.name}</h3>
       <p className="card__text">
-        {provider.address}, {provider.postcode}
+        {/* The address is a locality for most of the register, and blank for
+            the few whose postcode resolves nowhere. Leaving it out beats
+            printing a stray comma in front of the postcode. */}
+        {provider.address ? `${provider.address}, ${provider.postcode}` : provider.postcode}
       </p>
 
       <dl className="card__meta">
+        {provider.provider_type && (
+          <div>
+            <dt className="label">Type</dt>
+            <dd>{provider.provider_type}</dd>
+          </div>
+        )}
         <div>
           <dt className="label">Pathways</dt>
           <dd>
-            {provider.pathways.length === 0 ? (
-              "Ask the provider"
-            ) : (
-              <ul className="near-you__pathways">
-                {provider.pathways.map((pathway) => {
-                  const PathwayIcon = PATHWAY_ICONS[pathway.slug];
-                  return (
-                    <li key={pathway.slug}>
-                      {PathwayIcon && <PathwayIcon />}
-                      {pathway.name}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <ProviderPathways provider={provider} />
           </dd>
         </div>
       </dl>
@@ -296,5 +360,32 @@ function ProviderCard({ provider }) {
         </a>
       )}
     </li>
+  );
+}
+
+/**
+ * What a card says about subjects.
+ *
+ * An empty list means two different things, and the card has to tell them
+ * apart: pathways_confirmed says whether anybody has actually checked. Saying
+ * "none" about a provider nobody asked would be inventing an answer.
+ */
+function ProviderPathways({ provider }) {
+  if (provider.pathways.length === 0) {
+    return provider.pathways_confirmed ? "None of the five we cover" : "Not confirmed, ask the provider";
+  }
+
+  return (
+    <ul className="near-you__pathways">
+      {provider.pathways.map((pathway) => {
+        const PathwayIcon = PATHWAY_ICONS[pathway.slug];
+        return (
+          <li key={pathway.slug}>
+            {PathwayIcon && <PathwayIcon />}
+            {pathway.name}
+          </li>
+        );
+      })}
+    </ul>
   );
 }

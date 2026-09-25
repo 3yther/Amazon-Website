@@ -214,7 +214,19 @@ class ProviderSearchTests(APITestCase):
         provider = response.data["results"][0]
         self.assertEqual(
             set(provider),
-            {"id", "name", "address", "postcode", "distance_miles", "website_url", "pathways"},
+            {
+                "id",
+                "name",
+                "address",
+                "postcode",
+                "region",
+                "provider_type",
+                "foundation_year",
+                "distance_miles",
+                "website_url",
+                "pathways",
+                "pathways_confirmed",
+            },
         )
         self.assertEqual(
             provider["pathways"],
@@ -258,14 +270,62 @@ class SeedProvidersTests(APITestCase):
 
     fixtures = ["pathways", "providers"]
 
-    def test_every_provider_is_placed_on_the_map_and_offers_a_pathway(self):
+    # The postcodes in the official register that no geocoder can resolve, so
+    # the providers holding them cannot be searched for. Written down as a
+    # number rather than waved through: if a change unplaces more than this,
+    # something has gone wrong and these tests should say so.
+    MAX_UNPLACED = 25
+
+    def test_every_provider_is_described_well_enough_to_list(self):
         providers = Provider.objects.all()
-        self.assertGreaterEqual(providers.count(), 10)
+        self.assertGreaterEqual(providers.count(), 300)
         for provider in providers:
-            self.assertTrue(looks_like_a_postcode(provider.postcode), provider.name)
-            self.assertNotEqual((provider.latitude, provider.longitude), (0, 0), provider.name)
+            with self.subTest(provider=provider.name):
+                self.assertTrue(looks_like_a_postcode(provider.postcode), provider.postcode)
+                self.assertTrue(provider.name)
+                self.assertTrue(provider.region)
+                self.assertTrue(provider.provider_type)
+
+    def test_almost_every_provider_is_placed_on_the_map(self):
+        """
+        A provider at 0, 0 is left out of every search, so this counts them.
+
+        It is a budget rather than a ban because a handful of the register's
+        postcodes do not exist anywhere: some are typos, some are invalid on
+        their face. Those cannot be fixed from here, but a jump in the number
+        means something else broke.
+        """
+        unplaced = Provider.objects.filter(latitude=0, longitude=0)
+        self.assertLessEqual(
+            unplaced.count(),
+            self.MAX_UNPLACED,
+            sorted(f"{p.postcode} {p.name}" for p in unplaced),
+        )
+        self.assertGreaterEqual(Provider.objects.geocoded().count(), 300)
+
+    def test_a_website_we_hold_is_a_real_one(self):
+        """
+        Most of the register carries no website, which is fine: the card
+        leaves the link out. The ones we do hold have to work.
+        """
+        with_sites = Provider.objects.exclude(website_url="")
+        self.assertGreater(with_sites.count(), 0)
+        for provider in with_sites:
             self.assertTrue(provider.website_url.startswith("https://"), provider.name)
+
+    def test_a_confirmed_provider_is_one_somebody_actually_checked(self):
+        """
+        pathways_confirmed is the whole basis of the two-list answer, so it
+        must not drift into meaning nothing. Every confirmed provider here
+        offers at least one pathway, and the unconfirmed ones offer none.
+        """
+        confirmed = Provider.objects.filter(pathways_confirmed=True)
+        self.assertGreater(confirmed.count(), 30)
+        for provider in confirmed:
             self.assertTrue(provider.pathways.exists(), provider.name)
+
+        for provider in Provider.objects.filter(pathways_confirmed=False):
+            self.assertFalse(provider.pathways.exists(), provider.name)
 
     def test_every_pathway_is_offered_somewhere(self):
         for pathway in Pathway.objects.all():
@@ -400,17 +460,16 @@ class SeededSearchEndToEndTests(APITestCase):
 
     def test_every_seeded_provider_can_be_found_from_somewhere(self):
         """
-        A provider left at 0, 0 is silently dropped from every search. This
-        walks the whole fixture and searches from each one's own position, so
-        a row that cannot be found fails by name rather than by absence.
+        Walks every placed provider and searches from its own position, so a
+        row that cannot be found fails by name rather than by absence.
+
+        The ones left at 0, 0 are counted by
+        SeedProvidersTests.test_almost_every_provider_is_placed_on_the_map
+        instead: they are dropped from every search by design, and the point
+        here is that everything else is reachable.
         """
-        for provider in Provider.objects.all():
+        for provider in Provider.objects.geocoded():
             with self.subTest(provider=provider.name):
-                self.assertNotEqual(
-                    (provider.latitude, provider.longitude),
-                    (0, 0),
-                    f"{provider.name} has no position, so no search can return it",
-                )
                 origin = (float(provider.latitude), float(provider.longitude))
                 with patch("providers.views.lookup", return_value=origin):
                     response = self.client.get(
@@ -592,7 +651,16 @@ class ResultsAreNotCappedTests(APITestCase):
         response = self.search(radius="25")
 
         self.assertEqual(
-            set(response.data), {"postcode", "radius_miles", "count", "results"}
+            set(response.data),
+            {
+                "postcode",
+                "radius_miles",
+                "pathway",
+                "count",
+                "results",
+                "unconfirmed_count",
+                "unconfirmed",
+            },
         )
         self.assertNotIn("next", response.data)
         self.assertNotIn("previous", response.data)
@@ -648,3 +716,301 @@ class SeedCoverageTests(APITestCase):
 
     def test_the_widest_radius_reaches_a_lot(self):
         self.assertGreater(self.count_near(self.CITIES["London"], 50), 15)
+
+
+class RegisterFieldsTests(TestCase):
+    """What the official register carries, beyond a name and a postcode."""
+
+    def make(self, **fields):
+        return Provider.objects.create(
+            name=fields.pop("name", "A College"),
+            address="a",
+            postcode="N14 6BS",
+            latitude="51.630410",
+            longitude="-0.129501",
+            **fields,
+        )
+
+    def test_a_provider_remembers_its_region_and_type(self):
+        provider = self.make(region="London", provider_type="Sixth Form College")
+
+        provider.refresh_from_db()
+        self.assertEqual(provider.region, "London")
+        self.assertEqual(provider.provider_type, "Sixth Form College")
+
+    def test_the_foundation_year_is_off_unless_the_register_says_otherwise(self):
+        self.assertFalse(self.make().foundation_year)
+        self.assertTrue(self.make(name="B College", foundation_year=True).foundation_year)
+
+    def test_subjects_are_unconfirmed_until_somebody_says_so(self):
+        """
+        The default has to be False. A provider added without anyone checking
+        its subjects must not be presented as one that offers none of them.
+        """
+        self.assertFalse(self.make().pathways_confirmed)
+
+
+class UnconfirmedSubjectsSearchTests(APITestCase):
+    """
+    The two lists a filtered search answers with.
+
+    The official register says only THAT a provider runs T-Levels, so for most
+    of the list nobody knows which subjects. A search filtered by pathway
+    therefore cannot honestly give one list: it separates the providers we
+    have checked from the ones we have not, and the page says which is which.
+
+    Everything here sits north of the search point along one line, so the
+    distances are predictable and the ordering is easy to assert.
+    """
+
+    URL = "/api/providers/search/"
+    ORIGIN = (51.500000, -0.130000)
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.digital = Pathway.objects.create(
+            name="Digital", slug="digital", summary="s", description="d"
+        )
+        cls.media = Pathway.objects.create(
+            name="Media", slug="media", summary="s", description="d"
+        )
+
+        # Checked, and it does offer Digital. Nearest of the three.
+        cls.offers_digital = cls.make("Offers Digital", 51.51, confirmed=True)
+        cls.offers_digital.pathways.add(cls.digital)
+
+        # Checked, and it does not. Must appear in neither list.
+        cls.offers_media = cls.make("Offers Media only", 51.53, confirmed=True)
+        cls.offers_media.pathways.add(cls.media)
+
+        # Never checked. Belongs in "unconfirmed", not in the matches.
+        cls.unchecked = cls.make("Not checked yet", 51.55, confirmed=False)
+        cls.further_unchecked = cls.make("Also not checked", 51.60, confirmed=False)
+
+    @classmethod
+    def make(cls, name, latitude, confirmed):
+        return Provider.objects.create(
+            name=name,
+            address="a",
+            postcode="N14 6BS",
+            region="London",
+            provider_type="Sixth Form College",
+            latitude=str(latitude),
+            longitude="-0.130000",
+            pathways_confirmed=confirmed,
+        )
+
+    def search(self, **params):
+        with stub_lookup(point=self.ORIGIN):
+            return self.client.get(self.URL, {"postcode": "W1D 3QU", "radius": "50", **params})
+
+    def names(self, response, key="results"):
+        return [provider["name"] for provider in response.data[key]]
+
+    def test_an_unfiltered_search_puts_everything_in_one_list(self):
+        """Nothing is claimed about subjects, so there is nothing to be unsure about."""
+        response = self.search()
+
+        self.assertEqual(len(self.names(response)), 4)
+        self.assertEqual(response.data["unconfirmed"], [])
+        self.assertEqual(response.data["unconfirmed_count"], 0)
+
+    def test_a_filtered_search_matches_only_the_providers_we_checked(self):
+        response = self.search(pathway="digital")
+
+        self.assertEqual(self.names(response), ["Offers Digital"])
+        self.assertEqual(response.data["count"], 1)
+
+    def test_a_provider_we_checked_that_does_not_offer_it_is_in_neither_list(self):
+        """The whole point of confirming: this one is a real "no", not a maybe."""
+        response = self.search(pathway="digital")
+
+        self.assertNotIn("Offers Media only", self.names(response))
+        self.assertNotIn("Offers Media only", self.names(response, "unconfirmed"))
+
+    def test_the_ones_nobody_checked_come_back_separately(self):
+        response = self.search(pathway="digital")
+
+        self.assertEqual(
+            self.names(response, "unconfirmed"), ["Not checked yet", "Also not checked"]
+        )
+        self.assertEqual(response.data["unconfirmed_count"], 2)
+
+    def test_the_unconfirmed_list_is_sorted_nearest_first_too(self):
+        response = self.search(pathway="digital")
+
+        miles = [provider["distance_miles"] for provider in response.data["unconfirmed"]]
+        self.assertEqual(miles, sorted(miles))
+
+    def test_the_radius_bounds_the_unconfirmed_list_as_well(self):
+        """Otherwise a narrow search would quietly pull in the whole country."""
+        response = self.search(pathway="digital", radius="5")
+
+        self.assertEqual(self.names(response, "unconfirmed"), ["Not checked yet"])
+
+    def test_the_answer_says_which_pathway_it_was_about(self):
+        """The page needs it to word "no Digital providers within 15 miles"."""
+        self.assertEqual(self.search(pathway="digital").data["pathway"], "digital")
+        self.assertEqual(self.search().data["pathway"], "")
+
+    def test_an_unknown_pathway_is_still_a_400_and_never_a_half_answer(self):
+        response = self.search(pathway="underwater-basket-weaving")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("pathway", response.data)
+        self.assertNotIn("unconfirmed", response.data)
+
+    def test_a_confirmed_row_carries_the_flag_to_the_page(self):
+        response = self.search(pathway="digital")
+
+        self.assertTrue(response.data["results"][0]["pathways_confirmed"])
+        self.assertFalse(response.data["unconfirmed"][0]["pathways_confirmed"])
+
+
+class RetiredPostcodeTests(TestCase):
+    """
+    Placing a provider whose postcode Royal Mail has withdrawn.
+
+    The register carries a fair number of these, and they are real places: a
+    college that moved or was rebuilt keeps its old postcode in the
+    spreadsheet. Leaving them out of the search would be throwing away
+    colleges we know where to find, so the command falls back to the retired
+    record and says that it did.
+    """
+
+    def setUp(self):
+        self.provider = Provider.objects.create(
+            name="Rebuilt College",
+            address="a",
+            postcode="EX4 3EQ",
+            latitude="0.000000",
+            longitude="0.000000",
+        )
+
+    def run_command(self, *args):
+        out = StringIO()
+        call_command("geocode_providers", *args, stdout=out, stderr=StringIO())
+        return out.getvalue()
+
+    def test_a_retired_postcode_still_places_the_provider(self):
+        with patch("providers.management.commands.geocode_providers.lookup_many", return_value={}):
+            with patch(
+                "providers.management.commands.geocode_providers.lookup_terminated",
+                return_value=(50.722925, -3.532821),
+            ):
+                output = self.run_command()
+
+        self.provider.refresh_from_db()
+        self.assertAlmostEqual(float(self.provider.latitude), 50.722925, places=5)
+        self.assertIn("1 provider(s) placed on the map", output)
+
+    def test_it_says_the_postcode_was_a_retired_one(self):
+        """
+        Silently using a withdrawn postcode would hide a stale address. The
+        provider is searchable either way; somebody should still go and look.
+        """
+        with patch("providers.management.commands.geocode_providers.lookup_many", return_value={}):
+            with patch(
+                "providers.management.commands.geocode_providers.lookup_terminated",
+                return_value=(50.722925, -3.532821),
+            ):
+                output = self.run_command()
+
+        self.assertIn("RETIRED", output)
+        self.assertIn("Rebuilt College", output)
+
+    def test_strict_leaves_it_unplaced_instead(self):
+        with patch("providers.management.commands.geocode_providers.lookup_many", return_value={}):
+            with patch(
+                "providers.management.commands.geocode_providers.lookup_terminated"
+            ) as terminated:
+                output = self.run_command("--strict")
+
+        terminated.assert_not_called()
+        self.provider.refresh_from_db()
+        self.assertEqual((self.provider.latitude, self.provider.longitude), (0, 0))
+        self.assertIn("not found", output)
+
+    def test_a_postcode_that_is_retired_nowhere_either_is_reported(self):
+        with patch("providers.management.commands.geocode_providers.lookup_many", return_value={}):
+            with patch(
+                "providers.management.commands.geocode_providers.lookup_terminated",
+                return_value=None,
+            ):
+                output = self.run_command()
+
+        self.assertIn("1 postcode(s) not found", output)
+        self.assertIn("EX4 3EQ", output)
+
+    def test_one_retired_lookup_serves_every_provider_sharing_the_postcode(self):
+        Provider.objects.create(
+            name="Second Campus",
+            address="a",
+            postcode="ex4 3eq",
+            latitude="0.000000",
+            longitude="0.000000",
+        )
+
+        with patch("providers.management.commands.geocode_providers.lookup_many", return_value={}):
+            with patch(
+                "providers.management.commands.geocode_providers.lookup_terminated",
+                return_value=(50.722925, -3.532821),
+            ) as terminated:
+                self.run_command()
+
+        self.assertEqual(terminated.call_count, 1)
+
+
+class CheckProvidersToleranceTests(TestCase):
+    """
+    The deploy check, once the list is the official 360 rather than 71 by hand.
+
+    A few of the register's postcodes exist nowhere, so failing on the first
+    unplaced provider would fail every deploy forever, and a check that always
+    fails is a check everybody learns to ignore. It now fails on "the search
+    is broken", not on "the data is imperfect".
+    """
+
+    def make(self, name, placed):
+        return Provider.objects.create(
+            name=name,
+            address="a",
+            postcode="N14 6BS",
+            latitude="51.630410" if placed else "0.000000",
+            longitude="-0.129501" if placed else "0.000000",
+        )
+
+    def run_command(self, *args):
+        out, err = StringIO(), StringIO()
+        call_command("check_providers", *args, stdout=out, stderr=err)
+        return out.getvalue() + err.getvalue()
+
+    def test_a_few_bad_postcodes_in_a_big_list_do_not_fail_the_deploy(self):
+        for index in range(20):
+            self.make(f"Placed {index}", placed=True)
+        self.make("Bad postcode", placed=False)
+
+        output = self.run_command()
+
+        self.assertIn("20 provider(s) ready to search", output)
+        self.assertIn("Bad postcode", output)
+
+    def test_but_a_wholesale_failure_to_place_anything_still_stops_it(self):
+        for index in range(10):
+            self.make(f"Unplaced {index}", placed=False)
+        self.make("The only placed one", placed=True)
+
+        with self.assertRaises(SystemExit):
+            self.run_command()
+
+    def test_the_bar_can_be_set_by_hand(self):
+        for index in range(20):
+            self.make(f"Placed {index}", placed=True)
+        self.make("Bad postcode", placed=False)
+
+        with self.assertRaises(SystemExit):
+            self.run_command("--max-unplaced", "0")
+
+    def test_nothing_loaded_at_all_is_still_the_loud_failure(self):
+        with self.assertRaises(SystemExit):
+            self.run_command()
