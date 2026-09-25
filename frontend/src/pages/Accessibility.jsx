@@ -50,7 +50,7 @@ export default function Accessibility() {
     },
     {
       id: "language",
-      label: "Language and region",
+      label: "Language",
       content: <LanguageSettings preferences={preferences} updatePreference={updatePreference} />,
     },
     {

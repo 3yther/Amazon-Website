@@ -33,9 +33,13 @@ The settings on the Accessibility page, saved for signed-in users.
 - button_outline_style  -> text (default "default")
 - page_background       -> text (default "white")
 - language              -> text (default "en")
-- date_format           -> text (default "MM/DD/YYYY")
-- number_format         -> text (default "US")
+- date_format           -> text (default "MM/DD/YYYY"); unused, see note below
+- number_format         -> text (default "US"); unused, see note below
 - created_at, updated_at -> datetime (auto)
+
+date_format and number_format are no longer offered on the site: dates and
+numbers are always written the UK way (frontend/src/formats.js). The columns
+stay until the team agrees to drop them, since that is a model change.
 
 ### Pathway  (`content` app)
 - name            -> choice: Digital | Business | Media | Finance | Engineering (unique)
