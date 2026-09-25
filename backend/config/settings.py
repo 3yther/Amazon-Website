@@ -246,6 +246,10 @@ REST_FRAMEWORK = {
         "community_ask": "10/hour",
         "community_answer": "30/hour",
         "community_action": "120/hour",
+        # Shared by both password reset endpoints. Generous enough for a
+        # visitor who mistypes their new password once or twice, tight enough
+        # that it cannot be used to spam an inbox or hammer the token check.
+        "password_reset": "5/hour",
     },
 }
 
@@ -254,6 +258,27 @@ if DEBUG:
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append(
         "rest_framework.renderers.BrowsableAPIRenderer"
     )
+
+
+# ---------------------------------------------------------------------------
+# Email (password reset)
+# ---------------------------------------------------------------------------
+
+# No SMTP account has been set up for the prototype, so EMAIL_BACKEND defaults
+# to Django's console backend: it writes the message, reset link included, to
+# the server log instead of a real inbox. That is enough to build and test
+# the reset flow end to end without needing real email delivery yet.
+# PRODUCTION: set EMAIL_BACKEND (and DEFAULT_FROM_EMAIL) to point at Amazon
+# SES instead, as noted as a stretch service in the proposal's Hosting and
+# Data Architecture section. accounts/emails.py does not need to change.
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+)
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@t-smile.example")
+
+# Where the link inside a password reset email points. The front end, not
+# this API, since a visitor opens it in their browser.
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 
 
 # ---------------------------------------------------------------------------

@@ -323,6 +323,7 @@ const pl = {
     password: "Hasło",
     submitting: "Logowanie",
     submit: "Zaloguj się",
+    forgotPassword: "Nie pamiętasz hasła?",
     noAccount: "Nie masz jeszcze konta?",
     register: "Zarejestruj się",
   },
@@ -365,6 +366,27 @@ const pl = {
       overSixteen: "Potwierdź, że masz co najmniej 16 lat, aby założyć konto.",
       terms: "Zaakceptuj Regulamin, aby założyć konto.",
     },
+  },
+
+  forgotPassword: {
+    title: "Nie pamiętam hasła",
+    lead: "Podaj nazwę użytkownika, a jeśli konto ma zapisany adres e-mail, wyślemy na niego link do zresetowania hasła.",
+    submitting: "Wysyłanie",
+    submit: "Wyślij link resetujący",
+    sent: "Jeśli to konto ma zapisany adres e-mail, wysłaliśmy na niego instrukcje resetowania hasła. Link działa jednorazowo i wygasa po kilku dniach.",
+    backToLogin: "Jednak sobie przypomniałeś/aś?",
+  },
+
+  resetPassword: {
+    title: "Wybierz nowe hasło",
+    newPassword: "Nowe hasło",
+    passwordHint: "Co najmniej 8 znaków. Nie same cyfry i nie popularne hasło.",
+    confirmPassword: "Potwierdź nowe hasło",
+    submitting: "Zapisywanie",
+    submit: "Zapisz nowe hasło",
+    backToLogin: "Jednak sobie przypomniałeś/aś?",
+    requestNewLink: "Poproś o nowy link",
+    linkMissing: "W tym linku do resetowania hasła brakuje pewnych informacji. Poniżej poproś o nowy.",
   },
 
   registerInterest: {

@@ -323,6 +323,7 @@ const ro = {
     password: "Parolă",
     submitting: "Se autentifică",
     submit: "Autentificare",
+    forgotPassword: "Ai uitat parola?",
     noAccount: "Nu ai încă un cont?",
     register: "Creează cont",
   },
@@ -365,6 +366,27 @@ const ro = {
       overSixteen: "Confirmă că ai 16 ani sau mai mult ca să creezi un cont.",
       terms: "Acceptă Termenii și condițiile ca să creezi un cont.",
     },
+  },
+
+  forgotPassword: {
+    title: "Parolă uitată",
+    lead: "Introdu numele de utilizator și, dacă există un email asociat contului, îți vom trimite un link pentru resetarea parolei.",
+    submitting: "Se trimite",
+    submit: "Trimite linkul de resetare",
+    sent: "Dacă acel cont are un email asociat, i-am trimis instrucțiuni de resetare a parolei. Linkul funcționează o singură dată și expiră după câteva zile.",
+    backToLogin: "Până la urmă ți-ai amintit?",
+  },
+
+  resetPassword: {
+    title: "Alege o parolă nouă",
+    newPassword: "Parolă nouă",
+    passwordHint: "Cel puțin 8 caractere. Nu doar cifre și nu o parolă comună.",
+    confirmPassword: "Confirmă parola nouă",
+    submitting: "Se salvează",
+    submit: "Salvează parola nouă",
+    backToLogin: "Până la urmă ți-ai amintit?",
+    requestNewLink: "Solicită un link nou",
+    linkMissing: "Acestui link de resetare a parolei îi lipsesc informații. Solicită unul nou mai jos.",
   },
 
   registerInterest: {

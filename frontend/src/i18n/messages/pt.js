@@ -324,6 +324,7 @@ const pt = {
     password: "Palavra-passe",
     submitting: "A iniciar sessão",
     submit: "Iniciar sessão",
+    forgotPassword: "Esqueceste-te da palavra-passe?",
     noAccount: "Ainda não tens conta?",
     register: "Criar conta",
   },
@@ -366,6 +367,27 @@ const pt = {
       overSixteen: "Confirma que tens 16 anos ou mais para criar uma conta.",
       terms: "Aceita os Termos e Condições para criar uma conta.",
     },
+  },
+
+  forgotPassword: {
+    title: "Palavra-passe esquecida",
+    lead: "Introduz o teu nome de utilizador e, se houver um email associado à conta, enviamos-te uma ligação para repor a palavra-passe.",
+    submitting: "A enviar",
+    submit: "Enviar ligação de reposição",
+    sent: "Se essa conta tiver um email associado, enviámos-lhe instruções para repor a palavra-passe. A ligação funciona uma vez e expira ao fim de alguns dias.",
+    backToLogin: "Afinal lembraste-te?",
+  },
+
+  resetPassword: {
+    title: "Escolhe uma nova palavra-passe",
+    newPassword: "Nova palavra-passe",
+    passwordHint: "Pelo menos 8 caracteres. Não só números nem uma palavra-passe comum.",
+    confirmPassword: "Confirmar nova palavra-passe",
+    submitting: "A guardar",
+    submit: "Guardar nova palavra-passe",
+    backToLogin: "Afinal lembraste-te?",
+    requestNewLink: "Pedir uma nova ligação",
+    linkMissing: "Falta informação nesta ligação de reposição de palavra-passe. Pede uma nova abaixo.",
   },
 
   registerInterest: {

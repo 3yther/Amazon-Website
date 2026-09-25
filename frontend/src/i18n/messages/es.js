@@ -323,6 +323,7 @@ const es = {
     password: "Contraseña",
     submitting: "Iniciando sesión",
     submit: "Iniciar sesión",
+    forgotPassword: "¿Has olvidado tu contraseña?",
     noAccount: "¿Aún no tienes cuenta?",
     register: "Regístrate",
   },
@@ -365,6 +366,27 @@ const es = {
       overSixteen: "Confirma que tienes 16 años o más para crear una cuenta.",
       terms: "Acepta los Términos y condiciones para crear una cuenta.",
     },
+  },
+
+  forgotPassword: {
+    title: "Contraseña olvidada",
+    lead: "Introduce tu nombre de usuario y, si la cuenta tiene un correo electrónico registrado, te enviaremos un enlace para restablecer tu contraseña.",
+    submitting: "Enviando",
+    submit: "Enviar enlace de restablecimiento",
+    sent: "Si esa cuenta tiene un correo electrónico registrado, le hemos enviado instrucciones para restablecer la contraseña. El enlace funciona una vez y caduca en unos días.",
+    backToLogin: "¿Lo recordaste después de todo?",
+  },
+
+  resetPassword: {
+    title: "Elige una nueva contraseña",
+    newPassword: "Nueva contraseña",
+    passwordHint: "Al menos 8 caracteres. Que no sean solo números ni una contraseña común.",
+    confirmPassword: "Confirma la nueva contraseña",
+    submitting: "Guardando",
+    submit: "Guardar nueva contraseña",
+    backToLogin: "¿Lo recordaste después de todo?",
+    requestNewLink: "Solicitar un nuevo enlace",
+    linkMissing: "A este enlace de restablecimiento de contraseña le falta información. Solicita uno nuevo a continuación.",
   },
 
   registerInterest: {
