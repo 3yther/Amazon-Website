@@ -1,21 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { PersonIcon } from "./Icons.jsx";
 
 // Same choices as labels.js USER_TYPES, plus the staff role that only exists
 // through Django admin, so a signed-in staff member still gets a label here.
-const ROLE_LABELS = {
-  student: "Student",
-  parent: "Parent or guardian",
-  teacher: "Teacher or school",
-  amazon_staff: "Amazon staff",
-};
+// The words are under account.roles in the language files.
+const ROLES = ["student", "parent", "teacher", "amazon_staff"];
 
+// Labels are translation keys (see i18n/messages/en.js, account).
 const MENU_ITEMS = [
-  { to: "/accessibility", label: "Profile & Settings" },
-  { to: "/accessibility?tab=security", label: "Security Settings" },
-  { to: "/contact", label: "Contact Us" },
+  { to: "/accessibility", label: "account.settings" },
+  { to: "/accessibility?tab=security", label: "account.security" },
+  { to: "/contact", label: "account.contact" },
 ];
 
 // Logging out is NOT here on purpose. It used to be the last item in this
@@ -27,7 +25,7 @@ const MENU_ITEMS = [
 // Shown only to Amazon staff. Hiding it is a convenience, not a control:
 // /staff redirects anyone else away and its API refuses them (see
 // accounts/permissions.py).
-const STAFF_ITEM = { to: "/staff", label: "Submissions" };
+const STAFF_ITEM = { to: "/staff", label: "account.submissions" };
 
 /**
  * The account button in the header, and the menu it opens.
@@ -41,6 +39,7 @@ const STAFF_ITEM = { to: "/staff", label: "Submissions" };
  * the same trigger, the same roles. Only what is inside it changes.
  */
 export default function AccountDropdown() {
+  const t = useT();
   const { user, checked } = useAuth();
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
@@ -88,7 +87,7 @@ export default function AccountDropdown() {
         aria-expanded={open}
         // Spelled out for screen readers, which do not get the visual
         // shorthand of an initial in a circle.
-        aria-label={signedIn ? `Account menu for ${displayName}` : "Sign in or sign up"}
+        aria-label={signedIn ? t("account.menuFor", { name: displayName }) : t("account.signInOrUp")}
         onClick={() => setOpen((current) => !current)}
       >
         {signedIn ? (
@@ -101,7 +100,7 @@ export default function AccountDropdown() {
         {/* Hidden below the narrow breakpoint, where the header has no room
             for it; the icon or initial beside it still says what this is. */}
         <span className="account-button__greeting" aria-hidden="true">
-          {signedIn ? `Hello, ${greetingName}` : "Hello, sign in"}
+          {signedIn ? t("menu.helloUser", { name: greetingName }) : t("menu.helloGuest")}
         </span>
       </button>
 
@@ -116,22 +115,24 @@ export default function AccountDropdown() {
           {signedIn ? (
             <div className="dropdown-header">
               <p>{displayName}</p>
-              <p className="label">{ROLE_LABELS[user.user_type] ?? user.user_type}</p>
+              <p className="label">
+                {ROLES.includes(user.user_type) ? t(`account.roles.${user.user_type}`) : user.user_type}
+              </p>
             </div>
           ) : (
             <div className="dropdown-header">
-              <p>Not signed in</p>
-              <p className="label">Some resources need an account</p>
+              <p>{t("account.notSignedIn")}</p>
+              <p className="label">{t("account.needAccount")}</p>
             </div>
           )}
 
-          <ul className="dropdown-links" role="menu" aria-label="Account">
+          <ul className="dropdown-links" role="menu" aria-label={t("account.menu")}>
             {signedIn ? (
               (user.user_type === "amazon_staff" ? [STAFF_ITEM, ...MENU_ITEMS] : MENU_ITEMS).map(
                 (item) => (
                   <li key={item.label} role="none">
                     <NavLink to={item.to} role="menuitem" onClick={() => setOpen(false)}>
-                      {item.label}
+                      {t(item.label)}
                     </NavLink>
                   </li>
                 ),
@@ -140,7 +141,7 @@ export default function AccountDropdown() {
               <>
                 <li role="none">
                   <NavLink to="/login" role="menuitem" onClick={() => setOpen(false)}>
-                    Sign in
+                    {t("account.signIn")}
                   </NavLink>
                 </li>
                 {/* The one item in either menu that is a button rather than a
@@ -155,7 +156,7 @@ export default function AccountDropdown() {
                     className="button button--primary dropdown-cta"
                     onClick={() => setOpen(false)}
                   >
-                    Sign up
+                    {t("account.signUp")}
                   </NavLink>
                 </li>
               </>

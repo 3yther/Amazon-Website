@@ -1,0 +1,307 @@
+/* The Community pages. Colours only from the tokens in styles.css; squared
+   corners like the rest of the site (no pills); every control at least 44px
+   tall; sizes in rem so the font size setting grows everything together. */
+
+.community-caveat {
+  max-width: 44rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-inline-start: 4px solid var(--orange);
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.community-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.community-search {
+  display: grid;
+  gap: 0.375rem;
+  max-width: 40rem;
+  margin-bottom: 1rem;
+}
+
+.community-search__row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.community-search__row input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--control-h);
+}
+
+/* --- the question list ------------------------------------------------------ */
+
+.community-list,
+.community-answer-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.community-card,
+.community-answer {
+  display: grid;
+  gap: 0.625rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.community-card__title {
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.community-card__title a {
+  text-decoration: none;
+}
+
+.community-card__title a:hover {
+  text-decoration: underline;
+}
+
+.community-card__excerpt {
+  color: var(--ink-muted);
+}
+
+.community-card__meta,
+.community-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.community-meta {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.community-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.community-author__name {
+  font-weight: 700;
+}
+
+/* Role badges: plain for everyone, orange for Amazon staff and the team, so
+   an answer from somebody who actually knows stands out. */
+.community-badge {
+  padding: 0.0625rem 0.375rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.community-badge--official {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+.community-accepted {
+  justify-self: start;
+  padding: 0.125rem 0.5rem;
+  border-inline-start: 3px solid var(--orange);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.community-hidden {
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--line);
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.community-empty {
+  display: grid;
+  justify-items: start;
+  gap: 0.75rem;
+  margin-block: 1.5rem;
+}
+
+.community-more {
+  margin-top: 1.5rem;
+}
+
+/* --- asking ------------------------------------------------------------------------ */
+
+.community-ask {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 56rem) {
+  .community-ask {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}
+
+.community-ask__form,
+.community-answer-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 40rem;
+}
+
+.community-guidelines {
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--orange);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.community-guidelines h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.community-guidelines ul {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+
+/* --- one question ---------------------------------------------------------------- */
+
+.community-question {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 48rem;
+}
+
+.community-question__header {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.community-question__body,
+.community-answer__body {
+  white-space: pre-line; /* keeps the line breaks people typed */
+  overflow-wrap: anywhere;
+}
+
+.community-answers {
+  display: grid;
+  gap: 1rem;
+}
+
+.community-answers h2 {
+  font-size: 1.25rem;
+}
+
+.community-answer--accepted {
+  border-inline-start: 4px solid var(--orange);
+}
+
+.community-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Small secondary buttons: helpful, report, delete, "this helped me". */
+.community-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: var(--control-h);
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.community-action:hover {
+  border-color: var(--blue);
+}
+
+.community-action[aria-pressed="true"] {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
+
+.community-action__count {
+  font-family: var(--font-mono);
+}
+
+.community-report {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.community-report fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.community-report legend {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.community-report__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--control-h);
+}
+
+.community-report__option input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--blue);
+}
+
+.community-report input[type="text"],
+.community-report input:not([type]) {
+  min-height: var(--control-h);
+}
+
+.community-report__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.community-signin {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}

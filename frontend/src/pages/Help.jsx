@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { IconCards, PageHero } from "../components/InfoBlocks.jsx";
 import Pictogram from "../components/Pictogram.jsx";
-import { PROVIDER_QUESTIONS, SERVICES, SITE_ROUTES } from "../helpContent.js";
+import { useSiteContent } from "../i18n/content.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 import helpPhoto from "../assets/help-hero.jpg";
 
@@ -17,19 +18,18 @@ import helpPhoto from "../assets/help-hero.jpg";
  * invented contact details, and nothing promising a feature we have not built.
  */
 export default function Help() {
+  const t = useT();
+  // helpContent.js, in the visitor's language.
+  const { PROVIDER_QUESTIONS, SERVICES, SITE_ROUTES } = useSiteContent().help;
+
   return (
     <>
-      <PageHero
-        label="Help"
-        title="Stuck? Start here."
-        lead="Pick what you are trying to do."
-        photo={helpPhoto}
-      />
+      <PageHero label={t("help.hero.label")} title={t("help.hero.title")} lead={t("help.hero.lead")} photo={helpPhoto} />
 
       <section className="about-section" aria-labelledby="site-title">
         <div className="section-intro">
-          <p className="label">On this site</p>
-          <h2 id="site-title">Where to go</h2>
+          <p className="label">{t("help.site.label")}</p>
+          <h2 id="site-title">{t("help.site.title")}</h2>
         </div>
 
         <ul className="signpost">
@@ -47,9 +47,9 @@ export default function Help() {
 
       <section className="about-section" aria-labelledby="services-title">
         <div className="section-intro">
-          <p className="label">Elsewhere</p>
-          <h2 id="services-title">Free services</h2>
-          <p className="section-intro__lead">Run by the government, not by us.</p>
+          <p className="label">{t("help.services.label")}</p>
+          <h2 id="services-title">{t("help.services.title")}</h2>
+          <p className="section-intro__lead">{t("help.services.lead")}</p>
         </div>
 
         <IconCards items={SERVICES}>
@@ -63,8 +63,8 @@ export default function Help() {
 
       <section className="about-section" aria-labelledby="questions-title">
         <div className="section-intro">
-          <p className="label">Before you choose</p>
-          <h2 id="questions-title">Ask your school or college</h2>
+          <p className="label">{t("help.questions.label")}</p>
+          <h2 id="questions-title">{t("help.questions.title")}</h2>
         </div>
 
         <ul className="audience">
@@ -76,15 +76,14 @@ export default function Help() {
 
       <section className="about-section" aria-labelledby="stuck-title">
         <div className="section-intro">
-          <p className="label">Still stuck</p>
-          <h2 id="stuck-title">Ask a person</h2>
+          <p className="label">{t("help.person.label")}</p>
+          <h2 id="stuck-title">{t("help.person.title")}</h2>
         </div>
 
         <div className="help-person">
           <Pictogram name="phone" />
           <p>
-            Talk to your teacher or careers adviser. Or call the National Careers Service free on{" "}
-            <a href="tel:0800100900">0800 100 900</a>.
+            {t("help.person.text")} <a href="tel:0800100900">0800 100 900</a>.
           </p>
         </div>
       </section>

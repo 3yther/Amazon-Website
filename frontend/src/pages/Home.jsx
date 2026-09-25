@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
 import { AudienceCards, HowItWorks, PathwayTiles, StatsRow } from "../components/HomeSections.jsx";
 import { ArrowIcon } from "../components/Icons.jsx";
@@ -54,13 +55,8 @@ export default function Home() {
 
 /* ---------- Hero ---------- */
 
-// The subhead for each audience card, and the general line when none is chosen.
-const SUBHEADS = {
-  general: "Guides, packs and videos for students, parents and schools.",
-  teacher: "Ready-made class packs and guides for talking to students about T-Levels.",
-  parent: "Clear guides to what T-Levels involve, so you can help your child choose.",
-  student: "Guides and prep packs to help you pick a T-Level and get ready for it.",
-};
+// The subhead for each audience card, and the general line when none is
+// chosen, are home.subheads.<audience> in i18n/messages.
 
 /**
  * Opening band: the page's h1, a subhead that the audience cards further down
@@ -68,6 +64,7 @@ const SUBHEADS = {
  * it, and a mouse pointer lights up the ones nearby.
  */
 function Hero({ audience, subheadRef }) {
+  const t = useT();
   const hero = useRef(null);
   useSpotlight(hero);
 
@@ -76,17 +73,17 @@ function Hero({ audience, subheadRef }) {
       <RisingSubjects />
       <div className="hero__content">
         <h1 id="page-title" className="hero__title">
-          T-Levels, with a smile.
+          {t("home.title")}
         </h1>
 
         {/* Polite live region, so screen readers hear the new line when an
             audience card is picked. */}
         <p ref={subheadRef} className="hero__subhead" aria-live="polite">
-          {SUBHEADS[audience ?? "general"]}
+          {t(`home.subheads.${audience ?? "general"}`)}
         </p>
 
         <Link className="button button--primary" to="/resources">
-          Browse resources
+          {t("home.browse")}
           <ArrowIcon />
         </Link>
       </div>

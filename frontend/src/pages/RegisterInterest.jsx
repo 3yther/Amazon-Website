@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { PATHWAYS } from "../aboutContent.js";
-import { NEXT_STEPS, WHY_WE_ASK } from "../interestContent.js";
 import InterestForm from "../components/InterestForm.jsx";
 import { IconList } from "../components/InfoBlocks.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
+import { useSiteContent } from "../i18n/content.js";
 import "../about.css";
 
 // The Register interest page (/register-interest): the Expression of Interest
@@ -11,6 +11,9 @@ import "../about.css";
 // sits in a box on the Sign up page.
 
 export default function RegisterInterest() {
+  const t = useT();
+  const { about, interest } = useSiteContent();
+  const { PATHWAYS } = about;
   const [searchParams] = useSearchParams();
   const [sentPathway, setSentPathway] = useState(null);
   const thanksHeading = useRef(null);
@@ -29,16 +32,15 @@ export default function RegisterInterest() {
   if (sentPathway) {
     return (
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Register interest</p>
+        <p className="label">{t("registerInterest.submit")}</p>
         <h1 id="page-title" tabIndex={-1} ref={thanksHeading}>
-          Thanks, you are on the list
+          {t("registerInterest.thanks.title")}
         </h1>
-        <p className="lead">
-          Your interest in the {sentPathway.name} pathway has been sent to the Amazon Emerging Talent
-          team.
-        </p>
+        <p className="lead">{t("registerInterest.thanks.lead", { pathway: sentPathway.name })}</p>
         <p>
-          While you wait, see <Link to="/t-levels-at-amazon">what an Amazon placement looks like</Link>.
+          {t("registerInterest.thanks.whileYouWait")}{" "}
+          <Link to="/t-levels-at-amazon">{t("registerInterest.thanks.placementLink")}</Link>
+          {t("registerInterest.thanks.after")}
         </p>
       </section>
     );
@@ -47,11 +49,9 @@ export default function RegisterInterest() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Amazon Emerging Talent</p>
-        <h1 id="page-title">Register your interest</h1>
-        <p className="lead">
-          Want a T-Level placement at Amazon? Tell us which pathway. You do not need an account.
-        </p>
+        <p className="label">{t("registerInterest.label")}</p>
+        <h1 id="page-title">{t("registerInterest.title")}</h1>
+        <p className="lead">{t("registerInterest.lead")}</p>
       </section>
 
       <div className="interest">
@@ -59,11 +59,11 @@ export default function RegisterInterest() {
 
         <aside className="interest__aside" aria-labelledby="next-title">
           <h2 id="next-title" className="interest__aside-title">
-            What happens next
+            {t("registerInterest.nextTitle")}
           </h2>
-          <IconList items={NEXT_STEPS} />
-          <p className="interest__note">{WHY_WE_ASK}</p>
-          <p className="interest__note">Under 16? Ask a parent or carer before you send this.</p>
+          <IconList items={interest.NEXT_STEPS} />
+          <p className="interest__note">{interest.WHY_WE_ASK}</p>
+          <p className="interest__note">{t("registerInterest.underSixteen")}</p>
         </aside>
       </div>
     </>

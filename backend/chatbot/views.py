@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -74,12 +75,22 @@ class ChatView(CsrfCheckedMixin, APIView):
         # Deliberately does not start a session. Reading an empty history is not
         # a reason to give somebody a cookie; sending a message is, and POST
         # below does that. Data minimisation, same as the interest form.
+        #
+        # ai_available tells the widget whether an AI is set up at all. Without
+        # one, Smiley answers from its own checked copy in the browser and does
+        # not send (or store) questions nothing here could answer.
+        ai_available = bool(settings.ANTHROPIC_API_KEY)
         session_id = request.session.session_key
         if not session_id and not request.user.is_authenticated:
-            return Response({"messages": []})
+            return Response({"messages": [], "ai_available": ai_available})
 
         messages = recent_messages(conversation_queryset(request, session_id))
-        return Response({"messages": ChatMessageSerializer(messages, many=True).data})
+        return Response(
+            {
+                "messages": ChatMessageSerializer(messages, many=True).data,
+                "ai_available": ai_available,
+            }
+        )
 
     def post(self, request):
         serializer = ChatRequestSerializer(data=request.data)
@@ -112,7 +123,9 @@ class ChatView(CsrfCheckedMixin, APIView):
             reply = get_ai_response(
                 prompt=data["message"],
                 context=build_system_prompt(
-                    quiz_context=quiz_context, audience=data.get("audience") or None
+                    quiz_context=quiz_context,
+                    audience=data.get("audience") or None,
+                    language=data.get("language") or None,
                 ),
                 history=[
                     {"role": message.role, "content": message.message} for message in history

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AboutFaq from "../components/AboutFaq.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
 /**
@@ -8,13 +9,15 @@ import "../about.css";
  * so both pages always say the same thing.
  */
 export default function Faqs() {
+  const t = useT();
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">FAQs</p>
-        <h1 id="page-title">Questions people ask</h1>
+        <p className="label">{t("faqs.label")}</p>
+        <h1 id="page-title">{t("faqs.title")}</h1>
         <p className="lead">
-          Not here? Ask Smiley, or see <Link to="/help">Help</Link>.
+          {t("faqs.leadBefore")} <Link to="/help">{t("faqs.leadLink")}</Link>
+          {t("faqs.leadAfter")}
         </p>
       </section>
 

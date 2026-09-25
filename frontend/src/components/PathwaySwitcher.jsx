@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { PATHWAYS } from "../aboutContent.js";
+import { useSiteContent } from "../i18n/content.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import {
   BusinessIcon,
   DigitalIcon,
@@ -33,6 +34,9 @@ const PATHWAY_ICONS = {
 // arrow keys move the selection and the focus together.
 
 export default function PathwaySwitcher() {
+  const t = useT();
+  // The pathways from aboutContent.js, in the visitor's language.
+  const PATHWAYS = useSiteContent().about.PATHWAYS;
   const [activeSlug, setActiveSlug] = useState(PATHWAYS[0].slug);
   // Holds the five tab buttons, so a key press can focus the next one.
   const tabRefs = useRef([]);
@@ -62,13 +66,13 @@ export default function PathwaySwitcher() {
   return (
     <section className="about-section" aria-labelledby="pathways-title">
       <div className="section-intro">
-        <p className="label">Subjects</p>
-        <h2 id="pathways-title">The five pathways at Amazon</h2>
-        <p className="section-intro__lead">Pick one to see what the placement involves.</p>
+        <p className="label">{t("about.switcher.label")}</p>
+        <h2 id="pathways-title">{t("about.switcher.title")}</h2>
+        <p className="section-intro__lead">{t("about.switcher.lead")}</p>
       </div>
 
       <div className="pathways">
-        <div className="pathways__tabs" role="tablist" aria-label="Pathways" onKeyDown={handleKeyDown}>
+        <div className="pathways__tabs" role="tablist" aria-label={t("about.switcher.tabs")} onKeyDown={handleKeyDown}>
           {PATHWAYS.map((pathway, index) => {
             const selected = pathway.slug === activeSlug;
             const PathwayIcon = PATHWAY_ICONS[pathway.slug];
@@ -113,7 +117,7 @@ export default function PathwaySwitcher() {
             <h3 className="pathways__title">{pathway.name}</h3>
 
             <div className="pathways__detail">
-              <h4 className="label">T-Levels in this pathway</h4>
+              <h4 className="label">{t("about.switcher.tLevels")}</h4>
               <ul className="pathways__list">
                 {pathway.tLevels.map((name) => (
                   <li key={name}>{name}</li>
@@ -122,12 +126,12 @@ export default function PathwaySwitcher() {
             </div>
 
             <div className="pathways__detail">
-              <h4 className="label">On placement</h4>
+              <h4 className="label">{t("about.switcher.onPlacement")}</h4>
               <p>{pathway.placement}</p>
             </div>
 
             <div className="pathways__detail">
-              <h4 className="label">Suits</h4>
+              <h4 className="label">{t("about.switcher.suits")}</h4>
               <p>{pathway.suits}</p>
             </div>
 
@@ -143,13 +147,13 @@ export default function PathwaySwitcher() {
                 className="button button--primary"
                 to={`/register-interest?pathway=${pathway.slug}`}
               >
-                Register interest in {pathway.name}
+                {t("about.switcher.registerIn", { name: pathway.name })}
               </Link>
               {/* The content library does not read a pathway out of the URL
                   yet, so this is a plain link rather than a promise it cannot
                   keep. */}
               <Link className="button" to="/resources">
-                Browse resources
+                {t("home.browse")}
               </Link>
             </div>
           </div>

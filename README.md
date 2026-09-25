@@ -50,7 +50,10 @@ The site does three jobs:
 - **Accounts** with sign up and log in, so gated content unlocks for signed-in users.
 - **Expression of Interest** form, validated server side and rate limited.
 - **T Level Near You**: enter a postcode, optionally pick a pathway and a distance, and see the schools and colleges running T Levels near you, nearest first.
-- **Smiley, the AI guide**: answers T Level questions from the site's own checked copy, asks who you are and what interests you, offers help when a page goes quiet or a quiz answer goes wrong, and has a personality of its own (it blinks, watches your cursor, dozes off and wakes up). Every animation stops under reduced motion.- **Help, About and T Level at Amazon** information pages.
+- **Smiley, the guide**: answers most T Level questions by itself, in the browser, from the site's own checked copy (no API key needed). The AI only takes questions Smiley cannot match, and if it is not there Smiley says so honestly and points to the Community. It asks who you are, offers help when a page goes quiet or a quiz answer goes wrong, catches safeguarding messages and replies with checked helpline numbers (never sent to the server), and has a personality of its own: it blinks, watches your cursor, dozes off, peeks out from the edge of the page now and then, and hides a few easter eggs. Every animation stops under reduced motion.
+- **Community**: a place to ask about T Levels and Amazon placements and have students, parents, teachers and Amazon staff answer. Posts publish straight away but pass a filter first (personal details, links, strong language, and anything that sounds like someone is at risk is held back with support numbers). Answers can be marked helpful, the asker can mark the one that helped, and three reports hide a post for staff to review.
+- **Ten languages**: English plus the nine most spoken in England (Census 2021): Polish, Romanian, Panjabi, Urdu, Portuguese, Spanish, Arabic, Bengali and Gujarati, with right-to-left layouts for Arabic and Urdu. The interface, forms, Smiley, the Community and the About, T Levels at Amazon and Help pages are translated by machine and labelled as such; English stays the version that counts, and the legal pages stay in English only.
+- **Help, About and T Level at Amazon** information pages.
 - **Staff admin** where Amazon staff review submissions and manage content.
 
 ## Screenshots
@@ -88,9 +91,14 @@ backend/
   content/     Pathway, ContentItem, content API
   interest/    ExpressionOfInterest, submission API
   providers/   Provider, the near-you search API and the geocoding command
-  chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI providerfrontend/
+  chatbot/     Smiley's chat API, its checked facts (knowledge.py) and the AI provider
+  community/   Questions, answers, helpful votes, reports and the posting filter (moderation.py)
+frontend/
   src/api.js                    all calls to the Django API
-  src/assistant/                Smiley: the chat widget, its face, moods and script
+  src/assistant/                Smiley: the chat widget, its face, moods, easter eggs and script
+  src/assistant/answers/        Smiley's own answers: topics, matching and safeguarding
+  src/community/                shared parts of the Community pages
+  src/i18n/                     languages: messages/<code>.js for the interface, content/<code>.js for page copy
   src/pages/ContentLibrary.jsx  example page: lists content from the API
   src/styles.css                colour tokens and styles
 ```
@@ -144,10 +152,9 @@ Both `backend/` and `frontend/` ship an `.env.example` file. Copy each one and f
 | `DJANGO_ALLOWED_HOSTS` | Always | Comma-separated hostnames Django will serve. Defaults to `localhost,127.0.0.1`. |
 | `CORS_ALLOWED_ORIGINS` | If cross-origin | Only when the React app is served from a different origin than the API. The Vite proxy makes them the same origin locally, so you can leave the default. |
 | `CSRF_TRUSTED_ORIGINS` | If cross-origin | Same as above, for CSRF. |
-| `ANTHROPIC_API_KEY` | For the assistant | Key from console.anthropic.com. Without it the chat widget shows its fallback message. Never commit it. |
 | `DATABASE_URL` | Deployed only | A `postgres://` URL. When set, it replaces SQLite. Leave unset locally. |
 | `DJANGO_BEHIND_HTTPS_PROXY` | Deployed only | `true` when a proxy in front ends HTTPS (Railway does). |
-| `ANTHROPIC_API_KEY` | For Smiley | Lets Smiley answer questions. Without it the site works and Smiley shows a fallback message. Server side only, never sent to the browser. |
+| `ANTHROPIC_API_KEY` | Optional | Lets Smiley use the AI for questions it cannot answer by itself. Without it Smiley still answers from the site's checked copy and says honestly when it does not know. Key from console.anthropic.com. Server side only, never sent to the browser. Never commit it. |
 | `ANTHROPIC_SERVER_SIDE_FALLBACK` | Rarely | Set to `false` if the API rejects the server-side fallback option. |
 
 Production also has commented-out `POSTGRES_*` and `AWS_*` variables for RDS and S3. See the comments in `backend/config/settings.py`.
@@ -196,6 +203,14 @@ The Railway preview is temporary and has known limits: the Django admin is unsty
 | GET | `/api/providers/search/` | Schools and colleges near a postcode, nearest first. `postcode=` required; `pathway=<slug>` and `radius=<miles>` (default 15) optional |
 | GET | `/api/chat/` | The visitor's recent messages with Smiley |
 | POST | `/api/chat/` | Ask Smiley something. Rate limited. `503` when the AI is unavailable |
+| GET | `/api/community/questions/` | Paginated. Filters: `topic=`, `pathway=<slug>`, `q=` (search), `sort=new|helpful|unanswered` |
+| POST | `/api/community/questions/` | Ask a question. Signed in, rate limited, filtered before it is published |
+| GET, DELETE | `/api/community/questions/<id>/` | One question with its answers. Only the asker can delete it (staff hide posts in the admin) |
+| POST | `/api/community/questions/<id>/answers/` | Answer a question. Signed in, rate limited, filtered |
+| DELETE | `/api/community/answers/<id>/` | Delete your own answer |
+| POST | `/api/community/<questions|answers>/<id>/helpful/` | Toggle "helpful". Signed in |
+| POST | `/api/community/answers/<id>/accept/` | The asker marks the answer that helped |
+| POST | `/api/community/<questions|answers>/<id>/report/` | Report a post. Three reports, or one from staff, hide it for review |
 
 Filtering by pathway also returns items for all pathways; filtering by audience also returns items for everyone. Sign-up content is listed for everyone, but its `file` link is only sent to signed-in users (`locked: true` otherwise).
 
@@ -204,6 +219,8 @@ The provider search answers `{ postcode, radius_miles, count, results }`. It geo
 ## Admin
 
 Amazon staff review Expressions of Interest at `/admin/`. Submissions are read-only there. A staff account needs "Staff status" plus the "Can view expression of interest" permission (or be a superuser).
+
+Community posts and reports are there too: staff can hide or restore a question or answer, and work through open reports.
 
 ## How we work
 
@@ -242,6 +259,7 @@ Built by five T Level students:
 - The pathway summaries in `backend/content/fixtures/pathways.json` are draft copy. Check them against gov.uk before launch.
 - Production swaps SQLite for PostgreSQL on RDS and local files for S3. See the comments in `backend/config/settings.py`.
 - Never commit `.env` files or `*.pem` keys.
+- Translations live in `frontend/src/i18n/`. To change wording, change `messages/en.js` (or the English content file) first, then each language. A test checks every language has every string, keeps every `{placeholder}` and every figure (hours, points, pounds, phone numbers), and that each quiz answer still matches an option.
 - Smiley only answers from facts a person has checked, most quoted word for word from `frontend/src/aboutContent.js` (a test fails if the two drift apart). See what it still cannot answer with `cd backend && python manage.py check_chat_facts`.
 
 ## Licence

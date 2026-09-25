@@ -13,7 +13,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *   Busy states   listening while you type, thinking while it waits, curious
  *                 while you hover over it
  *   Extras        follows the page up and down as you scroll, says hello
- *                 when you come back to the tab, gets dizzy if poked too much
+ *                 when you come back to the tab, gets dizzy if poked too much,
+ *                 gets shy if you hover over it for five seconds
+ *   Tricks        dance, flip, barrel roll, a nap and a fashion show, when
+ *                 asked in the chat (perform)
+ *   Outfits       a seasonal hat by the visitor's calendar (seasonalOutfit)
  *
  * PRIVACY: every signal here (cursor, scrolling, idle time, tab switches) is
  * read in the browser and forgotten. None of it is sent or stored.
@@ -56,7 +60,35 @@ const REACTION_MOTION = {
   surprised: "hop",
   celebrating: "bounce",
   dizzy: "sway",
+  shy: "sway",
 };
+
+// Hovering over Smiley this long makes it shy.
+const SHY_AFTER_MS = 5000;
+
+// A nap ("go to sleep" in the chat) lasts this long, whatever you do.
+const NAP_MS = 5000;
+
+// Every outfit, in the order the "outfits" trick shows them off.
+export const OUTFITS = ["bobble", "witch", "party", "gradcap"];
+
+/**
+ * What Smiley wears today, by the visitor's own calendar:
+ *   party hat    31 December to 2 January
+ *   bobble hat   the rest of December to the end of February
+ *   witch's hat  24 to 31 October
+ *   mortarboard  10 to 20 August, results season
+ * None otherwise. Nothing religious, so it suits everyone.
+ */
+export function seasonalOutfit(date = new Date()) {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  if ((month === 12 && day === 31) || (month === 1 && day <= 2)) return "party";
+  if (month === 12 || month === 1 || month === 2) return "bobble";
+  if (month === 10 && day >= 24) return "witch";
+  if (month === 8 && day >= 10 && day <= 20) return "gradcap";
+  return null;
+}
 
 const ACTIVITY_EVENTS = ["mousemove", "pointerdown", "keydown", "scroll", "touchstart"];
 
@@ -87,13 +119,18 @@ export function useSmiley({ reducedMotion }) {
   const [sleep, setSleep] = useState("awake"); // awake | sleepy | asleep
   const [motion, setMotion] = useState({ name: null, key: 0 });
   const [antenna, setAntenna] = useState({ name: null, key: 0 });
+  const [outfit, setOutfit] = useState(() => seasonalOutfit());
 
   const reactionTimer = useRef(null);
   const glanceTimer = useRef(null);
   const wakeTimer = useRef(null);
+  const shyTimer = useRef(null);
+  const outfitTimers = useRef([]);
   const pokes = useRef([]);
   const lastCursorMove = useRef(Date.now());
   const sleepRef = useRef("awake");
+  // While napping, activity does not wake Smiley until this time.
+  const napUntil = useRef(0);
 
   // --- reactions ------------------------------------------------------------
 
@@ -149,6 +186,54 @@ export function useSmiley({ reducedMotion }) {
     react("celebrating", 2600);
     wiggle();
   }, [react, wiggle]);
+
+  /** Hovering: curious straight away, shy if you hover for too long. */
+  const hover = useCallback(
+    (on) => {
+      setHovering(on);
+      window.clearTimeout(shyTimer.current);
+      if (on) shyTimer.current = window.setTimeout(() => react("shy", 2600), SHY_AFTER_MS);
+    },
+    [react],
+  );
+
+  /**
+   * A trick asked for in the chat: "dance", "flip", "spin", "nap", "outfits",
+   * "wiggle", or any reaction's movement. Under reduced motion the moves are
+   * skipped; the nap and the outfits still happen, because they are changes
+   * of face and clothes rather than movement.
+   */
+  const perform = useCallback(
+    (trick) => {
+      if (!trick) return;
+
+      if (trick === "nap") {
+        napUntil.current = Date.now() + NAP_MS;
+        sleepRef.current = "asleep";
+        setSleep("asleep");
+        return;
+      }
+
+      if (trick === "outfits") {
+        for (const timer of outfitTimers.current) window.clearTimeout(timer);
+        const own = seasonalOutfit();
+        outfitTimers.current = [
+          ...OUTFITS.map((name, index) => window.setTimeout(() => setOutfit(name), index * 1100)),
+          window.setTimeout(() => setOutfit(own), OUTFITS.length * 1100),
+        ];
+        return;
+      }
+
+      if (trick === "wiggle") {
+        wiggle();
+        return;
+      }
+
+      // dance, flip, spin, hop, bounce, sway: each is a CSS animation.
+      play(trick);
+    },
+    [play, wiggle],
+  );
 
   // --- eyes follow the cursor -------------------------------------------------
 
@@ -275,6 +360,8 @@ export function useSmiley({ reducedMotion }) {
     const markActive = () => {
       lastActivity = Date.now();
       if (sleepRef.current === "awake") return;
+      // A nap asked for in the chat: typing the next question does not count.
+      if (Date.now() < napUntil.current) return;
 
       // Woken up: a start, then pleased to see you.
       changeSleep("awake");
@@ -325,6 +412,8 @@ export function useSmiley({ reducedMotion }) {
       window.clearTimeout(reactionTimer.current);
       window.clearTimeout(glanceTimer.current);
       window.clearTimeout(wakeTimer.current);
+      window.clearTimeout(shyTimer.current);
+      for (const timer of outfitTimers.current) window.clearTimeout(timer);
     },
     [],
   );
@@ -352,6 +441,7 @@ export function useSmiley({ reducedMotion }) {
       motionKey: motion.key,
       antenna: antenna.name,
       antennaKey: antenna.key,
+      outfit,
       still: reducedMotion,
     },
     react,
@@ -359,6 +449,8 @@ export function useSmiley({ reducedMotion }) {
     poke,
     celebrate,
     wiggle,
+    perform,
+    hover,
     setThinking,
     setListening,
     setHovering,

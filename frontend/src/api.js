@@ -234,10 +234,12 @@ export function submitFeedback(fields) {
  * Throws ApiError with status 503 when the assistant itself is unavailable, so
  * the widget can show its fallback message.
  */
-export function sendChatMessage(message, { quiz, audience } = {}) {
+export function sendChatMessage(message, { quiz, audience, language } = {}) {
   return postJson("/api/chat/", {
     message,
     ...(audience && { audience }),
+    // The site language, so Smiley's AI replies in it. Not stored.
+    ...(language && { language }),
     ...(quiz && {
       quiz_question: quiz.question,
       quiz_correct_answer: quiz.correctAnswer,
@@ -253,4 +255,55 @@ export function sendChatMessage(message, { quiz, audience } = {}) {
  */
 export function getChatHistory(options) {
   return request("/api/chat/", options);
+}
+
+// --- the Community -----------------------------------------------------------
+
+/**
+ * One page of Community questions: { count, next, previous, results }.
+ * filters: topic, pathway (a slug), sort (new | helpful | unanswered), q, page.
+ */
+export function getQuestions(filters, options) {
+  return request("/api/community/questions/", { ...options, params: filters });
+}
+
+/** One question with its answers. */
+export function getQuestion(id, options) {
+  return request(`/api/community/questions/${id}/`, options);
+}
+
+/**
+ * Ask a question: { title, body, topic, pathway }. A 400 with
+ * { moderation: [reason] } means it was stopped before publishing (see
+ * backend/community/moderation.py).
+ */
+export function askQuestion(fields) {
+  return postJson("/api/community/questions/", fields);
+}
+
+export function answerQuestion(questionId, body) {
+  return postJson(`/api/community/questions/${questionId}/answers/`, { body });
+}
+
+export function deleteQuestion(id) {
+  return sendJson("DELETE", `/api/community/questions/${id}/`);
+}
+
+export function deleteAnswer(id) {
+  return sendJson("DELETE", `/api/community/answers/${id}/`);
+}
+
+/** Marks a post helpful, or takes the mark back. kind: "questions" | "answers". */
+export function markHelpful(kind, id) {
+  return postJson(`/api/community/${kind}/${id}/helpful/`);
+}
+
+/** The person who asked marks the answer that helped (or unmarks it). */
+export function acceptAnswer(id) {
+  return postJson(`/api/community/answers/${id}/accept/`);
+}
+
+/** Flags a post for staff. kind: "questions" | "answers". */
+export function reportPost(kind, id, reason, note = "") {
+  return postJson(`/api/community/${kind}/${id}/report/`, { reason, note });
 }

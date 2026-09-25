@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { submitInterest } from "../api.js";
 import { useAuth } from "../auth.jsx";
-import { PATHWAYS } from "../aboutContent.js";
 import { formErrors } from "../formErrors.js";
+import { useT } from "../i18n/I18nProvider.jsx";
+import { useSiteContent } from "../i18n/content.js";
 import { USER_TYPES } from "../labels.js";
 import { CheckboxField, FormError, SelectField, TextareaField, TextField } from "./FormFields.jsx";
 
@@ -13,7 +14,8 @@ import { CheckboxField, FormError, SelectField, TextareaField, TextField } from 
 // Amazon staff to see. No account is needed.
 //
 // Used in two places: the Register interest page, and the box on the Sign up
-// page. Each decides what to show once it is sent, through onSent.
+// page. Each decides what to show once it is sent, through onSent. Wording is
+// in i18n/messages (registerInterest).
 
 const MESSAGE_LIMIT = 2000; // matches MESSAGE_MAX_LENGTH in interest/serializers.py
 
@@ -23,20 +25,20 @@ const EMPTY = { full_name: "", email: "", user_type: "", pathway: "", message: "
  * Quick checks in the browser, so the common mistakes are caught before
  * anything is sent. The server checks everything again; its answer wins.
  */
-function checkFields(fields, consent) {
+function checkFields(fields, consent, t) {
   const errors = {};
-  if (fields.full_name.trim().length < 2) errors.full_name = "Enter your full name.";
+  if (fields.full_name.trim().length < 2) errors.full_name = t("registerInterest.errors.fullName");
   if (!/^\S+@\S+\.\S+$/.test(fields.email.trim())) {
-    errors.email = "Enter an email address in the format name@example.com.";
+    errors.email = t("registerInterest.errors.email");
   }
-  if (!fields.user_type) errors.user_type = "Choose student, parent or teacher.";
-  if (!fields.pathway) errors.pathway = "Choose a pathway.";
+  if (!fields.user_type) errors.user_type = t("registerInterest.errors.userType");
+  if (!fields.pathway) errors.pathway = t("registerInterest.errors.pathway");
   if (fields.message.length > MESSAGE_LIMIT) {
-    errors.message = `Keep your message under ${MESSAGE_LIMIT} characters.`;
+    errors.message = t("registerInterest.errors.message", { limit: MESSAGE_LIMIT });
   }
   // TEAM NOTE: the backend does not store this tick yet. If Amazon needs a
   // record of consent, add a field to ExpressionOfInterest (see MODELS.md).
-  if (!consent) errors.consent = "Tick the box so we can share your details with Amazon.";
+  if (!consent) errors.consent = t("registerInterest.errors.consent");
   return errors;
 }
 
@@ -45,6 +47,8 @@ function checkFields(fields, consent) {
  * called with the chosen pathway once the server has accepted it.
  */
 export default function InterestForm({ startingPathway = "", onSent }) {
+  const t = useT();
+  const { PATHWAYS } = useSiteContent().about;
   // Nobody signed in (or no sign-in check yet) just means nothing to prefill.
   const user = useAuth()?.user;
 
@@ -66,7 +70,7 @@ export default function InterestForm({ startingPathway = "", onSent }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const found = checkFields(fields, consent);
+    const found = checkFields(fields, consent, t);
     if (Object.keys(found).length > 0) {
       setErrors(found);
       // Put focus on the first problem, so keyboard and screen reader users
@@ -93,7 +97,7 @@ export default function InterestForm({ startingPathway = "", onSent }) {
 
       <TextField
         id="interest-full-name"
-        label="Full name"
+        label={t("registerInterest.fullName")}
         name="full_name"
         value={fields.full_name}
         onChange={updateField}
@@ -103,7 +107,7 @@ export default function InterestForm({ startingPathway = "", onSent }) {
       />
       <TextField
         id="interest-email"
-        label="Email"
+        label={t("registerInterest.email")}
         name="email"
         type="email"
         value={fields.email}
@@ -114,30 +118,30 @@ export default function InterestForm({ startingPathway = "", onSent }) {
       />
       <SelectField
         id="interest-user-type"
-        label="I am a"
+        label={t("registerInterest.iAmA")}
         name="user_type"
         value={fields.user_type}
         onChange={updateField}
         required
         error={errors.user_type}
       >
-        <option value="">Choose one</option>
-        {Object.entries(USER_TYPES).map(([value, label]) => (
+        <option value="">{t("register.chooseOne")}</option>
+        {Object.keys(USER_TYPES).map((value) => (
           <option key={value} value={value}>
-            {label}
+            {t(`account.roles.${value}`)}
           </option>
         ))}
       </SelectField>
       <SelectField
         id="interest-pathway"
-        label="Pathway"
+        label={t("registerInterest.pathway")}
         name="pathway"
         value={fields.pathway}
         onChange={updateField}
         required
         error={errors.pathway}
       >
-        <option value="">Choose one</option>
+        <option value="">{t("register.chooseOne")}</option>
         {PATHWAYS.map((pathway) => (
           <option key={pathway.slug} value={pathway.slug}>
             {pathway.name}
@@ -146,9 +150,9 @@ export default function InterestForm({ startingPathway = "", onSent }) {
       </SelectField>
       <TextareaField
         id="interest-message"
-        label="Anything to add? (optional)"
+        label={t("registerInterest.message")}
         name="message"
-        hint="For example, a question about the placement."
+        hint={t("registerInterest.messageHint")}
         value={fields.message}
         onChange={updateField}
         maxLength={MESSAGE_LIMIT}
@@ -163,14 +167,15 @@ export default function InterestForm({ startingPathway = "", onSent }) {
         error={errors.consent}
         label={
           <>
-            I am happy for the Amazon Emerging Talent team to see these details and contact me.
-            See our <Link to="/privacy">Privacy Policy</Link>.
+            {t("registerInterest.consent")} {t("registerInterest.privacyBefore")}{" "}
+            <Link to="/privacy">{t("registerInterest.privacyLink")}</Link>
+            {t("registerInterest.privacyAfter")}
           </>
         }
       />
 
       <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-        {status === "submitting" ? "Sending" : "Register interest"}
+        {status === "submitting" ? t("registerInterest.submitting") : t("registerInterest.submit")}
       </button>
     </form>
   );

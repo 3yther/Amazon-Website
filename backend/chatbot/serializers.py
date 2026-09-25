@@ -3,7 +3,7 @@ import re
 from django.utils.html import strip_tags
 from rest_framework import serializers
 
-from .knowledge import AUDIENCES
+from .knowledge import AUDIENCES, LANGUAGES
 from .models import ChatMessage
 
 # Long enough for a real question, short enough to keep the prompt small and to
@@ -41,6 +41,8 @@ class ChatRequestSerializer(serializers.Serializer):
     audience = serializers.ChoiceField(
         choices=sorted(AUDIENCES), required=False, allow_blank=True
     )
+    # The site language the visitor chose, so Smiley replies in it.
+    language = serializers.ChoiceField(choices=sorted(LANGUAGES), required=False, allow_blank=True)
     quiz_question = serializers.CharField(max_length=300, required=False, allow_blank=True)
     quiz_correct_answer = serializers.CharField(
         max_length=200, required=False, allow_blank=True

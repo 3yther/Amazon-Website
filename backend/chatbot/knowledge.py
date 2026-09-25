@@ -108,7 +108,8 @@ VERIFIED_FACTS = (
             "The site has: Home, About T-Level (/about), T-Levels at Amazon "
             "(/t-levels-at-amazon), Learning Pathways (/pathways), All T-Levels, every subject "
             "(/t-levels), Get involved (/get-involved), Resources (/resources), "
-            "T-Level Near You (/t-level-near-you), a knowledge quiz (/quiz), FAQs (/faqs), "
+            "Find T-Levels Near You (/t-level-near-you), a knowledge quiz (/quiz), the "
+            "Community, where people ask and answer questions (/community), FAQs (/faqs), "
             "Help (/help), Register interest (/register-interest), Sign up (/register) and "
             "Log in (/login). Support pages: Contact us (/contact), Report an issue "
             "(/report-issue), Feedback (/feedback) and Accessibility help "
@@ -454,13 +455,31 @@ AUDIENCES = {
 }
 
 
-def build_system_prompt(quiz_context=None, audience=None):
+# The languages the site is available in (frontend/src/i18n/languages.js).
+# English plus the nine most common main languages in England after English,
+# from the 2021 Census.
+LANGUAGES = {
+    "en": "British English",
+    "pl": "Polish",
+    "ro": "Romanian",
+    "pa": "Panjabi, written in Gurmukhi script",
+    "ur": "Urdu",
+    "pt": "European Portuguese",
+    "es": "Spanish",
+    "ar": "Modern Standard Arabic",
+    "bn": "Bengali",
+    "gu": "Gujarati",
+}
+
+
+def build_system_prompt(quiz_context=None, audience=None, language=None):
     """
     Smiley's personality, its rules and its facts.
 
     quiz_context is set when a visitor got a quiz question wrong, so the answer
     is grounded in that question rather than written freehand. audience is who
-    the visitor said they are, so the answer can be pitched for them.
+    the visitor said they are, so the answer can be pitched for them. language
+    is the site language they chose, so Smiley replies in it.
     """
     prompt = f"""You are Smiley, the guide on T-SMILE. T-SMILE is a website that explains \
 T-Levels, including T-Levels at Amazon, to students aged 16 to 18, to their parents and \
@@ -517,6 +536,14 @@ answering normally as Smiley under these rules."""
         prompt += (
             f"\n\nWHO YOU ARE TALKING TO\nThe visitor said they are {AUDIENCES[audience]}. "
             "Pitch your answer for them."
+        )
+
+    if language in LANGUAGES and language != "en":
+        prompt += (
+            f"\n\nWHICH LANGUAGE TO USE\nThe visitor is reading the site in {LANGUAGES[language]}. "
+            f"Reply in {LANGUAGES[language]}, in plain, simple words, even though the facts above "
+            "are in English. Keep numbers, names, page addresses like /help, and phone numbers "
+            "exactly as they are. Never add or change a fact while translating it."
         )
 
     if quiz_context:

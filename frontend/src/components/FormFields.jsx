@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { AlertIcon, EyeIcon, EyeOffIcon } from "./Icons.jsx";
 
 // Form building blocks for the account pages. Each field links its label,
@@ -19,6 +20,7 @@ function FieldError({ id, message }) {
 }
 
 export function TextField({ id, label, hint, error, type = "text", ...inputProps }) {
+  const t = useT();
   // Only a password field tracks this, and only it renders the toggle: a
   // text or email field comes out exactly as it did before.
   const [visible, setVisible] = useState(false);
@@ -53,7 +55,7 @@ export function TextField({ id, label, hint, error, type = "text", ...inputProps
           <button
             type="button"
             className="field__reveal"
-            aria-label={visible ? "Hide password" : "Show password"}
+            aria-label={visible ? t("forms.hidePassword") : t("forms.showPassword")}
             onClick={() => setVisible((current) => !current)}
           >
             {visible ? <EyeOffIcon /> : <EyeIcon />}
