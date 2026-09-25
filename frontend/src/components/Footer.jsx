@@ -55,10 +55,9 @@ export default function Footer() {
       <div className="container footer-content">
         <div className="footer-column">
           <p className="label">About</p>
-          {/* TODO: copy review - placeholder description */}
           <p>
-            T-SMILE helps students, parents and teachers explore T-Levels and the Digital T-Level
-            at Amazon, with free and sign-up resources in one place.
+            T-Levels and Amazon placements, explained for students, parents and teachers. A
+            student project for Amazon Emerging Talent, not an official Amazon website.
           </p>
         </div>
 
