@@ -64,7 +64,7 @@ export default {
         placement:
           "Trabalhas com uma equipa técnica em tarefas reais: escrever e rever código, testar, corrigir erros, ou manter sistemas e utilizadores a funcionar.",
         suits: "Pessoas que gostam de resolver um problema e de o ver funcionar logo.",
-        amazonStatus: "Onde começou o programa de T Level da Amazon.",
+        amazonStatus: "Onde começou o programa de T-Level da Amazon.",
       },
       {
         name: "Negócios",
@@ -101,9 +101,9 @@ export default {
     ],
     FAQS: [
       {
-        question: "Um T Level é o mesmo que uma aprendizagem (apprenticeship)?",
+        question: "Um T-Level é o mesmo que uma aprendizagem (apprenticeship)?",
         answer:
-          "Não, é ao contrário. Uma aprendizagem é sobretudo trabalho pago com algum estudo. Um T Level é sobretudo estudo, cerca de 80 por cento, e um estágio numa empresa de pelo menos 315 horas completa o resto.",
+          "Não, é ao contrário. Uma aprendizagem é sobretudo trabalho pago com algum estudo. Um T-Level é sobretudo estudo, cerca de 80 por cento, e um estágio numa empresa de pelo menos 315 horas completa o resto.",
       },
       {
         question: "De que GCSE preciso?",
@@ -111,9 +111,9 @@ export default {
           "Os requisitos de entrada são definidos por cada escola ou college, não a nível nacional. É comum pedirem quatro ou cinco GCSE com nota 4 ou superior, normalmente incluindo inglês e matemática. Confirma com a escola onde queres entrar.",
       },
       {
-        question: "Que T Levels posso escolher?",
+        question: "Que T-Levels posso escolher?",
         answer:
-          "Cerca de 20, em áreas como digital, engenharia, construção, saúde, ciências, direito e contabilidade, media, marketing, agricultura, cuidados com animais, educação, e artesanato e design. Sport e Social Care chegam em setembro de 2028. O T Level de Finance recebe as últimas inscrições em setembro de 2026, por isso o que continua é o de Accounting.",
+          "Cerca de 20, em áreas como digital, engenharia, construção, saúde, ciências, direito e contabilidade, media, marketing, agricultura, cuidados com animais, educação, e artesanato e design. Sport e Social Care chegam em setembro de 2028. O T-Level de Finance recebe as últimas inscrições em setembro de 2026, por isso o que continua é o de Accounting.",
       },
       {
         question: "Como sou avaliado?",
@@ -128,7 +128,7 @@ export default {
       {
         question: "E se eu não passar em tudo?",
         answer:
-          "Recebes uma declaração de resultados do T Level (statement of achievement) em vez do certificado completo. Indica as partes que concluíste, por isso o trabalho não se perde.",
+          "Recebes uma declaração de resultados do T-Level (statement of achievement) em vez do certificado completo. Indica as partes que concluíste, por isso o trabalho não se perde.",
       },
       {
         question: "Quanto tempo dura o estágio numa empresa?",
@@ -146,14 +146,14 @@ export default {
           "Sim, através do 16 to 19 Bursary Fund. Pode cobrir transporte, livros, material e roupa especializada. Candidata-te através da tua escola ou college.",
       },
       {
-        question: "E se ainda não estiver preparado para um T Level?",
+        question: "E se ainda não estiver preparado para um T-Level?",
         answer:
-          "Existe o T Level Foundation Year, um curso de um ano de nível 2 que primeiro reforça o teu inglês, a matemática, as competências digitais e a experiência de trabalho, e depois te leva para o T Level.",
+          "Existe o T-Level Foundation Year, um curso de um ano de nível 2 que primeiro reforça o teu inglês, a matemática, as competências digitais e a experiência de trabalho, e depois te leva para o T-Level.",
       },
       {
         question: "Posso fazer outras qualificações ao mesmo tempo?",
         answer:
-          "Um T Level é um programa a tempo inteiro, mais ou menos do tamanho de três A levels, por isso normalmente não se junta a muito mais. Algumas escolas permitem uma qualificação extra. Pergunta na tua.",
+          "Um T-Level é um programa a tempo inteiro, mais ou menos do tamanho de três A levels, por isso normalmente não se junta a muito mais. Algumas escolas permitem uma qualificação extra. Pergunta na tua.",
       },
     ],
     QUIZ_QUESTIONS: [
@@ -204,8 +204,8 @@ export default {
     ],
     QUIZ_RESULTS: [
       {
-        heading: "Um T Level parece encaixar muito bem",
-        text: "Queres aprender a fazer, passar tempo num local de trabalho real e ter um caminho claro para um setor. É exatamente para isso que um T Level existe. Próximo passo: vê qual dos cinco percursos combina contigo e regista o teu interesse junto da Amazon.",
+        heading: "Um T-Level parece encaixar muito bem",
+        text: "Queres aprender a fazer, passar tempo num local de trabalho real e ter um caminho claro para um setor. É exatamente para isso que um T-Level existe. Próximo passo: vê qual dos cinco percursos combina contigo e regista o teu interesse junto da Amazon.",
       },
       {
         heading: "Vale a pena ver com atenção",
@@ -223,7 +223,7 @@ export default {
       { title: "Nove semanas", text: "Juntas-te a uma equipa, aprendes as ferramentas e fazes trabalho real." },
       { title: "Centros de competências", text: "Uma parte decorre nos centros de competências (skills hubs) da Amazon, em blocos de 15 dias." },
       { title: "Projetos de grupo", text: "Trabalhas com outros estudantes em projetos para instituições de solidariedade." },
-      { title: "Desafios de equipa", text: "Tarefas definidas pela tua equipa que usam as competências do teu T Level." },
+      { title: "Desafios de equipa", text: "Tarefas definidas pela tua equipa que usam as competências do teu T-Level." },
     ],
     SUPPORT: [
       { title: "Um colega de apoio (buddy)", text: "Para as perguntas pequenas." },
@@ -231,7 +231,7 @@ export default {
       { title: "Um gestor de estágio", text: "Mantém o estágio no caminho certo com a tua escola ou college." },
     ],
     ROUTE_IN: [
-      { title: "Começa um T Level", text: "Para jovens dos 16 aos 18 anos que já frequentam um T Level." },
+      { title: "Começa um T-Level", text: "Para jovens dos 16 aos 18 anos que já frequentam um T-Level." },
       {
         title: "O teu college entra em contacto",
         text: "A Amazon organiza os estágios com escolas e colleges, não diretamente com os estudantes.",
@@ -248,9 +248,9 @@ export default {
   help: {
     SERVICES: [
       {
-        title: "Encontra um T Level perto de ti",
+        title: "Encontra um T-Level perto de ti",
         text: "Pesquisa por código postal e área.",
-        linkText: "Encontrar um T Level em tlevels.gov.uk",
+        linkText: "Encontrar um T-Level em tlevels.gov.uk",
       },
       {
         title: "Orientação vocacional gratuita",
@@ -269,7 +269,7 @@ export default {
       },
     ],
     PROVIDER_QUESTIONS: [
-      "Que T Levels e especializações têm?",
+      "Que T-Levels e especializações têm?",
       "São vocês que encontram o meu estágio, ou sou eu?",
       "Que empresas já receberam os vossos estudantes?",
       "O estágio é em bloco, um dia por semana, ou uma mistura?",
@@ -277,9 +277,10 @@ export default {
       "Que apoio existe se eu tiver necessidades especiais?",
     ],
     SITE_ROUTES: [
-      { label: "O que é um T Level?", detail: "Sobre os T Levels" },
-      { label: "Como é um estágio na Amazon?", detail: "T Levels na Amazon" },
-      { label: "Quero guias e materiais", detail: "Recursos de T Level" },
+      { label: "O que é um T-Level?", detail: "Sobre os T-Levels" },
+      { label: "Quero ver todas as áreas", detail: "Todos os T-Levels" },
+      { label: "Como é um estágio na Amazon?", detail: "T-Levels na Amazon" },
+      { label: "Quero guias e materiais", detail: "Recursos de T-Level" },
       { label: "Quero registar o meu interesse", detail: "Registar interesse" },
       { label: "Já tenho uma conta", detail: "Iniciar sessão" },
     ],
@@ -298,37 +299,37 @@ export default {
   quiz: {
     KNOWLEDGE_QUESTIONS: [
       {
-        question: "Quanto tempo dura um estágio de T Level numa empresa?",
+        question: "Quanto tempo dura um estágio de T-Level numa empresa?",
         options: ["Pelo menos 315 horas, cerca de 45 dias", "Duas semanas", "Um ano inteiro", "Não há estágio"],
         correctAnswer: "Pelo menos 315 horas, cerca de 45 dias",
         explanation: "Pelo menos 315 horas, cerca de 45 dias. A Amazon faz os seus estágios num bloco de nove semanas.",
       },
       {
-        question: "Um T Level tem mais ou menos o tamanho de quantos A levels?",
+        question: "Um T-Level tem mais ou menos o tamanho de quantos A levels?",
         options: ["Um", "Dois", "Três", "Cinco"],
         correctAnswer: "Três",
-        explanation: "Três. Um T Level também dá pontos UCAS, por isso a universidade continua em aberto para ti.",
+        explanation: "Três. Um T-Level também dá pontos UCAS, por isso a universidade continua em aberto para ti.",
       },
       {
-        question: "Qual é a principal diferença entre um T Level e uma aprendizagem (apprenticeship)?",
+        question: "Qual é a principal diferença entre um T-Level e uma aprendizagem (apprenticeship)?",
         options: [
-          "Um T Level é sobretudo estudo, uma aprendizagem é sobretudo trabalho pago",
+          "Um T-Level é sobretudo estudo, uma aprendizagem é sobretudo trabalho pago",
           "São a mesma coisa",
-          "Um T Level é sobretudo trabalho pago, uma aprendizagem é sobretudo estudo",
+          "Um T-Level é sobretudo trabalho pago, uma aprendizagem é sobretudo estudo",
           "Só a aprendizagem inclui tempo numa empresa",
         ],
-        correctAnswer: "Um T Level é sobretudo estudo, uma aprendizagem é sobretudo trabalho pago",
+        correctAnswer: "Um T-Level é sobretudo estudo, uma aprendizagem é sobretudo trabalho pago",
         explanation:
-          "É ao contrário. Um T Level é cerca de 80 por cento estudo, e um estágio numa empresa de pelo menos 315 horas completa o resto.",
+          "É ao contrário. Um T-Level é cerca de 80 por cento estudo, e um estágio numa empresa de pelo menos 315 horas completa o resto.",
       },
       {
-        question: "Que percurso inclui o T Level de Digital Software Development?",
+        question: "Que percurso inclui o T-Level de Digital Software Development?",
         options: ["Digital", "Negócios", "Engenharia", "Media"],
         correctAnswer: "Digital",
         explanation: "Digital. Também inclui Digital Data Analytics e Digital Support and Security.",
       },
       {
-        question: "Que percurso inclui o T Level de Management and Administration?",
+        question: "Que percurso inclui o T-Level de Management and Administration?",
         options: ["Negócios", "Finanças", "Media", "Digital"],
         correctAnswer: "Negócios",
         explanation: "Negócios. O resumo no site é manter equipas e operações a funcionar.",

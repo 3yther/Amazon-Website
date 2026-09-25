@@ -16,7 +16,7 @@ import aboutPhoto from "../assets/about-hero.jpg";
 //     https://www.pexels.com/photo/engineers-in-workshop-3861960/
 
 /**
- * About T-Level: what a T Level is, how the placement works, the five
+ * About T-Level: what a T-Level is, how the placement works, the five
  * pathways, grades, who it suits, why do one and what it costs, plus the
  * pathway tabs, a quiz and an FAQ.
  *

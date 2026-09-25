@@ -82,10 +82,10 @@ const en = {
       label: "How it works",
       title: "Start in four steps",
       level: "Level",
-      browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways." },
-      register: { title: "Register interest", text: "Tell us which pathway you want to explore." },
+      browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways.", link: "Browse resources" },
+      register: { title: "Register interest", text: "Tell us which pathway you want to explore.", link: "Register interest" },
       hearBack: { title: "Hear back", text: "We review each submission and reply by email." },
-      getInvolved: { title: "Get involved", text: "Sign up to open more resources for your pathway." },
+      getInvolved: { title: "Get involved", text: "Sign up to open more resources for your pathway.", link: "Sign up" },
     },
   },
 
@@ -96,7 +96,7 @@ const en = {
       title: "Two years. One industry. A real placement.",
       lead: "A technical qualification you take after your GCSEs. Mostly learning, part working.",
     },
-    what: { label: "How it works", title: "What a T Level is", split: "How the two years are split" },
+    what: { label: "How it works", title: "What a T-Level is", split: "How the two years are split" },
     placement: {
       label: "The placement",
       title: "Inside the placement",
@@ -108,7 +108,7 @@ const en = {
       title: "The five pathways at Amazon",
       lead: "Pick one to see what the placement involves.",
       tabs: "Pathways",
-      tLevels: "T Levels in this pathway",
+      tLevels: "T-Levels in this pathway",
       onPlacement: "On placement",
       suits: "Suits",
       registerIn: "Register interest in {name}",
@@ -119,7 +119,7 @@ const en = {
       title: "Grades and UCAS points",
       lead: "Your grade earns UCAS points, which count towards university.",
       tableName: "Grades and UCAS points table",
-      caption: "T Level overall grades and the UCAS Tariff points each one is worth",
+      caption: "T-Level overall grades and the UCAS Tariff points each one is worth",
       grade: "Overall grade",
       points: "UCAS points",
       note: "Not every university uses UCAS points, so check your course. Miss a part and you still get a statement of what you passed.",
@@ -129,7 +129,7 @@ const en = {
     cost: { label: "Money", title: "What it costs" },
     quiz: {
       label: "Quiz",
-      title: "Is a T Level right for me?",
+      title: "Is a T-Level right for me?",
       lead: "Six questions. There are no wrong answers, and nothing is saved or sent anywhere.",
       progress: "{done} of {total} answered",
       incomplete: "Answer all {total} questions to see your result. You have done {done}.",
@@ -154,7 +154,7 @@ const en = {
     hero: {
       label: "Amazon Emerging Talent",
       title: "Nine weeks inside a team.",
-      lead: "Amazon takes T Level students on placement. You join a real team and do real work.",
+      lead: "Amazon takes T-Level students on placement. You join a real team and do real work.",
     },
     shape: { label: "The placement", title: "What the nine weeks look like" },
     support: { label: "Support", title: "Three people looking after you" },
@@ -167,7 +167,7 @@ const en = {
       leadAfter: " page.",
     },
     route: { label: "Getting one", title: "How to get a placement" },
-    growth: { label: "The programme", title: "It is growing", lead: "Figures from the Department for Education." },
+    growth: { label: "The programme", title: "It is growing", lead: "From six students to 100 in its first three years, with more planned. Figures from the Department for Education." },
     sourcesNote: "Checked in September 2026.",
   },
 
@@ -190,10 +190,10 @@ const en = {
     page: {
       label: "Quiz",
       title: "Test what you know",
-      lead: "{count} questions about T Levels, Amazon placements and this site. Nothing is saved, and nobody sees your score.",
+      lead: "{count} questions about T-Levels, Amazon placements and this site. Nothing is saved, and nobody sees your score.",
     },
     label: "Knowledge check",
-    title: "What do you know about T Levels?",
+    title: "What do you know about T-Levels?",
     lead: "{count} questions, one at a time. Getting one wrong is useful: Smiley will offer to talk it through.",
     scored: "You scored {score} out of {total}",
     doneLead: "Anything you are not sure about, ask Smiley in the corner. It will tell you if it does not know.",
@@ -216,7 +216,7 @@ const en = {
   pathwaysPage: {
     label: "Learning Pathways",
     title: "Five pathways",
-    lead: "Pick one to see the T Levels in it and what the placement involves.",
+    lead: "Pick one to see the T-Levels in it and what the placement involves.",
   },
 
   shell: {
@@ -233,7 +233,9 @@ const en = {
     "About T-Level": "About T-Level",
     "T-Levels at Amazon": "T-Levels at Amazon",
     "T-Level Resources": "T-Level Resources",
-    "T-Level Near you": "T-Level Near you",
+    "Find T-Levels Near You": "Find T-Levels Near You",
+    "All T-Levels": "All T-Levels",
+    "Get involved": "Get involved",
     Quiz: "Quiz",
     Help: "Help",
     "Register interest": "Register interest",
@@ -260,7 +262,7 @@ const en = {
   footer: {
     about: "About",
     aboutText:
-      "T-SMILE helps students, parents and teachers explore T Levels and the Digital T Level at Amazon, with free and sign-up resources in one place.",
+      "T-SMILE helps students, parents and teachers explore T-Levels and the Digital T-Level at Amazon, with free and sign-up resources in one place.",
     navigation: "Navigation",
     support: "Support",
     legal: "Legal & Compliance",
@@ -269,6 +271,7 @@ const en = {
     links: {
       home: "Home",
       pathways: "Learning Pathways",
+      allTLevels: "All T-Levels",
       profile: "Profile",
       resources: "Resources",
       faqs: "FAQs",
@@ -282,6 +285,7 @@ const en = {
       cookies: "Cookie Policy",
       dataRights: "GDPR / Data Rights",
       registerInterest: "Register your interest",
+      getInvolved: "Get involved",
       signUp: "Sign up",
     },
   },
@@ -293,7 +297,11 @@ const en = {
     security: "Security Settings",
     contact: "Contact Us",
     submissions: "Submissions",
-    logOut: "Logout",
+    signIn: "Sign in",
+    signUp: "Sign up",
+    signInOrUp: "Sign in or sign up",
+    notSignedIn: "Not signed in",
+    needAccount: "Some resources need an account",
     roles: {
       student: "Student",
       parent: "Parent or guardian",
@@ -308,16 +316,12 @@ const en = {
     main: "Main",
     helloUser: "Hello, {name}",
     helloGuest: "Hello, sign in",
-    signUp: "Sign up",
-    logIn: "Login",
-    logOut: "Log out",
-    loggingOut: "Logging out",
     pages: {
       home: "Home",
       about: "About T-Level",
       amazon: "T-Levels at Amazon",
       resources: "T-Level Resources",
-      nearYou: "T-Level Near you",
+      nearYou: "Find T-Levels Near You",
       quiz: "Quiz",
       community: "Community",
       help: "Help",
@@ -383,7 +387,7 @@ const en = {
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "Register your interest",
-    lead: "Want a T Level placement at Amazon? Tell us which pathway. You do not need an account.",
+    lead: "Want a T-Level placement at Amazon? Tell us which pathway. You do not need an account.",
     fullName: "Full name",
     email: "Email",
     iAmA: "I am a",
@@ -420,9 +424,9 @@ const en = {
   community: {
     label: "Ask and answer",
     title: "Community",
-    lead: "Questions about T Levels and Amazon placements, answered by students, parents, teachers and Amazon staff.",
+    lead: "Questions about T-Levels and Amazon placements, answered by students, parents, teachers and Amazon staff.",
     notChecked:
-      "Answers here are people's own experience and views, not checked facts. For the official picture, see the About and T Levels at Amazon pages, or ask Smiley.",
+      "Answers here are people's own experience and views, not checked facts. For the official picture, see the About and T-Levels at Amazon pages, or ask Smiley.",
     ask: "Ask a question",
     signInToAsk: "Log in to ask a question",
     signInToAnswer: "Log in to answer",
@@ -440,7 +444,7 @@ const en = {
     sortHelpful: "Most helpful",
     sortUnanswered: "Unanswered",
     topics: {
-      tlevels: "T Levels in general",
+      tlevels: "T-Levels in general",
       placements: "Placements",
       amazon: "Amazon",
       choosing: "Choosing and applying",
@@ -535,10 +539,10 @@ const en = {
   // Short sentences: the chat window is small.
   smiley: {
     name: "Smiley",
-    role: "T Level guide",
-    roleAi: "T Level guide, powered by AI",
+    role: "T-Level guide",
+    roleAi: "T-Level guide, powered by AI",
     landmark: "Assistant",
-    open: "Open Smiley, your T Level guide",
+    open: "Open Smiley, your T-Level guide",
     close: "Close Smiley",
     poke: "Poke Smiley",
     dismiss: "Dismiss Smiley's message",
@@ -564,7 +568,7 @@ const en = {
       lateNight: "Hello, night owl!",
     },
     intro:
-      "I'm Smiley, your T Level guide. Ask me anything about T Levels or placements at Amazon. " +
+      "I'm Smiley, your T-Level guide. Ask me anything about T-Levels or placements at Amazon. " +
       "If I don't know something, I'll tell you rather than make it up.",
     welcomeBack: "Good to see you again. Pick up where you left off, or ask me something new.",
     whoQuestion: "First things first: who's visiting today?",
@@ -602,20 +606,20 @@ const en = {
     quizLocalChosen: 'You picked "{chosen}". The right answer to "{question}" is: {correct}. {explanation}',
 
     nudges: {
-      home: "Still deciding where to start? I can explain what a T Level is, or what an Amazon placement looks like.",
+      home: "Still deciding where to start? I can explain what a T-Level is, or what an Amazon placement looks like.",
       about: "Anything on this page not quite clicking? Ask me and I'll try explaining it another way.",
       amazon: "Curious what an Amazon placement actually involves? Ask away.",
       resources: "Looking for something in particular? Tell me what you need and I'll point you at it.",
-      nearYou: "Hunting for a T Level near you? Ask me anything while you look.",
+      nearYou: "Hunting for a T-Level near you? Ask me anything while you look.",
       quiz: "Stuck on one? Tell me which question and I'll talk it through.",
       help: "Can't find what you need here? Ask me and I'll have a go.",
       community: "Can't find your question here? Ask me first, I might know.",
       register: "Not sure whether you need an account? I can tell you what it unlocks.",
-      other: "Still there? Ask me anything about T Levels and I'll answer if I know it.",
+      other: "Still there? Ask me anything about T-Levels and I'll answer if I know it.",
     },
 
     teasers: {
-      hello: "Hi, I'm Smiley! Ask me anything about T Levels.",
+      hello: "Hi, I'm Smiley! Ask me anything about T-Levels.",
       perfect: "Full marks! Nice work.",
       finished: "Done! Want to go over any of them?",
       quiz: "That one was tricky. Want me to explain it?",
@@ -631,8 +635,8 @@ const en = {
     // Chip labels, one per topic Smiley can answer by itself. Each is also
     // what appears as the visitor's message when they tap it.
     topics: {
-      whatIsTLevel: "What is a T Level?",
-      courseLength: "How long is a T Level?",
+      whatIsTLevel: "What is a T-Level?",
+      courseLength: "How long is a T-Level?",
       classroomHours: "How much of it is lessons?",
       placementLength: "How long is the placement?",
       placementHow: "How does the placement work?",
@@ -649,8 +653,8 @@ const en = {
       tlevelFail: "What if I don't pass?",
       notReady: "What if I'm not ready yet?",
       alongside: "Can I do other qualifications too?",
-      whoSuits: "Is a T Level right for me?",
-      tlevelBenefits: "Why take a T Level?",
+      whoSuits: "Is a T-Level right for me?",
+      tlevelBenefits: "Why take a T-Level?",
       amazonPlacement: "What's an Amazon placement like?",
       amazonSupport: "Who looks after me there?",
       amazonHowToGet: "How do I get an Amazon placement?",
@@ -663,7 +667,7 @@ const en = {
       "pathway-media": "Media",
       "pathway-finance": "Finance",
       "pathway-engineering": "Engineering",
-      nearYou: "Find a T Level near me",
+      nearYou: "Find a T-Level near me",
       providerQuestions: "What should I ask a college?",
       careersAdvice: "Where can I get careers advice?",
       resources: "Where are the resources?",
@@ -682,17 +686,17 @@ const en = {
     // Lead-ins and short answers written for Smiley. The facts themselves
     // come from the page copy, never from here.
     answers: {
-      whatIsTLevel: "Here's a T Level in three steps:",
+      whatIsTLevel: "Here's a T-Level in three steps:",
       amazonNotConfirmed: "Amazon hasn't confirmed placements in this pathway yet, so I can't promise one.",
-      pathway: "{name}: {summary}\nT Levels: {tLevels}.\nOn placement: {placement}\nGood for: {suits}\nAt Amazon: {amazon}",
-      whoSuits: "A T Level tends to suit you if:",
+      pathway: "{name}: {summary}\nT-Levels: {tLevels}.\nOn placement: {placement}\nGood for: {suits}\nAt Amazon: {amazon}",
+      whoSuits: "A T-Level tends to suit you if:",
       decideWithAdult:
         "Only you can decide, so talk it through with a teacher or careers adviser too. The quiz can help you think it over.",
       amazonPathways: "Here's what Amazon has said about each pathway:",
       pathwaysList: "There are five pathways:",
       providerQuestions: "Good questions to ask a school or college:",
       resources: "The Resources page has guides, packs and videos. Some need a free account to open.",
-      quiz: "The quiz has quick questions about T Levels, and I'll help with any you get wrong.",
+      quiz: "The quiz has quick questions about T-Levels, and I'll help with any you get wrong.",
       community:
         "In the Community you can ask a question and other students, parents, teachers and Amazon staff can answer. " +
         "Anything I don't know is a good one to ask there.",
@@ -715,11 +719,11 @@ const en = {
     },
 
     links: {
-      about: "About T Levels",
-      amazon: "T Levels at Amazon",
+      about: "About T-Levels",
+      amazon: "T-Levels at Amazon",
       pathways: "Learning Pathways",
       registerInterest: "Register interest",
-      nearYou: "Find a T Level near you",
+      nearYou: "Find a T-Level near you",
       resources: "Resources",
       quiz: "Take the quiz",
       community: "Go to the Community",
@@ -734,20 +738,20 @@ const en = {
 
     // Small talk and easter eggs.
     chat: {
-      greeting: "Hello! I'm Smiley. Ask me anything about T Levels or placements at Amazon, or pick a question below.",
+      greeting: "Hello! I'm Smiley. Ask me anything about T-Levels or placements at Amazon, or pick a question below.",
       howAreYou: "I'm good, thanks for asking! My aerial's picking up a strong signal today. How can I help?",
       thanks: "You're welcome! Anything else you'd like to know?",
       bye: "Bye for now! I'll be here in the corner if you need me.",
       whoAreYou:
-        "I'm Smiley, T-SMILE's guide. I answer questions about T Levels and placements at Amazon, using only facts the team has checked.",
+        "I'm Smiley, T-SMILE's guide. I answer questions about T-Levels and placements at Amazon, using only facts the team has checked.",
       areYouBot:
         "I'm a bot, yes. A friendly one, with an aerial. For anything I can't answer, a teacher, a careers adviser or the Community can help.",
-      whoMadeYou: "The T-SMILE team built me for the Amazon Emerging Talent T Level project. I'm the one with the T on my head.",
+      whoMadeYou: "The T-SMILE team built me for the Amazon Emerging Talent T-Level project. I'm the one with the T on my head.",
       whatCanYouDo:
-        "I can explain what a T Level is, how the industry placement works, what an Amazon placement involves, the five pathways, " +
+        "I can explain what a T-Level is, how the industry placement works, what an Amazon placement involves, the five pathways, " +
         "costs, entry requirements and more. Ask me in your own words, or tap a question.",
       jokes: [
-        "How many hours does it take to change a light bulb on a T Level? At least 315, but you learn loads.",
+        "How many hours does it take to change a light bulb on a T-Level? At least 315, but you learn loads.",
         "Why do programmers prefer dark mode? Because light attracts bugs.",
         "Why was the spreadsheet so calm? It had everything under control. Every single cell.",
         "I tried to catch some fog earlier. I mist.",
@@ -761,8 +765,8 @@ const en = {
       confused: "Sorry, that one's on me. Let's try again. Pick a topic below, or ask me a different way.",
       howOld: "I was switched on in September 2026, so I'm very new. Still learning, like you.",
       favouriteColour: "Orange. Obviously.",
-      meaningOfLife: "42. Although on a T Level, the magic number is 315. That's the minimum hours on placement.",
-      secret: "Here's a secret: the T on my head stands for T Levels. Don't tell anyone.",
+      meaningOfLife: "42. Although on a T-Level, the magic number is 315. That's the minimum hours on placement.",
+      secret: "Here's a secret: the T on my head stands for T-Levels. Don't tell anyone.",
       feelings: "I run on curiosity and good questions. Right now I'm feeling chatty.",
       sing: "La la la... my singing voice is mostly static. Maybe stick to questions?",
       name: "That's me! What can I help you with?",
@@ -790,10 +794,10 @@ const en = {
       struggling:
         "That sounds like a lot to carry, and you don't have to sort it out alone. Talking to someone you trust really helps, " +
         "like a teacher, a parent or carer. Childline is free on 0800 1111, or you can text SHOUT to 85258, any time. " +
-        "I'm still here for any T Level questions whenever you want.",
+        "I'm still here for any T-Level questions whenever you want.",
       personal:
         "Quick tip: you don't need to share personal details like your email, phone number or address with me, and it's safest " +
-        "not to. I haven't sent that message anywhere. What would you like to know about T Levels?",
+        "not to. I haven't sent that message anywhere. What would you like to know about T-Levels?",
     },
   },
 };

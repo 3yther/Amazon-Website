@@ -27,17 +27,17 @@ const ar = {
   },
 
   home: {
-    title: "T Levels، مع ابتسامة.",
+    title: "T-Levels، مع ابتسامة.",
     subheads: {
       general: "أدلة وحزم ومقاطع فيديو للطلاب وأولياء الأمور والمدارس.",
-      teacher: "حزم دروس وأدلة جاهزة للحديث مع طلابك عن T Levels.",
-      parent: "أدلة واضحة عمّا تتضمنه T Levels، لتساعد ابنك أو ابنتك على الاختيار.",
-      student: "أدلة وحزم تحضيرية تساعدك على اختيار T Level والاستعداد له.",
+      teacher: "حزم دروس وأدلة جاهزة للحديث مع طلابك عن T-Levels.",
+      parent: "أدلة واضحة عمّا تتضمنه T-Levels، لتساعد ابنك أو ابنتك على الاختيار.",
+      student: "أدلة وحزم تحضيرية تساعدك على اختيار T-Level والاستعداد له.",
     },
     browse: "تصفّح الموارد",
     stats: {
-      title: "T Levels باختصار",
-      tLevels: "مؤهلات T Level مختلفة",
+      title: "T-Levels باختصار",
+      tLevels: "مؤهلات T-Level مختلفة",
       pathways: "المسارات",
       resourceTypes: "أنواع الموارد",
       audiences: "الفئات",
@@ -50,12 +50,12 @@ const ar = {
       teacher: {
         who: "المعلمون والمدارس",
         title: "موارد جاهزة لصفّك",
-        text: "حزم دروس وأدلة تعرّف طلابك على T Levels.",
+        text: "حزم دروس وأدلة تعرّف طلابك على T-Levels.",
       },
       parent: {
         who: "أولياء الأمور والأوصياء",
         title: "ساعدهم على الاختيار بثقة",
-        text: "أدلة بسيطة عمّا تتضمنه T Levels وإلى أين تقود.",
+        text: "أدلة بسيطة عمّا تتضمنه T-Levels وإلى أين تقود.",
       },
       student: {
         who: "الطلاب",
@@ -66,7 +66,7 @@ const ar = {
     pathways: {
       label: "المسارات",
       title: "استكشف حسب المسار",
-      lead: "يضم كل مسار مجموعة من مؤهلات T Level المترابطة. اختر مسارًا لترى موارده.",
+      lead: "يضم كل مسار مجموعة من مؤهلات T-Level المترابطة. اختر مسارًا لترى موارده.",
       digital: "بناء التقنية وتشغيلها ودعمها.",
       business: "الحفاظ على سير عمل الفرق والعمليات.",
       media: "تخطيط المحتوى وصناعته ونشره.",
@@ -77,32 +77,32 @@ const ar = {
       label: "كيف يعمل",
       title: "ابدأ في أربع خطوات",
       level: "المستوى",
-      browse: { title: "تصفّح الموارد", text: "أدلة وحزم ومقاطع فيديو للمسارات الخمسة كلها." },
-      register: { title: "سجّل اهتمامك", text: "أخبرنا بالمسار الذي تريد استكشافه." },
+      browse: { title: "تصفّح الموارد", text: "أدلة وحزم ومقاطع فيديو للمسارات الخمسة كلها.", link: "تصفّح الموارد" },
+      register: { title: "سجّل اهتمامك", text: "أخبرنا بالمسار الذي تريد استكشافه.", link: "سجّل اهتمامك" },
       hearBack: { title: "تلقَّ الرد", text: "نراجع كل طلب ونرد عبر البريد الإلكتروني." },
-      getInvolved: { title: "شارك", text: "أنشئ حسابًا لفتح المزيد من موارد مسارك." },
+      getInvolved: { title: "شارك", text: "أنشئ حسابًا لفتح المزيد من موارد مسارك.", link: "إنشاء حساب" },
     },
   },
 
   about: {
     hero: {
-      label: "عن T Levels",
+      label: "عن T-Levels",
       title: "سنتان. مجال واحد. تدريب عملي حقيقي.",
       lead: "مؤهل تقني تدرسه بعد شهادات GCSE. معظمه تعلّم، وجزء منه عمل.",
     },
-    what: { label: "كيف يعمل", title: "ما هو T Level", split: "كيف تُقسَّم السنتان" },
+    what: { label: "كيف يعمل", title: "ما هو T-Level", split: "كيف تُقسَّم السنتان" },
     placement: {
       label: "التدريب العملي",
       title: "من داخل التدريب العملي",
       amazonLink: "كيف يبدو التدريب العملي في Amazon",
-      amazonDetail: "T Levels في Amazon",
+      amazonDetail: "T-Levels في Amazon",
     },
     switcher: {
       label: "المجالات",
       title: "المسارات الخمسة في Amazon",
       lead: "اختر مسارًا لترى ما يتضمنه التدريب العملي.",
       tabs: "المسارات",
-      tLevels: "مؤهلات T Level في هذا المسار",
+      tLevels: "مؤهلات T-Level في هذا المسار",
       onPlacement: "خلال التدريب العملي",
       suits: "يناسب",
       registerIn: "سجّل اهتمامك بمسار {name}",
@@ -113,7 +113,7 @@ const ar = {
       title: "الدرجات ونقاط UCAS",
       lead: "تمنحك درجتك نقاط UCAS التي تُحتسب للقبول في الجامعة.",
       tableName: "جدول الدرجات ونقاط UCAS",
-      caption: "الدرجات النهائية لمؤهل T Level ونقاط تعرفة UCAS التي تساويها كل درجة",
+      caption: "الدرجات النهائية لمؤهل T-Level ونقاط تعرفة UCAS التي تساويها كل درجة",
       grade: "الدرجة النهائية",
       points: "نقاط UCAS",
       note: "لا تستخدم كل الجامعات نقاط UCAS، لذا تحقق من متطلبات تخصصك. وإذا لم تنجح في جزء ما، تحصل مع ذلك على بيان بما نجحت فيه.",
@@ -123,7 +123,7 @@ const ar = {
     cost: { label: "المال", title: "كم يكلف" },
     quiz: {
       label: "اختبار",
-      title: "هل T Level مناسب لي؟",
+      title: "هل T-Level مناسب لي؟",
       lead: "ستة أسئلة. لا توجد إجابات خاطئة، ولا يُحفظ أي شيء ولا يُرسل إلى أي مكان.",
       progress: "تمت الإجابة عن {done} من {total}",
       incomplete: "أجب عن الأسئلة الـ {total} كلها لترى نتيجتك. أجبت عن {done}.",
@@ -147,7 +147,7 @@ const ar = {
     hero: {
       label: "Amazon Emerging Talent",
       title: "تسعة أسابيع داخل فريق.",
-      lead: "تستقبل Amazon طلاب T Level في تدريب عملي. تنضم إلى فريق حقيقي وتؤدي عملًا حقيقيًا.",
+      lead: "تستقبل Amazon طلاب T-Level في تدريب عملي. تنضم إلى فريق حقيقي وتؤدي عملًا حقيقيًا.",
     },
     shape: { label: "التدريب العملي", title: "كيف تبدو الأسابيع التسعة" },
     support: { label: "الدعم", title: "ثلاثة أشخاص يرعونك" },
@@ -155,11 +155,11 @@ const ar = {
       label: "المسارات",
       title: "ما المجالات التي تستقبلها Amazon",
       leadBefore: "المزيد عن كل مسار في صفحة",
-      leadLink: "عن T Levels",
+      leadLink: "عن T-Levels",
       leadAfter: ".",
     },
     route: { label: "الحصول عليه", title: "كيف تحصل على تدريب عملي" },
-    growth: { label: "البرنامج", title: "البرنامج يكبر", lead: "أرقام من وزارة التعليم." },
+    growth: { label: "البرنامج", title: "البرنامج يكبر", lead: "من ستة طلاب إلى 100 في سنواته الثلاث الأولى، مع المزيد في الخطة. أرقام من وزارة التعليم." },
     sourcesNote: "تم التحقق في سبتمبر 2026.",
   },
 
@@ -179,10 +179,10 @@ const ar = {
     page: {
       label: "اختبار",
       title: "اختبر معلوماتك",
-      lead: "{count} أسئلة عن T Levels والتدريب العملي في Amazon وهذا الموقع. لا يُحفظ أي شيء ولا يرى أحد نتيجتك.",
+      lead: "{count} أسئلة عن T-Levels والتدريب العملي في Amazon وهذا الموقع. لا يُحفظ أي شيء ولا يرى أحد نتيجتك.",
     },
     label: "اختبار المعرفة",
-    title: "ماذا تعرف عن T Levels؟",
+    title: "ماذا تعرف عن T-Levels؟",
     lead: "{count} أسئلة، سؤال تلو الآخر. الخطأ في سؤال مفيد أيضًا: سيعرض Smiley شرحه لك.",
     scored: "حصلت على {score} من {total}",
     doneLead: "إذا لم تكن متأكدًا من شيء، اسأل Smiley في الزاوية. سيخبرك إذا كان لا يعرف.",
@@ -205,7 +205,7 @@ const ar = {
   pathwaysPage: {
     label: "مسارات التعلّم",
     title: "خمسة مسارات",
-    lead: "اختر مسارًا لترى مؤهلات T Level فيه وما يتضمنه التدريب العملي.",
+    lead: "اختر مسارًا لترى مؤهلات T-Level فيه وما يتضمنه التدريب العملي.",
   },
 
   shell: {
@@ -217,10 +217,12 @@ const ar = {
 
   titles: {
     Home: "الرئيسية",
-    "About T-Level": "عن T Levels",
-    "T-Levels at Amazon": "T Levels في Amazon",
-    "T-Level Resources": "موارد T Level",
-    "T-Level Near you": "T Levels بالقرب منك",
+    "About T-Level": "عن T-Levels",
+    "T-Levels at Amazon": "T-Levels في Amazon",
+    "T-Level Resources": "موارد T-Level",
+    "Find T-Levels Near You": "ابحث عن T-Levels بالقرب منك",
+    "All T-Levels": "كل مؤهلات T-Level",
+    "Get involved": "شارك",
     Quiz: "اختبار",
     Help: "المساعدة",
     "Register interest": "تسجيل الاهتمام",
@@ -247,7 +249,7 @@ const ar = {
   footer: {
     about: "عن الموقع",
     aboutText:
-      "يساعد T-SMILE الطلاب وأولياء الأمور والمعلمين على استكشاف T Levels ومؤهل T Level الرقمي في Amazon، مع موارد مجانية وأخرى للمسجلين في مكان واحد.",
+      "يساعد T-SMILE الطلاب وأولياء الأمور والمعلمين على استكشاف T-Levels ومؤهل T-Level الرقمي في Amazon، مع موارد مجانية وأخرى للمسجلين في مكان واحد.",
     navigation: "التنقل",
     support: "الدعم",
     legal: "القانون والامتثال",
@@ -256,6 +258,7 @@ const ar = {
     links: {
       home: "الرئيسية",
       pathways: "مسارات التعلّم",
+      allTLevels: "كل مؤهلات T-Level",
       profile: "الملف الشخصي",
       resources: "الموارد",
       faqs: "الأسئلة الشائعة",
@@ -269,6 +272,7 @@ const ar = {
       cookies: "سياسة ملفات تعريف الارتباط",
       dataRights: "حماية البيانات / حقوقك",
       registerInterest: "سجّل اهتمامك",
+      getInvolved: "شارك",
       signUp: "إنشاء حساب",
     },
   },
@@ -280,7 +284,11 @@ const ar = {
     security: "إعدادات الأمان",
     contact: "اتصل بنا",
     submissions: "الطلبات المرسلة",
-    logOut: "تسجيل الخروج",
+    signIn: "تسجيل الدخول",
+    signUp: "إنشاء حساب",
+    signInOrUp: "سجّل الدخول أو أنشئ حسابًا",
+    notSignedIn: "لم تسجّل الدخول",
+    needAccount: "بعض الموارد تحتاج إلى حساب",
     roles: {
       student: "طالب",
       parent: "ولي أمر أو وصي",
@@ -295,16 +303,12 @@ const ar = {
     main: "الرئيسية",
     helloUser: "مرحبًا، {name}",
     helloGuest: "مرحبًا، سجّل الدخول",
-    signUp: "إنشاء حساب",
-    logIn: "تسجيل الدخول",
-    logOut: "تسجيل الخروج",
-    loggingOut: "جارٍ تسجيل الخروج",
     pages: {
       home: "الرئيسية",
-      about: "عن T Levels",
-      amazon: "T Levels في Amazon",
-      resources: "موارد T Level",
-      nearYou: "T Levels بالقرب منك",
+      about: "عن T-Levels",
+      amazon: "T-Levels في Amazon",
+      resources: "موارد T-Level",
+      nearYou: "ابحث عن T-Levels بالقرب منك",
       quiz: "اختبار",
       community: "المجتمع",
       help: "المساعدة",
@@ -327,7 +331,7 @@ const ar = {
   forms: {
     hidePassword: "إخفاء كلمة المرور",
     showPassword: "إظهار كلمة المرور",
-    panelLine: "موارد مجانية لمسار T Level الرقمي في Amazon.",
+    panelLine: "موارد مجانية لمسار T-Level الرقمي في Amazon.",
   },
 
   register: {
@@ -367,7 +371,7 @@ const ar = {
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "سجّل اهتمامك",
-    lead: "تريد تدريبًا عمليًا ضمن T Level في Amazon؟ أخبرنا بالمسار. لا تحتاج إلى حساب.",
+    lead: "تريد تدريبًا عمليًا ضمن T-Level في Amazon؟ أخبرنا بالمسار. لا تحتاج إلى حساب.",
     fullName: "الاسم الكامل",
     email: "البريد الإلكتروني",
     iAmA: "أنا",
@@ -402,9 +406,9 @@ const ar = {
   community: {
     label: "اسأل وأجب",
     title: "المجتمع",
-    lead: "أسئلة عن T Levels والتدريب العملي في Amazon، يجيب عنها طلاب وأولياء أمور ومعلمون وموظفون في Amazon.",
+    lead: "أسئلة عن T-Levels والتدريب العملي في Amazon، يجيب عنها طلاب وأولياء أمور ومعلمون وموظفون في Amazon.",
     notChecked:
-      "الإجابات هنا هي تجارب الناس وآراؤهم، وليست حقائق تم التحقق منها. للمعلومات الرسمية، راجع صفحتي عن T Levels وT Levels في Amazon، أو اسأل Smiley.",
+      "الإجابات هنا هي تجارب الناس وآراؤهم، وليست حقائق تم التحقق منها. للمعلومات الرسمية، راجع صفحتي عن T-Levels وT-Levels في Amazon، أو اسأل Smiley.",
     ask: "اطرح سؤالًا",
     signInToAsk: "سجّل الدخول لتطرح سؤالًا",
     signInToAnswer: "سجّل الدخول لتجيب",
@@ -422,7 +426,7 @@ const ar = {
     sortHelpful: "الأكثر فائدة",
     sortUnanswered: "بلا إجابة",
     topics: {
-      tlevels: "T Levels بشكل عام",
+      tlevels: "T-Levels بشكل عام",
       placements: "التدريب العملي",
       amazon: "Amazon",
       choosing: "الاختيار والتقديم",
@@ -515,10 +519,10 @@ const ar = {
 
   smiley: {
     name: "Smiley",
-    role: "دليل T Level",
-    roleAi: "دليل T Level، يعمل بالذكاء الاصطناعي",
+    role: "دليل T-Level",
+    roleAi: "دليل T-Level، يعمل بالذكاء الاصطناعي",
     landmark: "المساعد",
-    open: "افتح Smiley، دليلك إلى T Level",
+    open: "افتح Smiley، دليلك إلى T-Level",
     close: "أغلق Smiley",
     poke: "انقر على Smiley",
     dismiss: "إغلاق رسالة Smiley",
@@ -544,7 +548,7 @@ const ar = {
       lateNight: "مرحبًا يا ساهر الليل!",
     },
     intro:
-      "أنا Smiley، دليلك إلى T Level. اسألني أي شيء عن T Levels أو التدريب العملي في Amazon. " +
+      "أنا Smiley، دليلك إلى T-Level. اسألني أي شيء عن T-Levels أو التدريب العملي في Amazon. " +
       "إذا لم أعرف شيئًا، سأخبرك بدلًا من أن أختلق إجابة.",
     welcomeBack: "سعيد برؤيتك مجددًا. أكمل من حيث توقفت، أو اسألني شيئًا جديدًا.",
     whoQuestion: "أولًا: من يزورنا اليوم؟",
@@ -581,20 +585,20 @@ const ar = {
     quizLocalChosen: "اخترت «{chosen}». الإجابة الصحيحة عن «{question}» هي: {correct}. {explanation}",
 
     nudges: {
-      home: "ما زلت تفكر من أين تبدأ؟ يمكنني أن أشرح ما هو T Level، أو كيف يبدو التدريب العملي في Amazon.",
+      home: "ما زلت تفكر من أين تبدأ؟ يمكنني أن أشرح ما هو T-Level، أو كيف يبدو التدريب العملي في Amazon.",
       about: "هل هناك شيء في هذه الصفحة غير واضح؟ اسألني وسأحاول شرحه بطريقة أخرى.",
       amazon: "هل تتساءل عمّا يتضمنه التدريب العملي في Amazon فعلًا؟ اسأل ما تشاء.",
       resources: "تبحث عن شيء معين؟ أخبرني بما تحتاجه وسأدلك عليه.",
-      nearYou: "تبحث عن T Level بالقرب منك؟ اسألني أي شيء أثناء البحث.",
+      nearYou: "تبحث عن T-Level بالقرب منك؟ اسألني أي شيء أثناء البحث.",
       quiz: "علقت في سؤال؟ أخبرني أي سؤال وسنناقشه معًا.",
       help: "لا تجد ما تحتاجه هنا؟ اسألني وسأحاول.",
       community: "لا تجد سؤالك هنا؟ اسألني أولًا، فقد أعرف الإجابة.",
       register: "لست متأكدًا إن كنت تحتاج إلى حساب؟ سأخبرك بما يتيحه.",
-      other: "ما زلت هنا؟ اسألني أي شيء عن T Levels وسأجيب إن كنت أعرف.",
+      other: "ما زلت هنا؟ اسألني أي شيء عن T-Levels وسأجيب إن كنت أعرف.",
     },
 
     teasers: {
-      hello: "مرحبًا، أنا Smiley! اسألني أي شيء عن T Levels.",
+      hello: "مرحبًا، أنا Smiley! اسألني أي شيء عن T-Levels.",
       perfect: "العلامة الكاملة! أحسنت.",
       finished: "انتهيت! هل تريد مراجعة أي سؤال؟",
       quiz: "كان ذلك صعبًا. هل تريد أن أشرحه؟",
@@ -608,8 +612,8 @@ const ar = {
     },
 
     topics: {
-      whatIsTLevel: "ما هو T Level؟",
-      courseLength: "كم مدة T Level؟",
+      whatIsTLevel: "ما هو T-Level؟",
+      courseLength: "كم مدة T-Level؟",
       classroomHours: "كم منه دروس؟",
       placementLength: "كم مدة التدريب العملي؟",
       placementHow: "كيف يعمل التدريب العملي؟",
@@ -626,8 +630,8 @@ const ar = {
       tlevelFail: "ماذا لو لم أنجح؟",
       notReady: "ماذا لو لم أكن مستعدًا بعد؟",
       alongside: "هل يمكنني دراسة مؤهلات أخرى معه؟",
-      whoSuits: "هل T Level مناسب لي؟",
-      tlevelBenefits: "لماذا أختار T Level؟",
+      whoSuits: "هل T-Level مناسب لي؟",
+      tlevelBenefits: "لماذا أختار T-Level؟",
       amazonPlacement: "كيف يبدو التدريب العملي في Amazon؟",
       amazonSupport: "من يرعاني هناك؟",
       amazonHowToGet: "كيف أحصل على تدريب عملي في Amazon؟",
@@ -640,7 +644,7 @@ const ar = {
       "pathway-media": "الإعلام",
       "pathway-finance": "المالية",
       "pathway-engineering": "الهندسة",
-      nearYou: "ابحث عن T Level بالقرب مني",
+      nearYou: "ابحث عن T-Level بالقرب مني",
       providerQuestions: "ماذا أسأل الكلية؟",
       careersAdvice: "أين أجد إرشادًا مهنيًا؟",
       resources: "أين الموارد؟",
@@ -657,17 +661,17 @@ const ar = {
     },
 
     answers: {
-      whatIsTLevel: "إليك T Level في ثلاث خطوات:",
+      whatIsTLevel: "إليك T-Level في ثلاث خطوات:",
       amazonNotConfirmed: "لم تؤكد Amazon بعد وجود تدريب عملي في هذا المسار، لذا لا يمكنني أن أعدك به.",
-      pathway: "{name}: {summary}\nمؤهلات T Level: {tLevels}.\nخلال التدريب العملي: {placement}\nيناسب: {suits}\nفي Amazon: {amazon}",
-      whoSuits: "يناسبك T Level عادةً إذا:",
+      pathway: "{name}: {summary}\nمؤهلات T-Level: {tLevels}.\nخلال التدريب العملي: {placement}\nيناسب: {suits}\nفي Amazon: {amazon}",
+      whoSuits: "يناسبك T-Level عادةً إذا:",
       decideWithAdult:
         "القرار لك وحدك، لذا ناقشه أيضًا مع معلم أو مستشار مهني. يمكن أن يساعدك الاختبار على التفكير فيه.",
       amazonPathways: "هذا ما قالته Amazon عن كل مسار:",
       pathwaysList: "هناك خمسة مسارات:",
       providerQuestions: "أسئلة جيدة تطرحها على مدرسة أو كلية:",
       resources: "في صفحة الموارد أدلة وحزم ومقاطع فيديو. بعضها يحتاج إلى حساب مجاني لفتحه.",
-      quiz: "في الاختبار أسئلة سريعة عن T Levels، وسأساعدك في أي سؤال تخطئ فيه.",
+      quiz: "في الاختبار أسئلة سريعة عن T-Levels، وسأساعدك في أي سؤال تخطئ فيه.",
       community:
         "في المجتمع يمكنك طرح سؤال، ويمكن لطلاب آخرين وأولياء أمور ومعلمين وموظفين في Amazon الإجابة. " +
         "أي شيء لا أعرفه يستحق أن يُسأل هناك.",
@@ -690,11 +694,11 @@ const ar = {
     },
 
     links: {
-      about: "عن T Levels",
-      amazon: "T Levels في Amazon",
+      about: "عن T-Levels",
+      amazon: "T-Levels في Amazon",
       pathways: "مسارات التعلّم",
       registerInterest: "تسجيل الاهتمام",
-      nearYou: "ابحث عن T Level بالقرب منك",
+      nearYou: "ابحث عن T-Level بالقرب منك",
       resources: "الموارد",
       quiz: "خذ الاختبار",
       community: "اذهب إلى المجتمع",
@@ -708,20 +712,20 @@ const ar = {
     },
 
     chat: {
-      greeting: "مرحبًا! أنا Smiley. اسألني أي شيء عن T Levels أو التدريب العملي في Amazon، أو اختر سؤالًا من الأسفل.",
+      greeting: "مرحبًا! أنا Smiley. اسألني أي شيء عن T-Levels أو التدريب العملي في Amazon، أو اختر سؤالًا من الأسفل.",
       howAreYou: "أنا بخير، شكرًا لسؤالك! هوائيّ يلتقط إشارة قوية اليوم. كيف يمكنني المساعدة؟",
       thanks: "على الرحب والسعة! هل هناك شيء آخر تود معرفته؟",
       bye: "إلى اللقاء الآن! سأكون هنا في الزاوية إذا احتجت إليّ.",
       whoAreYou:
-        "أنا Smiley، دليل T-SMILE. أجيب عن الأسئلة المتعلقة بـ T Levels والتدريب العملي في Amazon، مستخدمًا فقط حقائق تحقق منها الفريق.",
+        "أنا Smiley، دليل T-SMILE. أجيب عن الأسئلة المتعلقة بـ T-Levels والتدريب العملي في Amazon، مستخدمًا فقط حقائق تحقق منها الفريق.",
       areYouBot:
         "نعم، أنا روبوت محادثة. لطيف، ولديّ هوائي. وفي ما لا أستطيع الإجابة عنه، يمكن أن يساعدك معلم أو مستشار مهني أو المجتمع.",
-      whoMadeYou: "صنعني فريق T-SMILE لمشروع T Level الخاص بـ Amazon Emerging Talent. أنا صاحب حرف T على رأسه.",
+      whoMadeYou: "صنعني فريق T-SMILE لمشروع T-Level الخاص بـ Amazon Emerging Talent. أنا صاحب حرف T على رأسه.",
       whatCanYouDo:
-        "يمكنني أن أشرح ما هو T Level، وكيف يعمل التدريب العملي، وما يتضمنه التدريب في Amazon، والمسارات الخمسة، " +
+        "يمكنني أن أشرح ما هو T-Level، وكيف يعمل التدريب العملي، وما يتضمنه التدريب في Amazon، والمسارات الخمسة، " +
         "والتكاليف، وشروط القبول، وأكثر. اسألني بكلماتك، أو اضغط على سؤال.",
       jokes: [
-        "كم ساعة يستغرق تغيير مصباح في T Level؟ 315 ساعة على الأقل، لكنك تتعلم الكثير.",
+        "كم ساعة يستغرق تغيير مصباح في T-Level؟ 315 ساعة على الأقل، لكنك تتعلم الكثير.",
         "لماذا ذهب الحاسوب إلى الطبيب؟ لأنه أصيب بفيروس.",
         "ماذا قال الراوتر للحاسوب المحمول؟ أشعر أن بيننا اتصالًا مميزًا.",
         "لماذا ذهب الروبوت في إجازة؟ ليشحن بطارياته.",
@@ -735,8 +739,8 @@ const ar = {
       confused: "آسف، الخطأ مني. لنحاول مرة أخرى. اختر موضوعًا من الأسفل، أو اسألني بطريقة مختلفة.",
       howOld: "شُغّلت في سبتمبر 2026، لذا أنا جديد جدًا. ما زلت أتعلم، مثلك.",
       favouriteColour: "البرتقالي. بالطبع.",
-      meaningOfLife: "42. لكن في T Level، الرقم السحري هو 315. هذا هو الحد الأدنى لساعات التدريب العملي.",
-      secret: "سأخبرك سرًا: حرف T على رأسي يرمز إلى T Levels. لا تخبر أحدًا.",
+      meaningOfLife: "42. لكن في T-Level، الرقم السحري هو 315. هذا هو الحد الأدنى لساعات التدريب العملي.",
+      secret: "سأخبرك سرًا: حرف T على رأسي يرمز إلى T-Levels. لا تخبر أحدًا.",
       feelings: "أعمل بالفضول والأسئلة الجيدة. أشعر الآن برغبة في الدردشة.",
       sing: "لا لا لا... صوتي في الغناء أغلبه تشويش. ربما نكتفي بالأسئلة؟",
       name: "هذا أنا! بماذا أساعدك؟",
@@ -762,10 +766,10 @@ const ar = {
       struggling:
         "يبدو أن هذا حمل ثقيل، ولست مضطرًا لحله وحدك. التحدث مع شخص تثق به يساعد فعلًا، " +
         "مثل معلم أو أحد والديك أو من يرعاك. خدمة Childline مجانية على 0800 1111، أو يمكنك إرسال SHOUT في رسالة نصية إلى 85258، في أي وقت. " +
-        "ما زلت هنا لأي سؤال عن T Levels متى أردت.",
+        "ما زلت هنا لأي سؤال عن T-Levels متى أردت.",
       personal:
         "نصيحة سريعة: لا تحتاج إلى مشاركة بيانات شخصية معي مثل بريدك الإلكتروني أو رقم هاتفك أو عنوانك، والأكثر أمانًا " +
-        "ألا تفعل. لم أرسل تلك الرسالة إلى أي مكان. ماذا تود أن تعرف عن T Levels؟",
+        "ألا تفعل. لم أرسل تلك الرسالة إلى أي مكان. ماذا تود أن تعرف عن T-Levels؟",
     },
 
     // Words an Arabic speaker might use for each topic. Matched inside words,

@@ -18,7 +18,12 @@ const NUMBER_FORMATS = {
   EU: "1.234,56 (EU)",
 };
 
-/** Interface language, date format and number format. */
+/**
+ * Interface language, date format and number format.
+ *
+ * Date and number format reach real output through formats.js, and the
+ * language through i18n/ (see the note at the top of this file).
+ */
 export default function LanguageSettings({ preferences, updatePreference }) {
   const { language, setLanguage, t } = useI18n();
 
@@ -44,6 +49,7 @@ export default function LanguageSettings({ preferences, updatePreference }) {
       <SelectField
         id="pref-date-format"
         label="Date format"
+        hint="Used wherever T-SMILE shows a date: when your password last changed, and the dates on staff submissions."
         value={preferences.date_format}
         onChange={(event) => updatePreference("date_format", event.target.value)}
       >
@@ -57,6 +63,7 @@ export default function LanguageSettings({ preferences, updatePreference }) {
       <SelectField
         id="pref-number-format"
         label="Number format"
+        hint="Changes how thousands and decimals are written. Most numbers on T-SMILE are small, so you will only see this on larger counts."
         value={preferences.number_format}
         onChange={(event) => updatePreference("number_format", event.target.value)}
       >

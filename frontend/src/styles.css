@@ -17,6 +17,14 @@
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   --radius: 2px;
+  /* One underline treatment for the whole site, so a link in a paragraph, in
+     the footer and in a card all sit the same distance from their text. Any
+     context that wants something else overrides these two rather than
+     inventing its own offset, and high contrast thickens them everywhere at
+     once. */
+  --underline-offset: 0.2em;
+  --underline-thickness: 1px;
+  --underline-thickness-hover: 2px;
   --container: 1120px;
   --gutter: clamp(16px, 4vw, 32px);
   --control-h: 44px;
@@ -27,9 +35,6 @@
      var(--paper): html.dark-mode redefines --blue and --paper in the same
      rule it uses these in, so a var() reference here would resolve back to
      itself (a cycle), which CSS treats as invalid rather than swapped. */
-  --text-primary: var(--blue);
-  --text-secondary: var(--ink-muted);
-  --border-light: var(--line);
   --paper-dark: #1a2430;
   --text-dark: #fafaf7;
   --border-dark-mode: rgb(250 250 247 / 0.2);
@@ -59,6 +64,14 @@
      so it holds 6:1 for light text even over a white patch. Flat, not a
      gradient (see the design rules in CONTEXT.md). */
   --scrim: rgb(35 47 62 / 0.82);
+
+  /* A lighter tint behind the open menu drawer, so the blurred page still
+     shows through. Fixed navy, like --scrim, so it stays dark in dark mode. */
+  --backdrop: rgb(35 47 62 / 0.45);
+
+  /* Soft shadows under Smiley's panels, so they lift off the page. */
+  --shadow-soft: 0 8px 24px rgb(35 47 62 / 0.14);
+  --shadow-raised: 0 10px 30px rgb(35 47 62 / 0.18);
 
   /* How strongly the drifting subject names show through (RisingSubjects).
      Light ink on a dark page needs more alpha than dark ink on a light one
@@ -106,16 +119,86 @@ body {
   letter-spacing: var(--text-spacing, normal);
 }
 
-/* A stronger version of the same two colours: heavier borders and no muted
-   mid-tone text, so everything reads at full contrast. */
+/* A stronger version of the same two colours: heavier borders, heavier
+   underlines and no muted mid-tone text, so everything reads at full
+   contrast.
+
+   WRITTEN AS LITERALS, NOT var(--blue) / var(--paper). Those two swap
+   meaning between the themes (see html.dark-mode above), so a reference to
+   either follows the theme and lands on the wrong side of it. That is
+   exactly what broke this: in dark mode --ink-muted was set to var(--paper),
+   which dark mode had already redefined as the dark PAGE colour, so every
+   .label, .card__text and .results-status turned background-on-background
+   and the words disappeared. The same trap in reverse waits in light mode
+   for anything sitting on the always-dark chrome, so each theme gets its own
+   pair and neither is derived from the other. */
 body.high-contrast {
-  --ink-muted: var(--blue);
-  --line: rgb(35 47 62 / 0.5);
+  --ink-muted: #232f3e; /* the brand navy, 13.6:1 on paper */
+  --line: rgb(35 47 62 / 0.55);
+  --underline-thickness: 2px;
 }
 
+/* Dark mode's own pair. Both selectors set the same values: the class is
+   there once the theme has been applied, the media query covers the moment
+   before that on a dark system. */
 html.dark-mode body.high-contrast {
-  --ink-muted: var(--paper);
-  --line: rgb(250 250 247 / 0.5);
+  --ink-muted: #fafaf7; /* the paper colour as INK, 14.9:1 on the dark page */
+  --line: rgb(250 250 247 / 0.6);
+  --underline-thickness: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) body.high-contrast {
+    --ink-muted: #fafaf7;
+    --line: rgb(250 250 247 / 0.6);
+    --underline-thickness: 2px;
+  }
+}
+
+/* ---------- Motion and colour vision (set by useAccessibilityPreferences) ---------- */
+
+/* @media (prefers-reduced-motion) only ever hears the operating system. The
+   site has its own Reduce motion setting too, and it wins, so
+   useReducedMotion works out the answer from both and it is written here as
+   data-motion. Every rule that asks the media query alone kept animating
+   after the site's own toggle was turned on, which is what left the
+   homepage's drifting subject names moving.
+
+   The blanket rule catches animations added later as well, so nothing new
+   has to remember to ask. */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* The one filter the colour-vision setting applies, on <html> so nothing can
+   sit outside it: the menu drawer and the chat widget both render through a
+   portal into <body>, so a filter on #root would have missed them. The
+   filters themselves are drawn by components/ColourVisionFilters.jsx. */
+html[data-colour-vision="protanopia"] {
+  filter: url("#colour-vision-protanopia");
+}
+
+html[data-colour-vision="deuteranopia"] {
+  filter: url("#colour-vision-deuteranopia");
+}
+
+html[data-colour-vision="tritanopia"] {
+  filter: url("#colour-vision-tritanopia");
+}
+
+/* The filter's own <svg> holder: present on every page, never drawn. */
+.colour-vision-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 body[data-page-background="cream"] {
@@ -178,11 +261,12 @@ p {
 
 a {
   color: inherit;
-  text-underline-offset: 0.2em;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness);
 }
 
 a:hover {
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 :focus-visible {
@@ -334,12 +418,25 @@ main:focus {
   height: 24px;
 }
 
+/* The two boxes ARE centred on each other: align-items: center on
+   .site-header__brand does that correctly, and both boxes measure the same
+   centre line. What does not line up is the ink inside them. The approved
+   logo file keeps the lower third of its box for the smile, so the "amazon"
+   lettering spans rows 31 to 62 of the image's 106, putting its optical
+   centre 3px above the box centre at the 53px height we show it at. The
+   wordmark comes up by the same 3px so the two read as one line.
+
+   A transform rather than a margin, so this stays a purely visual nudge and
+   does not change what the flex row measures. The logo is a fixed 95px at
+   every width, so the 3px holds at every breakpoint. */
 .wordmark {
+  display: inline-block;
   color: var(--ink-inverse);
   font-size: 1.375rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   text-decoration: none;
+  transform: translateY(-3px);
 }
 
 .wordmark__accent {
@@ -412,6 +509,8 @@ main {
   font-weight: 600;
 }
 
+/* Deliberately heavier than --underline-thickness-hover and in orange: this
+   is the "you are here" marker, not an ordinary link underline. */
 .footer-column a[aria-current="page"] {
   text-decoration-color: var(--orange);
   text-decoration-thickness: 3px;
@@ -419,7 +518,7 @@ main {
 
 .footer-bottom {
   padding-block: 16px;
-  border-top: 1px solid rgb(250 250 247 / 0.2);
+  border-top: 1px solid var(--border-dark-mode);
 }
 
 .footer-bottom .label {
@@ -433,22 +532,67 @@ main {
   justify-self: end;
 }
 
-/* Circular initial button, on the same orange-background/blue-text chip
-   pattern used elsewhere (e.g. .tag--signup). */
+/* "Hello, Ada" beside a circular initial, or "Hello, sign in" beside a person
+   icon. The button itself is transparent on the dark header; only the
+   initial keeps the orange chip. */
 .account-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: var(--control-h);
-  height: var(--control-h);
+  gap: 8px;
+  min-height: var(--control-h);
   padding: 0;
   border: 0;
+  background: none;
+  color: var(--ink-inverse);
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The circular chip, on the same orange-background/blue-text pattern used
+   elsewhere (e.g. .tag--signup). */
+.account-button__initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--control-h);
+  height: var(--control-h);
   border-radius: 50%;
   background: var(--orange);
   color: var(--ink-on-orange);
   font-size: 1.0625rem;
   font-weight: 800;
-  cursor: pointer;
+}
+
+/* Signed out there is no chip, so the icon carries the target size on its
+   own and keeps the button tappable. */
+.account-button > .icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.account-button__greeting {
+  white-space: nowrap;
+}
+
+/* The header is three columns and the middle one holds the brand. Past this
+   width the greeting starts pushing the brand off centre, so it goes and the
+   initial (or the icon) speaks for it. The button keeps its accessible name
+   either way, so nothing is lost to a screen reader. */
+@media (max-width: 720px) {
+  .account-button__greeting {
+    display: none;
+  }
+}
+
+.account-button:hover .account-button__greeting {
+  text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 .account-button[aria-expanded="true"] {
@@ -504,6 +648,21 @@ main {
 .dropdown-links a:hover,
 .dropdown-links .nav-button:hover {
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
+}
+
+/* The Sign up button at the foot of the signed-out menu. A button, not
+   another row, because it is the thing a new visitor is meant to press.
+   .button--primary carries the orange fill and the dark ink that always goes
+   on it; this only has to stretch it across the menu. */
+.dropdown-links__cta {
+  margin-top: 8px;
+}
+
+.dropdown-cta {
+  justify-content: center;
+  width: 100%;
 }
 
 /* ---------- Menu overlay ---------- */
@@ -539,7 +698,7 @@ main {
    plus a tint dark enough to keep the drawer's own edge obvious. Tinted with
    the fixed dark navy rather than --blue, which flips light in dark mode. */
 .menu-overlay::backdrop {
-  background: rgb(35 47 62 / 0.45);
+  background: var(--backdrop);
   backdrop-filter: blur(8px);
 }
 
@@ -739,6 +898,8 @@ a.menu-hello__text:hover {
 .menu-overlay__nav a:hover,
 .menu-overlay__nav .nav-button:hover {
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 .menu-overlay__nav a[aria-current="page"] {
@@ -1023,6 +1184,8 @@ a.menu-hello__text:hover {
 
 .pathway-tile:hover .pathway-tile__name {
   text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: var(--underline-thickness-hover);
 }
 
 /* How it works: "Level" cards. On desktop they climb left to right like a
@@ -1079,9 +1242,21 @@ a.menu-hello__text:hover {
   color: var(--ink-muted);
 }
 
+/* The page a step talks about. Sits at the foot of the card, so the links
+   line up across the staircase whatever the text length. */
+.step__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  align-self: end;
+  min-height: var(--control-h);
+  font-weight: 700;
+}
+
 @media (min-width: 960px) {
-  /* Bottoms line up and each card starts one step higher than the one
-     before (--drop is how many steps below the top card it starts, set in
+  /* Each card starts one step lower than the one before, so Level 01 is
+     highest (--drop is how many steps below the top card it starts, set in
      HomeSections.jsx). Every top is exactly --rise apart, whatever the text
      length, so the connecting line always meets them. */
   .steps {
@@ -1093,7 +1268,7 @@ a.menu-hello__text:hover {
   }
 
   /* The staircase line: from each card's top right corner across half the
-     gap, up one step, then on to the next card's top left corner. */
+     gap, down one step, then on to the next card's top left corner. */
   .step:not(:last-child)::after {
     content: "";
     position: absolute;
@@ -1104,13 +1279,13 @@ a.menu-hello__text:hover {
   }
 
   .step + .step::before {
-    top: -1px;
+    top: calc(-1 * var(--rise) - 1px);
     bottom: auto;
     left: auto;
     right: 100%;
     width: calc(var(--gap) / 2 + 1px);
     height: calc(var(--rise) + 1px);
-    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 }
 
@@ -1613,7 +1788,7 @@ main:has(.auth-layout) {
   flex: none;
 }
 
-/* ---------- T Level Near You (NearYou.jsx) ---------- */
+/* ---------- Find T-Levels Near You (NearYou.jsx) ---------- */
 
 /* .filters lays the three controls out on a grid and aligns everything to
    the bottom edge. The submit button is a grid item like the rest, so it
@@ -1702,10 +1877,16 @@ main:has(.auth-layout) {
   user-select: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .rising-subjects {
-    display: block;
-  }
+/* Hidden until we know motion is wanted: before the preference has been
+   read, still is the safe answer. data-motion already folds in the system
+   setting (see useReducedMotion), so this is the whole condition.
+
+   display: none rather than a stopped animation on purpose. Each name
+   recycles itself on animationend, so an animation cut to nothing would
+   spin through replacements forever; a hidden element runs no animation at
+   all. */
+html[data-motion="full"] .rising-subjects {
+  display: block;
 }
 
 /* Dark blue at 3% to 5% opacity (set per subject in RisingSubjects.jsx)
@@ -1945,6 +2126,11 @@ input[type="range"] {
   }
 }
 
+/* A section of the settings tab that is not part of the form above it: its
+   own bordered block, so pressing something in here plainly does not save
+   what is typed up there. Used by Signing out; the danger zone below is the
+   same shape with a heavier border. */
+.settings-block,
 .danger-zone {
   display: grid;
   gap: 12px;
@@ -1952,6 +2138,12 @@ input[type="range"] {
   padding: 20px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
+}
+
+/* Logging out is reversible, so it stays in the ordinary border rather than
+   the danger zone's. */
+.danger-zone {
+  border-color: var(--danger);
 }
 
 .button--danger {

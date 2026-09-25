@@ -27,17 +27,17 @@ const pt = {
   },
 
   home: {
-    title: "T Levels, com um sorriso.",
+    title: "T-Levels, com um sorriso.",
     subheads: {
       general: "Guias, materiais e vídeos para estudantes, pais e escolas.",
-      teacher: "Materiais de aula e guias prontos para falar dos T Levels com os teus alunos.",
-      parent: "Guias claros sobre o que os T Levels envolvem, para ajudares o teu filho ou filha a escolher.",
-      student: "Guias e materiais de preparação para te ajudar a escolher um T Level e a preparar-te.",
+      teacher: "Materiais de aula e guias prontos para falar dos T-Levels com os teus alunos.",
+      parent: "Guias claros sobre o que os T-Levels envolvem, para ajudares o teu filho ou filha a escolher.",
+      student: "Guias e materiais de preparação para te ajudar a escolher um T-Level e a preparar-te.",
     },
     browse: "Ver recursos",
     stats: {
-      title: "Os T Levels num relance",
-      tLevels: "T Levels diferentes",
+      title: "Os T-Levels num relance",
+      tLevels: "T-Levels diferentes",
       pathways: "Percursos",
       resourceTypes: "Tipos de recurso",
       audiences: "Públicos",
@@ -50,12 +50,12 @@ const pt = {
       teacher: {
         who: "Professores e escolas",
         title: "Recursos prontos para a tua sala de aula",
-        text: "Materiais de aula e guias que apresentam os T Levels aos teus alunos.",
+        text: "Materiais de aula e guias que apresentam os T-Levels aos teus alunos.",
       },
       parent: {
         who: "Pais e encarregados de educação",
         title: "Ajuda-os a escolher com confiança",
-        text: "Guias simples sobre o que os T Levels envolvem e onde levam.",
+        text: "Guias simples sobre o que os T-Levels envolvem e onde levam.",
       },
       student: {
         who: "Estudantes",
@@ -66,7 +66,7 @@ const pt = {
     pathways: {
       label: "Percursos",
       title: "Explora por percurso",
-      lead: "Cada um junta vários T Levels relacionados. Escolhe um para ver os seus recursos.",
+      lead: "Cada um junta vários T-Levels relacionados. Escolhe um para ver os seus recursos.",
       digital: "Criar, gerir e dar apoio à tecnologia.",
       business: "Manter equipas e operações a funcionar.",
       media: "Planear, criar e publicar conteúdos.",
@@ -77,32 +77,32 @@ const pt = {
       label: "Como funciona",
       title: "Começa em quatro passos",
       level: "Nível",
-      browse: { title: "Ver recursos", text: "Guias, materiais e vídeos para os cinco percursos." },
-      register: { title: "Regista o teu interesse", text: "Diz-nos que percurso queres explorar." },
+      browse: { title: "Ver recursos", text: "Guias, materiais e vídeos para os cinco percursos.", link: "Ver recursos" },
+      register: { title: "Regista o teu interesse", text: "Diz-nos que percurso queres explorar.", link: "Registar interesse" },
       hearBack: { title: "Recebe resposta", text: "Analisamos cada pedido e respondemos por email." },
-      getInvolved: { title: "Participa", text: "Cria uma conta para abrir mais recursos do teu percurso." },
+      getInvolved: { title: "Participa", text: "Cria uma conta para abrir mais recursos do teu percurso.", link: "Criar conta" },
     },
   },
 
   about: {
     hero: {
-      label: "Sobre os T Levels",
+      label: "Sobre os T-Levels",
       title: "Dois anos. Um setor. Um estágio a sério.",
       lead: "Uma qualificação técnica que se faz depois dos GCSE. Sobretudo aprendizagem, em parte trabalho.",
     },
-    what: { label: "Como funciona", title: "O que é um T Level", split: "Como se dividem os dois anos" },
+    what: { label: "Como funciona", title: "O que é um T-Level", split: "Como se dividem os dois anos" },
     placement: {
       label: "O estágio",
       title: "Por dentro do estágio",
       amazonLink: "Como é um estágio na Amazon",
-      amazonDetail: "T Levels na Amazon",
+      amazonDetail: "T-Levels na Amazon",
     },
     switcher: {
       label: "Áreas",
       title: "Os cinco percursos na Amazon",
       lead: "Escolhe um para ver o que o estágio envolve.",
       tabs: "Percursos",
-      tLevels: "T Levels neste percurso",
+      tLevels: "T-Levels neste percurso",
       onPlacement: "No estágio",
       suits: "Ideal para",
       registerIn: "Regista interesse em {name}",
@@ -113,7 +113,7 @@ const pt = {
       title: "Notas e pontos UCAS",
       lead: "A tua nota dá pontos UCAS, que contam para entrar na universidade.",
       tableName: "Tabela de notas e pontos UCAS",
-      caption: "Notas finais do T Level e os pontos da tabela UCAS que cada uma vale",
+      caption: "Notas finais do T-Level e os pontos da tabela UCAS que cada uma vale",
       grade: "Nota final",
       points: "Pontos UCAS",
       note: "Nem todas as universidades usam os pontos UCAS, por isso confirma no teu curso. Se falhares uma parte, recebes na mesma um documento com o que concluíste.",
@@ -123,7 +123,7 @@ const pt = {
     cost: { label: "Dinheiro", title: "Quanto custa" },
     quiz: {
       label: "Questionário",
-      title: "Um T Level é para mim?",
+      title: "Um T-Level é para mim?",
       lead: "Seis perguntas. Não há respostas erradas e nada é guardado nem enviado.",
       progress: "{done} de {total} respondidas",
       incomplete: "Responde às {total} perguntas para ver o teu resultado. Já respondeste a {done}.",
@@ -147,7 +147,7 @@ const pt = {
     hero: {
       label: "Amazon Emerging Talent",
       title: "Nove semanas dentro de uma equipa.",
-      lead: "A Amazon recebe estudantes de T Level em estágio. Juntas-te a uma equipa real e fazes trabalho real.",
+      lead: "A Amazon recebe estudantes de T-Level em estágio. Juntas-te a uma equipa real e fazes trabalho real.",
     },
     shape: { label: "O estágio", title: "Como são as nove semanas" },
     support: { label: "Apoio", title: "Três pessoas que cuidam de ti" },
@@ -155,11 +155,11 @@ const pt = {
       label: "Percursos",
       title: "Que áreas a Amazon recebe",
       leadBefore: "Mais sobre cada um na página",
-      leadLink: "Sobre os T Levels",
+      leadLink: "Sobre os T-Levels",
       leadAfter: ".",
     },
     route: { label: "Como conseguir", title: "Como conseguir um estágio" },
-    growth: { label: "O programa", title: "Está a crescer", lead: "Dados do Departamento de Educação." },
+    growth: { label: "O programa", title: "Está a crescer", lead: "De seis estudantes para 100 nos primeiros três anos, com mais previstos. Dados do Departamento de Educação." },
     sourcesNote: "Verificado em setembro de 2026.",
   },
 
@@ -179,10 +179,10 @@ const pt = {
     page: {
       label: "Questionário",
       title: "Testa o que sabes",
-      lead: "{count} perguntas sobre os T Levels, os estágios na Amazon e este site. Nada é guardado e ninguém vê a tua pontuação.",
+      lead: "{count} perguntas sobre os T-Levels, os estágios na Amazon e este site. Nada é guardado e ninguém vê a tua pontuação.",
     },
     label: "Teste de conhecimentos",
-    title: "O que sabes sobre os T Levels?",
+    title: "O que sabes sobre os T-Levels?",
     lead: "{count} perguntas, uma de cada vez. Errar uma também é útil: o Smiley oferece-se para a explicar.",
     scored: "Tiveste {score} em {total}",
     doneLead: "Se tiveres dúvidas, pergunta ao Smiley no canto. Ele diz-te se não souber.",
@@ -205,7 +205,7 @@ const pt = {
   pathwaysPage: {
     label: "Percursos de aprendizagem",
     title: "Cinco percursos",
-    lead: "Escolhe um para ver os T Levels que inclui e o que o estágio envolve.",
+    lead: "Escolhe um para ver os T-Levels que inclui e o que o estágio envolve.",
   },
 
   shell: {
@@ -217,10 +217,12 @@ const pt = {
 
   titles: {
     Home: "Início",
-    "About T-Level": "Sobre os T Levels",
-    "T-Levels at Amazon": "T Levels na Amazon",
-    "T-Level Resources": "Recursos de T Level",
-    "T-Level Near you": "T Levels perto de ti",
+    "About T-Level": "Sobre os T-Levels",
+    "T-Levels at Amazon": "T-Levels na Amazon",
+    "T-Level Resources": "Recursos de T-Level",
+    "Find T-Levels Near You": "Encontra T-Levels perto de ti",
+    "All T-Levels": "Todos os T-Levels",
+    "Get involved": "Participa",
     Quiz: "Questionário",
     Help: "Ajuda",
     "Register interest": "Registar interesse",
@@ -247,7 +249,7 @@ const pt = {
   footer: {
     about: "Sobre",
     aboutText:
-      "O T-SMILE ajuda estudantes, pais e professores a explorar os T Levels e o T Level Digital na Amazon, com recursos gratuitos e para utilizadores registados num só lugar.",
+      "O T-SMILE ajuda estudantes, pais e professores a explorar os T-Levels e o T-Level Digital na Amazon, com recursos gratuitos e para utilizadores registados num só lugar.",
     navigation: "Navegação",
     support: "Apoio",
     legal: "Informação legal e conformidade",
@@ -256,6 +258,7 @@ const pt = {
     links: {
       home: "Início",
       pathways: "Percursos de aprendizagem",
+      allTLevels: "Todos os T-Levels",
       profile: "Perfil",
       resources: "Recursos",
       faqs: "Perguntas frequentes",
@@ -269,6 +272,7 @@ const pt = {
       cookies: "Política de Cookies",
       dataRights: "RGPD / Direitos sobre os dados",
       registerInterest: "Regista o teu interesse",
+      getInvolved: "Participa",
       signUp: "Criar conta",
     },
   },
@@ -280,7 +284,11 @@ const pt = {
     security: "Definições de segurança",
     contact: "Contacto",
     submissions: "Envios",
-    logOut: "Terminar sessão",
+    signIn: "Iniciar sessão",
+    signUp: "Criar conta",
+    signInOrUp: "Inicia sessão ou cria uma conta",
+    notSignedIn: "Sessão não iniciada",
+    needAccount: "Alguns recursos precisam de uma conta",
     roles: {
       student: "Estudante",
       parent: "Pai, mãe ou encarregado de educação",
@@ -295,16 +303,12 @@ const pt = {
     main: "Principal",
     helloUser: "Olá, {name}",
     helloGuest: "Olá, inicia sessão",
-    signUp: "Criar conta",
-    logIn: "Iniciar sessão",
-    logOut: "Terminar sessão",
-    loggingOut: "A terminar sessão",
     pages: {
       home: "Início",
-      about: "Sobre os T Levels",
-      amazon: "T Levels na Amazon",
-      resources: "Recursos de T Level",
-      nearYou: "T Levels perto de ti",
+      about: "Sobre os T-Levels",
+      amazon: "T-Levels na Amazon",
+      resources: "Recursos de T-Level",
+      nearYou: "Encontra T-Levels perto de ti",
       quiz: "Questionário",
       community: "Comunidade",
       help: "Ajuda",
@@ -327,7 +331,7 @@ const pt = {
   forms: {
     hidePassword: "Ocultar palavra-passe",
     showPassword: "Mostrar palavra-passe",
-    panelLine: "Recursos gratuitos para o percurso do T Level Digital da Amazon.",
+    panelLine: "Recursos gratuitos para o percurso do T-Level Digital da Amazon.",
   },
 
   register: {
@@ -367,7 +371,7 @@ const pt = {
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "Regista o teu interesse",
-    lead: "Queres um estágio de T Level na Amazon? Diz-nos que percurso. Não precisas de conta.",
+    lead: "Queres um estágio de T-Level na Amazon? Diz-nos que percurso. Não precisas de conta.",
     fullName: "Nome completo",
     email: "Email",
     iAmA: "Sou",
@@ -402,9 +406,9 @@ const pt = {
   community: {
     label: "Pergunta e responde",
     title: "Comunidade",
-    lead: "Perguntas sobre os T Levels e os estágios na Amazon, respondidas por estudantes, pais, professores e pela equipa da Amazon.",
+    lead: "Perguntas sobre os T-Levels e os estágios na Amazon, respondidas por estudantes, pais, professores e pela equipa da Amazon.",
     notChecked:
-      "As respostas aqui são a experiência e a opinião de cada pessoa, não factos verificados. Para a informação oficial, vê as páginas Sobre os T Levels e T Levels na Amazon, ou pergunta ao Smiley.",
+      "As respostas aqui são a experiência e a opinião de cada pessoa, não factos verificados. Para a informação oficial, vê as páginas Sobre os T-Levels e T-Levels na Amazon, ou pergunta ao Smiley.",
     ask: "Fazer uma pergunta",
     signInToAsk: "Inicia sessão para perguntar",
     signInToAnswer: "Inicia sessão para responder",
@@ -422,7 +426,7 @@ const pt = {
     sortHelpful: "Mais úteis",
     sortUnanswered: "Sem resposta",
     topics: {
-      tlevels: "T Levels em geral",
+      tlevels: "T-Levels em geral",
       placements: "Estágios",
       amazon: "Amazon",
       choosing: "Escolher e candidatar-se",
@@ -515,10 +519,10 @@ const pt = {
 
   smiley: {
     name: "Smiley",
-    role: "Guia de T Level",
-    roleAi: "Guia de T Level, com IA",
+    role: "Guia de T-Level",
+    roleAi: "Guia de T-Level, com IA",
     landmark: "Assistente",
-    open: "Abrir o Smiley, o teu guia de T Level",
+    open: "Abrir o Smiley, o teu guia de T-Level",
     close: "Fechar o Smiley",
     poke: "Dar um toque ao Smiley",
     dismiss: "Fechar a mensagem do Smiley",
@@ -544,7 +548,7 @@ const pt = {
       lateNight: "Olá, coruja da noite!",
     },
     intro:
-      "Sou o Smiley, o teu guia de T Level. Pergunta-me o que quiseres sobre os T Levels ou os estágios na Amazon. " +
+      "Sou o Smiley, o teu guia de T-Level. Pergunta-me o que quiseres sobre os T-Levels ou os estágios na Amazon. " +
       "Se não souber alguma coisa, digo-te em vez de inventar.",
     welcomeBack: "Que bom ver-te outra vez. Continua onde ficaste, ou pergunta-me algo novo.",
     whoQuestion: "Antes de mais: quem nos visita hoje?",
@@ -581,20 +585,20 @@ const pt = {
     quizLocalChosen: "Escolheste «{chosen}». A resposta certa a «{question}» é: {correct}. {explanation}",
 
     nudges: {
-      home: "Ainda a decidir por onde começar? Posso explicar o que é um T Level, ou como é um estágio na Amazon.",
+      home: "Ainda a decidir por onde começar? Posso explicar o que é um T-Level, ou como é um estágio na Amazon.",
       about: "Há alguma coisa nesta página que não está a fazer sentido? Pergunta-me e explico de outra maneira.",
       amazon: "Tens curiosidade sobre o que um estágio na Amazon envolve mesmo? Pergunta à vontade.",
       resources: "Procuras algo em especial? Diz-me o que precisas e eu indico-te onde está.",
-      nearYou: "À procura de um T Level perto de ti? Pergunta-me o que quiseres enquanto procuras.",
+      nearYou: "À procura de um T-Level perto de ti? Pergunta-me o que quiseres enquanto procuras.",
       quiz: "Encravaste numa? Diz-me qual e vemos juntos.",
       help: "Não encontras o que precisas? Pergunta-me e eu tento ajudar.",
       community: "Não encontras a tua pergunta? Pergunta-me primeiro, posso saber.",
       register: "Não sabes se precisas de conta? Posso dizer-te o que ela desbloqueia.",
-      other: "Ainda aí? Pergunta-me o que quiseres sobre os T Levels e respondo se souber.",
+      other: "Ainda aí? Pergunta-me o que quiseres sobre os T-Levels e respondo se souber.",
     },
 
     teasers: {
-      hello: "Olá, sou o Smiley! Pergunta-me o que quiseres sobre os T Levels.",
+      hello: "Olá, sou o Smiley! Pergunta-me o que quiseres sobre os T-Levels.",
       perfect: "Tudo certo! Muito bem.",
       finished: "Feito! Queres rever alguma?",
       quiz: "Essa era difícil. Queres que a explique?",
@@ -608,8 +612,8 @@ const pt = {
     },
 
     topics: {
-      whatIsTLevel: "O que é um T Level?",
-      courseLength: "Quanto tempo dura um T Level?",
+      whatIsTLevel: "O que é um T-Level?",
+      courseLength: "Quanto tempo dura um T-Level?",
       classroomHours: "Quanto do curso são aulas?",
       placementLength: "Quanto tempo dura o estágio?",
       placementHow: "Como funciona o estágio?",
@@ -626,8 +630,8 @@ const pt = {
       tlevelFail: "E se eu não passar?",
       notReady: "E se ainda não estiver preparado?",
       alongside: "Posso fazer outras qualificações ao mesmo tempo?",
-      whoSuits: "Um T Level é para mim?",
-      tlevelBenefits: "Porquê fazer um T Level?",
+      whoSuits: "Um T-Level é para mim?",
+      tlevelBenefits: "Porquê fazer um T-Level?",
       amazonPlacement: "Como é um estágio na Amazon?",
       amazonSupport: "Quem cuida de mim lá?",
       amazonHowToGet: "Como consigo um estágio na Amazon?",
@@ -640,7 +644,7 @@ const pt = {
       "pathway-media": "Media",
       "pathway-finance": "Finanças",
       "pathway-engineering": "Engenharia",
-      nearYou: "Encontrar um T Level perto de mim",
+      nearYou: "Encontrar um T-Level perto de mim",
       providerQuestions: "O que devo perguntar a uma escola?",
       careersAdvice: "Onde posso ter orientação vocacional?",
       resources: "Onde estão os recursos?",
@@ -657,17 +661,17 @@ const pt = {
     },
 
     answers: {
-      whatIsTLevel: "Um T Level em três passos:",
+      whatIsTLevel: "Um T-Level em três passos:",
       amazonNotConfirmed: "A Amazon ainda não confirmou estágios neste percurso, por isso não posso prometer um.",
-      pathway: "{name}: {summary}\nT Levels: {tLevels}.\nNo estágio: {placement}\nIdeal para: {suits}\nNa Amazon: {amazon}",
-      whoSuits: "Um T Level costuma ser para ti se:",
+      pathway: "{name}: {summary}\nT-Levels: {tLevels}.\nNo estágio: {placement}\nIdeal para: {suits}\nNa Amazon: {amazon}",
+      whoSuits: "Um T-Level costuma ser para ti se:",
       decideWithAdult:
         "Só tu podes decidir, por isso fala também com um professor ou um orientador vocacional. O questionário pode ajudar-te a pensar.",
       amazonPathways: "Isto é o que a Amazon disse sobre cada percurso:",
       pathwaysList: "Há cinco percursos:",
       providerQuestions: "Boas perguntas para fazer a uma escola ou college:",
       resources: "A página de Recursos tem guias, materiais e vídeos. Alguns precisam de uma conta gratuita para abrir.",
-      quiz: "O questionário tem perguntas rápidas sobre os T Levels, e eu ajudo com as que errares.",
+      quiz: "O questionário tem perguntas rápidas sobre os T-Levels, e eu ajudo com as que errares.",
       community:
         "Na Comunidade podes fazer uma pergunta e outros estudantes, pais, professores e a equipa da Amazon podem responder. " +
         "O que eu não souber é uma boa pergunta para fazer lá.",
@@ -690,11 +694,11 @@ const pt = {
     },
 
     links: {
-      about: "Sobre os T Levels",
-      amazon: "T Levels na Amazon",
+      about: "Sobre os T-Levels",
+      amazon: "T-Levels na Amazon",
       pathways: "Percursos de aprendizagem",
       registerInterest: "Registar interesse",
-      nearYou: "Encontra um T Level perto de ti",
+      nearYou: "Encontra um T-Level perto de ti",
       resources: "Recursos",
       quiz: "Fazer o questionário",
       community: "Ir para a Comunidade",
@@ -708,20 +712,20 @@ const pt = {
     },
 
     chat: {
-      greeting: "Olá! Sou o Smiley. Pergunta-me o que quiseres sobre os T Levels ou os estágios na Amazon, ou escolhe uma pergunta abaixo.",
+      greeting: "Olá! Sou o Smiley. Pergunta-me o que quiseres sobre os T-Levels ou os estágios na Amazon, ou escolhe uma pergunta abaixo.",
       howAreYou: "Estou bem, obrigado por perguntares! A minha antena está a apanhar um sinal forte hoje. Como posso ajudar?",
       thanks: "De nada! Há mais alguma coisa que queiras saber?",
       bye: "Até já! Estou aqui no canto se precisares.",
       whoAreYou:
-        "Sou o Smiley, o guia do T-SMILE. Respondo a perguntas sobre os T Levels e os estágios na Amazon, só com factos que a equipa verificou.",
+        "Sou o Smiley, o guia do T-SMILE. Respondo a perguntas sobre os T-Levels e os estágios na Amazon, só com factos que a equipa verificou.",
       areYouBot:
         "Sim, sou um bot. Um simpático, com antena. Para o que eu não souber responder, um professor, um orientador vocacional ou a Comunidade podem ajudar.",
-      whoMadeYou: "A equipa T-SMILE criou-me para o projeto de T Level da Amazon Emerging Talent. Sou o que tem um T na cabeça.",
+      whoMadeYou: "A equipa T-SMILE criou-me para o projeto de T-Level da Amazon Emerging Talent. Sou o que tem um T na cabeça.",
       whatCanYouDo:
-        "Posso explicar o que é um T Level, como funciona o estágio, o que envolve um estágio na Amazon, os cinco percursos, " +
+        "Posso explicar o que é um T-Level, como funciona o estágio, o que envolve um estágio na Amazon, os cinco percursos, " +
         "os custos, os requisitos de entrada e mais. Pergunta-me por palavras tuas, ou toca numa pergunta.",
       jokes: [
-        "Quantas horas demora a trocar uma lâmpada num T Level? Pelo menos 315, mas aprendes imenso.",
+        "Quantas horas demora a trocar uma lâmpada num T-Level? Pelo menos 315, mas aprendes imenso.",
         "Porque é que o computador foi ao médico? Porque tinha um vírus.",
         "O que disse o router ao portátil? Sinto que temos uma ligação especial.",
         "Porque é que o robô foi de férias? Para recarregar as baterias.",
@@ -735,8 +739,8 @@ const pt = {
       confused: "Desculpa, a culpa foi minha. Vamos tentar outra vez. Escolhe um tema abaixo, ou pergunta-me de outra forma.",
       howOld: "Fui ligado em setembro de 2026, por isso sou muito novo. Ainda estou a aprender, tal como tu.",
       favouriteColour: "Laranja. Obviamente.",
-      meaningOfLife: "42. Mas num T Level, o número mágico é 315. São as horas mínimas de estágio.",
-      secret: "Um segredo: o T na minha cabeça é de T Levels. Não contes a ninguém.",
+      meaningOfLife: "42. Mas num T-Level, o número mágico é 315. São as horas mínimas de estágio.",
+      secret: "Um segredo: o T na minha cabeça é de T-Levels. Não contes a ninguém.",
       feelings: "Funciono a curiosidade e boas perguntas. Agora estou com vontade de conversar.",
       sing: "Lá lá lá... a minha voz a cantar é quase só interferência. Se calhar é melhor ficarmos pelas perguntas?",
       name: "Sou eu! Em que posso ajudar?",
@@ -762,10 +766,10 @@ const pt = {
       struggling:
         "Parece muita coisa para carregar, e não tens de resolver tudo sozinho. Falar com alguém em quem confias ajuda mesmo, " +
         "como um professor, um pai, mãe ou cuidador. A Childline é grátis através do 0800 1111, ou podes enviar SHOUT por SMS para o 85258, a qualquer hora. " +
-        "Continuo aqui para qualquer pergunta sobre T Levels quando quiseres.",
+        "Continuo aqui para qualquer pergunta sobre T-Levels quando quiseres.",
       personal:
         "Uma dica rápida: não precisas de partilhar comigo dados pessoais como o teu email, número de telefone ou morada, e o mais seguro " +
-        "é não o fazeres. Não enviei essa mensagem para lado nenhum. O que gostavas de saber sobre os T Levels?",
+        "é não o fazeres. Não enviei essa mensagem para lado nenhum. O que gostavas de saber sobre os T-Levels?",
     },
 
     // Words a Portuguese speaker might use for each topic. One matching word

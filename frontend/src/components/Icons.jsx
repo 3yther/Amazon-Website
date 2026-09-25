@@ -73,15 +73,6 @@ export function GlobeIcon() {
   );
 }
 
-export function PersonIcon() {
-  return (
-    <Icon>
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
-    </Icon>
-  );
-}
-
 export function ThumbUpIcon() {
   return (
     <Icon>
@@ -122,6 +113,18 @@ export function AlertIcon() {
     <Icon>
       <path d="M12 3 2 21h20L12 3z" />
       <path d="M12 10v5M12 18v.01" />
+    </Icon>
+  );
+}
+
+// Stands in for the circular initial when nobody is signed in, so the header's
+// account button is still something to aim at on a narrow screen where its
+// label is hidden. The menu's Hello band uses it as its avatar too.
+export function PersonIcon() {
+  return (
+    <Icon>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" />
     </Icon>
   );
 }

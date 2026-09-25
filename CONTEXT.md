@@ -25,6 +25,9 @@ receive interest submissions and manage content).
 - Colours: Amazon Orange #FF9900 and Amazon Dark Blue #232F3E only, on warm
   off-white #FAFAF7. No purple. No gradients.
 - No pill-shaped buttons (squared, small radius). No emoji icons (use SVG line icons).
+- Write "T-Level" and "T-Levels", with a hyphen, everywhere in copy. The only
+  exception is the exact title of a published source we cite, e.g. "T Level
+  Placements, About Amazon UK".
 - No em dashes anywhere in copy. No vacuous filler text. No fake reviews/metrics/accounts.
 - Keep website copy minimal and punchy. Fewer words, said with more weight.
 - Bolder typography for headings; monospace for small labels.
@@ -47,6 +50,45 @@ receive interest submissions and manage content).
   Nothing goes straight to `main`; open a PR and get it reviewed.
 - Never commit secrets, .env files, or *.pem keys. Check .gitignore first.
 - Write short docstrings/comments so a teammate (and a marker) can follow the code.
+
+## Accessibility settings: what each one reaches
+
+The controls on `/accessibility` are held by `AccessibilityPreferencesProvider`
+(`frontend/src/hooks/useAccessibilityPreferences.jsx`), mounted at the root in
+`main.jsx`. It writes flags onto `<html>` and `<body>`, and `styles.css` reads
+them. Anything new that should answer a setting reads the same flag rather
+than re-deriving it:
+
+| Setting | How it reaches the page |
+|---|---|
+| Font size, text spacing | `--font-scale`, `--text-spacing` on `<html>` |
+| High contrast | `body.high-contrast`, with a **separate pair of literal colours per theme**. Never build one of these out of `var(--blue)` or `var(--paper)`: those two swap meaning between light and dark, and aliasing them is what once turned every muted line of text into background-on-background in dark mode. |
+| Theme | `html.dark-mode` / `html.light-mode` |
+| Page background, focus outline | `body[data-page-background]`, `body[data-outline-style]` |
+| Reduce motion | `html[data-motion="reduced" \| "full"]`, worked out from the site's own setting **and** the system one, the site's winning. CSS must ask this, not `@media (prefers-reduced-motion)` alone, or it will not hear the site's own toggle. |
+| Colour blindness type | `html[data-colour-vision]`, which applies one of the SVG filters in `components/ColourVisionFilters.jsx` |
+
+### Known limits
+
+- **Colour vision correction is a filter on `<html>`.** That covers everything
+  the browser paints for us, the menu drawer and the chat widget included
+  (both render through a portal into `<body>`, so a filter any lower down
+  would have missed them). Two things it cannot reach: the Amazon logo and
+  the photographs, which are raster images we must not recolour anyway, and
+  anything a third party would draw inside an `<iframe>`. There is no such
+  iframe on the site today; if one is ever added, its contents will not be
+  corrected and that has to be said out loud rather than assumed.
+- **The correction is deliberately subtle here.** The palette is orange, dark
+  navy and off-white, which are already told apart by lightness rather than
+  hue, so the filter changes little on most pages. Where it earns its keep is
+  the one red we use (`--danger`). Do not read "it looks nearly the same" as
+  "it is not working".
+- **Text to speech reads the chat assistant only.** It is `useSpeech.js`
+  driving Smiley's replies. The site has no page reader; the setting's label
+  says so. Building one is a separate piece of work.
+- **Interface language saves but translates nothing.** English is the only
+  language the site is written in, so the control is honest about the others
+  being "coming soon" and that is all it does.
 
 ## Security (mentor stressed this)
 - Passwords hashed and salted (Django does this by default; use Django auth, do not roll your own).

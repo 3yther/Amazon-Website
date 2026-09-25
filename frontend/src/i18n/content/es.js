@@ -64,7 +64,7 @@ export default {
         placement:
           "Trabajas con un equipo técnico en tareas reales: escribir y revisar código, hacer pruebas, corregir errores o mantener en marcha los sistemas y a sus usuarios.",
         suits: "Personas a las que les gusta resolver un problema y verlo funcionar al momento.",
-        amazonStatus: "Donde empezó el programa de T Level de Amazon.",
+        amazonStatus: "Donde empezó el programa de T-Level de Amazon.",
       },
       {
         name: "Empresa",
@@ -101,9 +101,9 @@ export default {
     ],
     FAQS: [
       {
-        question: "¿Un T Level es lo mismo que un aprendizaje (apprenticeship)?",
+        question: "¿Un T-Level es lo mismo que un aprendizaje (apprenticeship)?",
         answer:
-          "No, es al revés. Un aprendizaje es sobre todo trabajo remunerado con algo de estudio. Un T Level es sobre todo estudio, alrededor del 80 %, y unas prácticas en empresa de al menos 315 horas completan el resto.",
+          "No, es al revés. Un aprendizaje es sobre todo trabajo remunerado con algo de estudio. Un T-Level es sobre todo estudio, alrededor del 80 %, y unas prácticas en empresa de al menos 315 horas completan el resto.",
       },
       {
         question: "¿Qué GCSE necesito?",
@@ -111,9 +111,9 @@ export default {
           "Cada instituto o college fija sus requisitos de acceso; no hay unos nacionales. Lo habitual es tener unos cuatro o cinco GCSE con nota 4 o superior, normalmente incluidos inglés y matemáticas. Consulta con el centro al que quieres ir.",
       },
       {
-        question: "¿Qué T Levels puedo elegir?",
+        question: "¿Qué T-Levels puedo elegir?",
         answer:
-          "Unos 20, en áreas como digital, ingeniería, construcción, salud, ciencias, derecho y contabilidad, medios, marketing, agricultura, cuidado de animales, educación, y artesanía y diseño. Sport y Social Care llegan en septiembre de 2028. El T Level de Finance acepta sus últimas matrículas en septiembre de 2026, así que el que continúa es Accounting.",
+          "Unos 20, en áreas como digital, ingeniería, construcción, salud, ciencias, derecho y contabilidad, medios, marketing, agricultura, cuidado de animales, educación, y artesanía y diseño. Sport y Social Care llegan en septiembre de 2028. El T-Level de Finance acepta sus últimas matrículas en septiembre de 2026, así que el que continúa es Accounting.",
       },
       {
         question: "¿Cómo me evalúan?",
@@ -128,7 +128,7 @@ export default {
       {
         question: "¿Y si no apruebo todo?",
         answer:
-          "Recibes una declaración de logros del T Level (statement of achievement) en lugar del certificado completo. Recoge las partes que sí completaste, así que el trabajo no se pierde.",
+          "Recibes una declaración de logros del T-Level (statement of achievement) en lugar del certificado completo. Recoge las partes que sí completaste, así que el trabajo no se pierde.",
       },
       {
         question: "¿Cuánto duran las prácticas en empresa?",
@@ -146,14 +146,14 @@ export default {
           "Sí, a través del 16 to 19 Bursary Fund. Puede cubrir transporte, libros, material y ropa especializada. Solicítala a través de tu instituto o college.",
       },
       {
-        question: "¿Y si todavía no estoy preparado para un T Level?",
+        question: "¿Y si todavía no estoy preparado para un T-Level?",
         answer:
-          "Existe el T Level Foundation Year, un curso de un año de nivel 2 que primero refuerza tu inglés, tus matemáticas, tus competencias digitales y tu experiencia laboral, y después te lleva al T Level.",
+          "Existe el T-Level Foundation Year, un curso de un año de nivel 2 que primero refuerza tu inglés, tus matemáticas, tus competencias digitales y tu experiencia laboral, y después te lleva al T-Level.",
       },
       {
         question: "¿Puedo hacer otras titulaciones a la vez?",
         answer:
-          "Un T Level es un programa a tiempo completo de un tamaño parecido a tres A levels, así que normalmente no se combina con mucho más. Algunos centros permiten una titulación extra. Pregunta en el tuyo.",
+          "Un T-Level es un programa a tiempo completo de un tamaño parecido a tres A levels, así que normalmente no se combina con mucho más. Algunos centros permiten una titulación extra. Pregunta en el tuyo.",
       },
     ],
     QUIZ_QUESTIONS: [
@@ -204,8 +204,8 @@ export default {
     ],
     QUIZ_RESULTS: [
       {
-        heading: "Un T Level parece encajar muy bien contigo",
-        text: "Quieres aprender haciendo, pasar tiempo en un lugar de trabajo real y tener un camino claro hacia un sector. Justo para eso está pensado un T Level. Siguiente paso: mira cuál de los cinco itinerarios encaja contigo y registra tu interés con Amazon.",
+        heading: "Un T-Level parece encajar muy bien contigo",
+        text: "Quieres aprender haciendo, pasar tiempo en un lugar de trabajo real y tener un camino claro hacia un sector. Justo para eso está pensado un T-Level. Siguiente paso: mira cuál de los cinco itinerarios encaja contigo y registra tu interés con Amazon.",
       },
       {
         heading: "Merece la pena mirarlo bien",
@@ -223,7 +223,7 @@ export default {
       { title: "Nueve semanas", text: "Te unes a un equipo, aprendes las herramientas y haces trabajo real." },
       { title: "Centros de formación", text: "Una parte se hace en los centros de formación (skills hubs) de Amazon, en bloques de 15 días." },
       { title: "Proyectos en grupo", text: "Trabajas con otros estudiantes en proyectos para organizaciones benéficas." },
-      { title: "Retos de equipo", text: "Tareas que marca tu equipo y que usan tus competencias del T Level." },
+      { title: "Retos de equipo", text: "Tareas que marca tu equipo y que usan tus competencias del T-Level." },
     ],
     SUPPORT: [
       { title: "Un compañero (buddy)", text: "Para las preguntas pequeñas." },
@@ -231,7 +231,7 @@ export default {
       { title: "Un responsable de prácticas", text: "Mantiene las prácticas en orden con tu instituto o college." },
     ],
     ROUTE_IN: [
-      { title: "Empieza un T Level", text: "Para jóvenes de 16 a 18 años que ya cursan un T Level." },
+      { title: "Empieza un T-Level", text: "Para jóvenes de 16 a 18 años que ya cursan un T-Level." },
       {
         title: "Tu centro se pone en contacto",
         text: "Amazon organiza las prácticas con institutos y colleges, no directamente con los estudiantes.",
@@ -248,9 +248,9 @@ export default {
   help: {
     SERVICES: [
       {
-        title: "Busca un T Level cerca de ti",
+        title: "Busca un T-Level cerca de ti",
         text: "Busca por código postal y materia.",
-        linkText: "Buscar un T Level en tlevels.gov.uk",
+        linkText: "Buscar un T-Level en tlevels.gov.uk",
       },
       {
         title: "Orientación profesional gratuita",
@@ -269,7 +269,7 @@ export default {
       },
     ],
     PROVIDER_QUESTIONS: [
-      "¿Qué T Levels y especialidades ofrecéis?",
+      "¿Qué T-Levels y especialidades ofrecéis?",
       "¿Me buscáis vosotros las prácticas o las busco yo?",
       "¿Qué empresas han acogido a vuestros estudiantes?",
       "¿Las prácticas son en bloque, un día a la semana o una mezcla?",
@@ -277,9 +277,10 @@ export default {
       "¿Qué apoyo hay si tengo necesidades adicionales?",
     ],
     SITE_ROUTES: [
-      { label: "¿Qué es un T Level?", detail: "Sobre los T Levels" },
-      { label: "¿Cómo son unas prácticas en Amazon?", detail: "T Levels en Amazon" },
-      { label: "Quiero guías y materiales", detail: "Recursos de T Level" },
+      { label: "¿Qué es un T-Level?", detail: "Sobre los T-Levels" },
+      { label: "Quiero ver todas las materias", detail: "Todos los T-Levels" },
+      { label: "¿Cómo son unas prácticas en Amazon?", detail: "T-Levels en Amazon" },
+      { label: "Quiero guías y materiales", detail: "Recursos de T-Level" },
       { label: "Quiero registrar mi interés", detail: "Registrar interés" },
       { label: "Ya tengo una cuenta", detail: "Iniciar sesión" },
     ],
@@ -298,37 +299,37 @@ export default {
   quiz: {
     KNOWLEDGE_QUESTIONS: [
       {
-        question: "¿Cuánto duran unas prácticas en empresa de T Level?",
+        question: "¿Cuánto duran unas prácticas en empresa de T-Level?",
         options: ["Al menos 315 horas, unos 45 días", "Dos semanas", "Un año entero", "No hay prácticas"],
         correctAnswer: "Al menos 315 horas, unos 45 días",
         explanation: "Al menos 315 horas, unos 45 días. Amazon organiza sus prácticas en un bloque de nueve semanas.",
       },
       {
-        question: "Un T Level tiene más o menos el tamaño de ¿cuántos A levels?",
+        question: "Un T-Level tiene más o menos el tamaño de ¿cuántos A levels?",
         options: ["Uno", "Dos", "Tres", "Cinco"],
         correctAnswer: "Tres",
-        explanation: "Tres. Un T Level también da puntos UCAS, así que la universidad sigue abierta para ti.",
+        explanation: "Tres. Un T-Level también da puntos UCAS, así que la universidad sigue abierta para ti.",
       },
       {
-        question: "¿Cuál es la principal diferencia entre un T Level y un aprendizaje (apprenticeship)?",
+        question: "¿Cuál es la principal diferencia entre un T-Level y un aprendizaje (apprenticeship)?",
         options: [
-          "Un T Level es sobre todo estudio; un aprendizaje, sobre todo trabajo remunerado",
+          "Un T-Level es sobre todo estudio; un aprendizaje, sobre todo trabajo remunerado",
           "Son lo mismo",
-          "Un T Level es sobre todo trabajo remunerado; un aprendizaje, sobre todo estudio",
+          "Un T-Level es sobre todo trabajo remunerado; un aprendizaje, sobre todo estudio",
           "Solo el aprendizaje incluye tiempo con una empresa",
         ],
-        correctAnswer: "Un T Level es sobre todo estudio; un aprendizaje, sobre todo trabajo remunerado",
+        correctAnswer: "Un T-Level es sobre todo estudio; un aprendizaje, sobre todo trabajo remunerado",
         explanation:
-          "Es al revés. Un T Level es alrededor de un 80 % estudio, y unas prácticas en empresa de al menos 315 horas completan el resto.",
+          "Es al revés. Un T-Level es alrededor de un 80 % estudio, y unas prácticas en empresa de al menos 315 horas completan el resto.",
       },
       {
-        question: "¿Qué itinerario incluye el T Level de Digital Software Development?",
+        question: "¿Qué itinerario incluye el T-Level de Digital Software Development?",
         options: ["Digital", "Empresa", "Ingeniería", "Medios"],
         correctAnswer: "Digital",
         explanation: "Digital. También incluye Digital Data Analytics y Digital Support and Security.",
       },
       {
-        question: "¿Qué itinerario incluye el T Level de Management and Administration?",
+        question: "¿Qué itinerario incluye el T-Level de Management and Administration?",
         options: ["Empresa", "Finanzas", "Medios", "Digital"],
         correctAnswer: "Empresa",
         explanation: "Empresa. Su resumen en la web es mantener en marcha los equipos y las operaciones.",

@@ -266,5 +266,1015 @@
       ],
       "created_at": "2026-09-24T09:00:00Z"
     }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 16,
+    "fields": {
+      "name": "Newham College",
+      "address": "High Street South, London",
+      "postcode": "E6 6ER",
+      "latitude": "51.531752",
+      "longitude": "0.054868",
+      "website_url": "https://www.newham.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 17,
+    "fields": {
+      "name": "Waltham Forest College",
+      "address": "707 Forest Road, London",
+      "postcode": "E17 4JB",
+      "latitude": "51.591437",
+      "longitude": "-0.010351",
+      "website_url": "https://www.waltham.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 18,
+    "fields": {
+      "name": "Lewisham College",
+      "address": "Lewisham Way, London",
+      "postcode": "SE4 1UT",
+      "latitude": "51.468220",
+      "longitude": "-0.025911",
+      "website_url": "https://www.lewisham.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 19,
+    "fields": {
+      "name": "Westminster Kingsway College",
+      "address": "211 Gray's Inn Road, London",
+      "postcode": "WC1X 8RA",
+      "latitude": "51.526906",
+      "longitude": "-0.118768",
+      "website_url": "https://www.westking.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 20,
+    "fields": {
+      "name": "Harrow College",
+      "address": "Lowlands Road, Harrow",
+      "postcode": "HA1 3AQ",
+      "latitude": "51.577664",
+      "longitude": "-0.335181",
+      "website_url": "https://www.harrow.ac.uk",
+      "pathways": [
+        1,
+        2
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 21,
+    "fields": {
+      "name": "Uxbridge College",
+      "address": "Park Road, Uxbridge",
+      "postcode": "UB8 1NQ",
+      "latitude": "51.549949",
+      "longitude": "-0.469104",
+      "website_url": "https://www.uxbridgecollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 22,
+    "fields": {
+      "name": "Kingston College",
+      "address": "Kingston Hall Road, Kingston upon Thames",
+      "postcode": "KT1 2AQ",
+      "latitude": "51.406917",
+      "longitude": "-0.305171",
+      "website_url": "https://www.kingston-college.ac.uk",
+      "pathways": [
+        1,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 23,
+    "fields": {
+      "name": "Richmond upon Thames College",
+      "address": "Egerton Road, Twickenham",
+      "postcode": "TW2 7SJ",
+      "latitude": "51.452477",
+      "longitude": "-0.341898",
+      "website_url": "https://www.rutc.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 24,
+    "fields": {
+      "name": "City and Islington College",
+      "address": "383 Holloway Road, London",
+      "postcode": "N7 0RN",
+      "latitude": "51.556574",
+      "longitude": "-0.118294",
+      "website_url": "https://www.candi.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 25,
+    "fields": {
+      "name": "New City College Havering",
+      "address": "Ardleigh Green Road, Hornchurch",
+      "postcode": "RM11 2LL",
+      "latitude": "51.581598",
+      "longitude": "0.221276",
+      "website_url": "https://www.ncclondon.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 26,
+    "fields": {
+      "name": "Harlow College",
+      "address": "Velizy Avenue, Harlow",
+      "postcode": "CM20 3LH",
+      "latitude": "51.770472",
+      "longitude": "0.099176",
+      "website_url": "https://www.harlow-college.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 27,
+    "fields": {
+      "name": "South and City College Birmingham",
+      "address": "High Street Deritend, Birmingham",
+      "postcode": "B5 5SU",
+      "latitude": "52.475472",
+      "longitude": "-1.885748",
+      "website_url": "https://www.sccb.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 28,
+    "fields": {
+      "name": "Birmingham Metropolitan College",
+      "address": "Jennens Road, Birmingham",
+      "postcode": "B4 7PS",
+      "latitude": "52.483225",
+      "longitude": "-1.889336",
+      "website_url": "https://www.bmet.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 29,
+    "fields": {
+      "name": "Walsall College",
+      "address": "Littleton Street West, Walsall",
+      "postcode": "WS2 8ES",
+      "latitude": "52.589464",
+      "longitude": "-1.982549",
+      "website_url": "https://www.walsallcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 30,
+    "fields": {
+      "name": "Dudley College of Technology",
+      "address": "The Broadway, Dudley",
+      "postcode": "DY1 4AS",
+      "latitude": "52.514272",
+      "longitude": "-2.082617",
+      "website_url": "https://www.dudleycol.ac.uk",
+      "pathways": [
+        1,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 31,
+    "fields": {
+      "name": "Coventry College",
+      "address": "Swanswell Street, Coventry",
+      "postcode": "CV1 5DG",
+      "latitude": "52.414022",
+      "longitude": "-1.503735",
+      "website_url": "https://www.coventrycollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 32,
+    "fields": {
+      "name": "Sandwell College",
+      "address": "1 Spon Lane, West Bromwich",
+      "postcode": "B70 6AW",
+      "latitude": "52.515101",
+      "longitude": "-1.992082",
+      "website_url": "https://www.sandwell.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 33,
+    "fields": {
+      "name": "The Manchester College",
+      "address": "Ashton Old Road, Manchester",
+      "postcode": "M11 2WH",
+      "latitude": "53.471861",
+      "longitude": "-2.187627",
+      "website_url": "https://www.tmc.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 34,
+    "fields": {
+      "name": "Salford City College",
+      "address": "Walkden Road, Manchester",
+      "postcode": "M28 7QD",
+      "latitude": "53.516796",
+      "longitude": "-2.396352",
+      "website_url": "https://www.salfordcc.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 35,
+    "fields": {
+      "name": "Stockport College",
+      "address": "Wellington Road South, Stockport",
+      "postcode": "SK1 3UQ",
+      "latitude": "53.403115",
+      "longitude": "-2.157889",
+      "website_url": "https://www.stockport.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 36,
+    "fields": {
+      "name": "The Oldham College",
+      "address": "Rochdale Road, Oldham",
+      "postcode": "OL9 6AA",
+      "latitude": "53.542642",
+      "longitude": "-2.119957",
+      "website_url": "https://www.oldham.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 37,
+    "fields": {
+      "name": "Tameside College",
+      "address": "Beaufort Road, Ashton-under-Lyne",
+      "postcode": "OL6 6NX",
+      "latitude": "53.487954",
+      "longitude": "-2.080771",
+      "website_url": "https://www.tameside.ac.uk",
+      "pathways": [
+        1,
+        2
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 38,
+    "fields": {
+      "name": "The City of Liverpool College",
+      "address": "Roscoe Street, Liverpool",
+      "postcode": "L1 9DW",
+      "latitude": "53.401294",
+      "longitude": "-2.974189",
+      "website_url": "https://www.liv-coll.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 39,
+    "fields": {
+      "name": "Wirral Metropolitan College",
+      "address": "Europa Boulevard, Birkenhead",
+      "postcode": "CH41 4NT",
+      "latitude": "53.393105",
+      "longitude": "-3.021491",
+      "website_url": "https://www.wmc.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 40,
+    "fields": {
+      "name": "St Helens College",
+      "address": "Water Street, St Helens",
+      "postcode": "WA10 1PP",
+      "latitude": "53.452664",
+      "longitude": "-2.741469",
+      "website_url": "https://www.sthelens.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 41,
+    "fields": {
+      "name": "The Sheffield College",
+      "address": "Granville Road, Sheffield",
+      "postcode": "S2 2RL",
+      "latitude": "53.372600",
+      "longitude": "-1.460137",
+      "website_url": "https://www.sheffcol.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 42,
+    "fields": {
+      "name": "Bradford College",
+      "address": "Great Horton Road, Bradford",
+      "postcode": "BD7 1AY",
+      "latitude": "53.791692",
+      "longitude": "-1.768114",
+      "website_url": "https://www.bradfordcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 43,
+    "fields": {
+      "name": "Hull College",
+      "address": "Queen's Gardens, Hull",
+      "postcode": "HU1 3DG",
+      "latitude": "53.746414",
+      "longitude": "-0.331874",
+      "website_url": "https://www.hull-college.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 44,
+    "fields": {
+      "name": "York College",
+      "address": "Sim Balk Lane, York",
+      "postcode": "YO23 2BB",
+      "latitude": "53.929724",
+      "longitude": "-1.113616",
+      "website_url": "https://www.yorkcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 45,
+    "fields": {
+      "name": "Calderdale College",
+      "address": "Francis Street, Halifax",
+      "postcode": "HX1 3UZ",
+      "latitude": "53.719542",
+      "longitude": "-1.874418",
+      "website_url": "https://www.calderdale.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 46,
+    "fields": {
+      "name": "Gateshead College",
+      "address": "Quarryfield Road, Gateshead",
+      "postcode": "NE8 3BE",
+      "latitude": "54.966557",
+      "longitude": "-1.598114",
+      "website_url": "https://www.gateshead.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 47,
+    "fields": {
+      "name": "Sunderland College",
+      "address": "Durham Road, Sunderland",
+      "postcode": "SR3 4AH",
+      "latitude": "54.892135",
+      "longitude": "-1.409336",
+      "website_url": "https://www.sunderlandcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 48,
+    "fields": {
+      "name": "Middlesbrough College",
+      "address": "Dock Street, Middlesbrough",
+      "postcode": "TS2 1AD",
+      "latitude": "54.579957",
+      "longitude": "-1.226826",
+      "website_url": "https://www.mbro.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 49,
+    "fields": {
+      "name": "Leicester College",
+      "address": "Aylestone Road, Leicester",
+      "postcode": "LE2 7LW",
+      "latitude": "52.622526",
+      "longitude": "-1.132920",
+      "website_url": "https://www.leicestercollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 50,
+    "fields": {
+      "name": "Derby College",
+      "address": "Roundhouse Road, Derby",
+      "postcode": "DE24 8JE",
+      "latitude": "52.916041",
+      "longitude": "-1.458940",
+      "website_url": "https://www.derby-college.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 51,
+    "fields": {
+      "name": "Loughborough College",
+      "address": "Radmoor Road, Loughborough",
+      "postcode": "LE11 3BT",
+      "latitude": "52.767512",
+      "longitude": "-1.220321",
+      "website_url": "https://www.loucoll.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 52,
+    "fields": {
+      "name": "Cambridge Regional College",
+      "address": "Kings Hedges Road, Cambridge",
+      "postcode": "CB4 2QT",
+      "latitude": "52.235291",
+      "longitude": "0.134368",
+      "website_url": "https://www.camre.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 53,
+    "fields": {
+      "name": "Peterborough College",
+      "address": "Park Crescent, Peterborough",
+      "postcode": "PE1 4DZ",
+      "latitude": "52.586802",
+      "longitude": "-0.230177",
+      "website_url": "https://www.peterborough.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 54,
+    "fields": {
+      "name": "Suffolk New College",
+      "address": "Rope Walk, Ipswich",
+      "postcode": "IP4 1LT",
+      "latitude": "52.054886",
+      "longitude": "1.165955",
+      "website_url": "https://www.suffolk.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 55,
+    "fields": {
+      "name": "Colchester Institute",
+      "address": "Sheepen Road, Colchester",
+      "postcode": "CO3 3LL",
+      "latitude": "51.893528",
+      "longitude": "0.888604",
+      "website_url": "https://www.colchester.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 56,
+    "fields": {
+      "name": "City College Southampton",
+      "address": "St Mary Street, Southampton",
+      "postcode": "SO14 1AR",
+      "latitude": "50.903432",
+      "longitude": "-1.395121",
+      "website_url": "https://www.southampton-city.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 57,
+    "fields": {
+      "name": "Highbury College",
+      "address": "Dovercourt Road, Portsmouth",
+      "postcode": "PO6 2SA",
+      "latitude": "50.837358",
+      "longitude": "-1.062208",
+      "website_url": "https://www.highbury.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 58,
+    "fields": {
+      "name": "Havant and South Downs College",
+      "address": "College Road, Waterlooville",
+      "postcode": "PO7 8AA",
+      "latitude": "50.861588",
+      "longitude": "-1.021112",
+      "website_url": "https://www.hsdc.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 59,
+    "fields": {
+      "name": "Greater Brighton Metropolitan College",
+      "address": "Pelham Street, Brighton",
+      "postcode": "BN1 4FA",
+      "latitude": "50.828496",
+      "longitude": "-0.136345",
+      "website_url": "https://www.gbmc.ac.uk",
+      "pathways": [
+        1,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 60,
+    "fields": {
+      "name": "Reading College",
+      "address": "Kings Road, Reading",
+      "postcode": "RG1 4HJ",
+      "latitude": "51.454144",
+      "longitude": "-0.955411",
+      "website_url": "https://www.activatelearning.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 61,
+    "fields": {
+      "name": "City of Oxford College",
+      "address": "Oxpens Road, Oxford",
+      "postcode": "OX1 1SA",
+      "latitude": "51.749553",
+      "longitude": "-1.264506",
+      "website_url": "https://www.activatelearning.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 62,
+    "fields": {
+      "name": "Milton Keynes College",
+      "address": "Chaffron Way, Milton Keynes",
+      "postcode": "MK6 5LP",
+      "latitude": "52.027997",
+      "longitude": "-0.752128",
+      "website_url": "https://www.mkcollege.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 63,
+    "fields": {
+      "name": "East Kent College",
+      "address": "Ramsgate Road, Broadstairs",
+      "postcode": "CT10 1PN",
+      "latitude": "51.354170",
+      "longitude": "1.435053",
+      "website_url": "https://www.eastkent.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 64,
+    "fields": {
+      "name": "North Kent College",
+      "address": "Oakfield Lane, Dartford",
+      "postcode": "DA1 2JT",
+      "latitude": "51.431955",
+      "longitude": "0.204054",
+      "website_url": "https://www.northkent.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 65,
+    "fields": {
+      "name": "Basingstoke College of Technology",
+      "address": "Worting Road, Basingstoke",
+      "postcode": "RG21 8TN",
+      "latitude": "51.263360",
+      "longitude": "-1.095958",
+      "website_url": "https://www.bcot.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 66,
+    "fields": {
+      "name": "City of Bristol College",
+      "address": "College Green, Bristol",
+      "postcode": "BS1 5UA",
+      "latitude": "51.450932",
+      "longitude": "-2.605732",
+      "website_url": "https://www.cityofbristol.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 67,
+    "fields": {
+      "name": "South Gloucestershire and Stroud College",
+      "address": "Filton Avenue, Bristol",
+      "postcode": "BS34 7AT",
+      "latitude": "51.515151",
+      "longitude": "-2.571652",
+      "website_url": "https://www.sgscol.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 68,
+    "fields": {
+      "name": "City College Plymouth",
+      "address": "Kings Road, Devonport, Plymouth",
+      "postcode": "PL1 5QG",
+      "latitude": "50.373863",
+      "longitude": "-4.167587",
+      "website_url": "https://www.cityplym.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 69,
+    "fields": {
+      "name": "Gloucestershire College",
+      "address": "Llanthony Road, Gloucester",
+      "postcode": "GL2 5JQ",
+      "latitude": "51.862091",
+      "longitude": "-2.256720",
+      "website_url": "https://www.gloscol.ac.uk",
+      "pathways": [
+        1,
+        2,
+        4
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 70,
+    "fields": {
+      "name": "Cornwall College",
+      "address": "Trevenson Road, Pool, Redruth",
+      "postcode": "TR15 3RD",
+      "latitude": "50.226832",
+      "longitude": "-5.275888",
+      "website_url": "https://www.cornwall.ac.uk",
+      "pathways": [
+        1,
+        2,
+        5
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
+  },
+  {
+    "model": "providers.provider",
+    "pk": 71,
+    "fields": {
+      "name": "Truro and Penwith College",
+      "address": "College Road, Truro",
+      "postcode": "TR1 3XX",
+      "latitude": "50.262784",
+      "longitude": "-5.100830",
+      "website_url": "https://www.truro-penwith.ac.uk",
+      "pathways": [
+        1,
+        2,
+        3
+      ],
+      "created_at": "2026-09-24T09:00:00Z"
+    }
   }
 ]

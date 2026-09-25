@@ -64,7 +64,7 @@ export default {
         placement:
           "Lucrezi cu o echipă tehnică la sarcini reale: scrii și verifici cod, testezi, repari erori sau ții sistemele și utilizatorii în funcțiune.",
         suits: "Oameni cărora le place să rezolve o problemă și să vadă imediat că merge.",
-        amazonStatus: "Aici a început programul T Level al Amazon.",
+        amazonStatus: "Aici a început programul T-Level al Amazon.",
       },
       {
         name: "Afaceri",
@@ -101,9 +101,9 @@ export default {
     ],
     FAQS: [
       {
-        question: "Un T Level este același lucru cu o ucenicie (apprenticeship)?",
+        question: "Un T-Level este același lucru cu o ucenicie (apprenticeship)?",
         answer:
-          "Nu, e invers. O ucenicie înseamnă în mare parte muncă plătită, cu puțin studiu. Un T Level înseamnă în mare parte studiu, cam 80 la sută, iar restul este un stagiu la un angajator de cel puțin 315 ore.",
+          "Nu, e invers. O ucenicie înseamnă în mare parte muncă plătită, cu puțin studiu. Un T-Level înseamnă în mare parte studiu, cam 80 la sută, iar restul este un stagiu la un angajator de cel puțin 315 ore.",
       },
       {
         question: "De ce GCSE am nevoie?",
@@ -111,9 +111,9 @@ export default {
           "Condițiile de admitere sunt stabilite de fiecare școală sau colegiu, nu la nivel național. Frecvent se cer patru sau cinci GCSE cu nota 4 sau mai mare, de obicei inclusiv engleză și matematică. Verifică la instituția unde vrei să mergi.",
       },
       {
-        question: "Din ce T Levels pot alege?",
+        question: "Din ce T-Levels pot alege?",
         answer:
-          "Circa 20, în domenii precum digital, inginerie, construcții, sănătate, științe, drept și contabilitate, media, marketing, agricultură, îngrijirea animalelor, educație, precum și meșteșuguri și design. Sport și Social Care vin în septembrie 2028. T Level-ul Finance are ultimele înscrieri în septembrie 2026, așa că cel care continuă este Accounting.",
+          "Circa 20, în domenii precum digital, inginerie, construcții, sănătate, științe, drept și contabilitate, media, marketing, agricultură, îngrijirea animalelor, educație, precum și meșteșuguri și design. Sport și Social Care vin în septembrie 2028. T-Level-ul Finance are ultimele înscrieri în septembrie 2026, așa că cel care continuă este Accounting.",
       },
       {
         question: "Cum sunt evaluat?",
@@ -128,7 +128,7 @@ export default {
       {
         question: "Ce se întâmplă dacă nu promovez tot?",
         answer:
-          "Primești o declarație de rezultate T Level (statement of achievement) în locul certificatului complet. Ea arată părțile pe care le-ai terminat, așa că munca ta nu se pierde.",
+          "Primești o declarație de rezultate T-Level (statement of achievement) în locul certificatului complet. Ea arată părțile pe care le-ai terminat, așa că munca ta nu se pierde.",
       },
       {
         question: "Cât durează stagiul la angajator?",
@@ -146,14 +146,14 @@ export default {
           "Da, prin 16 to 19 Bursary Fund. Poate acoperi transportul, cărțile, echipamentul și îmbrăcămintea de specialitate. Aplici prin școala sau colegiul tău.",
       },
       {
-        question: "Ce fac dacă nu sunt încă pregătit pentru un T Level?",
+        question: "Ce fac dacă nu sunt încă pregătit pentru un T-Level?",
         answer:
-          "Există T Level Foundation Year, un curs de un an de nivel 2 care îți dezvoltă mai întâi engleza, matematica, abilitățile digitale și experiența de muncă, apoi te duce la T Level.",
+          "Există T-Level Foundation Year, un curs de un an de nivel 2 care îți dezvoltă mai întâi engleza, matematica, abilitățile digitale și experiența de muncă, apoi te duce la T-Level.",
       },
       {
         question: "Pot face și alte calificări în paralel?",
         answer:
-          "Un T Level este un program cu normă întreagă, cam cât trei A levels, așa că de obicei nu se combină cu multe altele. Unele instituții permit o calificare în plus. Întreabă la a ta.",
+          "Un T-Level este un program cu normă întreagă, cam cât trei A levels, așa că de obicei nu se combină cu multe altele. Unele instituții permit o calificare în plus. Întreabă la a ta.",
       },
     ],
     QUIZ_QUESTIONS: [
@@ -204,8 +204,8 @@ export default {
     ],
     QUIZ_RESULTS: [
       {
-        heading: "Un T Level pare foarte potrivit",
-        text: "Vrei să înveți practic, să petreci timp într-un loc de muncă real și să ai un drum clar spre un domeniu. Exact pentru asta este gândit un T Level. Următorul pas: vezi care dintre cele cinci parcursuri ți se potrivește, apoi înregistrează-ți interesul la Amazon.",
+        heading: "Un T-Level pare foarte potrivit",
+        text: "Vrei să înveți practic, să petreci timp într-un loc de muncă real și să ai un drum clar spre un domeniu. Exact pentru asta este gândit un T-Level. Următorul pas: vezi care dintre cele cinci parcursuri ți se potrivește, apoi înregistrează-ți interesul la Amazon.",
       },
       {
         heading: "Merită să te uiți cu atenție",
@@ -223,7 +223,7 @@ export default {
       { title: "Nouă săptămâni", text: "Te alături unei echipe, înveți instrumentele și faci muncă reală." },
       { title: "Centre de competențe", text: "O parte se desfășoară în centrele de competențe (skills hubs) ale Amazon, în blocuri de 15 zile." },
       { title: "Proiecte de grup", text: "Lucrezi cu alți elevi la proiecte pentru organizații caritabile." },
-      { title: "Provocări de echipă", text: "Sarcini date de echipa ta, în care folosești abilitățile de la T Level." },
+      { title: "Provocări de echipă", text: "Sarcini date de echipa ta, în care folosești abilitățile de la T-Level." },
     ],
     SUPPORT: [
       { title: "Un coleg de sprijin (buddy)", text: "Pentru întrebările mici." },
@@ -231,7 +231,7 @@ export default {
       { title: "Un coordonator de stagiu", text: "Ține stagiul pe drumul cel bun împreună cu școala sau colegiul tău." },
     ],
     ROUTE_IN: [
-      { title: "Începe un T Level", text: "Pentru tinerii de 16 până la 18 ani care urmează deja un curs T Level." },
+      { title: "Începe un T-Level", text: "Pentru tinerii de 16 până la 18 ani care urmează deja un curs T-Level." },
       {
         title: "Colegiul tău ia legătura",
         text: "Amazon organizează stagiile cu școlile și colegiile, nu direct cu elevii.",
@@ -248,9 +248,9 @@ export default {
   help: {
     SERVICES: [
       {
-        title: "Găsește un T Level lângă tine",
+        title: "Găsește un T-Level lângă tine",
         text: "Caută după cod poștal și domeniu.",
-        linkText: "Găsește un T Level pe tlevels.gov.uk",
+        linkText: "Găsește un T-Level pe tlevels.gov.uk",
       },
       {
         title: "Consiliere în carieră gratuită",
@@ -269,7 +269,7 @@ export default {
       },
     ],
     PROVIDER_QUESTIONS: [
-      "Ce T Levels și specializări aveți?",
+      "Ce T-Levels și specializări aveți?",
       "Voi îmi găsiți stagiul sau eu?",
       "Ce angajatori v-au primit elevii?",
       "Stagiul este în bloc, o zi pe săptămână sau o combinație?",
@@ -277,9 +277,10 @@ export default {
       "Ce sprijin există dacă am nevoi suplimentare?",
     ],
     SITE_ROUTES: [
-      { label: "Ce este un T Level?", detail: "Despre T Levels" },
-      { label: "Cum e un stagiu la Amazon?", detail: "T Levels la Amazon" },
-      { label: "Vreau ghiduri și pachete", detail: "Resurse T Level" },
+      { label: "Ce este un T-Level?", detail: "Despre T-Levels" },
+      { label: "Vreau să văd toate domeniile", detail: "Toate T-Levels" },
+      { label: "Cum e un stagiu la Amazon?", detail: "T-Levels la Amazon" },
+      { label: "Vreau ghiduri și pachete", detail: "Resurse T-Level" },
       { label: "Vreau să-mi înregistrez interesul", detail: "Înregistrează interesul" },
       { label: "Am deja un cont", detail: "Autentificare" },
     ],
@@ -298,37 +299,37 @@ export default {
   quiz: {
     KNOWLEDGE_QUESTIONS: [
       {
-        question: "Cât durează un stagiu T Level la un angajator?",
+        question: "Cât durează un stagiu T-Level la un angajator?",
         options: ["Cel puțin 315 ore, cam 45 de zile", "Două săptămâni", "Un an întreg", "Nu există stagiu"],
         correctAnswer: "Cel puțin 315 ore, cam 45 de zile",
         explanation: "Cel puțin 315 ore, cam 45 de zile. Amazon organizează stagiile ca un bloc de nouă săptămâni.",
       },
       {
-        question: "Cu câte A levels este comparabil, ca volum, un T Level?",
+        question: "Cu câte A levels este comparabil, ca volum, un T-Level?",
         options: ["Unul", "Două", "Trei", "Cinci"],
         correctAnswer: "Trei",
-        explanation: "Trei. Un T Level aduce și puncte UCAS, deci drumul spre universitate rămâne deschis.",
+        explanation: "Trei. Un T-Level aduce și puncte UCAS, deci drumul spre universitate rămâne deschis.",
       },
       {
-        question: "Care este principala diferență dintre un T Level și o ucenicie (apprenticeship)?",
+        question: "Care este principala diferență dintre un T-Level și o ucenicie (apprenticeship)?",
         options: [
-          "Un T Level este mai ales studiu, o ucenicie este mai ales muncă plătită",
+          "Un T-Level este mai ales studiu, o ucenicie este mai ales muncă plătită",
           "Sunt același lucru",
-          "Un T Level este mai ales muncă plătită, o ucenicie este mai ales studiu",
+          "Un T-Level este mai ales muncă plătită, o ucenicie este mai ales studiu",
           "Doar ucenicia include timp la un angajator",
         ],
-        correctAnswer: "Un T Level este mai ales studiu, o ucenicie este mai ales muncă plătită",
+        correctAnswer: "Un T-Level este mai ales studiu, o ucenicie este mai ales muncă plătită",
         explanation:
-          "E invers. Un T Level înseamnă cam 80 la sută studiu, iar restul este un stagiu la un angajator de cel puțin 315 ore.",
+          "E invers. Un T-Level înseamnă cam 80 la sută studiu, iar restul este un stagiu la un angajator de cel puțin 315 ore.",
       },
       {
-        question: "Ce parcurs include T Level-ul Digital Software Development?",
+        question: "Ce parcurs include T-Level-ul Digital Software Development?",
         options: ["Digital", "Afaceri", "Inginerie", "Media"],
         correctAnswer: "Digital",
         explanation: "Digital. Include și Digital Data Analytics și Digital Support and Security.",
       },
       {
-        question: "Ce parcurs include T Level-ul Management and Administration?",
+        question: "Ce parcurs include T-Level-ul Management and Administration?",
         options: ["Afaceri", "Finanțe", "Media", "Digital"],
         correctAnswer: "Afaceri",
         explanation: "Afaceri. Descrierea lui pe site este: ții echipele și operațiunile în funcțiune.",

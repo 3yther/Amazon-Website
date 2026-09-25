@@ -226,12 +226,19 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
-// Each step's words are home.steps.<key> in i18n/messages.
-const STEPS = ["browse", "register", "hearBack", "getInvolved"];
+// Each step's words are home.steps.<key> in i18n/messages. `link` goes to the
+// page a step talks about, and its label is home.steps.<key>.link. "Hear back"
+// has none: it is something we do, not somewhere to go.
+const STEPS = [
+  { key: "browse", link: "/resources" },
+  { key: "register", link: "/register-interest" },
+  { key: "hearBack" },
+  { key: "getInvolved", link: "/register" },
+];
 
 /**
- * Four "Level" cards, a nod to T-Levels. On desktop they climb left to right
- * like a staircase (see .steps in styles.css); on smaller screens they stack.
+ * Four "Level" cards, a nod to T-Levels. On desktop they step down left to
+ * right like a staircase, Level 01 highest (see .steps in styles.css); on smaller screens they stack.
  */
 export function HowItWorks() {
   const t = useT();
@@ -245,12 +252,18 @@ export function HowItWorks() {
       <ol className="steps">
         {STEPS.map((step, index) => (
           // --drop: how many steps below the top card this one starts.
-          <li key={step} className="step" style={{ "--drop": STEPS.length - 1 - index }}>
+          <li key={step.key} className="step" style={{ "--drop": index }}>
             <p className="label">
               {t("home.steps.level")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
             </p>
-            <h3 className="step__title">{t(`home.steps.${step}.title`)}</h3>
-            <p className="step__text">{t(`home.steps.${step}.text`)}</p>
+            <h3 className="step__title">{t(`home.steps.${step.key}.title`)}</h3>
+            <p className="step__text">{t(`home.steps.${step.key}.text`)}</p>
+            {step.link && (
+              <Link className="step__link" to={step.link}>
+                {t(`home.steps.${step.key}.link`)}
+                <ArrowIcon />
+              </Link>
+            )}
           </li>
         ))}
       </ol>

@@ -26,17 +26,17 @@ const ro = {
   },
 
   home: {
-    title: "T Levels, cu zâmbetul pe buze.",
+    title: "T-Levels, cu zâmbetul pe buze.",
     subheads: {
       general: "Ghiduri, pachete și videoclipuri pentru elevi, părinți și școli.",
-      teacher: "Pachete pentru clasă și ghiduri gata făcute, ca să vorbești cu elevii despre T Levels.",
-      parent: "Ghiduri clare despre ce presupun T Levels, ca să-ți poți ajuta copilul să aleagă.",
-      student: "Ghiduri și pachete de pregătire care te ajută să alegi un T Level și să te pregătești.",
+      teacher: "Pachete pentru clasă și ghiduri gata făcute, ca să vorbești cu elevii despre T-Levels.",
+      parent: "Ghiduri clare despre ce presupun T-Levels, ca să-ți poți ajuta copilul să aleagă.",
+      student: "Ghiduri și pachete de pregătire care te ajută să alegi un T-Level și să te pregătești.",
     },
     browse: "Vezi resursele",
     stats: {
-      title: "T Levels pe scurt",
-      tLevels: "T Levels diferite",
+      title: "T-Levels pe scurt",
+      tLevels: "T-Levels diferite",
       pathways: "Parcursuri",
       resourceTypes: "Tipuri de resurse",
       audiences: "Public",
@@ -49,12 +49,12 @@ const ro = {
       teacher: {
         who: "Profesori și școli",
         title: "Resurse gata pentru clasa ta",
-        text: "Pachete pentru clasă și ghiduri care le prezintă elevilor T Levels.",
+        text: "Pachete pentru clasă și ghiduri care le prezintă elevilor T-Levels.",
       },
       parent: {
         who: "Părinți și tutori",
         title: "Ajută-l să aleagă cu încredere",
-        text: "Ghiduri simple despre ce presupun T Levels și unde duc.",
+        text: "Ghiduri simple despre ce presupun T-Levels și unde duc.",
       },
       student: {
         who: "Elevi",
@@ -65,7 +65,7 @@ const ro = {
     pathways: {
       label: "Parcursuri",
       title: "Explorează după parcurs",
-      lead: "Fiecare cuprinde un grup de T Levels înrudite. Alege unul ca să-i vezi resursele.",
+      lead: "Fiecare cuprinde un grup de T-Levels înrudite. Alege unul ca să-i vezi resursele.",
       digital: "Creezi, administrezi și susții tehnologia.",
       business: "Ții echipele și operațiunile în funcțiune.",
       media: "Planifici, creezi și publici conținut.",
@@ -76,32 +76,32 @@ const ro = {
       label: "Cum funcționează",
       title: "Începe în patru pași",
       level: "Nivel",
-      browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri." },
-      register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi." },
+      browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
+      register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
       hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },
-      getInvolved: { title: "Implică-te", text: "Creează un cont ca să deschizi mai multe resurse pentru parcursul tău." },
+      getInvolved: { title: "Implică-te", text: "Creează un cont ca să deschizi mai multe resurse pentru parcursul tău.", link: "Creează cont" },
     },
   },
 
   about: {
     hero: {
-      label: "Despre T Levels",
+      label: "Despre T-Levels",
       title: "Doi ani. Un domeniu. Un stagiu adevărat.",
       lead: "O calificare tehnică pe care o faci după GCSE. În mare parte învățare, în parte muncă.",
     },
-    what: { label: "Cum funcționează", title: "Ce este un T Level", split: "Cum sunt împărțiți cei doi ani" },
+    what: { label: "Cum funcționează", title: "Ce este un T-Level", split: "Cum sunt împărțiți cei doi ani" },
     placement: {
       label: "Stagiul",
       title: "Cum arată stagiul",
       amazonLink: "Cum arată un stagiu la Amazon",
-      amazonDetail: "T Levels la Amazon",
+      amazonDetail: "T-Levels la Amazon",
     },
     switcher: {
       label: "Domenii",
       title: "Cele cinci parcursuri la Amazon",
       lead: "Alege unul ca să vezi ce presupune stagiul.",
       tabs: "Parcursuri",
-      tLevels: "T Levels din acest parcurs",
+      tLevels: "T-Levels din acest parcurs",
       onPlacement: "În stagiu",
       suits: "Potrivit pentru",
       registerIn: "Înregistrează-ți interesul pentru {name}",
@@ -112,7 +112,7 @@ const ro = {
       title: "Note și puncte UCAS",
       lead: "Nota ta îți aduce puncte UCAS, care contează la admiterea la universitate.",
       tableName: "Tabelul notelor și punctelor UCAS",
-      caption: "Notele finale T Level și punctele UCAS Tariff pe care le valorează fiecare",
+      caption: "Notele finale T-Level și punctele UCAS Tariff pe care le valorează fiecare",
       grade: "Nota finală",
       points: "Puncte UCAS",
       note: "Nu toate universitățile folosesc punctele UCAS, așa că verifică pentru cursul tău. Dacă pici o parte, primești totuși un document cu ce ai promovat.",
@@ -122,7 +122,7 @@ const ro = {
     cost: { label: "Bani", title: "Cât costă" },
     quiz: {
       label: "Chestionar",
-      title: "Este un T Level potrivit pentru mine?",
+      title: "Este un T-Level potrivit pentru mine?",
       lead: "Șase întrebări. Nu există răspunsuri greșite și nimic nu este salvat sau trimis nicăieri.",
       progress: "{done} din {total} răspunse",
       incomplete: "Răspunde la toate cele {total} întrebări ca să-ți vezi rezultatul. Ai răspuns la {done}.",
@@ -146,7 +146,7 @@ const ro = {
     hero: {
       label: "Amazon Emerging Talent",
       title: "Nouă săptămâni într-o echipă.",
-      lead: "Amazon primește elevi de T Level în stagiu. Te alături unei echipe reale și faci muncă reală.",
+      lead: "Amazon primește elevi de T-Level în stagiu. Te alături unei echipe reale și faci muncă reală.",
     },
     shape: { label: "Stagiul", title: "Cum arată cele nouă săptămâni" },
     support: { label: "Sprijin", title: "Trei oameni care au grijă de tine" },
@@ -154,11 +154,11 @@ const ro = {
       label: "Parcursuri",
       title: "Ce domenii primește Amazon",
       leadBefore: "Mai multe despre fiecare pe pagina",
-      leadLink: "Despre T Levels",
+      leadLink: "Despre T-Levels",
       leadAfter: ".",
     },
     route: { label: "Cum obții unul", title: "Cum obții un stagiu" },
-    growth: { label: "Programul", title: "Este în creștere", lead: "Cifre de la Departamentul pentru Educație." },
+    growth: { label: "Programul", title: "Este în creștere", lead: "De la șase elevi la 100 în primii trei ani, cu mai mulți planificați. Cifre de la Departamentul pentru Educație." },
     sourcesNote: "Verificat în septembrie 2026.",
   },
 
@@ -178,10 +178,10 @@ const ro = {
     page: {
       label: "Chestionar",
       title: "Testează ce știi",
-      lead: "{count} întrebări despre T Levels, stagiile la Amazon și acest site. Nimic nu este salvat și nimeni nu îți vede scorul.",
+      lead: "{count} întrebări despre T-Levels, stagiile la Amazon și acest site. Nimic nu este salvat și nimeni nu îți vede scorul.",
     },
     label: "Test de cunoștințe",
-    title: "Ce știi despre T Levels?",
+    title: "Ce știi despre T-Levels?",
     lead: "{count} întrebări, pe rând. Și un răspuns greșit e util: Smiley se va oferi să ți-l explice.",
     scored: "Ai obținut {score} din {total}",
     doneLead: "Dacă nu ești sigur de ceva, întreabă-l pe Smiley din colț. Îți va spune dacă nu știe.",
@@ -204,7 +204,7 @@ const ro = {
   pathwaysPage: {
     label: "Parcursuri de învățare",
     title: "Cinci parcursuri",
-    lead: "Alege unul ca să vezi ce T Levels include și ce presupune stagiul.",
+    lead: "Alege unul ca să vezi ce T-Levels include și ce presupune stagiul.",
   },
 
   shell: {
@@ -216,10 +216,12 @@ const ro = {
 
   titles: {
     Home: "Acasă",
-    "About T-Level": "Despre T Levels",
-    "T-Levels at Amazon": "T Levels la Amazon",
-    "T-Level Resources": "Resurse T Level",
-    "T-Level Near you": "T Levels lângă tine",
+    "About T-Level": "Despre T-Levels",
+    "T-Levels at Amazon": "T-Levels la Amazon",
+    "T-Level Resources": "Resurse T-Level",
+    "Find T-Levels Near You": "Găsește T-Levels lângă tine",
+    "All T-Levels": "Toate T-Levels",
+    "Get involved": "Implică-te",
     Quiz: "Chestionar",
     Help: "Ajutor",
     "Register interest": "Înregistrează interesul",
@@ -246,7 +248,7 @@ const ro = {
   footer: {
     about: "Despre",
     aboutText:
-      "T-SMILE îi ajută pe elevi, părinți și profesori să exploreze T Levels și T Level-ul Digital la Amazon, cu resurse gratuite și pentru utilizatori înregistrați într-un singur loc.",
+      "T-SMILE îi ajută pe elevi, părinți și profesori să exploreze T-Levels și T-Level-ul Digital la Amazon, cu resurse gratuite și pentru utilizatori înregistrați într-un singur loc.",
     navigation: "Navigare",
     support: "Asistență",
     legal: "Informații legale și conformitate",
@@ -255,6 +257,7 @@ const ro = {
     links: {
       home: "Acasă",
       pathways: "Parcursuri de învățare",
+      allTLevels: "Toate T-Levels",
       profile: "Profil",
       resources: "Resurse",
       faqs: "Întrebări frecvente",
@@ -268,6 +271,7 @@ const ro = {
       cookies: "Politica privind cookie-urile",
       dataRights: "GDPR / Drepturile asupra datelor",
       registerInterest: "Înregistrează-ți interesul",
+      getInvolved: "Implică-te",
       signUp: "Creează cont",
     },
   },
@@ -279,7 +283,11 @@ const ro = {
     security: "Setări de securitate",
     contact: "Contact",
     submissions: "Trimiteri",
-    logOut: "Deconectare",
+    signIn: "Autentificare",
+    signUp: "Creează cont",
+    signInOrUp: "Autentifică-te sau creează un cont",
+    notSignedIn: "Nu ești autentificat",
+    needAccount: "Unele resurse au nevoie de un cont",
     roles: {
       student: "Elev",
       parent: "Părinte sau tutore",
@@ -294,16 +302,12 @@ const ro = {
     main: "Principal",
     helloUser: "Salut, {name}",
     helloGuest: "Salut, autentifică-te",
-    signUp: "Creează cont",
-    logIn: "Autentificare",
-    logOut: "Deconectare",
-    loggingOut: "Se deconectează",
     pages: {
       home: "Acasă",
-      about: "Despre T Levels",
-      amazon: "T Levels la Amazon",
-      resources: "Resurse T Level",
-      nearYou: "T Levels lângă tine",
+      about: "Despre T-Levels",
+      amazon: "T-Levels la Amazon",
+      resources: "Resurse T-Level",
+      nearYou: "Găsește T-Levels lângă tine",
       quiz: "Chestionar",
       community: "Comunitate",
       help: "Ajutor",
@@ -326,7 +330,7 @@ const ro = {
   forms: {
     hidePassword: "Ascunde parola",
     showPassword: "Arată parola",
-    panelLine: "Resurse gratuite pentru parcursul T Level Digital de la Amazon.",
+    panelLine: "Resurse gratuite pentru parcursul T-Level Digital de la Amazon.",
   },
 
   register: {
@@ -366,7 +370,7 @@ const ro = {
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "Înregistrează-ți interesul",
-    lead: "Vrei un stagiu T Level la Amazon? Spune-ne ce parcurs. Nu ai nevoie de cont.",
+    lead: "Vrei un stagiu T-Level la Amazon? Spune-ne ce parcurs. Nu ai nevoie de cont.",
     fullName: "Nume complet",
     email: "Email",
     iAmA: "Sunt",
@@ -401,9 +405,9 @@ const ro = {
   community: {
     label: "Întreabă și răspunde",
     title: "Comunitate",
-    lead: "Întrebări despre T Levels și stagiile la Amazon, cu răspunsuri de la elevi, părinți, profesori și angajați Amazon.",
+    lead: "Întrebări despre T-Levels și stagiile la Amazon, cu răspunsuri de la elevi, părinți, profesori și angajați Amazon.",
     notChecked:
-      "Răspunsurile de aici sunt experiența și părerile oamenilor, nu fapte verificate. Pentru informațiile oficiale, vezi paginile Despre T Levels și T Levels la Amazon, sau întreabă-l pe Smiley.",
+      "Răspunsurile de aici sunt experiența și părerile oamenilor, nu fapte verificate. Pentru informațiile oficiale, vezi paginile Despre T-Levels și T-Levels la Amazon, sau întreabă-l pe Smiley.",
     ask: "Pune o întrebare",
     signInToAsk: "Autentifică-te ca să pui o întrebare",
     signInToAnswer: "Autentifică-te ca să răspunzi",
@@ -421,7 +425,7 @@ const ro = {
     sortHelpful: "Cele mai utile",
     sortUnanswered: "Fără răspuns",
     topics: {
-      tlevels: "T Levels în general",
+      tlevels: "T-Levels în general",
       placements: "Stagii",
       amazon: "Amazon",
       choosing: "Alegere și înscriere",
@@ -514,10 +518,10 @@ const ro = {
 
   smiley: {
     name: "Smiley",
-    role: "Ghid T Level",
-    roleAi: "Ghid T Level, cu AI",
+    role: "Ghid T-Level",
+    roleAi: "Ghid T-Level, cu AI",
     landmark: "Asistent",
-    open: "Deschide-l pe Smiley, ghidul tău T Level",
+    open: "Deschide-l pe Smiley, ghidul tău T-Level",
     close: "Închide-l pe Smiley",
     poke: "Dă-i un ghiont lui Smiley",
     dismiss: "Închide mesajul lui Smiley",
@@ -543,7 +547,7 @@ const ro = {
       lateNight: "Salut, bufniță de noapte!",
     },
     intro:
-      "Sunt Smiley, ghidul tău T Level. Întreabă-mă orice despre T Levels sau despre stagiile la Amazon. " +
+      "Sunt Smiley, ghidul tău T-Level. Întreabă-mă orice despre T-Levels sau despre stagiile la Amazon. " +
       "Dacă nu știu ceva, îți spun, în loc să inventez.",
     welcomeBack: "Mă bucur să te revăd. Continuă de unde ai rămas sau întreabă-mă ceva nou.",
     whoQuestion: "Mai întâi: cine ne vizitează azi?",
@@ -580,20 +584,20 @@ const ro = {
     quizLocalChosen: "Ai ales „{chosen}”. Răspunsul corect la „{question}” este: {correct}. {explanation}",
 
     nudges: {
-      home: "Încă te gândești de unde să începi? Pot să-ți explic ce este un T Level sau cum arată un stagiu la Amazon.",
+      home: "Încă te gândești de unde să începi? Pot să-ți explic ce este un T-Level sau cum arată un stagiu la Amazon.",
       about: "E ceva pe pagina asta care nu se leagă? Întreabă-mă și încerc să explic altfel.",
       amazon: "Ești curios ce presupune de fapt un stagiu la Amazon? Întreabă liniștit.",
       resources: "Cauți ceva anume? Spune-mi ce îți trebuie și îți arăt unde e.",
-      nearYou: "Cauți un T Level lângă tine? Întreabă-mă orice cât cauți.",
+      nearYou: "Cauți un T-Level lângă tine? Întreabă-mă orice cât cauți.",
       quiz: "Te-ai blocat la una? Spune-mi care și o discutăm.",
       help: "Nu găsești ce îți trebuie? Întreabă-mă și încerc să ajut.",
       community: "Nu-ți găsești întrebarea aici? Întreabă-mă întâi, poate știu.",
       register: "Nu știi dacă ai nevoie de cont? Îți spun ce deblochează.",
-      other: "Mai ești acolo? Întreabă-mă orice despre T Levels și îți răspund dacă știu.",
+      other: "Mai ești acolo? Întreabă-mă orice despre T-Levels și îți răspund dacă știu.",
     },
 
     teasers: {
-      hello: "Salut, sunt Smiley! Întreabă-mă orice despre T Levels.",
+      hello: "Salut, sunt Smiley! Întreabă-mă orice despre T-Levels.",
       perfect: "Punctaj maxim! Bravo.",
       finished: "Gata! Vrei să le mai trecem în revistă?",
       quiz: "Aceea a fost grea. Vrei să ți-o explic?",
@@ -607,8 +611,8 @@ const ro = {
     },
 
     topics: {
-      whatIsTLevel: "Ce este un T Level?",
-      courseLength: "Cât durează un T Level?",
+      whatIsTLevel: "Ce este un T-Level?",
+      courseLength: "Cât durează un T-Level?",
       classroomHours: "Cât din el sunt ore de curs?",
       placementLength: "Cât durează stagiul?",
       placementHow: "Cum funcționează stagiul?",
@@ -625,8 +629,8 @@ const ro = {
       tlevelFail: "Ce se întâmplă dacă nu promovez?",
       notReady: "Ce fac dacă nu sunt încă pregătit?",
       alongside: "Pot face și alte calificări?",
-      whoSuits: "Este un T Level potrivit pentru mine?",
-      tlevelBenefits: "De ce să fac un T Level?",
+      whoSuits: "Este un T-Level potrivit pentru mine?",
+      tlevelBenefits: "De ce să fac un T-Level?",
       amazonPlacement: "Cum e un stagiu la Amazon?",
       amazonSupport: "Cine are grijă de mine acolo?",
       amazonHowToGet: "Cum obțin un stagiu la Amazon?",
@@ -639,7 +643,7 @@ const ro = {
       "pathway-media": "Media",
       "pathway-finance": "Finanțe",
       "pathway-engineering": "Inginerie",
-      nearYou: "Găsește un T Level lângă mine",
+      nearYou: "Găsește un T-Level lângă mine",
       providerQuestions: "Ce să întreb un colegiu?",
       careersAdvice: "Unde primesc consiliere în carieră?",
       resources: "Unde sunt resursele?",
@@ -656,17 +660,17 @@ const ro = {
     },
 
     answers: {
-      whatIsTLevel: "Un T Level în trei pași:",
+      whatIsTLevel: "Un T-Level în trei pași:",
       amazonNotConfirmed: "Amazon nu a confirmat încă stagii în acest parcurs, așa că nu pot promite unul.",
-      pathway: "{name}: {summary}\nT Levels: {tLevels}.\nÎn stagiu: {placement}\nPotrivit pentru: {suits}\nLa Amazon: {amazon}",
-      whoSuits: "Un T Level ți se potrivește de obicei dacă:",
+      pathway: "{name}: {summary}\nT-Levels: {tLevels}.\nÎn stagiu: {placement}\nPotrivit pentru: {suits}\nLa Amazon: {amazon}",
+      whoSuits: "Un T-Level ți se potrivește de obicei dacă:",
       decideWithAdult:
         "Doar tu poți decide, așa că discută și cu un profesor sau cu un consilier de carieră. Chestionarul te poate ajuta să te gândești.",
       amazonPathways: "Iată ce a spus Amazon despre fiecare parcurs:",
       pathwaysList: "Există cinci parcursuri:",
       providerQuestions: "Întrebări bune pentru o școală sau un colegiu:",
       resources: "Pagina Resurse are ghiduri, pachete și videoclipuri. Unele au nevoie de un cont gratuit ca să se deschidă.",
-      quiz: "Chestionarul are întrebări scurte despre T Levels, iar eu te ajut cu cele greșite.",
+      quiz: "Chestionarul are întrebări scurte despre T-Levels, iar eu te ajut cu cele greșite.",
       community:
         "În Comunitate poți pune o întrebare, iar alți elevi, părinți, profesori și angajați Amazon pot răspunde. " +
         "Tot ce nu știu eu merită întrebat acolo.",
@@ -689,11 +693,11 @@ const ro = {
     },
 
     links: {
-      about: "Despre T Levels",
-      amazon: "T Levels la Amazon",
+      about: "Despre T-Levels",
+      amazon: "T-Levels la Amazon",
       pathways: "Parcursuri de învățare",
       registerInterest: "Înregistrează interesul",
-      nearYou: "Găsește un T Level lângă tine",
+      nearYou: "Găsește un T-Level lângă tine",
       resources: "Resurse",
       quiz: "Fă chestionarul",
       community: "Mergi la Comunitate",
@@ -707,20 +711,20 @@ const ro = {
     },
 
     chat: {
-      greeting: "Salut! Sunt Smiley. Întreabă-mă orice despre T Levels sau stagiile la Amazon, ori alege o întrebare de mai jos.",
+      greeting: "Salut! Sunt Smiley. Întreabă-mă orice despre T-Levels sau stagiile la Amazon, ori alege o întrebare de mai jos.",
       howAreYou: "Sunt bine, mersi că întrebi! Antena mea prinde un semnal puternic azi. Cu ce te pot ajuta?",
       thanks: "Cu plăcere! Mai vrei să afli ceva?",
       bye: "Pe curând! Sunt aici în colț dacă ai nevoie de mine.",
       whoAreYou:
-        "Sunt Smiley, ghidul T-SMILE. Răspund la întrebări despre T Levels și stagiile la Amazon, folosind doar fapte verificate de echipă.",
+        "Sunt Smiley, ghidul T-SMILE. Răspund la întrebări despre T-Levels și stagiile la Amazon, folosind doar fapte verificate de echipă.",
       areYouBot:
         "Da, sunt un bot. Unul prietenos, cu antenă. Pentru ce nu pot răspunde eu, te pot ajuta un profesor, un consilier de carieră sau Comunitatea.",
-      whoMadeYou: "Echipa T-SMILE m-a creat pentru proiectul T Level Amazon Emerging Talent. Eu sunt cel cu T-ul pe cap.",
+      whoMadeYou: "Echipa T-SMILE m-a creat pentru proiectul T-Level Amazon Emerging Talent. Eu sunt cel cu T-ul pe cap.",
       whatCanYouDo:
-        "Pot să-ți explic ce este un T Level, cum funcționează stagiul, ce presupune un stagiu la Amazon, cele cinci parcursuri, " +
+        "Pot să-ți explic ce este un T-Level, cum funcționează stagiul, ce presupune un stagiu la Amazon, cele cinci parcursuri, " +
         "costurile, condițiile de admitere și multe altele. Întreabă-mă cu cuvintele tale sau atinge o întrebare.",
       jokes: [
-        "Câte ore durează să schimbi un bec la un T Level? Cel puțin 315, dar înveți o grămadă.",
+        "Câte ore durează să schimbi un bec la un T-Level? Cel puțin 315, dar înveți o grămadă.",
         "De ce s-a dus calculatorul la doctor? Pentru că avea un virus.",
         "Ce i-a spus routerul laptopului? Simt că între noi e o conexiune specială.",
         "De ce a plecat robotul în vacanță? Ca să-și încarce bateriile.",
@@ -734,8 +738,8 @@ const ro = {
       confused: "Scuze, e vina mea. Hai să încercăm din nou. Alege un subiect de mai jos sau întreabă-mă altfel.",
       howOld: "Am fost pornit în septembrie 2026, deci sunt foarte nou. Încă învăț, ca și tine.",
       favouriteColour: "Portocaliu. Evident.",
-      meaningOfLife: "42. Deși la un T Level, numărul magic este 315. Atâtea ore de stagiu sunt minimul.",
-      secret: "Îți spun un secret: T-ul de pe capul meu vine de la T Levels. Nu spune nimănui.",
+      meaningOfLife: "42. Deși la un T-Level, numărul magic este 315. Atâtea ore de stagiu sunt minimul.",
+      secret: "Îți spun un secret: T-ul de pe capul meu vine de la T-Levels. Nu spune nimănui.",
       feelings: "Funcționez pe bază de curiozitate și întrebări bune. Acum am chef de vorbă.",
       sing: "La la la... vocea mea de cântat e mai mult bruiaj. Poate rămânem la întrebări?",
       name: "Eu sunt! Cu ce te pot ajuta?",
@@ -761,10 +765,10 @@ const ro = {
       struggling:
         "Pare mult de dus și nu trebuie să rezolvi totul singur. Să vorbești cu cineva în care ai încredere ajută cu adevărat, " +
         "cum ar fi un profesor, un părinte sau un îngrijitor. Childline este gratuit la 0800 1111, sau poți trimite SHOUT prin SMS la 85258, oricând. " +
-        "Sunt tot aici pentru orice întrebare despre T Levels, oricând vrei.",
+        "Sunt tot aici pentru orice întrebare despre T-Levels, oricând vrei.",
       personal:
         "Un sfat rapid: nu trebuie să-mi dai date personale precum emailul, numărul de telefon sau adresa, și cel mai sigur " +
-        "e să nu o faci. Nu am trimis mesajul acela nicăieri. Ce ai vrea să afli despre T Levels?",
+        "e să nu o faci. Nu am trimis mesajul acela nicăieri. Ce ai vrea să afli despre T-Levels?",
     },
 
     // Words a Romanian speaker might use for each topic. One matching word is

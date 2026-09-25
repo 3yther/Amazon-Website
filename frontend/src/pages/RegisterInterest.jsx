@@ -17,7 +17,7 @@ import { useSiteContent } from "../i18n/content.js";
 import "../about.css";
 
 // The Expression of Interest form: the site's main way for someone to tell
-// Amazon they want a T Level placement. Sends to POST /api/interest/ (the
+// Amazon they want a T-Level placement. Sends to POST /api/interest/ (the
 // interest app), which validates it again on the server and saves it for
 // Amazon staff to see in Django admin. No account is needed.
 

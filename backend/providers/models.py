@@ -1,4 +1,4 @@
-"""Schools and colleges that offer T Levels. Schema follows MODELS.md exactly."""
+"""Schools and colleges that offer T-Levels. Schema follows MODELS.md exactly."""
 from django.db import models
 
 
@@ -18,7 +18,7 @@ class ProviderQuerySet(models.QuerySet):
 
 class Provider(models.Model):
     """
-    One school or college offering T Levels, with the position the "near you"
+    One school or college offering T-Levels, with the position the "near you"
     search measures from.
 
     The position is worked out once by the geocode_providers management

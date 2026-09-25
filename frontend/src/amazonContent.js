@@ -15,7 +15,7 @@ export const PLACEMENT_SHAPE = [
     text: "Part of it runs in Amazon's skills hubs, in blocks of 15 days.",
   },
   { icon: "heart", title: "Group projects", text: "Work with other students on projects for charities." },
-  { icon: "target", title: "Team challenges", text: "Tasks set by your team that use your T Level skills." },
+  { icon: "target", title: "Team challenges", text: "Tasks set by your team that use your T-Level skills." },
 ];
 
 /** The support wrapped around each student. */
@@ -34,8 +34,8 @@ export const ROUTE_IN = [
   {
     number: "01",
     icon: "book",
-    title: "Start a T Level",
-    text: "For 16 to 18 year olds already on a T Level course.",
+    title: "Start a T-Level",
+    text: "For 16 to 18 year olds already on a T-Level course.",
   },
   {
     number: "02",

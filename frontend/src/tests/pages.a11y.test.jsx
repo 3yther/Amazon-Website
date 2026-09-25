@@ -8,7 +8,9 @@ import Contact from "../pages/Contact.jsx";
 import Cookies from "../pages/Cookies.jsx";
 import DataRights from "../pages/DataRights.jsx";
 import Faqs from "../pages/Faqs.jsx";
+import GetInvolved from "../pages/GetInvolved.jsx";
 import Help from "../pages/Help.jsx";
+import TLevels from "../pages/TLevels.jsx";
 import NearYou from "../pages/NearYou.jsx";
 import Pathways from "../pages/Pathways.jsx";
 import Privacy from "../pages/Privacy.jsx";
@@ -42,14 +44,16 @@ const PAGES = [
   ["Contact us", Contact],
   ["Report an issue", ReportIssue],
   ["Accessibility help", AccessibilityHelp],
-  ["T Level Near You", NearYou],
+  ["Find T-Levels Near You", NearYou],
+  ["All T-Levels", TLevels],
+  ["Get involved", GetInvolved],
   ["Terms of Service", Terms],
   ["Privacy Policy", Privacy],
   ["Cookie Policy", Cookies],
   ["GDPR and data rights", DataRights],
 ];
 
-// One page here (T Level Near You) asks the API for the pathway filter as
+// One page here (Find T-Levels Near You) asks the API for the pathway filter as
 // soon as it renders. Answering that here keeps every page in this file
 // offline and the same on every run; the page's own behaviour is tested in
 // NearYou.test.jsx.

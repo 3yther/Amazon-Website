@@ -25,7 +25,7 @@ class ChatApiTests(APITestCase):
             name="Digital",
             slug="digital",
             summary="Build, run and support technology.",
-            description="Covers the Digital T Levels.",
+            description="Covers the Digital T-Levels.",
         )
 
     def post_message(self, text="What pathways are there?", **extra):

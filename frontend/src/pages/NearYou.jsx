@@ -12,7 +12,7 @@ import {
   MediaIcon,
 } from "../components/Icons.jsx";
 
-// The T Level finder (/t-level-near-you): a postcode, an optional pathway and
+// The T-Level finder (/t-level-near-you): a postcode, an optional pathway and
 // a distance go to GET /api/providers/search/, which measures every provider
 // it holds and answers with the ones inside the radius, nearest first.
 //
@@ -138,16 +138,16 @@ export default function NearYou() {
     <>
       <section className="intro" aria-labelledby="page-title">
         <p className="label">Find a provider</p>
-        <h1 id="page-title">T-Level Near you</h1>
+        <h1 id="page-title">Find T-Levels Near You</h1>
         <p className="lead">
-          Enter your postcode to see the schools and colleges running T Levels near you, closest
+          Enter your postcode to see the schools and colleges running T-Levels near you, closest
           first.
         </p>
       </section>
 
       <form
         className="filters near-you__form"
-        aria-label="Search for T Level providers"
+        aria-label="Search for T-Level providers"
         onSubmit={handleSubmit}
         noValidate
       >

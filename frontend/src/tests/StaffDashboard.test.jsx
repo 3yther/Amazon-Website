@@ -9,13 +9,17 @@ import { expectNoAxeViolations } from "./axe.js";
 // IsAmazonStaff permission; these tests cover what the page does once the
 // server has already decided.
 
-const { mockUseAuth, mockGetInterestSubmissions } = vi.hoisted(() => ({
+const { mockUseAuth, mockGetInterestSubmissions, mockPreferences } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),
   mockGetInterestSubmissions: vi.fn(),
+  mockPreferences: vi.fn(),
 }));
 
 vi.mock("../auth.jsx", () => ({ useAuth: mockUseAuth }));
 vi.mock("../api.js", () => ({ getInterestSubmissions: mockGetInterestSubmissions }));
+vi.mock("../hooks/useAccessibilityPreferences.jsx", () => ({
+  useAccessibilityPreferences: mockPreferences,
+}));
 
 const SUBMISSION = {
   id: 1,
@@ -47,9 +51,18 @@ function signedInAs(userType) {
   });
 }
 
+function preferring(overrides = {}) {
+  mockPreferences.mockReturnValue({
+    preferences: { date_format: "DD/MM/YYYY", number_format: "UK", ...overrides },
+    updatePreference: vi.fn(),
+    status: "idle",
+  });
+}
+
 describe("Staff dashboard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    preferring();
     mockGetInterestSubmissions.mockResolvedValue({
       count: 1,
       next: null,
@@ -66,6 +79,35 @@ describe("Staff dashboard", () => {
     expect(screen.getByText("ada@example.com")).toBeInTheDocument();
     expect(screen.getByText("digital")).toBeInTheDocument();
     expect(screen.getByRole("table")).toBeInTheDocument();
+  });
+
+  it("writes the submitted date in the visitor's chosen format", async () => {
+    // The Language and region settings used to have nothing to act on. This
+    // table is one of the two places on the site that shows a real date.
+    signedInAs("amazon_staff");
+    renderDashboard();
+    expect(await screen.findByText("01/09/2026")).toBeInTheDocument();
+
+    preferring({ date_format: "MM/DD/YYYY" });
+    renderDashboard();
+    expect(await screen.findByText("09/01/2026")).toBeInTheDocument();
+  });
+
+  it("writes a large count in the visitor's chosen number format", async () => {
+    mockGetInterestSubmissions.mockResolvedValue({
+      count: 1234,
+      next: null,
+      previous: null,
+      results: [SUBMISSION],
+    });
+
+    signedInAs("amazon_staff");
+    preferring({ number_format: "EU" });
+    renderDashboard();
+
+    // The submission count is the one number on the site that can run past a
+    // thousand, which is the only point where these formats differ.
+    expect(await screen.findByText(/1\.234 submissions/)).toBeInTheDocument();
   });
 
   it("sends a signed-in student away instead of showing anything", () => {
