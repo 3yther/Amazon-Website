@@ -440,7 +440,10 @@ export default {
         {
           heading: "Durante quanto tempo os guardamos",
           paragraphs: [
-            "Ainda não definimos isto, e vamos fazê-lo antes de o site ficar público. Até lá, pede-nos e apagamos os teus dados.",
+            "Mensagens com o Smiley: 90 dias.",
+            "Formulários de interesse e opiniões: 12 meses.",
+            "A tua conta e publicações na Comunidade: até as apagares.",
+            "Podes pedir-nos para apagar qualquer coisa mais cedo.",
           ],
         },
         {

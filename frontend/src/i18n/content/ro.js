@@ -440,7 +440,10 @@ export default {
         {
           heading: "Cât timp le păstrăm",
           paragraphs: [
-            "Nu am stabilit încă și o vom face înainte de lansarea site-ului. Până atunci, cere-ne și îți ștergem datele.",
+            "Mesajele către Smiley: 90 de zile.",
+            "Formularele de interes și părerile: 12 luni.",
+            "Contul tău și postările din Comunitate: până le ștergi.",
+            "Ne poți cere să ștergem orice mai devreme.",
           ],
         },
         {

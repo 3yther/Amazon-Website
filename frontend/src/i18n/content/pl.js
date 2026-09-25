@@ -440,7 +440,10 @@ export default {
         {
           heading: "Jak długo je przechowujemy",
           paragraphs: [
-            "Jeszcze tego nie ustaliliśmy i zrobimy to przed uruchomieniem strony. Do tego czasu poproś nas, a usuniemy Twoje dane.",
+            "Wiadomości do Smileya: 90 dni.",
+            "Formularze zainteresowania i opinie: 12 miesięcy.",
+            "Twoje konto i posty w Społeczności: dopóki ich nie usuniesz.",
+            "Możesz poprosić nas o wcześniejsze usunięcie czegokolwiek.",
           ],
         },
         {
