@@ -54,13 +54,21 @@ Starter resources are in `backend/content/fixtures/resources.json`.
 ## providers
 
 **Provider** (a school or college that runs T-Levels)
-- name, address, postcode
+- name, address (a locality for most; may be blank), postcode
+- region: one of the nine English regions the DfE list uses
+- provider_type: General FE and Tertiary College, Academy, University Technical College, and the rest of the DfE list's categories
+- foundation_year (also runs the one-year T-Level Foundation Year)
 - latitude, longitude (0, 0 means not looked up yet)
 - website_url (optional)
 - pathways (many to many)
+- pathways_confirmed (someone has actually checked the line above)
 - created_at
 
-Loaded from `backend/providers/fixtures/providers.json`. `python manage.py geocode_providers` fills in the positions from postcodes.io.
+Loaded from `backend/providers/fixtures/providers.json`, built from the Department for Education's "T Level registered providers" spreadsheet (360 providers, January 2026 version, for 2026/27). `python manage.py geocode_providers` fills in the positions from postcodes.io, falling back to its retired-postcode record when Royal Mail has withdrawn one.
+
+`address` is a locality ("ward, district") for most providers, because the official list carries a postcode and no street. Hand-written street addresses are kept where we had them.
+
+`pathways_confirmed` exists because an empty `pathways` list is ambiguous. The register says only THAT a provider runs T-Levels, never which subjects, so for most of the list we do not know. Unticked, empty means "not checked"; ticked, it means "checked, and it offers none of our five". The search answers the two groups separately (`results` and `unconfirmed`) so the page never claims a provider teaches something nobody looked up.
 
 ## interest
 

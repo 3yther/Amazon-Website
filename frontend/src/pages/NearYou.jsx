@@ -7,6 +7,11 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import { makeTranslate } from "../i18n/translate.js";
 
 // Find T-Levels near you. Searches GET /api/providers/search/ when you press Search.
+//
+// Two lists when a pathway is chosen: the register says only THAT a school runs
+// T-Levels, not which subjects, so the server sends the ones we have checked
+// separately from the ones we have not (results and unconfirmed). Merging them
+// would claim a college teaches something nobody looked up.
 
 // 15 is the server's default too.
 const RADIUS_OPTIONS = [5, 10, 15, 25, 50];
@@ -92,6 +97,13 @@ export default function NearYou() {
   }
 
   const results = search?.results ?? [];
+  const unconfirmed = search?.unconfirmed ?? [];
+  // The slug the last search was made with, so the headings keep saying
+  // "Digital" even after the filter is changed but not sent. The name comes
+  // from the catalogue, not the pathways call, so it is there either way.
+  const searched = search?.pathway || "";
+  const pathwayName = searched ? t(`pathways.${searched}`) : "";
+  const showLists = status !== "error" && (results.length > 0 || unconfirmed.length > 0);
 
   return (
     <>
@@ -170,12 +182,32 @@ export default function NearYou() {
         </p>
       )}
 
-      {results.length > 0 && status !== "error" && (
-        <ul className="card-grid" aria-busy={status === "loading"}>
-          {results.map((provider) => (
-            <ProviderCard key={provider.id} provider={provider} />
-          ))}
-        </ul>
+      {showLists && (
+        <>
+          {results.length > 0 && (
+            <ProviderList
+              heading={
+                searched
+                  ? t("nearYou.groupOffering", { pathway: pathwayName })
+                  : t("nearYou.groupNear")
+              }
+              providers={results}
+              busy={status === "loading"}
+            />
+          )}
+
+          {unconfirmed.length > 0 && (
+            <ProviderList
+              heading={t("nearYou.unconfirmedTitle")}
+              description={t(
+                unconfirmed.length === 1 ? "nearYou.unconfirmedNoteOne" : "nearYou.unconfirmedNote",
+                { pathway: pathwayName },
+              )}
+              providers={unconfirmed}
+              busy={status === "loading"}
+            />
+          )}
+        </>
       )}
     </>
   );
@@ -186,10 +218,44 @@ function searchStatus(status, search, t) {
   if (status === "loading") return t("nearYou.searching");
   if (!search) return t("nearYou.start");
 
-  const { count, radius_miles: radius, postcode } = search;
-  if (count === 0) return t("nearYou.none", { radius, postcode });
-  if (count === 1) return t("nearYou.oneFound", { radius, postcode });
-  return t("nearYou.found", { count, radius, postcode });
+  const { count, radius_miles: radius, postcode, pathway, unconfirmed_count: unknown } = search;
+
+  // Nothing at all, filtered or not: the one message that suggests a fix.
+  if (count === 0 && !unknown) return t("nearYou.none", { radius, postcode });
+
+  if (!pathway) {
+    if (count === 1) return t("nearYou.oneFound", { radius, postcode });
+    return t("nearYou.found", { count, radius, postcode });
+  }
+
+  const name = t(`pathways.${pathway}`);
+  const unsure = unknown
+    ? " " +
+      (unknown === 1
+        ? t("nearYou.oneUnsure")
+        : t("nearYou.unsure", { count: unknown }))
+    : "";
+
+  if (count === 0) return t("nearYou.noneConfirmed", { pathway: name, radius, postcode }) + unsure;
+  if (count === 1) return t("nearYou.oneFoundOffering", { pathway: name, radius, postcode }) + unsure;
+  return t("nearYou.foundOffering", { count, pathway: name, radius, postcode }) + unsure;
+}
+
+// One headed group of provider cards.
+function ProviderList({ heading, description, providers, busy }) {
+  return (
+    <section className="near-you__group">
+      {/* h2 for the group, so the provider names below can be h3 and the
+          outline holds whether the visitor filtered by pathway or not. */}
+      <h2 className="near-you__group-title">{heading}</h2>
+      {description && <p className="near-you__group-note">{description}</p>}
+      <ul className="card-grid" aria-busy={busy}>
+        {providers.map((provider) => (
+          <ProviderCard key={provider.id} provider={provider} />
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 function ProviderCard({ provider }) {
@@ -198,33 +264,27 @@ function ProviderCard({ provider }) {
     <li className="card">
       <div className="card__tags">
         <span className="tag tag--distance">{formatDistance(provider.distance_miles, t)}</span>
+        {provider.foundation_year && <span className="tag">{t("nearYou.foundationYear")}</span>}
       </div>
 
-      {/* h2 because the cards sit straight under the page's h1 */}
-      <h2 className="card__title">{provider.name}</h2>
+      <h3 className="card__title">{provider.name}</h3>
       <p className="card__text">
-        {provider.address}, {provider.postcode}
+        {/* address is a locality for most of the register, and blank for the few
+            whose postcode resolves nowhere: no stray comma in that case. */}
+        {provider.address ? `${provider.address}, ${provider.postcode}` : provider.postcode}
       </p>
 
       <dl className="card__meta">
+        {provider.provider_type && (
+          <div>
+            <dt className="label">{t("nearYou.type")}</dt>
+            <dd>{provider.provider_type}</dd>
+          </div>
+        )}
         <div>
           <dt className="label">{t("nearYou.pathways")}</dt>
           <dd>
-            {provider.pathways.length === 0 ? (
-              t("nearYou.askProvider")
-            ) : (
-              <ul className="near-you__pathways">
-                {provider.pathways.map((pathway) => {
-                  const PathwayIcon = PATHWAY_ICONS[pathway.slug];
-                  return (
-                    <li key={pathway.slug}>
-                      {PathwayIcon && <PathwayIcon />}
-                      {t(`pathways.${pathway.slug}`)}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <ProviderPathways provider={provider} t={t} />
           </dd>
         </div>
       </dl>
@@ -237,5 +297,28 @@ function ProviderCard({ provider }) {
         </a>
       )}
     </li>
+  );
+}
+
+// An empty pathways list means two different things, so pathways_confirmed
+// decides the wording. Saying "none" about a provider nobody asked would be
+// inventing an answer.
+function ProviderPathways({ provider, t }) {
+  if (provider.pathways.length === 0) {
+    return provider.pathways_confirmed ? t("nearYou.noneOfFive") : t("nearYou.notConfirmed");
+  }
+
+  return (
+    <ul className="near-you__pathways">
+      {provider.pathways.map((pathway) => {
+        const PathwayIcon = PATHWAY_ICONS[pathway.slug];
+        return (
+          <li key={pathway.slug}>
+            {PathwayIcon && <PathwayIcon />}
+            {t(`pathways.${pathway.slug}`)}
+          </li>
+        );
+      })}
+    </ul>
   );
 }

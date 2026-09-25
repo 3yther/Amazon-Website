@@ -1714,6 +1714,28 @@ main:has(.auth-layout) {
   color: var(--ink-on-orange);
 }
 
+/* A headed group of results. There are two when a pathway is chosen: the
+   providers we have checked, and the ones whose subjects nobody has. The
+   heading is what keeps them from reading as one list. */
+.near-you__group + .near-you__group {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.near-you__group-title {
+  margin-bottom: 8px;
+  font-size: 1.125rem;
+}
+
+/* Why the second group is a separate list. Muted and narrow: it is an aside
+   to the results, not a warning, and nothing here is the visitor's fault. */
+.near-you__group-note {
+  max-width: 60ch;
+  margin-bottom: 16px;
+  color: var(--ink-muted);
+}
+
 /* The pathways a provider offers, inside the card's definition list. A list,
    because that is what it is, with the bullets and indent taken off. */
 .near-you__pathways {
