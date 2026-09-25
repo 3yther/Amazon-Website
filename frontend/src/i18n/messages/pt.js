@@ -76,7 +76,7 @@ const pt = {
     steps: {
       label: "Como funciona",
       title: "Começa em quatro passos",
-      level: "Nível",
+      step: "Passo",
       browse: { title: "Ver recursos", text: "Guias, materiais e vídeos para os cinco percursos.", link: "Ver recursos" },
       register: { title: "Regista o teu interesse", text: "Diz-nos que percurso queres explorar.", link: "Registar interesse" },
       hearBack: { title: "Recebe resposta", text: "Analisamos cada pedido e respondemos por email." },

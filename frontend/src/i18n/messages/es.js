@@ -75,7 +75,7 @@ const es = {
     steps: {
       label: "Cómo funciona",
       title: "Empieza en cuatro pasos",
-      level: "Nivel",
+      step: "Paso",
       browse: { title: "Ver recursos", text: "Guías, materiales y vídeos para los cinco itinerarios.", link: "Ver recursos" },
       register: { title: "Registra tu interés", text: "Dinos qué itinerario quieres explorar.", link: "Registrar interés" },
       hearBack: { title: "Recibe respuesta", text: "Revisamos cada solicitud y respondemos por correo electrónico." },

@@ -75,7 +75,7 @@ const ro = {
     steps: {
       label: "Cum funcționează",
       title: "Începe în patru pași",
-      level: "Nivel",
+      step: "Pasul",
       browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
       register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
       hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },

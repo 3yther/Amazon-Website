@@ -3,18 +3,16 @@ import { Link } from "react-router-dom";
 import parentPhoto from "../assets/audience-parent.jpg";
 import studentPhoto from "../assets/audience-student.jpg";
 import teacherPhoto from "../assets/audience-teacher.jpg";
+import businessPhoto from "../assets/pathway-business.jpg";
+import digitalPhoto from "../assets/pathway-digital.jpg";
+import engineeringPhoto from "../assets/pathway-engineering.jpg";
+import financePhoto from "../assets/pathway-finance.jpg";
+import mediaPhoto from "../assets/pathway-media.jpg";
 import { AUDIENCES, CONTENT_TYPES, PATHWAY_NAMES } from "../labels.js";
 import { T_LEVEL_SUBJECTS } from "../tlevelSubjects.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
-import {
-  ArrowIcon,
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "./Icons.jsx";
+import { ArrowIcon } from "./Icons.jsx";
 
 // Homepage sections below the hero (see pages/Home.jsx), in page order.
 
@@ -190,12 +188,26 @@ export function AudienceCards({ selected, onSelect }) {
 // Slugs match backend/content/fixtures/pathways.json. Names and summaries
 // are pathways.<slug> and home.pathways.<slug> in i18n/messages. Each tile
 // opens the library already filtered to its pathway.
+//
+// Photos from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
+// free to use, attribution not required. Credited here for the asset log.
+// Saved at 640px wide from Pexels' own image server.
+//   pathway-digital.jpg: ThisIsEngineering,
+//     https://www.pexels.com/photo/female-software-engineer-coding-on-computer-3861951/
+//   pathway-business.jpg: Pavel Danilyuk,
+//     https://www.pexels.com/photo/three-people-working-in-the-office-7654168/
+//   pathway-media.jpg: cottonbro studio,
+//     https://www.pexels.com/photo/a-cameraman-recording-a-scene-6883811/
+//   pathway-finance.jpg: Mikhail Nilov,
+//     https://www.pexels.com/photo/woman-in-black-long-sleeve-shirt-8297043/
+//   pathway-engineering.jpg: Rizky Rafael,
+//     https://www.pexels.com/photo/man-in-green-uniform-holding-a-machine-4281613/
 const PATHWAYS = [
-  { slug: "digital", Icon: DigitalIcon },
-  { slug: "business", Icon: BusinessIcon },
-  { slug: "media", Icon: MediaIcon },
-  { slug: "finance", Icon: FinanceIcon },
-  { slug: "engineering", Icon: EngineeringIcon },
+  { slug: "digital", photo: digitalPhoto },
+  { slug: "business", photo: businessPhoto },
+  { slug: "media", photo: mediaPhoto },
+  { slug: "finance", photo: financePhoto },
+  { slug: "engineering", photo: engineeringPhoto },
 ];
 
 export function PathwayTiles() {
@@ -209,10 +221,17 @@ export function PathwayTiles() {
       </div>
 
       <ul className="pathway-grid">
-        {PATHWAYS.map(({ slug, Icon }) => (
+        {PATHWAYS.map(({ slug, photo }) => (
           <li key={slug}>
             <Link className="pathway-tile" to={`/resources?pathway=${slug}`}>
-              <Icon />
+              {/* Decorative: the pathway's name beside it carries the meaning. */}
+              <img
+                className="pathway-tile__photo"
+                src={photo}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
               <span className="pathway-tile__name">{t(`pathways.${slug}`)}</span>
               <span className="pathway-tile__summary">{t(`home.pathways.${slug}`)}</span>
               <ArrowIcon />
@@ -237,8 +256,8 @@ const STEPS = [
 ];
 
 /**
- * Four "Level" cards, a nod to T-Levels. On desktop they step down left to
- * right like a staircase, Level 01 highest (see .steps in styles.css); on smaller screens they stack.
+ * Four numbered step cards. On desktop they step down left to right like a
+ * staircase, Step 01 highest (see .steps in styles.css); on smaller screens they stack.
  */
 export function HowItWorks() {
   const t = useT();
@@ -254,7 +273,7 @@ export function HowItWorks() {
           // --drop: how many steps below the top card this one starts.
           <li key={step.key} className="step" style={{ "--drop": index }}>
             <p className="label">
-              {t("home.steps.level")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
+              {t("home.steps.step")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>
             </p>
             <h3 className="step__title">{t(`home.steps.${step.key}.title`)}</h3>
             <p className="step__text">{t(`home.steps.${step.key}.text`)}</p>
