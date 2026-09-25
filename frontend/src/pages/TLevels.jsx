@@ -1,24 +1,24 @@
 import { Link } from "react-router-dom";
 import { ArrowIcon } from "../components/Icons.jsx";
-import { PATHWAYS } from "../aboutContent.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { T_LEVEL_ROUTES, T_LEVEL_SUBJECTS, subjectPage } from "../tlevelSubjects.js";
 import "../about.css";
 
-const PATHWAY_NAMES = Object.fromEntries(PATHWAYS.map((pathway) => [pathway.slug, pathway.name]));
 const RUNNING_ROUTES = T_LEVEL_ROUTES.filter((route) =>
   route.subjects.some((subject) => !subject.comingIn),
 );
 
 // All T-Levels page: every subject grouped by route, linking to the official pages.
+// The route and subject names are the official ones, so they stay in English.
 export default function TLevels() {
+  const t = useT();
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Subjects</p>
-        <h1 id="page-title">All T-Levels</h1>
+        <p className="label">{t("tLevelsPage.label")}</p>
+        <h1 id="page-title">{t("tLevelsPage.title")}</h1>
         <p className="lead">
-          {T_LEVEL_SUBJECTS.length} subjects across {RUNNING_ROUTES.length} routes, from agriculture to
-          marketing. Two more arrive in September 2028.
+          {t("tLevelsPage.lead", { subjects: T_LEVEL_SUBJECTS.length, routes: RUNNING_ROUTES.length })}
         </p>
       </section>
 
@@ -33,14 +33,17 @@ export default function TLevels() {
                   {subject.page ? (
                     <a href={subjectPage(subject)}>
                       {subject.name}
-                      <span className="sr-only">, on tlevels.gov.uk</span>
+                      <span className="sr-only">{t("tLevelsPage.onGovUk")}</span>
                     </a>
                   ) : (
                     <span>{subject.name}</span>
                   )}
-                  {(subject.note || subject.comingIn) && (
+                  {subject.note && (
+                    <span className="t-level-routes__note">{t(`tLevelsPage.notes.${subject.note}`)}</span>
+                  )}
+                  {subject.comingIn && (
                     <span className="t-level-routes__note">
-                      {subject.note ?? `Coming ${subject.comingIn}`}
+                      {t("tLevelsPage.comingIn", { year: subject.comingIn })}
                     </span>
                   )}
                 </li>
@@ -49,7 +52,7 @@ export default function TLevels() {
 
             {route.pathway && (
               <Link className="card__action t-level-routes__pathway" to={`/resources?pathway=${route.pathway}`}>
-                {PATHWAY_NAMES[route.pathway]} resources
+                {t("tLevelsPage.pathwayResources", { pathway: t(`pathways.${route.pathway}`) })}
                 <ArrowIcon />
               </Link>
             )}
@@ -59,22 +62,20 @@ export default function TLevels() {
 
       <section className="about-section" aria-labelledby="next-title">
         <div className="section-intro">
-          <p className="label">Next</p>
-          <h2 id="next-title">Find one near you</h2>
-          <p className="section-intro__lead">
-            Not every school or college runs every subject.
-          </p>
+          <p className="label">{t("tLevelsPage.nextLabel")}</p>
+          <h2 id="next-title">{t("tLevelsPage.nextTitle")}</h2>
+          <p className="section-intro__lead">{t("tLevelsPage.nextLead")}</p>
         </div>
         <ul className="signpost">
           <li>
             <Link to="/t-level-near-you">
-              <span className="signpost__label">Search by postcode on this site</span>
-              <span className="signpost__detail label">Find T-Levels Near You</span>
+              <span className="signpost__label">{t("tLevelsPage.searchHere")}</span>
+              <span className="signpost__detail label">{t("nearYou.title")}</span>
             </Link>
           </li>
           <li>
             <a href="https://www.tlevels.gov.uk/students/find">
-              <span className="signpost__label">Search every provider in England</span>
+              <span className="signpost__label">{t("tLevelsPage.searchEngland")}</span>
               <span className="signpost__detail label">tlevels.gov.uk</span>
             </a>
           </li>

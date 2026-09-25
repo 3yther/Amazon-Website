@@ -42,7 +42,7 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
       await submitFeedback(fields);
       setStatus("sent");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

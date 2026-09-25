@@ -1,16 +1,10 @@
 import { useI18n } from "./I18nProvider.jsx";
 
-// Pages whose text is legal wording. They stay in English whatever language is
-// chosen, because a machine translation of a legal document is not something
-// anybody should rely on.
-export const ENGLISH_ONLY_PATHS = new Set(["/terms", "/privacy", "/cookies", "/data-rights"]);
+// Pages that are only in English. The staff page is just for Amazon staff.
+const ENGLISH_ONLY_PATHS = new Set(["/staff"]);
 
-/**
- * A short, honest line under the header whenever the site is not in English:
- * this was translated by machine, and English is the version that counts.
- * The way back to English is also written in English, so it can be found
- * even if the translation around it is poor.
- */
+// A line under the header when the site isn't in English, saying it was
+// machine translated. "Read in English" is always in English so it can be found.
 export default function TranslationNotice({ pathname }) {
   const { language, meta, t, setLanguage } = useI18n();
   if (language === "en") return null;

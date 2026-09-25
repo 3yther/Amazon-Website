@@ -42,7 +42,7 @@ export default function SecuritySettings({ lastChanged }) {
       setFields(EMPTY_FIELDS);
       setStatus("success");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

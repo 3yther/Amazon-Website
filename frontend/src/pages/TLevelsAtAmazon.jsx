@@ -1,35 +1,18 @@
 import { Link } from "react-router-dom";
-import { IconCards, PageHero, RouteSteps } from "../components/InfoBlocks.jsx";
-import {
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "../components/Icons.jsx";
+import { GROWTH } from "../amazonContent.js";
+import amazonPhoto from "../assets/amazon-hero.jpg";
 import warehousePhoto from "../assets/pexels-warehouse-operations.jpg";
+import { PATHWAY_ICONS } from "../components/Icons.jsx";
+import { IconCards, PageHero, RouteSteps } from "../components/InfoBlocks.jsx";
 import { useSiteContent } from "../i18n/content.js";
 import { useT } from "../i18n/I18nProvider.jsx";
-
-// Photo from Pexels (free to use): pexels-warehouse-operations.jpg by GB The Green Brand,
-// https://www.pexels.com/photo/modern-warehouse-operations-with-employees-and-forklift-30824313/
-
-import { GROWTH } from "../amazonContent.js";
 import "../about.css";
-import amazonPhoto from "../assets/amazon-hero.jpg";
 
-// Hero photo from Pexels (free to use, not an Amazon photo): amazon-hero.jpg by Mikhail Nilov,
-// https://www.pexels.com/photo/young-professionals-working-with-computers-7988745/
-
-// The same pathway icons as the homepage tiles, so each subject always has
-// the same picture wherever it appears.
-const PATHWAY_ICONS = {
-  digital: DigitalIcon,
-  business: BusinessIcon,
-  media: MediaIcon,
-  finance: FinanceIcon,
-  engineering: EngineeringIcon,
-};
+// Photos from Pexels (free to use):
+//   amazon-hero.jpg: Mikhail Nilov (not an Amazon photo),
+//     https://www.pexels.com/photo/young-professionals-working-with-computers-7988745/
+//   pexels-warehouse-operations.jpg: GB The Green Brand,
+//     https://www.pexels.com/photo/modern-warehouse-operations-with-employees-and-forklift-30824313/
 
 // The biggest figure sets the full width of the growth bars.
 const MOST = Math.max(...GROWTH.map((point) => point.value));

@@ -15,7 +15,7 @@ const ar = {
       "تُرجمت هذه الصفحة آليًا ({language})، لذلك قد لا تكون بعض العبارات دقيقة. " +
       "النسخة الإنجليزية هي المعتمدة.",
     showEnglish: "اقرأ بالإنجليزية",
-    englishOnly: "هذه الصفحة متوفرة بالإنجليزية فقط، حتى تكون صياغتها دقيقة تمامًا.",
+    englishOnly: "هذه الصفحة متوفرة بالإنجليزية فقط.",
   },
 
   pathways: {
@@ -213,6 +213,7 @@ const ar = {
     error404: "خطأ 404",
     notFound: "الصفحة غير موجودة",
     toLibrary: "اذهب إلى مكتبة المحتوى",
+    loading: "جارٍ التحميل",
   },
 
   titles: {
@@ -332,6 +333,8 @@ const ar = {
     hidePassword: "إخفاء كلمة المرور",
     showPassword: "إظهار كلمة المرور",
     panelLine: "موارد مجانية لمسار T-Level الرقمي في Amazon.",
+    somethingWrong: "حدث خطأ ما. حاول مرة أخرى.",
+    noConnection: "تعذّر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.",
   },
 
   register: {
@@ -1027,6 +1030,164 @@ const ar = {
       password: "كلمة المرور",
       deactivating: "جارٍ إلغاء التفعيل",
       wrongPassword: "كلمة المرور غير صحيحة.",
+    },
+  },
+
+  resources: {
+    label: "الموارد",
+    title: "موارد T-Level",
+    lead: "أدلة وفيديوهات وحزم مجانية، من مصادر رسمية مثل gov.uk وUCAS.",
+    filters: "تصفية المحتوى",
+    pathway: "المسار",
+    allPathways: "كل المسارات",
+    for: "لمن",
+    anyone: "للجميع",
+    access: "الوصول",
+    any: "أي",
+    clear: "مسح عوامل التصفية",
+    loadError: "تعذّر تحميل المحتوى.",
+    serverError: "حدث خطأ من جهتنا. حاول مرة أخرى بعد قليل.",
+    tryAgain: "حاول مرة أخرى",
+    loading: "جارٍ التحميل",
+    noMatches: "لا يوجد محتوى يطابق عوامل التصفية هذه.",
+    oneItem: "1 عنصر",
+    items: "{count} عناصر",
+    loadMore: "تحميل المزيد",
+    signUp: "أنشئ حسابًا للوصول",
+    openOn: "افتح على {site}",
+    anotherWebsite: "موقع آخر",
+    open: "افتح",
+    types: {
+      guide: "دليل",
+      document: "مستند",
+      video: "فيديو",
+      prep_pack: "حزمة تحضير",
+      class_pack: "حزمة للصف",
+    },
+    audiences: {
+      all: "الجميع",
+      student: "الطلاب",
+      parent: "الآباء وأولياء الأمور",
+      teacher: "المعلمون والمدارس",
+    },
+    accessLevels: {
+      free: "مجاني",
+      signup: "بحساب",
+    },
+  },
+
+  nearYou: {
+    label: "ابحث عن مدرسة",
+    title: "ابحث عن T-Levels بالقرب منك",
+    lead: "أدخل رمزك البريدي لترى المدارس والكليات القريبة منك التي تقدم T-Levels، بدءًا من الأقرب.",
+    form: "ابحث عن مدارس تقدم T-Levels",
+    postcode: "الرمز البريدي",
+    postcodeHint: "مثلًا SW1A 1AA.",
+    pathway: "المسار",
+    allPathways: "كل المسارات",
+    within: "ضمن",
+    miles: "{miles} ميل",
+    search: "ابحث",
+    searching: "جارٍ البحث",
+    error: "تعذّر البحث عن المدارس.",
+    tryAgain: "حاول مرة أخرى",
+    start: "أدخل رمزًا بريديًا لترى المدارس القريبة منك.",
+    none: "لا توجد مدارس ضمن {radius} ميل من {postcode}. جرّب مسافة أكبر.",
+    oneFound: "1 مدرسة ضمن {radius} ميل من {postcode}.",
+    found: "{count} مدارس ضمن {radius} ميل من {postcode}.",
+    underTenth: "أقل من 0.1 ميل",
+    oneMile: "1 ميل",
+    distance: "{miles} ميل",
+    pathways: "المسارات",
+    askProvider: "اسأل المدرسة",
+    website: "زيارة الموقع",
+    errors: {
+      empty: "أدخل رمزًا بريديًا.",
+      notFull: "أدخل رمزًا بريديًا كاملًا في المملكة المتحدة، مثلًا SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "المواد",
+    title: "كل مؤهلات T-Level",
+    lead: "{subjects} مادة في {routes} مجالات، من الزراعة إلى التسويق. تصل مادتان أخريان في سبتمبر 2028.",
+    onGovUk: "، على tlevels.gov.uk",
+    comingIn: "تبدأ في سبتمبر {year}",
+    notes: {
+      financeEnds: "آخر تسجيل في سبتمبر 2026",
+    },
+    pathwayResources: "موارد {pathway}",
+    nextLabel: "التالي",
+    nextTitle: "ابحث عن واحدة بالقرب منك",
+    nextLead: "ليست كل مدرسة أو كلية تقدم كل مادة.",
+    searchHere: "ابحث بالرمز البريدي على هذا الموقع",
+    searchEngland: "ابحث في كل المدارس في إنجلترا",
+  },
+
+  getInvolvedPage: {
+    label: "شارك",
+    title: "خطوتك التالية",
+    lead: "اختر من أنت.",
+    everyone: "الجميع",
+    audiences: {
+      students: {
+        heading: "الطلاب",
+        lead: "عمرك بين 16 و18 عامًا، أو تنهي شهادات GCSE.",
+      },
+      parents: {
+        heading: "الآباء ومقدمو الرعاية",
+        lead: "تساعد شخصًا على اختيار ما بعد GCSE.",
+      },
+      teachers: {
+        heading: "المعلمون والمدارس",
+        lead: "ترتب Amazon التدريب مع المدارس والكليات، وليس مع الطلاب مباشرة.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "اطّلع على كل مواد T-Level",
+        detail: "كل مؤهلات T-Level",
+      },
+      nearYou: {
+        label: "ابحث عن مدرسة أو كلية بالقرب منك",
+        detail: "ابحث عن T-Levels بالقرب منك",
+      },
+      interest: {
+        label: "أخبر Amazon أنك تريد تدريبًا",
+        detail: "تسجيل الاهتمام",
+      },
+      quiz: {
+        label: "اختبر ما تعرفه",
+        detail: "اختبار",
+      },
+      about: {
+        label: "ما هو T-Level",
+        detail: "عن T-Levels",
+      },
+      parentGuides: {
+        label: "أدلة مكتوبة للآباء",
+        detail: "الموارد",
+      },
+      bursary: {
+        label: "مساعدة في التنقل والكتب والمعدات",
+        detail: "16 to 19 Bursary، gov.uk",
+      },
+      amazon: {
+        label: "اسأل Amazon عن تدريب لطلابك",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "حزم للصف وأدلة للمعلمين",
+        detail: "الموارد",
+      },
+      guidance: {
+        label: "ما يجب أن يتضمنه التدريب",
+        detail: "إرشادات التدريب، gov.uk",
+      },
+      feedback: {
+        label: "أخبرنا بما يجعل هذا الموقع أفضل",
+        detail: "الملاحظات",
+      },
     },
   },
 };

@@ -22,7 +22,7 @@ export default function ForgotPassword() {
       await requestPasswordReset(username);
       setStatus("sent");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

@@ -2,41 +2,25 @@ import { useEffect, useState } from "react";
 import { ApiError, getPathways, searchProviders } from "../api.js";
 import { formErrors } from "../formErrors.js";
 import { SelectField, TextField } from "../components/FormFields.jsx";
-import {
-  AlertIcon,
-  ArrowIcon,
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "../components/Icons.jsx";
+import { AlertIcon, ArrowIcon, PATHWAY_ICONS } from "../components/Icons.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
+import { makeTranslate } from "../i18n/translate.js";
 
 // Find T-Levels near you. Searches GET /api/providers/search/ when you press Search.
 
-// The distances offered. 15 matches the server's default, so an untouched
-// form and a bare request agree.
+// 15 is the server's default too.
 const RADIUS_OPTIONS = [5, 10, 15, 25, 50];
 const DEFAULT_RADIUS = "15";
 
-// The same pathway icons the homepage tiles and the resources cards use.
-const PATHWAY_ICONS = {
-  digital: DigitalIcon,
-  business: BusinessIcon,
-  media: MediaIcon,
-  finance: FinanceIcon,
-  engineering: EngineeringIcon,
-};
+const english = makeTranslate();
 
 // Rough UK postcode check (same as POSTCODE_PATTERN in backend/providers/postcodes.py).
 const POSTCODE_PATTERN = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\d[A-Za-z]{2}$/;
 
-export function checkPostcode(postcode) {
+export function checkPostcode(postcode, t = english) {
   const typed = postcode.trim();
-  if (!typed) return "Enter a postcode.";
-  if (!POSTCODE_PATTERN.test(typed.replace(/\s+/g, ""))) {
-    return "Enter a full UK postcode, for example SW1A 1AA.";
-  }
+  if (!typed) return t("nearYou.errors.empty");
+  if (!POSTCODE_PATTERN.test(typed.replace(/\s+/g, ""))) return t("nearYou.errors.notFull");
   return "";
 }
 
@@ -47,27 +31,28 @@ function focusPostcode() {
 }
 
 // Error message for a failed search. A 503 comes with its own message in "detail".
-function searchError(error) {
-  const found = formErrors(error);
+function searchError(error, t) {
+  const found = formErrors(error, t);
   const detail = error instanceof ApiError ? error.body?.detail : null;
   return detail ? { ...found, form: detail } : found;
 }
 
 // "Under 0.1 miles" looks better than "0 miles".
-export function formatDistance(miles) {
-  if (miles === 0) return "Under 0.1 miles";
-  return `${miles} ${miles === 1 ? "mile" : "miles"}`;
+export function formatDistance(miles, t = english) {
+  if (miles === 0) return t("nearYou.underTenth");
+  if (miles === 1) return t("nearYou.oneMile");
+  return t("nearYou.distance", { miles });
 }
 
 export default function NearYou() {
+  const t = useT();
   const [pathways, setPathways] = useState([]);
   const [fields, setFields] = useState({ postcode: "", pathway: "", radius: DEFAULT_RADIUS });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | loading | ready | error
   const [search, setSearch] = useState(null); // the answer to the last search
 
-  // For the pathway filter. A dead pathways call leaves the filter empty
-  // rather than breaking the page: a postcode on its own is still a search.
+  // For the pathway filter. If this fails the filter is just empty.
   useEffect(() => {
     const controller = new AbortController();
     getPathways({ signal: controller.signal })
@@ -84,10 +69,9 @@ export default function NearYou() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const problem = checkPostcode(fields.postcode);
+    const problem = checkPostcode(fields.postcode, t);
     if (problem) {
       setErrors({ postcode: problem });
-      // Land the visitor on the field to fix, rather than making them find it.
       focusPostcode();
       return;
     }
@@ -98,13 +82,10 @@ export default function NearYou() {
       setSearch(await searchProviders(fields));
       setStatus("ready");
     } catch (error) {
-      // A 400 names the field it is about (a postcode that does not exist, an
-      // unknown pathway); anything else lands under "form".
-      const found = searchError(error);
+      // A 400 names the field (e.g. a postcode that doesn't exist), anything else goes under "form".
+      const found = searchError(error, t);
       setErrors(found);
-      // Drop the last answer too. Leaving it would put a summary and a list
-      // for one postcode under an error about a different one.
-      setSearch(null);
+      setSearch(null); // don't leave old results under the error
       setStatus(found.postcode ? "idle" : "error");
       if (found.postcode) focusPostcode();
     }
@@ -115,25 +96,17 @@ export default function NearYou() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Find a provider</p>
-        <h1 id="page-title">Find T-Levels Near You</h1>
-        <p className="lead">
-          Enter your postcode to see the schools and colleges running T-Levels near you, closest
-          first.
-        </p>
+        <p className="label">{t("nearYou.label")}</p>
+        <h1 id="page-title">{t("nearYou.title")}</h1>
+        <p className="lead">{t("nearYou.lead")}</p>
       </section>
 
-      <form
-        className="filters near-you__form"
-        aria-label="Search for T-Level providers"
-        onSubmit={handleSubmit}
-        noValidate
-      >
+      <form className="filters near-you__form" aria-label={t("nearYou.form")} onSubmit={handleSubmit} noValidate>
         <TextField
           id={POSTCODE_FIELD_ID}
-          label="Postcode"
+          label={t("nearYou.postcode")}
           name="postcode"
-          hint="For example SW1A 1AA."
+          hint={t("nearYou.postcodeHint")}
           value={fields.postcode}
           onChange={updateField}
           autoComplete="postal-code"
@@ -145,23 +118,23 @@ export default function NearYou() {
 
         <SelectField
           id="near-you-pathway"
-          label="Pathway"
+          label={t("nearYou.pathway")}
           name="pathway"
           value={fields.pathway}
           onChange={updateField}
           error={errors.pathway}
         >
-          <option value="">All pathways</option>
+          <option value="">{t("nearYou.allPathways")}</option>
           {pathways.map((pathway) => (
             <option key={pathway.slug} value={pathway.slug}>
-              {pathway.name}
+              {t(`pathways.${pathway.slug}`)}
             </option>
           ))}
         </SelectField>
 
         <SelectField
           id="near-you-radius"
-          label="Within"
+          label={t("nearYou.within")}
           name="radius"
           value={fields.radius}
           onChange={updateField}
@@ -169,17 +142,13 @@ export default function NearYou() {
         >
           {RADIUS_OPTIONS.map((miles) => (
             <option key={miles} value={String(miles)}>
-              {miles} miles
+              {t("nearYou.miles", { miles })}
             </option>
           ))}
         </SelectField>
 
-        <button
-          type="submit"
-          className="button button--primary near-you__submit"
-          disabled={status === "loading"}
-        >
-          {status === "loading" ? "Searching" : "Search"}
+        <button type="submit" className="button button--primary near-you__submit" disabled={status === "loading"}>
+          {status === "loading" ? t("nearYou.searching") : t("nearYou.search")}
         </button>
       </form>
 
@@ -187,17 +156,17 @@ export default function NearYou() {
         <div className="notice" role="alert">
           <AlertIcon />
           <div>
-            <p className="notice__title">Could not search for providers.</p>
+            <p className="notice__title">{t("nearYou.error")}</p>
             <p>{errors.form}</p>
             {import.meta.env.DEV && <p>Check the Django API is running on port 8000.</p>}
             <button type="button" className="button" onClick={handleSubmit}>
-              Try again
+              {t("nearYou.tryAgain")}
             </button>
           </div>
         </div>
       ) : (
         <p className="label results-status" role="status">
-          <SearchStatus status={status} search={search} />
+          {searchStatus(status, search, t)}
         </p>
       )}
 
@@ -213,27 +182,25 @@ export default function NearYou() {
 }
 
 // The line under the form. It's a live region so screen readers hear it change.
-function SearchStatus({ status, search }) {
-  if (status === "loading") return "Searching";
-  // Also the state after a search that could not run, which is why this does
-  // not say "to start": the error beside the field says what went wrong.
-  if (!search) return "Enter a postcode to see providers near you.";
+function searchStatus(status, search, t) {
+  if (status === "loading") return t("nearYou.searching");
+  if (!search) return t("nearYou.start");
 
   const { count, radius_miles: radius, postcode } = search;
-  if (count === 0) {
-    return `No providers found within ${radius} miles of ${postcode}. Try a wider radius.`;
-  }
-  return `${count} ${count === 1 ? "provider" : "providers"} within ${radius} miles of ${postcode}.`;
+  if (count === 0) return t("nearYou.none", { radius, postcode });
+  if (count === 1) return t("nearYou.oneFound", { radius, postcode });
+  return t("nearYou.found", { count, radius, postcode });
 }
 
 function ProviderCard({ provider }) {
+  const t = useT();
   return (
     <li className="card">
       <div className="card__tags">
-        <span className="tag tag--distance">{formatDistance(provider.distance_miles)}</span>
+        <span className="tag tag--distance">{formatDistance(provider.distance_miles, t)}</span>
       </div>
 
-      {/* h2: the cards sit straight under the page's h1. */}
+      {/* h2 because the cards sit straight under the page's h1 */}
       <h2 className="card__title">{provider.name}</h2>
       <p className="card__text">
         {provider.address}, {provider.postcode}
@@ -241,10 +208,10 @@ function ProviderCard({ provider }) {
 
       <dl className="card__meta">
         <div>
-          <dt className="label">Pathways</dt>
+          <dt className="label">{t("nearYou.pathways")}</dt>
           <dd>
             {provider.pathways.length === 0 ? (
-              "Ask the provider"
+              t("nearYou.askProvider")
             ) : (
               <ul className="near-you__pathways">
                 {provider.pathways.map((pathway) => {
@@ -252,7 +219,7 @@ function ProviderCard({ provider }) {
                   return (
                     <li key={pathway.slug}>
                       {PathwayIcon && <PathwayIcon />}
-                      {pathway.name}
+                      {t(`pathways.${pathway.slug}`)}
                     </li>
                   );
                 })}
@@ -264,7 +231,7 @@ function ProviderCard({ provider }) {
 
       {provider.website_url && (
         <a className="button button--primary card__action" href={provider.website_url}>
-          Visit website
+          {t("nearYou.website")}
           <span className="sr-only">, {provider.name}</span>
           <ArrowIcon />
         </a>

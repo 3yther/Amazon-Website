@@ -52,7 +52,7 @@ export default function Feedback() {
       await submitFeedback(fields);
       setStatus("sent");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

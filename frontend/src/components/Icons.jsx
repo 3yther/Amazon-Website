@@ -127,7 +127,7 @@ export function PersonIcon() {
   );
 }
 
-// One per pathway, for the homepage pathway tiles.
+// One per pathway (see PATHWAY_ICONS at the bottom).
 
 export function DigitalIcon() {
   return (
@@ -171,3 +171,12 @@ export function EngineeringIcon() {
     </Icon>
   );
 }
+
+// Pathway slug -> icon, so every page uses the same picture for a pathway.
+export const PATHWAY_ICONS = {
+  digital: DigitalIcon,
+  business: BusinessIcon,
+  media: MediaIcon,
+  finance: FinanceIcon,
+  engineering: EngineeringIcon,
+};

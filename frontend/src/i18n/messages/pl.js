@@ -14,7 +14,7 @@ const pl = {
       "Ta strona została przetłumaczona maszynowo ({language}), więc niektóre sformułowania mogą być nieprecyzyjne. " +
       "Wiążąca jest wersja angielska.",
     showEnglish: "Czytaj po angielsku",
-    englishOnly: "Ta strona jest dostępna tylko po angielsku, aby jej treść była całkowicie dokładna.",
+    englishOnly: "Ta strona jest dostępna tylko po angielsku.",
   },
 
   pathways: {
@@ -212,6 +212,7 @@ const pl = {
     error404: "Błąd 404",
     notFound: "Nie znaleziono strony",
     toLibrary: "Przejdź do biblioteki materiałów",
+    loading: "Wczytywanie",
   },
 
   titles: {
@@ -331,6 +332,8 @@ const pl = {
     hidePassword: "Ukryj hasło",
     showPassword: "Pokaż hasło",
     panelLine: "Darmowe materiały dla cyfrowej ścieżki T-Level w Amazon.",
+    somethingWrong: "Coś poszło nie tak. Spróbuj ponownie.",
+    noConnection: "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
   },
 
   register: {
@@ -1025,6 +1028,164 @@ const pl = {
       password: "Hasło",
       deactivating: "Dezaktywowanie",
       wrongPassword: "Nieprawidłowe hasło.",
+    },
+  },
+
+  resources: {
+    label: "Materiały",
+    title: "Materiały o T-Levels",
+    lead: "Bezpłatne poradniki, filmy i pakiety z oficjalnych źródeł, takich jak gov.uk i UCAS.",
+    filters: "Filtruj materiały",
+    pathway: "Kierunek",
+    allPathways: "Wszystkie kierunki",
+    for: "Dla kogo",
+    anyone: "Dla każdego",
+    access: "Dostęp",
+    any: "Dowolny",
+    clear: "Wyczyść filtry",
+    loadError: "Nie udało się wczytać materiałów.",
+    serverError: "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+    tryAgain: "Spróbuj ponownie",
+    loading: "Wczytywanie",
+    noMatches: "Żadne materiały nie pasują do tych filtrów.",
+    oneItem: "1 materiał",
+    items: "Materiały: {count}",
+    loadMore: "Wczytaj więcej",
+    signUp: "Załóż konto, aby uzyskać dostęp",
+    openOn: "Otwórz na {site}",
+    anotherWebsite: "innej stronie",
+    open: "Otwórz",
+    types: {
+      guide: "Poradnik",
+      document: "Dokument",
+      video: "Film",
+      prep_pack: "Pakiet przygotowawczy",
+      class_pack: "Pakiet na lekcję",
+    },
+    audiences: {
+      all: "Wszyscy",
+      student: "Uczniowie",
+      parent: "Rodzice i opiekunowie",
+      teacher: "Nauczyciele i szkoły",
+    },
+    accessLevels: {
+      free: "Bezpłatne",
+      signup: "Z kontem",
+    },
+  },
+
+  nearYou: {
+    label: "Znajdź szkołę",
+    title: "Znajdź T-Levels w pobliżu",
+    lead: "Wpisz swój kod pocztowy, aby zobaczyć szkoły i college w pobliżu, które prowadzą T-Levels, od najbliższych.",
+    form: "Szukaj szkół z T-Levels",
+    postcode: "Kod pocztowy",
+    postcodeHint: "Na przykład SW1A 1AA.",
+    pathway: "Kierunek",
+    allPathways: "Wszystkie kierunki",
+    within: "W promieniu",
+    miles: "{miles} mil",
+    search: "Szukaj",
+    searching: "Szukanie",
+    error: "Nie udało się wyszukać szkół.",
+    tryAgain: "Spróbuj ponownie",
+    start: "Wpisz kod pocztowy, aby zobaczyć szkoły w pobliżu.",
+    none: "Brak szkół w promieniu {radius} mil od {postcode}. Spróbuj większego promienia.",
+    oneFound: "1 szkoła w promieniu {radius} mil od {postcode}.",
+    found: "Szkoły w promieniu {radius} mil od {postcode}: {count}.",
+    underTenth: "Mniej niż 0.1 mili",
+    oneMile: "1 mila",
+    distance: "{miles} mil",
+    pathways: "Kierunki",
+    askProvider: "Zapytaj szkołę",
+    website: "Odwiedź stronę",
+    errors: {
+      empty: "Wpisz kod pocztowy.",
+      notFull: "Wpisz pełny brytyjski kod pocztowy, na przykład SW1A 1AA.",
+    },
+  },
+
+  tLevelsPage: {
+    label: "Przedmioty",
+    title: "Wszystkie T-Levels",
+    lead: "{subjects} przedmiotów w {routes} dziedzinach, od rolnictwa po marketing. Dwa kolejne pojawią się we wrześniu 2028.",
+    onGovUk: ", na tlevels.gov.uk",
+    comingIn: "Od września {year}",
+    notes: {
+      financeEnds: "Ostatni nabór we wrześniu 2026",
+    },
+    pathwayResources: "Materiały: {pathway}",
+    nextLabel: "Dalej",
+    nextTitle: "Znajdź szkołę w pobliżu",
+    nextLead: "Nie każda szkoła czy college prowadzi każdy przedmiot.",
+    searchHere: "Szukaj według kodu pocztowego na tej stronie",
+    searchEngland: "Szukaj wśród wszystkich szkół w Anglii",
+  },
+
+  getInvolvedPage: {
+    label: "Dołącz",
+    title: "Twój następny krok",
+    lead: "Wybierz, kim jesteś.",
+    everyone: "Wszyscy",
+    audiences: {
+      students: {
+        heading: "Uczniowie",
+        lead: "W wieku od 16 do 18 lat albo kończysz GCSE.",
+      },
+      parents: {
+        heading: "Rodzice i opiekunowie",
+        lead: "Pomagasz komuś zdecydować, co po GCSE.",
+      },
+      teachers: {
+        heading: "Nauczyciele i szkoły",
+        lead: "Amazon organizuje praktyki ze szkołami i college, a nie bezpośrednio z uczniami.",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "Zobacz wszystkie przedmioty T-Level",
+        detail: "Wszystkie T-Levels",
+      },
+      nearYou: {
+        label: "Znajdź szkołę lub college w pobliżu",
+        detail: "Znajdź T-Levels w pobliżu",
+      },
+      interest: {
+        label: "Powiedz Amazonowi, że chcesz praktyki",
+        detail: "Zgłoś zainteresowanie",
+      },
+      quiz: {
+        label: "Sprawdź swoją wiedzę",
+        detail: "Quiz",
+      },
+      about: {
+        label: "Czym jest T-Level",
+        detail: "O T-Levels",
+      },
+      parentGuides: {
+        label: "Poradniki dla rodziców",
+        detail: "Materiały",
+      },
+      bursary: {
+        label: "Pomoc z dojazdami, książkami i sprzętem",
+        detail: "16 to 19 Bursary, gov.uk",
+      },
+      amazon: {
+        label: "Zapytaj Amazon o praktyki dla swoich uczniów",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "Pakiety na lekcje i poradniki dla nauczycieli",
+        detail: "Materiały",
+      },
+      guidance: {
+        label: "Co muszą obejmować praktyki",
+        detail: "Wytyczne dotyczące praktyk, gov.uk",
+      },
+      feedback: {
+        label: "Powiedz nam, co ulepszyłoby tę stronę",
+        detail: "Opinie",
+      },
     },
   },
 };

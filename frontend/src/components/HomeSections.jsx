@@ -7,14 +7,7 @@ import { AUDIENCES, CONTENT_TYPES, PATHWAY_NAMES } from "../labels.js";
 import { T_LEVEL_SUBJECTS } from "../tlevelSubjects.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
-import {
-  ArrowIcon,
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "./Icons.jsx";
+import { ArrowIcon, PATHWAY_ICONS } from "./Icons.jsx";
 
 // Homepage sections below the hero (see pages/Home.jsx), in page order.
 
@@ -170,14 +163,6 @@ export function AudienceCards({ selected, onSelect }) {
 /* ---------- Pathway tiles ---------- */
 
 // Each tile opens the resources page filtered to that pathway.
-const PATHWAYS = [
-  { slug: "digital", Icon: DigitalIcon },
-  { slug: "business", Icon: BusinessIcon },
-  { slug: "media", Icon: MediaIcon },
-  { slug: "finance", Icon: FinanceIcon },
-  { slug: "engineering", Icon: EngineeringIcon },
-];
-
 export function PathwayTiles() {
   const t = useT();
   return (
@@ -189,7 +174,7 @@ export function PathwayTiles() {
       </div>
 
       <ul className="pathway-grid">
-        {PATHWAYS.map(({ slug, Icon }) => (
+        {Object.entries(PATHWAY_ICONS).map(([slug, Icon]) => (
           <li key={slug}>
             <Link className="pathway-tile" to={`/resources?pathway=${slug}`}>
               <Icon />

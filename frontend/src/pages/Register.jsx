@@ -85,7 +85,7 @@ export default function Register() {
       await refresh();
       navigate("/", { replace: true });
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

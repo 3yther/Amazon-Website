@@ -1,4 +1,4 @@
-// Display text for the choice values defined in MODELS.md.
+// The choice values from MODELS.md with English labels. The translated words are in i18n/messages.
 
 export const CONTENT_TYPES = {
   guide: "Guide",
@@ -13,11 +13,6 @@ export const AUDIENCES = {
   student: "Students",
   parent: "Parents and guardians",
   teacher: "Teachers and schools",
-};
-
-export const ACCESS_LEVELS = {
-  free: "Free",
-  signup: "Sign-up",
 };
 
 // Account types offered at registration. Amazon staff accounts are made in

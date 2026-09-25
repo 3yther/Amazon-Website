@@ -16,7 +16,7 @@ const ur = {
       "اس صفحے کا ترجمہ مشین سے کیا گیا ہے ({language})، اس لیے کچھ الفاظ درست نہیں ہو سکتے۔ " +
       "انگریزی ورژن ہی معتبر ہے۔",
     showEnglish: "انگریزی میں پڑھیں",
-    englishOnly: "یہ صفحہ صرف انگریزی میں دستیاب ہے، تاکہ اس کے الفاظ بالکل درست رہیں۔",
+    englishOnly: "یہ صفحہ صرف انگریزی میں دستیاب ہے۔",
   },
 
   pathways: {
@@ -214,6 +214,7 @@ const ur = {
     error404: "خرابی 404",
     notFound: "صفحہ نہیں ملا",
     toLibrary: "مواد کی لائبریری پر جائیں",
+    loading: "لوڈ ہو رہا ہے",
   },
 
   titles: {
@@ -333,6 +334,8 @@ const ur = {
     hidePassword: "پاس ورڈ چھپائیں",
     showPassword: "پاس ورڈ دکھائیں",
     panelLine: "Amazon کے ڈیجیٹل T-Level راستے کے لیے مفت وسائل۔",
+    somethingWrong: "کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔",
+    noConnection: "سرور تک نہیں پہنچ سکے۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔",
   },
 
   register: {
@@ -1028,6 +1031,164 @@ const ur = {
       password: "پاس ورڈ",
       deactivating: "غیر فعال کیا جا رہا ہے",
       wrongPassword: "غلط پاس ورڈ۔",
+    },
+  },
+
+  resources: {
+    label: "وسائل",
+    title: "T-Level کے وسائل",
+    lead: "مفت گائیڈز، ویڈیوز اور پیک، gov.uk اور UCAS جیسے سرکاری ذرائع سے۔",
+    filters: "مواد فلٹر کریں",
+    pathway: "راستہ",
+    allPathways: "تمام راستے",
+    for: "کس کے لیے",
+    anyone: "کوئی بھی",
+    access: "رسائی",
+    any: "کوئی بھی",
+    clear: "فلٹر صاف کریں",
+    loadError: "مواد لوڈ نہیں ہو سکا۔",
+    serverError: "ہماری طرف کچھ غلط ہو گیا۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔",
+    tryAgain: "دوبارہ کوشش کریں",
+    loading: "لوڈ ہو رہا ہے",
+    noMatches: "ان فلٹرز سے کوئی مواد نہیں ملا۔",
+    oneItem: "1 چیز",
+    items: "{count} چیزیں",
+    loadMore: "مزید لوڈ کریں",
+    signUp: "رسائی کے لیے اکاؤنٹ بنائیں",
+    openOn: "{site} پر کھولیں",
+    anotherWebsite: "دوسری ویب سائٹ",
+    open: "کھولیں",
+    types: {
+      guide: "گائیڈ",
+      document: "دستاویز",
+      video: "ویڈیو",
+      prep_pack: "تیاری کا پیک",
+      class_pack: "کلاس پیک",
+    },
+    audiences: {
+      all: "سب",
+      student: "طلبہ",
+      parent: "والدین اور سرپرست",
+      teacher: "اساتذہ اور اسکول",
+    },
+    accessLevels: {
+      free: "مفت",
+      signup: "اکاؤنٹ کے ساتھ",
+    },
+  },
+
+  nearYou: {
+    label: "اسکول تلاش کریں",
+    title: "اپنے قریب T-Levels تلاش کریں",
+    lead: "اپنا پوسٹ کوڈ لکھیں اور اپنے قریب T-Levels پڑھانے والے اسکول اور کالج دیکھیں، سب سے قریب پہلے۔",
+    form: "T-Levels والے اسکول تلاش کریں",
+    postcode: "پوسٹ کوڈ",
+    postcodeHint: "مثلاً SW1A 1AA۔",
+    pathway: "راستہ",
+    allPathways: "تمام راستے",
+    within: "فاصلہ",
+    miles: "{miles} میل",
+    search: "تلاش کریں",
+    searching: "تلاش ہو رہی ہے",
+    error: "اسکولوں کی تلاش نہیں ہو سکی۔",
+    tryAgain: "دوبارہ کوشش کریں",
+    start: "اپنے قریب اسکول دیکھنے کے لیے پوسٹ کوڈ لکھیں۔",
+    none: "{postcode} سے {radius} میل کے اندر کوئی اسکول نہیں ملا۔ زیادہ فاصلہ آزمائیں۔",
+    oneFound: "{postcode} سے {radius} میل کے اندر 1 اسکول۔",
+    found: "{postcode} سے {radius} میل کے اندر {count} اسکول۔",
+    underTenth: "0.1 میل سے کم",
+    oneMile: "1 میل",
+    distance: "{miles} میل",
+    pathways: "راستے",
+    askProvider: "اسکول سے پوچھیں",
+    website: "ویب سائٹ دیکھیں",
+    errors: {
+      empty: "پوسٹ کوڈ لکھیں۔",
+      notFull: "برطانیہ کا پورا پوسٹ کوڈ لکھیں، مثلاً SW1A 1AA۔",
+    },
+  },
+
+  tLevelsPage: {
+    label: "مضامین",
+    title: "تمام T-Levels",
+    lead: "{routes} شعبوں میں {subjects} مضامین، زراعت سے مارکیٹنگ تک۔ ستمبر 2028 میں دو اور آئیں گے۔",
+    onGovUk: "، tlevels.gov.uk پر",
+    comingIn: "ستمبر {year} سے",
+    notes: {
+      financeEnds: "آخری داخلے ستمبر 2026 میں",
+    },
+    pathwayResources: "{pathway} کے وسائل",
+    nextLabel: "اگلا",
+    nextTitle: "اپنے قریب تلاش کریں",
+    nextLead: "ہر اسکول یا کالج ہر مضمون نہیں پڑھاتا۔",
+    searchHere: "اس سائٹ پر پوسٹ کوڈ سے تلاش کریں",
+    searchEngland: "انگلینڈ کے تمام اسکولوں میں تلاش کریں",
+  },
+
+  getInvolvedPage: {
+    label: "شامل ہوں",
+    title: "آپ کا اگلا قدم",
+    lead: "بتائیں آپ کون ہیں۔",
+    everyone: "سب",
+    audiences: {
+      students: {
+        heading: "طلبہ",
+        lead: "عمر 16 سے 18 سال، یا GCSE مکمل کر رہے ہیں۔",
+      },
+      parents: {
+        heading: "والدین اور سرپرست",
+        lead: "کسی کو GCSE کے بعد کا فیصلہ کرنے میں مدد کر رہے ہیں۔",
+      },
+      teachers: {
+        heading: "اساتذہ اور اسکول",
+        lead: "Amazon پلیسمنٹ اسکولوں اور کالجوں کے ساتھ طے کرتا ہے، براہ راست طلبہ کے ساتھ نہیں۔",
+      },
+    },
+    actions: {
+      subjects: {
+        label: "T-Level کے تمام مضامین دیکھیں",
+        detail: "تمام T-Levels",
+      },
+      nearYou: {
+        label: "اپنے قریب اسکول یا کالج تلاش کریں",
+        detail: "اپنے قریب T-Levels تلاش کریں",
+      },
+      interest: {
+        label: "Amazon کو بتائیں کہ آپ پلیسمنٹ چاہتے ہیں",
+        detail: "دلچسپی درج کریں",
+      },
+      quiz: {
+        label: "اپنی معلومات جانچیں",
+        detail: "کوئز",
+      },
+      about: {
+        label: "T-Level کیا ہے",
+        detail: "T-Levels کے بارے میں",
+      },
+      parentGuides: {
+        label: "والدین کے لیے لکھی گئی گائیڈز",
+        detail: "وسائل",
+      },
+      bursary: {
+        label: "سفر، کتابوں اور سامان میں مدد",
+        detail: "16 to 19 Bursary، gov.uk",
+      },
+      amazon: {
+        label: "اپنے طلبہ کی پلیسمنٹ کے بارے میں Amazon سے پوچھیں",
+        detail: "About Amazon UK",
+      },
+      classPacks: {
+        label: "کلاس پیک اور اساتذہ کی گائیڈز",
+        detail: "وسائل",
+      },
+      guidance: {
+        label: "پلیسمنٹ میں کیا ہونا ضروری ہے",
+        detail: "پلیسمنٹ کی رہنمائی، gov.uk",
+      },
+      feedback: {
+        label: "ہمیں بتائیں کہ یہ سائٹ کیسے بہتر ہو سکتی ہے",
+        detail: "رائے",
+      },
     },
   },
 };

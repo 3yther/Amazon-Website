@@ -74,7 +74,7 @@ export default function InterestForm({ startingPathway = "", onSent }) {
       await submitInterest(fields);
       onSent(PATHWAYS.find((item) => item.slug === fields.pathway));
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }

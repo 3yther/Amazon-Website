@@ -2,23 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSiteContent } from "../i18n/content.js";
 import { useT } from "../i18n/I18nProvider.jsx";
-import {
-  BusinessIcon,
-  DigitalIcon,
-  EngineeringIcon,
-  FinanceIcon,
-  MediaIcon,
-} from "./Icons.jsx";
-
-// The same pathway icons as the homepage tiles, so each subject always has
-// the same picture wherever it appears.
-const PATHWAY_ICONS = {
-  digital: DigitalIcon,
-  business: BusinessIcon,
-  media: MediaIcon,
-  finance: FinanceIcon,
-  engineering: EngineeringIcon,
-};
+import { PATHWAY_ICONS } from "./Icons.jsx";
 
 // Tabs for the five pathways. Uses the ARIA tabs pattern, and the arrow keys
 // move between tabs (only the selected tab has tabIndex 0).
@@ -134,7 +118,7 @@ export default function PathwaySwitcher() {
               >
                 {t("about.switcher.registerIn", { name: pathway.name })}
               </Link>
-              <Link className="button" to="/resources">
+              <Link className="button" to={`/resources?pathway=${pathway.slug}`}>
                 {t("home.browse")}
               </Link>
             </div>

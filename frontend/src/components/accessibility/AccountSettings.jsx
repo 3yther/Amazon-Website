@@ -45,7 +45,7 @@ export default function AccountSettings() {
       await refresh();
       setStatus("saved");
     } catch (error) {
-      setErrors(formErrors(error));
+      setErrors(formErrors(error, t));
       setStatus("idle");
     }
   }
@@ -76,7 +76,7 @@ export default function AccountSettings() {
       await refresh();
       navigate("/login", { replace: true });
     } catch (error) {
-      setDeactivateError(formErrors(error).form ?? t("settings.account.wrongPassword"));
+      setDeactivateError(formErrors(error, t).form ?? t("settings.account.wrongPassword"));
       setDeactivating(false);
     }
   }

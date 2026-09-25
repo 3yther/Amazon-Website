@@ -29,7 +29,7 @@ export default function Login() {
       await refresh();
       navigate("/", { replace: true });
     } catch (error) {
-      setErrors(formErrors(error)); // what the user typed stays in place
+      setErrors(formErrors(error, t)); // what the user typed stays in place
       setStatus("idle");
     }
   }
