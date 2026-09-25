@@ -8,7 +8,7 @@ Our website for the **Amazon Emerging Talent Digital T-Level project**. It expla
 ![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)
 ![Node](https://img.shields.io/badge/node-22%2B-339933?logo=node.js&logoColor=white)
 
-**Live preview:** https://frontend-production-2990.up.railway.app/ (temporary, on Railway)
+**Live preview:** https://tsmile.up.railway.app/ (temporary, on Railway)
 
 Read [`CONTEXT.md`](CONTEXT.md) (rules and conventions) and [`MODELS.md`](MODELS.md) (database) before changing anything.
 
