@@ -132,7 +132,7 @@ export default function SiteNav() {
           </nav>
 
           <div className="container menu-overlay__language">
-            <LanguagePicker variant="menu" />
+            <LanguagePicker />
           </div>
         </dialog>,
         document.body,

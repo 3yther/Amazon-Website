@@ -113,7 +113,9 @@ describe.each(OTHERS)("%s page copy", (code) => {
     const strip = (list) => JSON.stringify(list, (key, value) => (typeof value === "string" && !/^(icon|slug|value|to|href|number|points|id|year)$/.test(key) && key !== "" ? "" : value));
     for (const [module, lists] of Object.entries(ENGLISH_CONTENT)) {
       for (const [name, value] of Object.entries(lists)) {
-        if (Array.isArray(value)) expect(strip(merged[module][name]), `${module}.${name}`).toBe(strip(value));
+        if (value !== null && typeof value === "object") {
+          expect(strip(merged[module][name]), `${module}.${name}`).toBe(strip(value));
+        }
       }
     }
   });

@@ -8,7 +8,6 @@ import Footer from "./components/Footer.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
 import { useT } from "./i18n/I18nProvider.jsx";
-import LanguagePicker from "./i18n/LanguagePicker.jsx";
 import TranslationNotice from "./i18n/TranslationNotice.jsx";
 import About from "./pages/About.jsx";
 import Accessibility from "./pages/Accessibility.jsx";
@@ -73,10 +72,9 @@ export default function App() {
             </Link>
           </div>
 
-          {/* Third column, balancing the menu button on the left: the
-              language menu, then the account menu once someone is signed in. */}
+          {/* Third column, balancing the menu button on the left: the account
+              menu, which also holds the language menu. */}
           <div className="site-header__end">
-            <LanguagePicker variant="header" />
             <AccountDropdown />
           </div>
         </div>

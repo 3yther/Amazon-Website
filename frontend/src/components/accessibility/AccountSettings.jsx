@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { deactivateAccount, logout, updateProfile } from "../../api.js";
 import { useAuth } from "../../auth.jsx";
 import { formErrors } from "../../formErrors.js";
+import { useT } from "../../i18n/I18nProvider.jsx";
 import { FormError, TextField } from "../FormFields.jsx";
 
 function fieldsFrom(user) {
@@ -26,6 +27,7 @@ function fieldsFrom(user) {
  * since logging out costs nothing and needs no confirmation.
  */
 export default function AccountSettings() {
+  const t = useT();
   const { user, refresh } = useAuth();
   const navigate = useNavigate();
   const [fields, setFields] = useState(() => fieldsFrom(user));
@@ -84,26 +86,26 @@ export default function AccountSettings() {
       await refresh();
       navigate("/login", { replace: true });
     } catch (error) {
-      setDeactivateError(formErrors(error).form ?? "Incorrect password.");
+      setDeactivateError(formErrors(error).form ?? t("settings.account.wrongPassword"));
       setDeactivating(false);
     }
   }
 
   return (
     <div className="settings-section">
-      <p className="label">Account</p>
+      <p className="label">{t("settings.tabs.account")}</p>
 
       <form className="account-form" onSubmit={handleSave} noValidate>
         {errors.form && <FormError message={errors.form} />}
         {status === "saved" && (
           <div className="notice notice--success" role="status">
-            <p>Profile saved.</p>
+            <p>{t("settings.account.saved")}</p>
           </div>
         )}
 
         <TextField
           id="pref-first-name"
-          label="First name"
+          label={t("settings.account.firstName")}
           name="first_name"
           value={fields.first_name}
           onChange={updateField}
@@ -112,7 +114,7 @@ export default function AccountSettings() {
         />
         <TextField
           id="pref-last-name"
-          label="Last name"
+          label={t("settings.account.lastName")}
           name="last_name"
           value={fields.last_name}
           onChange={updateField}
@@ -121,7 +123,7 @@ export default function AccountSettings() {
         />
         <TextField
           id="pref-email"
-          label="Email"
+          label={t("settings.account.email")}
           name="email"
           type="email"
           value={fields.email}
@@ -131,7 +133,7 @@ export default function AccountSettings() {
         />
         <TextField
           id="pref-phone"
-          label="Phone"
+          label={t("settings.account.phone")}
           name="phone"
           type="tel"
           value={fields.phone}
@@ -142,7 +144,7 @@ export default function AccountSettings() {
 
         <div className="account-card__actions">
           <button type="submit" className="button button--primary" disabled={status === "saving"}>
-            {status === "saving" ? "Saving" : "Save"}
+            {status === "saving" ? t("settings.account.saving") : t("settings.account.save")}
           </button>
           <button
             type="button"
@@ -153,27 +155,24 @@ export default function AccountSettings() {
             }}
             disabled={status === "saving"}
           >
-            Cancel
+            {t("settings.account.cancel")}
           </button>
         </div>
       </form>
 
       <div className="settings-block">
-        <p className="label">Signing out</p>
-        <p>
-          Ends this session on this device. Your settings and your account stay exactly as
-          they are.
-        </p>
+        <p className="label">{t("settings.account.signingOutLabel")}</p>
+        <p>{t("settings.account.signingOutText")}</p>
         <button type="button" className="button" onClick={handleLogout} disabled={loggingOut}>
-          {loggingOut ? "Logging out" : "Log out"}
+          {loggingOut ? t("settings.account.loggingOut") : t("settings.account.logOut")}
         </button>
       </div>
 
       <div className="danger-zone">
-        <p className="label">Danger zone</p>
-        <p>Deactivating your account signs you out and disables sign-in until it is reactivated.</p>
+        <p className="label">{t("settings.account.dangerLabel")}</p>
+        <p>{t("settings.account.dangerText")}</p>
         <button type="button" className="button button--danger" onClick={() => setConfirmOpen(true)}>
-          Deactivate account
+          {t("settings.account.deactivate")}
         </button>
       </div>
 
@@ -186,14 +185,14 @@ export default function AccountSettings() {
             aria-labelledby="deactivate-title"
             onClick={(event) => event.stopPropagation()}
           >
-            <h2 id="deactivate-title">Deactivate account</h2>
-            <p>Enter your password to confirm. This signs you out immediately.</p>
+            <h2 id="deactivate-title">{t("settings.account.deactivate")}</h2>
+            <p>{t("settings.account.confirmText")}</p>
 
             <form onSubmit={handleDeactivate} noValidate>
               {deactivateError && <FormError message={deactivateError} />}
               <TextField
                 id="pref-deactivate-password"
-                label="Password"
+                label={t("settings.account.password")}
                 type="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
@@ -202,10 +201,10 @@ export default function AccountSettings() {
               />
               <div className="account-card__actions">
                 <button type="submit" className="button button--danger" disabled={deactivating}>
-                  {deactivating ? "Deactivating" : "Deactivate account"}
+                  {deactivating ? t("settings.account.deactivating") : t("settings.account.deactivate")}
                 </button>
                 <button type="button" className="button" onClick={closeConfirm}>
-                  Cancel
+                  {t("settings.account.cancel")}
                 </button>
               </div>
             </form>

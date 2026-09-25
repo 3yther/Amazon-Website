@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
+import LanguagePicker from "../i18n/LanguagePicker.jsx";
 import { PersonIcon } from "./Icons.jsx";
 
 // Same choices as labels.js USER_TYPES, plus the staff role that only exists
@@ -162,6 +163,13 @@ export default function AccountDropdown() {
               </>
             )}
           </ul>
+
+          {/* The language menu, for everyone, signed in or not. Outside the
+              list, because a menu may only hold menu items, and a <select>
+              is not one. The side menu has the same control. */}
+          <div className="dropdown-language">
+            <LanguagePicker variant="menu" />
+          </div>
         </div>
       )}
     </div>

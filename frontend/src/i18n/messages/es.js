@@ -79,7 +79,7 @@ const es = {
       browse: { title: "Ver recursos", text: "Guías, materiales y vídeos para los cinco itinerarios.", link: "Ver recursos" },
       register: { title: "Registra tu interés", text: "Dinos qué itinerario quieres explorar.", link: "Registrar interés" },
       hearBack: { title: "Recibe respuesta", text: "Revisamos cada solicitud y respondemos por correo electrónico." },
-      getInvolved: { title: "Participa", text: "Regístrate para abrir más recursos de tu itinerario.", link: "Registrarse" },
+      getInvolved: { title: "Participa", text: "Regístrate para preguntar y responder en la Comunidad y tener tus ajustes en cualquier dispositivo.", link: "Registrarse" },
     },
   },
 
@@ -287,7 +287,7 @@ const es = {
     signUp: "Registrarse",
     signInOrUp: "Inicia sesión o regístrate",
     notSignedIn: "No has iniciado sesión",
-    needAccount: "Algunos recursos necesitan una cuenta",
+    needAccount: "Regístrate para unirte a la Comunidad",
     roles: {
       student: "Estudiante",
       parent: "Madre, padre o tutor",
@@ -317,7 +317,7 @@ const es = {
   login: {
     label: "Cuenta",
     title: "Hola de nuevo",
-    lead: "Inicia sesión para abrir los recursos para usuarios registrados.",
+    lead: "Inicia sesión para unirte a la Comunidad y tener tus ajustes en cualquier dispositivo.",
     username: "Nombre de usuario",
     password: "Contraseña",
     submitting: "Iniciando sesión",
@@ -694,19 +694,18 @@ const es = {
       amazonPathways: "Esto es lo que Amazon ha dicho sobre cada itinerario:",
       pathwaysList: "Hay cinco itinerarios:",
       providerQuestions: "Buenas preguntas para hacer a un instituto o college:",
-      resources: "La página de Recursos tiene guías, materiales y vídeos. Algunos necesitan una cuenta gratuita para abrirse.",
+      resources: "La página de Recursos tiene guías, paquetes y vídeos, todos gratuitos.",
       quiz: "El test tiene preguntas rápidas sobre los T-Levels, y te ayudo con las que falles.",
       community:
         "En la Comunidad puedes hacer una pregunta y otros estudiantes, familias, docentes y personal de Amazon pueden responder. " +
         "Lo que yo no sepa es una buena pregunta para hacer allí.",
       account:
-        "Puedes navegar por la web y hablar conmigo sin cuenta. Una cuenta gratuita abre los recursos marcados para usuarios registrados " +
-        "y te permite preguntar y responder en la Comunidad.",
+        "Puedes navegar por la web, abrir todos los recursos y hablar conmigo sin cuenta. Una cuenta gratuita te permite preguntar y responder en la Comunidad y guarda tus ajustes en cualquier dispositivo.",
       contact: "Puedes contactar con el equipo de T-SMILE desde la página de Contacto.",
       accessibility:
         "Puedes cambiar el tamaño del texto, los colores, el modo oscuro, el movimiento y la lectura en voz alta en los ajustes de Accesibilidad.",
       language:
-        "¡Sí! Usa el menú del globo en la parte superior de la página o el del menú lateral. Hay diez idiomas para elegir.",
+        "¡Sí! Usa el menú de idioma que hay bajo el botón de la cuenta, arriba de la página, o el del menú lateral. Hay diez idiomas para elegir.",
       privacy:
         "Solo guardo las preguntas que tengo que consultar, para que podamos seguir donde lo dejamos. Lo que respondo yo solo, y cómo " +
         "te mueves por la web, se queda en tu navegador. La Política de privacidad tiene los detalles.",
@@ -850,6 +849,182 @@ const es = {
       areYouBot: "eres un robot, eres un bot, eres humano, eres una ia",
       whatCanYouDo: "qué puedes hacer, que puedes hacer, en qué me ayudas, en que me ayudas",
       joke: "chiste, chistes",
+    },
+  },
+
+  legalPage: {
+    updated: "Última actualización: {date}. Borrador, pendiente de revisión antes del lanzamiento.",
+  },
+
+  messageForm: {
+    about: "¿De qué se trata?",
+    email: "Correo electrónico (opcional)",
+    emailHint: "Añádelo si quieres una respuesta.",
+    sending: "Enviando",
+    empty: "Escribe primero un mensaje.",
+  },
+
+  contact: {
+    label: "Ayuda",
+    title: "Contacto",
+    leadBefore: "Envía un mensaje al equipo. ¿Algo no funciona? Usa la página",
+    leadLink: "Informar de un problema",
+    leadAfter: ".",
+    categories: {
+      general: "Una pregunta u otra cosa",
+      feature: "Una idea para la web",
+    },
+    message: "Tu mensaje",
+    submit: "Enviar mensaje",
+    sent: "Gracias, tu mensaje ha llegado al equipo.",
+  },
+
+  reportIssue: {
+    label: "Ayuda",
+    title: "Informar de un problema",
+    lead: "Cuéntanos qué ha fallado y en qué página estabas.",
+    categories: {
+      bug: "Algo no funciona",
+      accessibility: "Algo es difícil de usar o de leer",
+    },
+    message: "¿Qué ha pasado?",
+    submit: "Enviar informe",
+    sent: "Gracias, tenemos tu informe y lo revisaremos.",
+  },
+
+  feedbackPage: {
+    label: "Comentarios",
+    title: "Comentarios",
+    lead: "Cuéntanos qué funciona y qué no.",
+    category: "Categoría",
+    categories: {
+      bug: "Informe de error",
+      feature: "Sugerencia de función",
+      general: "Comentario general",
+      accessibility: "Problema de accesibilidad",
+    },
+    message: "Mensaje",
+    email: "Correo electrónico (opcional)",
+    emailHint: "Para poder responderte, si quieres.",
+    sending: "Enviando",
+    submit: "Enviar comentario",
+    thanksTitle: "Gracias",
+    thanksLead: "Leemos todos los mensajes. Gracias por dedicarnos tu tiempo.",
+  },
+
+  accessibilityHelp: {
+    label: "Ayuda",
+    title: "Ayuda de accesibilidad",
+    lead: "Intentamos cumplir WCAG 2.2 AA, el estándar de las webs accesibles.",
+    waysTitle: "Usa la web a tu manera",
+    ways: {
+      settings: "Cambia el tamaño del texto, el contraste, el espaciado y los colores en los ajustes de accesibilidad.",
+      keyboard: "Todo funciona con el teclado. Tab para moverte, Intro para elegir.",
+      skip: "Pulsa Tab una vez en cualquier página para ir directamente al contenido principal.",
+      screenReaders: "Las páginas están hechas para funcionar con lectores de pantalla como NVDA y VoiceOver.",
+      motion: "Los textos en movimiento y las animaciones se detienen si tu dispositivo está configurado para reducir el movimiento.",
+      speech: "Smiley puede leer sus respuestas en voz alta. Actívalo en los ajustes de accesibilidad.",
+    },
+    openSettings: "Abrir los ajustes de accesibilidad",
+    problemTitle: "¿Algo no te funciona?",
+    problemLead: "Dinos qué página y qué te lo impidió, y lo arreglaremos.",
+    report: "Informar de un problema de accesibilidad",
+  },
+
+  settings: {
+    label: "Ajustes",
+    title: "Accesibilidad",
+    lead: "Cambia cómo se ve y cómo funciona T-SMILE para ti. Con la sesión iniciada, estos ajustes te siguen en cualquier dispositivo; sin sesión, se quedan en este navegador.",
+    signInPrompt: "Inicia sesión para gestionar esto.",
+    tabs: {
+      sightLoss: "Vista",
+      display: "Apariencia",
+      language: "Idioma",
+      security: "Seguridad",
+      account: "Cuenta",
+    },
+    sight: {
+      fontSize: "Tamaño de letra",
+      highContrast: "Alto contraste",
+      textSpacing: "Espaciado del texto",
+      spacing: {
+        normal: "Normal",
+        comfortable: "Cómodo",
+        relaxed: "Amplio",
+        wide: "Muy amplio",
+      },
+      colourBlindness: "Tipo de daltonismo",
+      colourBlindnessHint: "Dinos cómo ves los colores y la web ajusta los suyos, para que los tonos que te parecerían iguales se distingan.",
+      colours: {
+        none: "Ninguno",
+        protanopia: "Protanopía (sin rojo)",
+        deuteranopia: "Deuteranopía (sin verde)",
+        tritanopia: "Tritanopía (sin azul)",
+      },
+      speech: "Leer en voz alta las respuestas del asistente",
+      speechHint: "Solo lee las respuestas de Smiley, con una voz de este dispositivo. El resto de la página todavía no se lee en voz alta.",
+      reduceMotion: "Reducir el movimiento",
+      reduceMotionHint: "Desactiva las animaciones de la web, además del ajuste de tu sistema.",
+    },
+    display: {
+      theme: "Tema",
+      themes: {
+        light: "Claro",
+        dark: "Oscuro",
+        system: "Igual que el sistema",
+      },
+      outline: "Estilo del contorno de foco",
+      outlines: {
+        default: "Predeterminado",
+        thick: "Grueso",
+        dashed: "Discontinuo",
+      },
+      background: "Fondo de la página",
+      backgrounds: {
+        white: "Blanco",
+        cream: "Crema",
+        gray: "Gris",
+      },
+    },
+    security: {
+      lastChanged: "Contraseña cambiada por última vez el {date}.",
+      changed: "Contraseña cambiada.",
+      current: "Contraseña actual",
+      new: "Contraseña nueva",
+      strength: "Seguridad: {level}",
+      strengths: {
+        veryWeak: "Muy débil",
+        weak: "Débil",
+        fair: "Aceptable",
+        good: "Buena",
+        strong: "Fuerte",
+        veryStrong: "Muy fuerte",
+      },
+      minLength: "Al menos 8 caracteres.",
+      confirm: "Confirma la contraseña nueva",
+      saving: "Guardando",
+      submit: "Cambiar contraseña",
+    },
+    account: {
+      saved: "Perfil guardado.",
+      firstName: "Nombre",
+      lastName: "Apellidos",
+      email: "Correo electrónico",
+      phone: "Teléfono",
+      saving: "Guardando",
+      save: "Guardar",
+      cancel: "Cancelar",
+      signingOutLabel: "Cerrar sesión",
+      signingOutText: "Termina esta sesión en este dispositivo. Tus ajustes y tu cuenta se quedan exactamente como están.",
+      loggingOut: "Cerrando sesión",
+      logOut: "Cerrar sesión",
+      dangerLabel: "Zona de peligro",
+      dangerText: "Desactivar tu cuenta cierra tu sesión y bloquea el inicio de sesión hasta que se reactive.",
+      deactivate: "Desactivar la cuenta",
+      confirmText: "Escribe tu contraseña para confirmar. Tu sesión se cerrará al momento.",
+      password: "Contraseña",
+      deactivating: "Desactivando",
+      wrongPassword: "Contraseña incorrecta.",
     },
   },
 };

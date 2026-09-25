@@ -79,7 +79,7 @@ const ro = {
       browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
       register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
       hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },
-      getInvolved: { title: "Implică-te", text: "Creează un cont ca să deschizi mai multe resurse pentru parcursul tău.", link: "Creează cont" },
+      getInvolved: { title: "Implică-te", text: "Creează un cont ca să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.", link: "Creează cont" },
     },
   },
 
@@ -287,7 +287,7 @@ const ro = {
     signUp: "Creează cont",
     signInOrUp: "Autentifică-te sau creează un cont",
     notSignedIn: "Nu ești autentificat",
-    needAccount: "Unele resurse au nevoie de un cont",
+    needAccount: "Creează un cont ca să intri în Comunitate",
     roles: {
       student: "Elev",
       parent: "Părinte sau tutore",
@@ -317,7 +317,7 @@ const ro = {
   login: {
     label: "Cont",
     title: "Bine ai revenit",
-    lead: "Autentifică-te ca să deschizi resursele pentru utilizatori înregistrați.",
+    lead: "Autentifică-te ca să intri în Comunitate și să îți păstrezi setările pe orice dispozitiv.",
     username: "Nume de utilizator",
     password: "Parolă",
     submitting: "Se autentifică",
@@ -694,19 +694,18 @@ const ro = {
       amazonPathways: "Iată ce a spus Amazon despre fiecare parcurs:",
       pathwaysList: "Există cinci parcursuri:",
       providerQuestions: "Întrebări bune pentru o școală sau un colegiu:",
-      resources: "Pagina Resurse are ghiduri, pachete și videoclipuri. Unele au nevoie de un cont gratuit ca să se deschidă.",
+      resources: "Pagina Resurse are ghiduri, pachete și videoclipuri, toate gratuite.",
       quiz: "Chestionarul are întrebări scurte despre T-Levels, iar eu te ajut cu cele greșite.",
       community:
         "În Comunitate poți pune o întrebare, iar alți elevi, părinți, profesori și angajați Amazon pot răspunde. " +
         "Tot ce nu știu eu merită întrebat acolo.",
       account:
-        "Poți naviga pe site și vorbi cu mine fără cont. Un cont gratuit deschide resursele marcate pentru utilizatori înregistrați " +
-        "și îți permite să întrebi și să răspunzi în Comunitate.",
+        "Poți naviga pe site, poți deschide orice resursă și poți vorbi cu mine fără cont. Un cont gratuit îți permite să pui întrebări și să răspunzi în Comunitate și îți păstrează setările pe orice dispozitiv.",
       contact: "Poți lua legătura cu echipa T-SMILE prin pagina de Contact.",
       accessibility:
         "Poți schimba mărimea textului, culorile, modul întunecat, animațiile și citirea cu voce tare din setările de Accesibilitate.",
       language:
-        "Da! Folosește meniul cu globul din partea de sus a paginii sau pe cel din meniul lateral. Poți alege dintre zece limbi.",
+        "Da! Folosește meniul de limbă de sub butonul contului, sus pe pagină, sau pe cel din meniul lateral. Poți alege dintre zece limbi.",
       privacy:
         "Salvez doar întrebările pe care trebuie să le caut, ca să putem continua de unde am rămas. Ce răspund singur și felul în care " +
         "te miști pe site rămân în browserul tău. Politica de confidențialitate are detaliile.",
@@ -850,6 +849,182 @@ const ro = {
       areYouBot: "ești robot, esti robot, ești bot, ești om, ești ai",
       whatCanYouDo: "ce poți face, ce poti face, cu ce mă ajuți",
       joke: "glumă, gluma, banc, bancuri",
+    },
+  },
+
+  legalPage: {
+    updated: "Ultima actualizare: {date}. Versiune de lucru, de verificat înainte de lansare.",
+  },
+
+  messageForm: {
+    about: "Despre ce este vorba?",
+    email: "Email (opțional)",
+    emailHint: "Adaugă-l dacă vrei un răspuns.",
+    sending: "Se trimite",
+    empty: "Scrie mai întâi un mesaj.",
+  },
+
+  contact: {
+    label: "Asistență",
+    title: "Contact",
+    leadBefore: "Trimite un mesaj echipei. Ceva nu merge? Folosește pagina",
+    leadLink: "Raportează o problemă",
+    leadAfter: ".",
+    categories: {
+      general: "O întrebare sau altceva",
+      feature: "O idee pentru site",
+    },
+    message: "Mesajul tău",
+    submit: "Trimite mesajul",
+    sent: "Mulțumim, mesajul tău a ajuns la echipă.",
+  },
+
+  reportIssue: {
+    label: "Asistență",
+    title: "Raportează o problemă",
+    lead: "Spune-ne ce nu a mers și pe ce pagină erai.",
+    categories: {
+      bug: "Ceva nu funcționează",
+      accessibility: "Ceva e greu de folosit sau de citit",
+    },
+    message: "Ce s-a întâmplat?",
+    submit: "Trimite raportul",
+    sent: "Mulțumim, am primit raportul tău și ne vom uita la el.",
+  },
+
+  feedbackPage: {
+    label: "Păreri",
+    title: "Păreri",
+    lead: "Spune-ne ce merge bine și ce nu.",
+    category: "Categorie",
+    categories: {
+      bug: "Raportare de eroare",
+      feature: "Sugestie de funcție",
+      general: "Părere generală",
+      accessibility: "Problemă de accesibilitate",
+    },
+    message: "Mesaj",
+    email: "Email (opțional)",
+    emailHint: "Ca să îți putem răspunde, dacă vrei.",
+    sending: "Se trimite",
+    submit: "Trimite părerea",
+    thanksTitle: "Mulțumim",
+    thanksLead: "Citim fiecare mesaj. Mulțumim că ți-ai făcut timp.",
+  },
+
+  accessibilityHelp: {
+    label: "Asistență",
+    title: "Ajutor pentru accesibilitate",
+    lead: "Ne propunem să respectăm WCAG 2.2 AA, standardul pentru site-uri accesibile.",
+    waysTitle: "Folosește site-ul în felul tău",
+    ways: {
+      settings: "Schimbă mărimea textului, contrastul, spațierea și culorile din setările de accesibilitate.",
+      keyboard: "Totul funcționează cu tastatura. Apasă Tab ca să te muți, Enter ca să alegi.",
+      skip: "Apasă Tab o dată pe orice pagină ca să sari direct la conținutul principal.",
+      screenReaders: "Paginile sunt făcute să funcționeze cu cititoare de ecran precum NVDA și VoiceOver.",
+      motion: "Textele în mișcare și animațiile se opresc dacă dispozitivul tău e setat să reducă mișcarea.",
+      speech: "Smiley își poate citi răspunsurile cu voce tare. Pornește asta din setările de accesibilitate.",
+    },
+    openSettings: "Deschide setările de accesibilitate",
+    problemTitle: "Ceva nu merge pentru tine?",
+    problemLead: "Spune-ne ce pagină și ce te-a încurcat, și o reparăm.",
+    report: "Raportează o problemă de accesibilitate",
+  },
+
+  settings: {
+    label: "Setări",
+    title: "Accesibilitate",
+    lead: "Schimbă cum arată și cum se comportă T-SMILE pentru tine. Când ești autentificat, setările te urmează pe orice dispozitiv; altfel, rămân în acest browser.",
+    signInPrompt: "Autentifică-te ca să gestionezi asta.",
+    tabs: {
+      sightLoss: "Vedere",
+      display: "Afișare",
+      language: "Limbă",
+      security: "Securitate",
+      account: "Cont",
+    },
+    sight: {
+      fontSize: "Mărimea fontului",
+      highContrast: "Contrast ridicat",
+      textSpacing: "Spațierea textului",
+      spacing: {
+        normal: "Normală",
+        comfortable: "Confortabilă",
+        relaxed: "Aerisită",
+        wide: "Largă",
+      },
+      colourBlindness: "Tipul de daltonism",
+      colourBlindnessHint: "Spune-ne cum vezi culorile și site-ul își ajustează culorile, astfel încât nuanțele care ți s-ar părea la fel să fie separate.",
+      colours: {
+        none: "Niciunul",
+        protanopia: "Protanopie (fără roșu)",
+        deuteranopia: "Deuteranopie (fără verde)",
+        tritanopia: "Tritanopie (fără albastru)",
+      },
+      speech: "Citește cu voce tare răspunsurile asistentului",
+      speechHint: "Citește doar răspunsurile lui Smiley, cu o voce de pe acest dispozitiv. Restul paginii nu este încă citit cu voce tare.",
+      reduceMotion: "Reduce mișcarea",
+      reduceMotionHint: "Oprește animațiile site-ului, pe lângă setarea sistemului tău.",
+    },
+    display: {
+      theme: "Temă",
+      themes: {
+        light: "Luminoasă",
+        dark: "Întunecată",
+        system: "Ca sistemul",
+      },
+      outline: "Stilul conturului de focus",
+      outlines: {
+        default: "Implicit",
+        thick: "Gros",
+        dashed: "Întrerupt",
+      },
+      background: "Fundalul paginii",
+      backgrounds: {
+        white: "Alb",
+        cream: "Crem",
+        gray: "Gri",
+      },
+    },
+    security: {
+      lastChanged: "Parola a fost schimbată ultima dată pe {date}.",
+      changed: "Parola a fost schimbată.",
+      current: "Parola actuală",
+      new: "Parola nouă",
+      strength: "Putere: {level}",
+      strengths: {
+        veryWeak: "Foarte slabă",
+        weak: "Slabă",
+        fair: "Acceptabilă",
+        good: "Bună",
+        strong: "Puternică",
+        veryStrong: "Foarte puternică",
+      },
+      minLength: "Cel puțin 8 caractere.",
+      confirm: "Confirmă parola nouă",
+      saving: "Se salvează",
+      submit: "Schimbă parola",
+    },
+    account: {
+      saved: "Profil salvat.",
+      firstName: "Prenume",
+      lastName: "Nume",
+      email: "Email",
+      phone: "Telefon",
+      saving: "Se salvează",
+      save: "Salvează",
+      cancel: "Anulează",
+      signingOutLabel: "Deconectare",
+      signingOutText: "Încheie sesiunea pe acest dispozitiv. Setările și contul tău rămân exact cum sunt.",
+      loggingOut: "Se deconectează",
+      logOut: "Deconectează-te",
+      dangerLabel: "Zonă de pericol",
+      dangerText: "Dezactivarea contului te deconectează și blochează autentificarea până când contul este reactivat.",
+      deactivate: "Dezactivează contul",
+      confirmText: "Introdu parola ca să confirmi. Vei fi deconectat imediat.",
+      password: "Parolă",
+      deactivating: "Se dezactivează",
+      wrongPassword: "Parolă greșită.",
     },
   },
 };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { submitFeedback } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { FormError, SelectField, TextareaField, TextField } from "./FormFields.jsx";
 
 // A short message form for the Contact us and Report an Issue pages. Both send
@@ -14,9 +15,11 @@ import { FormError, SelectField, TextareaField, TextField } from "./FormFields.j
 
 /**
  * categories: [{ value, label }], values from the backend's Feedback.Category
- * (bug, feature, general, accessibility).
+ * (bug, feature, general, accessibility). The page passes every label already
+ * translated; the form's own words are in i18n/messages (messageForm).
  */
 export default function MessageForm({ idPrefix, categories, messageLabel, submitLabel, sentText }) {
+  const t = useT();
   // Nobody signed in (or no sign-in check yet) just means no email to prefill.
   const user = useAuth()?.user;
   const [fields, setFields] = useState(() => ({
@@ -38,7 +41,7 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
     // Checked here as well as on the server, so the most common mistake gets
     // an answer straight away.
     if (!fields.message.trim()) {
-      setErrors({ message: "Write a message first." });
+      setErrors({ message: t("messageForm.empty") });
       return;
     }
 
@@ -68,7 +71,7 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
       {categories.length > 1 && (
         <SelectField
           id={`${idPrefix}-category`}
-          label="What is it about?"
+          label={t("messageForm.about")}
           name="category"
           value={fields.category}
           onChange={updateField}
@@ -94,10 +97,10 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
 
       <TextField
         id={`${idPrefix}-email`}
-        label="Email (optional)"
+        label={t("messageForm.email")}
         name="email"
         type="email"
-        hint="Add it if you want a reply."
+        hint={t("messageForm.emailHint")}
         value={fields.email}
         onChange={updateField}
         autoComplete="email"
@@ -105,7 +108,7 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
       />
 
       <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-        {status === "submitting" ? "Sending" : submitLabel}
+        {status === "submitting" ? t("messageForm.sending") : submitLabel}
       </button>
     </form>
   );

@@ -232,7 +232,7 @@ export const FAQS = [
     id: "placement",
     question: "How long is the industry placement?",
     answer:
-      "At least 315 hours, roughly 45 days. It can be one or two days a week, a full-time block, or a mix. Amazon runs its placements as a nine week block.",
+      "At least 315 hours, roughly 45 days. It can be one or two days a week, a full-time block, or a mix. Amazon runs its placements as a nine week block. The Early Years Educator specialism needs 750 hours instead.",
   },
   {
     id: "paid",
