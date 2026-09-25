@@ -2,16 +2,23 @@ import { useLayoutEffect } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import amazonLogo from "./assets/amazon-wordmark.png";
 import ChatWidget from "./assistant/ChatWidget.jsx";
+import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
 import Footer from "./components/Footer.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
+import { useT } from "./i18n/I18nProvider.jsx";
+import LanguagePicker from "./i18n/LanguagePicker.jsx";
+import TranslationNotice from "./i18n/TranslationNotice.jsx";
 import About from "./pages/About.jsx";
 import Accessibility from "./pages/Accessibility.jsx";
 import AccessibilityHelp from "./pages/AccessibilityHelp.jsx";
 import Contact from "./pages/Contact.jsx";
 import Cookies from "./pages/Cookies.jsx";
 import DataRights from "./pages/DataRights.jsx";
+import Community from "./pages/Community.jsx";
+import CommunityAsk from "./pages/CommunityAsk.jsx";
+import CommunityQuestion from "./pages/CommunityQuestion.jsx";
 import Faqs from "./pages/Faqs.jsx";
 import Feedback from "./pages/Feedback.jsx";
 import GetInvolved from "./pages/GetInvolved.jsx";
@@ -35,6 +42,7 @@ import TLevelsAtAmazon from "./pages/TLevelsAtAmazon.jsx";
 // from the current route, and each route sets its own browser tab title.
 export default function App() {
   const { pathname } = useLocation();
+  const t = useT();
 
   // Start each new page at the top, as a normal page load would. Runs before
   // the pages' own effects, so a page can still choose where to scroll.
@@ -45,7 +53,7 @@ export default function App() {
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to content
+        {t("shell.skip")}
       </a>
 
       <header className="site-header">
@@ -58,16 +66,21 @@ export default function App() {
             {/* Approved logo file, used unaltered: transparent, sitting
                 straight on the dark header. */}
             <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
-            <Link className="wordmark" to="/">
+            <Link className="wordmark" to="/" onClick={countWordmarkClick}>
               T-<span className="wordmark__accent">SMILE</span>
             </Link>
           </div>
 
-          {/* Third column, balancing the menu button on the left. Empty until
-              someone is signed in, when it shows the account menu. */}
-          <AccountDropdown />
+          {/* Third column, balancing the menu button on the left: the
+              language menu, then the account menu once someone is signed in. */}
+          <div className="site-header__end">
+            <LanguagePicker variant="header" />
+            <AccountDropdown />
+          </div>
         </div>
       </header>
+
+      <TranslationNotice pathname={pathname} />
 
       <main id="main" className="container" tabIndex={-1}>
         <Routes>
@@ -83,6 +96,10 @@ export default function App() {
           <Route path="/register-interest" element={<PageTitle title="Register interest"><RegisterInterest /></PageTitle>} />
           <Route path="/pathways" element={<PageTitle title="Learning Pathways"><Pathways /></PageTitle>} />
           <Route path="/faqs" element={<PageTitle title="FAQs"><Faqs /></PageTitle>} />
+          {/* "ask" before ":id", so /community/ask is never read as a question number. */}
+          <Route path="/community" element={<PageTitle title="Community"><Community /></PageTitle>} />
+          <Route path="/community/ask" element={<PageTitle title="Ask the Community"><CommunityAsk /></PageTitle>} />
+          <Route path="/community/:id" element={<PageTitle title="Community question"><CommunityQuestion /></PageTitle>} />
           <Route path="/register" element={<PageTitle title="Sign up"><Register /></PageTitle>} />
           <Route path="/login" element={<PageTitle title="Login"><Login /></PageTitle>} />
           {/* Linked from the footer. */}
@@ -113,13 +130,27 @@ export default function App() {
   );
 }
 
+// An easter egg: click the T-SMILE name five times quickly and Smiley says
+// hello. Each click still goes home as normal.
+let wordmarkClicks = [];
+
+function countWordmarkClick() {
+  const now = Date.now();
+  wordmarkClicks = [...wordmarkClicks.filter((time) => now - time < 2500), now];
+  if (wordmarkClicks.length >= 5) {
+    wordmarkClicks = [];
+    reportEasterEgg("wordmark");
+  }
+}
+
 function NotFound() {
+  const t = useT();
   return (
     <section className="intro" aria-labelledby="page-title">
-      <p className="label">Error 404</p>
-      <h1 id="page-title">Page not found</h1>
+      <p className="label">{t("shell.error404")}</p>
+      <h1 id="page-title">{t("shell.notFound")}</h1>
       <p className="lead">
-        <Link to="/resources">Go to the content library</Link>
+        <Link to="/resources">{t("shell.toLibrary")}</Link>
       </p>
     </section>
   );

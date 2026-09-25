@@ -6,6 +6,7 @@ import { formErrors } from "../formErrors.js";
 import { PATHWAY_NAMES, USER_TYPES } from "../labels.js";
 import AuthPanel from "../components/AuthPanel.jsx";
 import { CheckboxField, FormError, SelectField, TextField } from "../components/FormFields.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 // Exactly the fields RegisterSerializer accepts. Everything else on this form
 // is kept out of here, so it cannot end up in the request.
@@ -19,25 +20,19 @@ const EMPTY_FIELDS = {
 
 // Front end only for now: the backend has no column for this, so it is not
 // sent anywhere. Values are ready for a field to be added later.
-const HEARD_ABOUT_OPTIONS = [
-  { value: "search_engine", label: "Search engine" },
-  { value: "social_media", label: "Social media" },
-  { value: "friend_family", label: "Friend or family" },
-  { value: "advert", label: "Advert" },
-  { value: "influencer", label: "Influencer" },
-  { value: "ai", label: "AI" },
-  { value: "other", label: "Other" },
-];
+// The words for each are under register.heardAbout in the language files.
+const HEARD_ABOUT_OPTIONS = ["search_engine", "social_media", "friend_family", "advert", "influencer", "ai", "other"];
 
 // Both tick boxes are a condition of signing up, checked here and never sent:
 // the age one is a yes or no confirmation, not a date of birth, and neither
 // has anywhere to be stored.
 const CONFIRMATION_ERRORS = {
-  over_sixteen: "Confirm you are 16 or over to create an account.",
-  terms: "Agree to the Terms and Conditions to create an account.",
+  over_sixteen: "register.errors.overSixteen",
+  terms: "register.errors.terms",
 };
 
 export default function Register() {
+  const t = useT();
   const navigate = useNavigate();
   const { refresh } = useAuth();
   const [fields, setFields] = useState(EMPTY_FIELDS);
@@ -70,7 +65,7 @@ export default function Register() {
     // beside itself, and the first lands the cursor, so it is easy to find.
     const missing = {};
     for (const name of ["over_sixteen", "terms"]) {
-      if (!confirmed[name]) missing[name] = CONFIRMATION_ERRORS[name];
+      if (!confirmed[name]) missing[name] = t(CONFIRMATION_ERRORS[name]);
     }
     if (Object.keys(missing).length > 0) {
       setErrors(missing);
@@ -104,9 +99,9 @@ export default function Register() {
       <div className="auth-side">
         <div className="auth-form" aria-labelledby="page-title">
           <div className="auth-heading">
-            <p className="label">Account</p>
-            <h1 id="page-title">Create your account</h1>
-            <p className="lead">It takes a minute, and it is free.</p>
+            <p className="label">{t("login.label")}</p>
+            <h1 id="page-title">{t("register.title")}</h1>
+            <p className="lead">{t("register.lead")}</p>
           </div>
 
         <form className="account-form" onSubmit={handleSubmit} noValidate>
@@ -114,9 +109,9 @@ export default function Register() {
 
           <TextField
             id="register-username"
-            label="Username"
+            label={t("login.username")}
             name="username"
-            hint="Letters, numbers and @ . + - _ only."
+            hint={t("register.usernameHint")}
             value={fields.username}
             onChange={updateField}
             autoComplete="username"
@@ -125,10 +120,10 @@ export default function Register() {
           />
           <TextField
             id="register-password"
-            label="Password"
+            label={t("login.password")}
             name="password"
             type="password"
-            hint="At least 8 characters. Not all numbers, not a common password."
+            hint={t("register.passwordHint")}
             value={fields.password}
             onChange={updateField}
             autoComplete="new-password"
@@ -137,7 +132,7 @@ export default function Register() {
           />
           <TextField
             id="register-password-confirm"
-            label="Confirm password"
+            label={t("register.confirmPassword")}
             name="password_confirm"
             type="password"
             value={fields.password_confirm}
@@ -148,47 +143,47 @@ export default function Register() {
           />
           <SelectField
             id="register-user-type"
-            label="Account type"
+            label={t("register.accountType")}
             name="user_type"
             value={fields.user_type}
             onChange={updateField}
             required
             error={errors.user_type}
           >
-            <option value="">Choose one</option>
-            {Object.entries(USER_TYPES).map(([value, label]) => (
+            <option value="">{t("register.chooseOne")}</option>
+            {Object.keys(USER_TYPES).map((value) => (
               <option key={value} value={value}>
-                {label}
+                {t(`account.roles.${value}`)}
               </option>
             ))}
           </SelectField>
           <SelectField
             id="register-pathway"
-            label="Pathway (optional)"
+            label={t("register.pathway")}
             name="pathway_interest"
             value={fields.pathway_interest}
             onChange={updateField}
             error={errors.pathway_interest}
           >
-            <option value="">No preference</option>
+            <option value="">{t("register.noPreference")}</option>
             {PATHWAY_NAMES.map((name) => (
               <option key={name} value={name}>
-                {name}
+                {t(`pathways.${name.toLowerCase()}`)}
               </option>
             ))}
           </SelectField>
 
           <SelectField
             id="register-heard-about"
-            label="Where did you hear about us? (optional)"
+            label={t("register.heardAboutLabel")}
             name="heard_about"
             value={heardAbout}
             onChange={(event) => setHeardAbout(event.target.value)}
           >
-            <option value="">Choose one</option>
-            {HEARD_ABOUT_OPTIONS.map(({ value, label }) => (
+            <option value="">{t("register.chooseOne")}</option>
+            {HEARD_ABOUT_OPTIONS.map((value) => (
               <option key={value} value={value}>
-                {label}
+                {t(`register.heardAbout.${value}`)}
               </option>
             ))}
           </SelectField>
@@ -197,7 +192,7 @@ export default function Register() {
             id="register-over-sixteen"
             name="over_sixteen"
             ref={overSixteenBox}
-            label="I confirm I am 16 or over."
+            label={t("register.overSixteen")}
             required
             checked={confirmed.over_sixteen}
             onChange={updateConfirmation}
@@ -209,12 +204,12 @@ export default function Register() {
             ref={termsBox}
             label={
               <>
-                I have read and agree to the{" "}
+                {t("register.termsBefore")}{" "}
                 <Link to="/terms" target="_blank" rel="noopener noreferrer">
-                  Terms and Conditions
-                  <span className="sr-only"> (opens in a new tab)</span>
+                  {t("register.termsLink")}
+                  <span className="sr-only"> {t("register.newTab")}</span>
                 </Link>
-                .
+                {t("register.termsAfter")}
               </>
             }
             required
@@ -224,12 +219,12 @@ export default function Register() {
           />
 
           <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-            {status === "submitting" ? "Signing up" : "Sign up"}
+            {status === "submitting" ? t("register.submitting") : t("register.submit")}
           </button>
         </form>
 
           <p className="account-switch">
-            Already registered? <Link to="/login">Log in</Link>
+            {t("register.haveAccount")} <Link to="/login">{t("login.submit")}</Link>
           </p>
         </div>
       </div>

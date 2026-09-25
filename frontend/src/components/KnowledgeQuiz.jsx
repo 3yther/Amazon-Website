@@ -4,6 +4,7 @@ import {
   reportIncorrectAnswer,
   reportQuizFinished,
 } from "../assistant/assistantBus.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 import { KNOWLEDGE_QUESTIONS } from "../knowledgeQuizQuestions.js";
 import "./knowledgeQuiz.css";
 
@@ -51,6 +52,7 @@ export default function KnowledgeQuiz({
   onCorrectAnswer = reportCorrectAnswer,
   onFinish = reportQuizFinished,
 }) {
+  const t = useT();
   const groupId = useId();
   const [index, setIndex] = useState(0);
   const [chosen, setChosen] = useState(null);
@@ -114,14 +116,11 @@ export default function KnowledgeQuiz({
   if (done) {
     return (
       <section className="knowledge-quiz" aria-labelledby="knowledge-quiz-title">
-        <p className="label">Knowledge check</p>
-        <h2 id="knowledge-quiz-title">You scored {score} out of {questions.length}</h2>
-        <p className="knowledge-quiz__lead">
-          Anything you are not sure about, ask Smiley in the corner. It will tell you
-          if it does not know.
-        </p>
+        <p className="label">{t("quiz.label")}</p>
+        <h2 id="knowledge-quiz-title">{t("quiz.scored", { score, total: questions.length })}</h2>
+        <p className="knowledge-quiz__lead">{t("quiz.doneLead")}</p>
         <button type="button" className="button" onClick={startAgain}>
-          Start again
+          {t("about.quiz.startAgain")}
         </button>
       </section>
     );
@@ -129,12 +128,9 @@ export default function KnowledgeQuiz({
 
   return (
     <section className="knowledge-quiz" aria-labelledby="knowledge-quiz-title">
-      <p className="label">Knowledge check</p>
-      <h2 id="knowledge-quiz-title">What do you know about T-Levels?</h2>
-      <p className="knowledge-quiz__lead">
-        {questions.length} questions, one at a time. Getting one wrong is useful: Smiley
-        will offer to talk it through.
-      </p>
+      <p className="label">{t("quiz.label")}</p>
+      <h2 id="knowledge-quiz-title">{t("quiz.title")}</h2>
+      <p className="knowledge-quiz__lead">{t("quiz.lead", { count: questions.length })}</p>
 
       {/* The bar is only a picture of the "Question 2 of 7" text below, so
           screen readers skip it rather than hear the progress twice. */}
@@ -149,7 +145,7 @@ export default function KnowledgeQuiz({
         <fieldset className="knowledge-quiz__question">
           <legend className="knowledge-quiz__legend">
             <span className="label knowledge-quiz__number">
-              Question {index + 1} of {questions.length}
+              {t("quiz.questionOf", { number: index + 1, total: questions.length })}
             </span>
             {question.question}
           </legend>
@@ -185,7 +181,7 @@ export default function KnowledgeQuiz({
               ref={feedbackRef}
             >
               <p className="knowledge-quiz__verdict">
-                {wasRight ? "That is right." : `Not quite. The right answer: ${question.correctAnswer}.`}
+                {wasRight ? t("quiz.right") : t("quiz.wrong", { answer: question.correctAnswer })}
               </p>
               <p>{question.explanation}</p>
             </div>
@@ -195,11 +191,11 @@ export default function KnowledgeQuiz({
         <div className="knowledge-quiz__actions">
           {!checked ? (
             <button type="submit" className="button button--primary" disabled={chosen === null}>
-              Check answer
+              {t("quiz.check")}
             </button>
           ) : (
             <button type="button" className="button button--primary" onClick={nextQuestion}>
-              {isLast ? "See my score" : "Next question"}
+              {isLast ? t("quiz.seeScore") : t("quiz.next")}
             </button>
           )}
         </div>

@@ -1,25 +1,28 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getChatHistory, sendChatMessage } from "../api.js";
 import { ChevronDownIcon, CloseIcon } from "../components/Icons.jsx";
+import { useSiteContent } from "../i18n/content.js";
+import { useI18n } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
+import Confetti from "./Confetti.jsx";
+import SmileyCameo from "./SmileyCameo.jsx";
 import SmileyFace from "./SmileyFace.jsx";
+import { answerLocally, answerTopic, dontKnow } from "./answers/answerEngine.js";
 import { onQuizEvent } from "./assistantBus.js";
 import {
-  AFTER_ANSWER_CHIPS,
-  AUDIENCE_CHIPS,
-  FALLBACK_TEXT,
-  INTRO,
-  LOCAL_REPLIES,
-  RETRY_CHIP,
-  TEASERS,
-  WELCOME_BACK,
-  WHO_QUESTION,
+  afterAiChips,
   audienceReply,
+  fallbackChips,
   greetingFor,
+  introMessages,
+  isLateNight,
+  localReply,
   nudgeForPath,
+  quizExplanation,
   quizNudge,
 } from "./smileyScript.js";
+import { useEasterEggs } from "./useEasterEggs.js";
 import { useIdleNudge } from "./useIdleNudge.js";
 import { useSmiley } from "./useSmiley.js";
 import { useSpeech } from "./useSpeech.js";
@@ -32,6 +35,7 @@ const GREETED_KEY = "tsmile:smiley-greeted";
 const TEASER_DELAY_MS = 4000; // before Smiley says hello on a first visit
 const TEASER_SHOW_MS = 9000; // how long a speech bubble stays
 const LISTENING_PAUSE_MS = 1500; // typing pause before Smiley stops "listening"
+const LOCAL_REPLY_MS = 450; // a beat before a local answer, so it reads as a reply
 
 function readSession(key) {
   try {
@@ -49,6 +53,8 @@ function writeSession(key, value) {
   }
 }
 
+const between = (min, max) => Math.round(min + Math.random() * (max - min));
+
 /**
  * Smiley, the T-SMILE guide, sitting in the corner of every page.
  *
@@ -59,25 +65,34 @@ function writeSession(key, value) {
  * and it asks questions of its own: who is visiting, which pathway interests
  * them, and it suggests what to ask next.
  *
- * Personality lives in useSmiley.js (behaviour) and SmileyFace.jsx (drawing).
- * Everything Smiley says without the AI lives in smileyScript.js.
+ * How it answers (see answers/answerEngine.js):
+ *   safeguarding first, in the browser, never sent anywhere;
+ *   then the site's own checked copy, instantly, in the visitor's language;
+ *   then the AI, only for what is left and only if the site has one;
+ *   then an honest "I don't know that one yet".
  *
- * Only what the visitor types or picks is sent to the server. The nudges, the
- * "who's visiting?" answer and every behavioural signal stay in this browser.
+ * Personality lives in useSmiley.js (behaviour), SmileyFace.jsx (drawing)
+ * and useEasterEggs.js (surprises). Words live in i18n/messages.
  */
 export default function ChatWidget() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const reducedMotion = useReducedMotion();
+  const { t, language } = useI18n();
+  const content = useSiteContent();
   const panelId = useId();
 
   const [open, setOpen] = useState(false);
   const [openedByVisitor, setOpenedByVisitor] = useState(false);
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | sending | error
+  const [status, setStatus] = useState("idle"); // idle | sending
   const [audience, setAudience] = useState(() => readSession(AUDIENCE_KEY));
   const [teaser, setTeaser] = useState(null);
+  // null until the server says; false means answer everything in the browser.
+  const [aiAvailable, setAiAvailable] = useState(null);
+  const [cameo, setCameo] = useState(null);
+  const [confetti, setConfetti] = useState(false);
   // The page a nudge already happened on, so nobody is nudged twice on the
   // same visit to the same page.
   const [nudgedPath, setNudgedPath] = useState(null);
@@ -102,9 +117,11 @@ export default function ChatWidget() {
   const spokenId = useRef(0);
   const teaserTimer = useRef(null);
   const listeningTimer = useRef(null);
-  // The quiz question a nudge was about, attached to the next message so the
-  // answer explains that question.
+  const replyTimer = useRef(null);
+  // The quiz question a nudge was about. pendingQuiz goes with the next
+  // message to the AI; lastQuiz stays so it can be explained without one.
   const pendingQuiz = useRef(null);
+  const lastQuiz = useRef(null);
   // The last question sent, so "Try again" can resend it.
   const lastQuestion = useRef(null);
 
@@ -112,9 +129,43 @@ export default function ChatWidget() {
     openRef.current = open;
   }, [open]);
 
+  /** Everything the answer engine needs, fresh for each answer. */
+  const answerContext = useCallback(
+    () => ({ t, language, ...content, now: new Date() }),
+    [t, language, content],
+  );
+
   const addMessage = useCallback((message) => {
     setMessages((current) => [...current, { id: nextId.current++, ...message }]);
   }, []);
+
+  /** Smiley says something, and its face and body go with it. */
+  const say = useCallback(
+    (reply, extra = {}) => {
+      addMessage({ role: "assistant", text: reply.text, chips: reply.chips, ...extra });
+      smiley.react(reply.mood ?? "happy", 1500);
+      if (reply.motion) smiley.perform(reply.motion);
+      else smiley.wiggle();
+    },
+    [addMessage, smiley],
+  );
+
+  /** A local answer, after a short beat so it reads as a reply. */
+  const sayAfterABeat = useCallback(
+    (reply, extra) => {
+      setStatus("sending");
+      smiley.setThinking(true);
+      window.clearTimeout(replyTimer.current);
+      replyTimer.current = window.setTimeout(() => {
+        smiley.setThinking(false);
+        setStatus("idle");
+        say(reply, extra);
+      }, LOCAL_REPLY_MS);
+    },
+    [say, smiley],
+  );
+
+  useEffect(() => () => window.clearTimeout(replyTimer.current), []);
 
   // --- the speech bubble beside Smiley ------------------------------------
 
@@ -132,13 +183,14 @@ export default function ChatWidget() {
 
   useEffect(() => () => window.clearTimeout(teaserTimer.current), []);
 
-  // First visit this session: a wave and a hello, once.
+  // First visit this session: a wave and a hello, once. After 11pm it is a
+  // gentle reminder to get some sleep instead.
   useEffect(() => {
     if (readSession(GREETED_KEY)) return undefined;
     const timer = window.setTimeout(() => {
       writeSession(GREETED_KEY, "yes");
       if (openRef.current) return;
-      showTeaser(TEASERS.hello);
+      showTeaser(t(isLateNight() ? "smiley.teasers.lateNight" : "smiley.teasers.hello"));
       smiley.react("happy", 1800);
       smiley.wiggle();
     }, TEASER_DELAY_MS);
@@ -156,16 +208,16 @@ export default function ChatWidget() {
 
   function openByVisitor() {
     hideTeaser();
+    setCameo(null);
     // A fresh conversation starts with a hello and a question.
     setMessages((current) => {
       if (current.length > 0) return current;
-      const intro = [
-        { id: nextId.current++, role: "assistant", intro: true, text: `${greetingFor()} ${INTRO}` },
-      ];
-      const follow = audience
-        ? audienceReply(audience, { opener: false })
-        : { text: WHO_QUESTION, chips: AUDIENCE_CHIPS };
-      return [...intro, { id: nextId.current++, role: "assistant", intro: true, ...follow }];
+      return introMessages(t, audience).map((message) => ({
+        id: nextId.current++,
+        role: "assistant",
+        intro: true,
+        ...message,
+      }));
     });
     setOpen(true);
     setOpenedByVisitor(true);
@@ -201,12 +253,12 @@ export default function ChatWidget() {
 
   const handleIdle = useCallback(() => {
     setNudgedPath(pathname);
-    const nudge = nudgeForPath(pathname);
-    addMessage({ role: "assistant", text: nudge.text, chips: nudge.chips, tag: "Checking in" });
+    const nudge = nudgeForPath(t, pathname);
+    addMessage({ role: "assistant", text: nudge.text, chips: nudge.chips, tag: t("smiley.tags.checkingIn") });
     openBySmiley();
     smiley.react("curious", 2200);
     smiley.wiggle();
-  }, [addMessage, openBySmiley, pathname]);
+  }, [addMessage, openBySmiley, pathname, t]);
 
   useIdleNudge({ enabled: !open && nudgedPath !== pathname, onIdle: handleIdle });
 
@@ -221,32 +273,34 @@ export default function ChatWidget() {
         if (event.type === "finished") {
           if (event.score === event.total) {
             smiley.celebrate();
-            showTeaser(TEASERS.perfect);
+            showTeaser(t("smiley.teasers.perfect"));
           } else {
             smiley.react("happy", 1600);
-            showTeaser(TEASERS.finished);
+            showTeaser(t("smiley.teasers.finished"));
           }
           return;
         }
 
         // A wrong answer. Keep the question, so the reply explains the quiz's
         // own content rather than something written freehand.
-        pendingQuiz.current = {
+        const quiz = {
           question: event.question,
           correctAnswer: event.correctAnswer,
           chosenAnswer: event.chosenAnswer,
           explanation: event.explanation,
         };
-        const nudge = quizNudge(event.question);
-        addMessage({ role: "assistant", text: nudge.text, chips: nudge.chips, tag: "Quiz help" });
+        pendingQuiz.current = quiz;
+        lastQuiz.current = quiz;
+        const nudge = quizNudge(t, event.question);
+        addMessage({ role: "assistant", text: nudge.text, chips: nudge.chips, tag: t("smiley.tags.quizHelp") });
         setNudgedPath(pathname);
         smiley.react("sympathetic", 2600);
 
         // Closed the chat on this page already? Then a quiet bubble, not a pop-up.
-        if (closedOnPath === pathname) showTeaser(TEASERS.quiz);
+        if (closedOnPath === pathname) showTeaser(t("smiley.teasers.quiz"));
         else if (!openRef.current) openBySmiley();
       }),
-    [addMessage, closedOnPath, openBySmiley, pathname, showTeaser],
+    [addMessage, closedOnPath, openBySmiley, pathname, showTeaser, t],
   );
 
   // A new page: Smiley glances over at it.
@@ -259,16 +313,63 @@ export default function ChatWidget() {
     if (!openRef.current) smiley.glance(-1, -0.4, 900);
   }, [pathname]);
 
+  // --- easter eggs ------------------------------------------------------------
+
+  const handleEgg = useCallback(
+    (type) => {
+      switch (type) {
+        case "peek":
+          if (reducedMotion || openRef.current) return;
+          setCameo({ edge: Math.random() < 0.5 ? "left" : "right", spot: between(25, 65) });
+          return;
+        case "bottom":
+          if (openRef.current) return;
+          if (!reducedMotion) setCameo({ edge: "bottom", spot: between(20, 60) });
+          showTeaser(t("smiley.teasers.bottom"));
+          smiley.react("happy", 1600);
+          return;
+        case "party":
+          smiley.celebrate();
+          if (!reducedMotion) setConfetti(true);
+          if (openRef.current) addMessage({ role: "assistant", text: t("smiley.teasers.party") });
+          else showTeaser(t("smiley.teasers.party"));
+          return;
+        case "offline":
+          smiley.react("sympathetic", 3000);
+          showTeaser(t("smiley.teasers.offline"));
+          return;
+        case "online":
+          smiley.react("happy", 1600);
+          showTeaser(t("smiley.teasers.online"));
+          return;
+        case "wordmark":
+          smiley.react("happy", 1800);
+          smiley.wiggle();
+          showTeaser(t("smiley.teasers.wordmark"));
+          return;
+        default:
+      }
+    },
+    [addMessage, reducedMotion, showTeaser, smiley, t],
+  );
+
+  useEasterEggs({ onEgg: handleEgg, canPeek: !open && !reducedMotion && !cameo });
+
+  const endCameo = useCallback(() => setCameo(null), []);
+  const endConfetti = useCallback(() => setConfetti(false), []);
+
   // --- talking to the API --------------------------------------------------
 
   useEffect(() => {
     // Earlier messages, fetched the first time the chat opens rather than on
     // page load, so a visitor who never opens it is never given a session.
+    // The same call says whether an AI is set up at all.
     if (!open || historyLoaded.current) return;
     historyLoaded.current = true;
 
     getChatHistory()
-      .then(({ messages: earlier }) => {
+      .then(({ messages: earlier, ai_available: available }) => {
+        setAiAvailable(Boolean(available));
         if (!earlier?.length) return;
         setMessages((current) => {
           const restored = earlier.map((message) => ({
@@ -280,7 +381,7 @@ export default function ChatWidget() {
           const welcome = {
             id: nextId.current++,
             role: "assistant",
-            text: `${greetingFor()} ${WELCOME_BACK}`,
+            text: `${greetingFor(t)} ${t("smiley.welcomeBack")}`,
             restored: true,
           };
           // Somebody Smiley has met: swap the first-time hello for a welcome
@@ -290,38 +391,79 @@ export default function ChatWidget() {
           return [...restored, welcome, ...fresh];
         });
       })
-      .catch(() => {}); // an empty history is not worth telling anyone about
+      // No server at all: Smiley can still answer from the page copy.
+      .catch(() => setAiAvailable(false));
   }, [open]);
+
+  /** The best Smiley can do without the AI: a guess it owns up to, or honesty. */
+  function answerWithoutAi(local, ctx) {
+    if (local) say({ ...local, text: `${t("smiley.answers.closest")}\n${local.text}` });
+    else say(dontKnow(ctx));
+  }
 
   async function send(text) {
     const question = text.trim();
     if (!question || status === "sending") return;
 
+    stopSpeech();
+    setDraft("");
+    smiley.setListening(false);
+
+    const ctx = answerContext();
+    const local = answerLocally(question, ctx);
+
+    // Safeguarding and personal details: answered here, never sent anywhere.
+    if (local?.kind === "safety") {
+      addMessage({ role: "user", text: question, private: true });
+      say(local, { tag: t("smiley.tags.private") });
+      return;
+    }
+
+    addMessage({ role: "user", text: question });
+
+    // Something the site's own copy answers: instant, and word for word.
+    if (local?.confident) {
+      pendingQuiz.current = null;
+      sayAfterABeat(local);
+      return;
+    }
+
+    // No AI on this site: the closest checked answer, or an honest gap.
+    if (aiAvailable === false) {
+      pendingQuiz.current = null;
+      setStatus("sending");
+      smiley.setThinking(true);
+      window.setTimeout(() => {
+        smiley.setThinking(false);
+        setStatus("idle");
+        answerWithoutAi(local, ctx);
+      }, LOCAL_REPLY_MS);
+      return;
+    }
+
     const quiz = pendingQuiz.current;
     pendingQuiz.current = null;
     lastQuestion.current = { text: question, quiz };
-
-    stopSpeech();
-    setDraft("");
-    addMessage({ role: "user", text: question });
     setStatus("sending");
-    smiley.setListening(false);
     smiley.setThinking(true);
 
     try {
-      const { reply } = await sendChatMessage(question, { quiz, audience });
-      addMessage({ role: "assistant", text: reply, chips: AFTER_ANSWER_CHIPS });
-      setStatus("idle");
+      const { reply } = await sendChatMessage(question, { quiz, audience, language });
+      addMessage({ role: "assistant", text: reply, chips: afterAiChips(t) });
       smiley.react("happy", 1500);
       smiley.wiggle();
     } catch {
-      // Section 10: Smiley failing must not break anything else. The visitor
-      // gets a way to try again and somewhere else to go.
-      addMessage({ role: "assistant", kind: "fallback", chips: [RETRY_CHIP] });
-      setStatus("error");
-      smiley.react("sympathetic", 2200);
+      // Section 10: the AI failing must not break anything else. Smiley falls
+      // back to what it knows, and offers a way to try again.
+      if (local) {
+        answerWithoutAi(local, ctx);
+      } else {
+        addMessage({ role: "assistant", kind: "fallback", text: t("smiley.fallback"), chips: fallbackChips(t) });
+        smiley.react("sympathetic", 2200);
+      }
     } finally {
       smiley.setThinking(false);
+      setStatus("idle");
     }
   }
 
@@ -332,21 +474,42 @@ export default function ChatWidget() {
 
   function handleChip({ label, action }) {
     switch (action.type) {
+      case "topic": {
+        // Answered from the page copy, in the visitor's language, with or
+        // without the AI.
+        addMessage({ role: "user", text: label, local: true });
+        const reply = answerTopic(action.id, answerContext());
+        if (reply) sayAfterABeat(reply);
+        break;
+      }
       case "audience": {
         // Kept in this tab only. It shapes Smiley's suggestions and replies,
         // and is never stored on the server.
         setAudience(action.value);
         writeSession(AUDIENCE_KEY, action.value);
         addMessage({ role: "user", text: label, local: true });
-        addMessage({ role: "assistant", ...audienceReply(action.value) });
-        smiley.react("happy", 1200);
+        sayAfterABeat(audienceReply(t, action.value));
         break;
       }
-      case "local":
+      case "local": {
         addMessage({ role: "user", text: label, local: true });
-        addMessage({ role: "assistant", ...LOCAL_REPLIES[action.key] });
-        smiley.react("happy", 1000);
+        const reply = localReply(t, action.key);
+        if (reply) sayAfterABeat(reply);
         break;
+      }
+      case "quiz": {
+        const quiz = lastQuiz.current;
+        if (!quiz) break;
+        if (aiAvailable === false) {
+          // The quiz's own right answer and explanation: checked content.
+          addMessage({ role: "user", text: label, local: true });
+          sayAfterABeat({ text: quizExplanation(t, quiz), mood: "happy" });
+        } else {
+          pendingQuiz.current = quiz;
+          send(t(action.mode === "whyWrong" ? "smiley.quizWhyWrongAsk" : "smiley.quizExplainAsk"));
+        }
+        break;
+      }
       case "link":
         navigate(action.to);
         smiley.react("happy", 1000);
@@ -368,10 +531,7 @@ export default function ChatWidget() {
     setDraft(event.target.value);
     smiley.setListening(true);
     window.clearTimeout(listeningTimer.current);
-    listeningTimer.current = window.setTimeout(
-      () => smiley.setListening(false),
-      LISTENING_PAUSE_MS,
-    );
+    listeningTimer.current = window.setTimeout(() => smiley.setListening(false), LISTENING_PAUSE_MS);
   }
 
   useEffect(() => () => window.clearTimeout(listeningTimer.current), []);
@@ -384,16 +544,11 @@ export default function ChatWidget() {
     // messages restored from history are not re-read.
     if (!open) return;
     const unread = messages.filter(
-      (message) =>
-        message.id > spokenId.current && message.role === "assistant" && !message.restored,
+      (message) => message.id > spokenId.current && message.role === "assistant" && !message.restored,
     );
     if (!unread.length) return;
     spokenId.current = messages.at(-1).id;
-    speak(
-      unread
-        .map((message) => (message.kind === "fallback" ? FALLBACK_TEXT : message.text))
-        .join(" "),
-    );
+    speak(unread.map((message) => message.text).join(" "));
   }, [messages, open, speak]);
 
   useEffect(() => {
@@ -407,84 +562,48 @@ export default function ChatWidget() {
 
   const latest = messages.at(-1);
   const chips =
-    status !== "sending" && latest?.role === "assistant" && latest.chips?.length
-      ? latest.chips
-      : null;
+    status !== "sending" && latest?.role === "assistant" && latest.chips?.length ? latest.chips : null;
   const conversationStarted = messages.some((message) => message.role === "user");
 
   return (
     // An aside, so the widget sits inside a landmark like the rest of the page.
     // Named "Assistant" so it does not share a name with the dialog inside it.
-    <aside
-      className={`assistant${reducedMotion ? " assistant--still" : ""}`}
-      aria-label="Assistant"
-    >
+    <aside className={`assistant${reducedMotion ? " assistant--still" : ""}`} aria-label={t("smiley.landmark")}>
       {open && (
-        <div
-          className="assistant__panel"
-          id={panelId}
-          ref={panelRef}
-          role="dialog"
-          aria-labelledby={`${panelId}-name`}
-        >
+        <div className="assistant__panel" id={panelId} ref={panelRef} role="dialog" aria-labelledby={`${panelId}-name`}>
           <div className="assistant__header">
-            <button
-              type="button"
-              className="assistant__poke"
-              onClick={smiley.poke}
-              aria-label="Poke Smiley"
-            >
+            <button type="button" className="assistant__poke" onClick={smiley.poke} aria-label={t("smiley.poke")}>
               <SmileyFace ref={smiley.faceRef} {...smiley.face} size={44} />
             </button>
             <div className="assistant__identity">
               <p className="assistant__name" id={`${panelId}-name`}>
-                Smiley
+                {t("smiley.name")}
               </p>
-              <p className="assistant__role">T-Level guide, powered by AI</p>
+              <p className="assistant__role">{t(aiAvailable ? "smiley.roleAi" : "smiley.role")}</p>
             </div>
-            <button
-              type="button"
-              className="assistant__close"
-              onClick={closeWidget}
-              aria-label="Close Smiley"
-            >
+            <button type="button" className="assistant__close" onClick={closeWidget} aria-label={t("smiley.close")}>
               <CloseIcon />
             </button>
           </div>
 
           {/* Said once, quietly: visitors are told Smiley may check in, rather
               than it just happening. It goes once the conversation starts. */}
-          {!conversationStarted && (
-            <p className="assistant__disclosure">
-              I might pop up if a page goes quiet for a while. That's worked out in your
-              browser and never saved. What you type to me is saved, so we can pick up where
-              we left off.
-            </p>
-          )}
+          {!conversationStarted && <p className="assistant__disclosure">{t("smiley.disclosure")}</p>}
 
           <div className="assistant__scroll" ref={scrollRef}>
-            <div
-              className="assistant__log"
-              role="log"
-              aria-live="polite"
-              aria-label="Conversation with Smiley"
-            >
+            <div className="assistant__log" role="log" aria-live="polite" aria-label={t("smiley.conversation")}>
               {messages.map((message, index) => (
-                <Message
-                  key={message.id}
-                  message={message}
-                  startsTurn={messages[index - 1]?.role !== "assistant"}
-                />
+                <Message key={message.id} message={message} startsTurn={messages[index - 1]?.role !== "assistant"} />
               ))}
 
               {status === "sending" && (
                 <div className="assistant__turn">
                   <p className="assistant__who">
                     <SmileyFace size={24} mood="thinking" still />
-                    <span className="assistant__who-name">Smiley</span>
+                    <span className="assistant__who-name">{t("smiley.name")}</span>
                   </p>
                   <p className="assistant__thinking">
-                    <span className="sr-only">Smiley is thinking</span>
+                    <span className="sr-only">{t("smiley.thinking")}</span>
                     <span className="assistant__dot" />
                     <span className="assistant__dot" />
                     <span className="assistant__dot" />
@@ -496,14 +615,9 @@ export default function ChatWidget() {
             {/* Outside the live region, so the suggestions are not read out
                 every time, but still reachable straight after the message. */}
             {chips && (
-              <div className="assistant__chips" role="group" aria-label="Suggested replies">
+              <div className="assistant__chips" role="group" aria-label={t("smiley.suggested")}>
                 {chips.map((chip) => (
-                  <button
-                    type="button"
-                    key={chip.label}
-                    className="assistant__chip"
-                    onClick={() => handleChip(chip)}
-                  >
+                  <button type="button" key={chip.label} className="assistant__chip" onClick={() => handleChip(chip)}>
                     {chip.label}
                   </button>
                 ))}
@@ -513,7 +627,7 @@ export default function ChatWidget() {
 
           <form className="assistant__form" onSubmit={handleSubmit}>
             <label className="sr-only" htmlFor={`${panelId}-input`}>
-              Your question for Smiley
+              {t("smiley.inputLabel")}
             </label>
             <input
               id={`${panelId}-input`}
@@ -523,7 +637,7 @@ export default function ChatWidget() {
               value={draft}
               onChange={handleType}
               onBlur={() => smiley.setListening(false)}
-              placeholder="Ask Smiley anything"
+              placeholder={t("smiley.placeholder")}
               autoComplete="off"
               maxLength={1000}
             />
@@ -532,7 +646,7 @@ export default function ChatWidget() {
               className="button button--primary assistant__send"
               disabled={status === "sending" || !draft.trim()}
             >
-              Send
+              {t("smiley.send")}
             </button>
           </form>
         </div>
@@ -543,37 +657,42 @@ export default function ChatWidget() {
           <button type="button" className="assistant__teaser-text" onClick={openByVisitor}>
             {teaser}
           </button>
-          <button
-            type="button"
-            className="assistant__teaser-close"
-            onClick={hideTeaser}
-            aria-label="Dismiss Smiley's message"
-          >
+          <button type="button" className="assistant__teaser-close" onClick={hideTeaser} aria-label={t("smiley.dismiss")}>
             <CloseIcon />
           </button>
         </div>
       )}
 
+      {cameo && !open && (
+        <SmileyCameo
+          edge={cameo.edge}
+          spot={cameo.spot}
+          outfit={smiley.face.outfit}
+          onDone={endCameo}
+          onOpen={openByVisitor}
+        />
+      )}
+
+      {confetti && <Confetti onDone={endConfetti} />}
+
       <button
         type="button"
-        className={`assistant__toggle${open ? " assistant__toggle--open" : ""}`}
+        className={`assistant__toggle${open ? " assistant__toggle--open" : ""}${cameo && !open ? " assistant__toggle--ducked" : ""}`}
         ref={toggleRef}
         onClick={open ? closeWidget : openByVisitor}
-        onMouseEnter={() => smiley.setHovering(true)}
-        onMouseLeave={() => smiley.setHovering(false)}
-        onFocus={() => smiley.setHovering(true)}
-        onBlur={() => smiley.setHovering(false)}
+        onMouseEnter={() => smiley.hover(true)}
+        onMouseLeave={() => smiley.hover(false)}
+        onFocus={() => smiley.hover(true)}
+        onBlur={() => smiley.hover(false)}
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
       >
         {/* One Smiley at a time: in the corner while closed, in the header
-            while open, so there are never two pairs of eyes following you. */}
-        {open ? (
-          <ChevronDownIcon />
-        ) : (
-          <SmileyFace ref={smiley.faceRef} {...smiley.face} size={64} grounded />
-        )}
-        <span className="sr-only">{open ? "Close Smiley" : "Open Smiley, your T-Level guide"}</span>
+            while open, so there are never two pairs of eyes following you.
+            While it peeks in from the edge of the screen, the corner one
+            ducks out of sight. */}
+        {open ? <ChevronDownIcon /> : <SmileyFace ref={smiley.faceRef} {...smiley.face} size={64} grounded />}
+        <span className="sr-only">{open ? t("smiley.close") : t("smiley.open")}</span>
       </button>
     </aside>
   );
@@ -581,6 +700,8 @@ export default function ChatWidget() {
 
 /** One turn of the conversation. */
 function Message({ message, startsTurn }) {
+  const { t } = useI18n();
+
   if (message.role === "user") {
     return (
       <p className="assistant__message assistant__message--user">
@@ -597,20 +718,11 @@ function Message({ message, startsTurn }) {
       {(startsTurn || message.tag) && (
         <p className="assistant__who">
           <SmileyFace size={24} mood={fallback ? "sympathetic" : "neutral"} still />
-          <span className="assistant__who-name">Smiley</span>
+          <span className="assistant__who-name">{t("smiley.name")}</span>
           {message.tag && <span className="assistant__tag">{message.tag}</span>}
         </p>
       )}
-      <p className="assistant__message assistant__message--assistant">
-        {fallback ? (
-          <>
-            I can't answer right now. Try again in a moment, or have a look at the{" "}
-            <Link to="/help">Help page</Link> or the <Link to="/resources">Resources page</Link>.
-          </>
-        ) : (
-          message.text
-        )}
-      </p>
+      <p className="assistant__message assistant__message--assistant">{message.text}</p>
     </div>
   );
 }

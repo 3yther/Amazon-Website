@@ -5,8 +5,10 @@ import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import AuthPanel from "../components/AuthPanel.jsx";
 import { FormError, TextField } from "../components/FormFields.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 export default function Login() {
+  const t = useT();
   const navigate = useNavigate();
   const { refresh } = useAuth();
   const [fields, setFields] = useState({ username: "", password: "" });
@@ -39,9 +41,9 @@ export default function Login() {
       <div className="auth-side">
         <div className="auth-form" aria-labelledby="page-title">
           <div className="auth-heading">
-            <p className="label">Account</p>
-            <h1 id="page-title">Welcome back</h1>
-            <p className="lead">Log in to open sign-up resources.</p>
+            <p className="label">{t("login.label")}</p>
+            <h1 id="page-title">{t("login.title")}</h1>
+            <p className="lead">{t("login.lead")}</p>
           </div>
 
           <form className="account-form" onSubmit={handleSubmit} noValidate>
@@ -49,7 +51,7 @@ export default function Login() {
 
             <TextField
               id="login-username"
-              label="Username"
+              label={t("login.username")}
               name="username"
               value={fields.username}
               onChange={updateField}
@@ -59,7 +61,7 @@ export default function Login() {
             />
             <TextField
               id="login-password"
-              label="Password"
+              label={t("login.password")}
               name="password"
               type="password"
               value={fields.password}
@@ -70,12 +72,12 @@ export default function Login() {
             />
 
             <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-              {status === "submitting" ? "Logging in" : "Log in"}
+              {status === "submitting" ? t("login.submitting") : t("login.submit")}
             </button>
           </form>
 
           <p className="account-switch">
-            No account yet? <Link to="/register">Register</Link>
+            {t("login.noAccount")} <Link to="/register">{t("login.register")}</Link>
           </p>
         </div>
       </div>

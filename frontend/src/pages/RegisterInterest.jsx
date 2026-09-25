@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { submitInterest } from "../api.js";
 import { useAuth } from "../auth.jsx";
-import { PATHWAYS } from "../aboutContent.js";
-import { NEXT_STEPS, WHY_WE_ASK } from "../interestContent.js";
 import { formErrors } from "../formErrors.js";
 import { USER_TYPES } from "../labels.js";
 import {
@@ -14,6 +12,8 @@ import {
   TextField,
 } from "../components/FormFields.jsx";
 import { IconList } from "../components/InfoBlocks.jsx";
+import { useT } from "../i18n/I18nProvider.jsx";
+import { useSiteContent } from "../i18n/content.js";
 import "../about.css";
 
 // The Expression of Interest form: the site's main way for someone to tell
@@ -29,24 +29,27 @@ const EMPTY = { full_name: "", email: "", user_type: "", pathway: "", message: "
  * Quick checks in the browser, so the common mistakes are caught before
  * anything is sent. The server checks everything again; its answer wins.
  */
-function checkFields(fields, consent) {
+function checkFields(fields, consent, t) {
   const errors = {};
-  if (fields.full_name.trim().length < 2) errors.full_name = "Enter your full name.";
+  if (fields.full_name.trim().length < 2) errors.full_name = t("registerInterest.errors.fullName");
   if (!/^\S+@\S+\.\S+$/.test(fields.email.trim())) {
-    errors.email = "Enter an email address in the format name@example.com.";
+    errors.email = t("registerInterest.errors.email");
   }
-  if (!fields.user_type) errors.user_type = "Choose student, parent or teacher.";
-  if (!fields.pathway) errors.pathway = "Choose a pathway.";
+  if (!fields.user_type) errors.user_type = t("registerInterest.errors.userType");
+  if (!fields.pathway) errors.pathway = t("registerInterest.errors.pathway");
   if (fields.message.length > MESSAGE_LIMIT) {
-    errors.message = `Keep your message under ${MESSAGE_LIMIT} characters.`;
+    errors.message = t("registerInterest.errors.message", { limit: MESSAGE_LIMIT });
   }
   // TEAM NOTE: the backend does not store this tick yet. If Amazon needs a
   // record of consent, add a field to ExpressionOfInterest (see MODELS.md).
-  if (!consent) errors.consent = "Tick the box so we can share your details with Amazon.";
+  if (!consent) errors.consent = t("registerInterest.errors.consent");
   return errors;
 }
 
 export default function RegisterInterest() {
+  const t = useT();
+  const { about, interest } = useSiteContent();
+  const { PATHWAYS } = about;
   // Nobody signed in (or no sign-in check yet) just means nothing to prefill.
   const user = useAuth()?.user;
   const [searchParams] = useSearchParams();
@@ -81,7 +84,7 @@ export default function RegisterInterest() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const found = checkFields(fields, consent);
+    const found = checkFields(fields, consent, t);
     if (Object.keys(found).length > 0) {
       setErrors(found);
       // Put focus on the first problem, so keyboard and screen reader users
@@ -106,16 +109,15 @@ export default function RegisterInterest() {
     const pathway = PATHWAYS.find((item) => item.slug === fields.pathway);
     return (
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Register interest</p>
+        <p className="label">{t("registerInterest.submit")}</p>
         <h1 id="page-title" tabIndex={-1} ref={thanksHeading}>
-          Thanks, you are on the list
+          {t("registerInterest.thanks.title")}
         </h1>
-        <p className="lead">
-          Your interest in the {pathway?.name} pathway has been sent to the Amazon Emerging Talent
-          team.
-        </p>
+        <p className="lead">{t("registerInterest.thanks.lead", { pathway: pathway?.name })}</p>
         <p>
-          While you wait, see <Link to="/t-levels-at-amazon">what an Amazon placement looks like</Link>.
+          {t("registerInterest.thanks.whileYouWait")}{" "}
+          <Link to="/t-levels-at-amazon">{t("registerInterest.thanks.placementLink")}</Link>
+          {t("registerInterest.thanks.after")}
         </p>
       </section>
     );
@@ -124,11 +126,9 @@ export default function RegisterInterest() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Amazon Emerging Talent</p>
-        <h1 id="page-title">Register your interest</h1>
-        <p className="lead">
-          Want a T-Level placement at Amazon? Tell us which pathway. You do not need an account.
-        </p>
+        <p className="label">{t("registerInterest.label")}</p>
+        <h1 id="page-title">{t("registerInterest.title")}</h1>
+        <p className="lead">{t("registerInterest.lead")}</p>
       </section>
 
       <div className="interest">
@@ -137,7 +137,7 @@ export default function RegisterInterest() {
 
           <TextField
             id="interest-full-name"
-            label="Full name"
+            label={t("registerInterest.fullName")}
             name="full_name"
             value={fields.full_name}
             onChange={updateField}
@@ -147,7 +147,7 @@ export default function RegisterInterest() {
           />
           <TextField
             id="interest-email"
-            label="Email"
+            label={t("registerInterest.email")}
             name="email"
             type="email"
             value={fields.email}
@@ -158,30 +158,30 @@ export default function RegisterInterest() {
           />
           <SelectField
             id="interest-user-type"
-            label="I am a"
+            label={t("registerInterest.iAmA")}
             name="user_type"
             value={fields.user_type}
             onChange={updateField}
             required
             error={errors.user_type}
           >
-            <option value="">Choose one</option>
-            {Object.entries(USER_TYPES).map(([value, label]) => (
+            <option value="">{t("register.chooseOne")}</option>
+            {Object.keys(USER_TYPES).map((value) => (
               <option key={value} value={value}>
-                {label}
+                {t(`account.roles.${value}`)}
               </option>
             ))}
           </SelectField>
           <SelectField
             id="interest-pathway"
-            label="Pathway"
+            label={t("registerInterest.pathway")}
             name="pathway"
             value={fields.pathway}
             onChange={updateField}
             required
             error={errors.pathway}
           >
-            <option value="">Choose one</option>
+            <option value="">{t("register.chooseOne")}</option>
             {PATHWAYS.map((pathway) => (
               <option key={pathway.slug} value={pathway.slug}>
                 {pathway.name}
@@ -190,9 +190,9 @@ export default function RegisterInterest() {
           </SelectField>
           <TextareaField
             id="interest-message"
-            label="Anything to add? (optional)"
+            label={t("registerInterest.message")}
             name="message"
-            hint="For example, a question about the placement."
+            hint={t("registerInterest.messageHint")}
             value={fields.message}
             onChange={updateField}
             maxLength={MESSAGE_LIMIT}
@@ -207,24 +207,25 @@ export default function RegisterInterest() {
             error={errors.consent}
             label={
               <>
-                I am happy for the Amazon Emerging Talent team to see these details and contact me.
-                See our <Link to="/privacy">Privacy Policy</Link>.
+                {t("registerInterest.consent")} {t("registerInterest.privacyBefore")}{" "}
+                <Link to="/privacy">{t("registerInterest.privacyLink")}</Link>
+                {t("registerInterest.privacyAfter")}
               </>
             }
           />
 
           <button type="submit" className="button button--primary" disabled={status === "submitting"}>
-            {status === "submitting" ? "Sending" : "Register interest"}
+            {status === "submitting" ? t("registerInterest.submitting") : t("registerInterest.submit")}
           </button>
         </form>
 
         <aside className="interest__aside" aria-labelledby="next-title">
           <h2 id="next-title" className="interest__aside-title">
-            What happens next
+            {t("registerInterest.nextTitle")}
           </h2>
-          <IconList items={NEXT_STEPS} />
-          <p className="interest__note">{WHY_WE_ASK}</p>
-          <p className="interest__note">Under 16? Ask a parent or carer before you send this.</p>
+          <IconList items={interest.NEXT_STEPS} />
+          <p className="interest__note">{interest.WHY_WE_ASK}</p>
+          <p className="interest__note">{t("registerInterest.underSixteen")}</p>
         </aside>
       </div>
     </>

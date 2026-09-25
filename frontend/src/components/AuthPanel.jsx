@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import studentsPhoto from "../assets/pexels-students-library.jpg";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 // Photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
 // free to use, attribution not required. Credited here for the asset log.
@@ -14,6 +15,7 @@ import studentsPhoto from "../assets/pexels-students-library.jpg";
  * carries everything a visitor needs.
  */
 export default function AuthPanel() {
+  const t = useT();
   return (
     <aside className="auth-panel">
       <img className="auth-panel__photo" src={studentsPhoto} alt="" aria-hidden="true" loading="lazy" decoding="async" />
@@ -21,9 +23,7 @@ export default function AuthPanel() {
         <Link className="wordmark auth-panel__wordmark" to="/">
           T-<span className="wordmark__accent">SMILE</span>
         </Link>
-        <p className="auth-panel__line">
-          Free resources for Amazon&rsquo;s Digital T-Level pathway.
-        </p>
+        <p className="auth-panel__line">{t("forms.panelLine")}</p>
       </div>
     </aside>
   );

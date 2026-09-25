@@ -1,3 +1,4 @@
+import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
 import officeMeeting from "../assets/pexels-office-meeting.jpg";
 import studentsLibrary from "../assets/pexels-students-library.jpg";
@@ -39,6 +40,7 @@ const PHOTOS = [
  * horizontal scrollbar of its own.
  */
 export default function PhotoStrip() {
+  const t = useT();
   const reducedMotion = useReducedMotion();
 
   function card(photo, copyIndex) {
@@ -53,7 +55,7 @@ export default function PhotoStrip() {
     <div
       className={reducedMotion ? "photo-strip photo-strip--static" : "photo-strip"}
       role="group"
-      aria-label="Students, warehouse teams and office teams at work"
+      aria-label={t("about.photos")}
     >
       <ul className="photo-strip__track">
         {PHOTOS.map((photo) => card(photo, 0))}
