@@ -802,3 +802,11 @@ class DeleteOldDataTests(APITestCase):
         call_command("delete_old_data", "--dry-run", stdout=out)
         self.assertEqual(Feedback.objects.count(), 1)
         self.assertIn("1 feedback messages", out.getvalue())
+
+
+class AdminStylesTests(APITestCase):
+    """WhiteNoise serves the admin's CSS even with DEBUG off (it was unstyled on Railway)."""
+
+    def test_admin_css_is_served(self):
+        response = self.client.get("/static/admin/css/base.css")
+        self.assertEqual(response.status_code, 200)

@@ -68,6 +68,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # Serves static files (the admin's CSS and JS) when DEBUG is off.
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     # Must sit above CommonMiddleware so CORS headers are added to every response.
     "corsheaders.middleware.CorsMiddleware",
@@ -170,6 +172,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+# Serve straight from the apps, so it works on Railway without running collectstatic.
+WHITENOISE_USE_FINDERS = True
 
 # Uploaded content files (ContentItem.file). Stored on local disk in development.
 MEDIA_URL = "/media/"
