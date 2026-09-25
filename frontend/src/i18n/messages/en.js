@@ -81,7 +81,7 @@ const en = {
     steps: {
       label: "How it works",
       title: "Start in four steps",
-      level: "Level",
+      step: "Step",
       browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways.", link: "Browse resources" },
       register: { title: "Register interest", text: "Tell us which pathway you want to explore.", link: "Register interest" },
       hearBack: { title: "Hear back", text: "We review each submission and reply by email." },
