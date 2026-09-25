@@ -10,6 +10,7 @@ We agreed this as a team before building features. Only change a model if the te
 - user_type: student, parent, teacher or amazon_staff
 - pathway_interest: Digital, Business, Media, Finance or Engineering (optional)
 - phone (optional)
+- heard_about: search_engine, social_media, friend_family, advert, influencer, ai or other (optional, from sign up)
 - is_deactivated, deactivated_at
 - last_password_changed
 - created_at
@@ -22,7 +23,6 @@ We agreed this as a team before building features. Only change a model if the te
 - theme: light, dark or system
 - button_outline_style, page_background
 - language (default "en")
-- date_format, number_format: not used any more (the site is always UK format), kept until the team agrees to drop them
 - created_at, updated_at
 
 **Feedback** (from the Feedback, Contact and Report an issue pages)
@@ -71,6 +71,7 @@ Loaded from `backend/providers/fixtures/providers.json`. `python manage.py geoco
 - message (optional)
 - user (optional, set if they were signed in)
 - submitted_at
+- consented_at (when they ticked the consent box)
 
 ## chatbot
 

@@ -62,7 +62,7 @@ describe("Register interest box on the Sign up page", () => {
     await user.click(screen.getByRole("button", { name: "Register interest" }));
 
     await waitFor(() => expect(sent).toHaveLength(1));
-    expect(sent[0]).toMatchObject({ full_name: "Ada Lovelace", pathway: "digital" });
+    expect(sent[0]).toMatchObject({ full_name: "Ada Lovelace", pathway: "digital", consent: true });
     expect(await screen.findByText(/interest in the Digital pathway has been sent/)).toHaveFocus();
   });
 

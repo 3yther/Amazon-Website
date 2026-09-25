@@ -21,7 +21,7 @@ const EMPTY_FIELDS = {
   pathway_interest: "",
 };
 
-// Not saved yet, there's no field for it in the backend. Words are under register.heardAbout.
+// Saved as Profile.heard_about. Words are under register.heardAbout.
 const HEARD_ABOUT_OPTIONS = ["search_engine", "social_media", "friend_family", "advert", "influencer", "ai", "other"];
 
 // Both boxes have to be ticked to sign up. They aren't sent to the server.
@@ -35,7 +35,7 @@ export default function Register() {
   const navigate = useNavigate();
   const { refresh } = useAuth();
   const [fields, setFields] = useState(EMPTY_FIELDS);
-  const [heardAbout, setHeardAbout] = useState(""); // not sent, see HEARD_ABOUT_OPTIONS
+  const [heardAbout, setHeardAbout] = useState(""); // optional, see HEARD_ABOUT_OPTIONS
   const [confirmed, setConfirmed] = useState({ over_sixteen: false, terms: false });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting
@@ -79,6 +79,7 @@ export default function Register() {
     // required." rather than rejecting "" as an invalid choice.
     const payload = { ...fields };
     if (!payload.user_type) delete payload.user_type;
+    if (heardAbout) payload.heard_about = heardAbout;
 
     try {
       await register(payload); // also signs the new user in

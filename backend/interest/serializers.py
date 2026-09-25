@@ -1,6 +1,7 @@
 import re
 
 from django.contrib.auth.base_user import BaseUserManager
+from django.utils import timezone
 from rest_framework import serializers
 
 from content.models import Pathway
@@ -30,10 +31,12 @@ class ExpressionOfInterestSerializer(serializers.ModelSerializer):
     message = serializers.CharField(
         required=False, allow_blank=True, max_length=MESSAGE_MAX_LENGTH, write_only=True
     )
+    # The consent tick box. Has to be ticked, and the time is saved as consented_at.
+    consent = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = ExpressionOfInterest
-        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "submitted_at"]
+        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "consent", "submitted_at"]
         read_only_fields = ["id", "submitted_at"]
         extra_kwargs = {
             "full_name": {"write_only": True, "min_length": 2},
@@ -53,6 +56,15 @@ class ExpressionOfInterestSerializer(serializers.ModelSerializer):
         # Lower-case the domain part, as Django does for user emails.
         return BaseUserManager.normalize_email(value.strip())
 
+    def validate_consent(self, value):
+        if not value:
+            raise serializers.ValidationError("Tick the box to say the team can see your details.")
+        return value
+
+    def create(self, validated_data):
+        validated_data.pop("consent")
+        return super().create({**validated_data, "consented_at": timezone.now()})
+
 
 class ExpressionOfInterestStaffSerializer(serializers.ModelSerializer):
     """What Amazon staff see on the submissions list. Separate from the one above
@@ -63,5 +75,5 @@ class ExpressionOfInterestStaffSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExpressionOfInterest
-        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "submitted_at"]
+        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "submitted_at", "consented_at"]
         read_only_fields = fields

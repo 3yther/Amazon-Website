@@ -23,6 +23,7 @@ class ExpressionOfInterestAdmin(admin.ModelAdmin):
         "message",
         "user",
         "submitted_at",
+        "consented_at",
     ]
 
     def has_add_permission(self, request):

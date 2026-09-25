@@ -105,6 +105,7 @@ describe("Register interest form", () => {
         user_type: "student",
         pathway: "digital",
         message: "",
+        consent: true,
       },
     ]);
     await waitFor(() => expect(thanks).toHaveFocus());

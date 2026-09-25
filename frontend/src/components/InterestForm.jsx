@@ -27,8 +27,6 @@ function checkFields(fields, consent, t) {
   if (fields.message.length > MESSAGE_LIMIT) {
     errors.message = t("registerInterest.errors.message", { limit: MESSAGE_LIMIT });
   }
-  // TEAM NOTE: the backend does not store this tick yet. If Amazon needs a
-  // record of consent, add a field to ExpressionOfInterest (see MODELS.md).
   if (!consent) errors.consent = t("registerInterest.errors.consent");
   return errors;
 }
@@ -71,7 +69,7 @@ export default function InterestForm({ startingPathway = "", onSent }) {
     setStatus("submitting");
     setErrors({});
     try {
-      await submitInterest(fields);
+      await submitInterest({ ...fields, consent });
       onSent(PATHWAYS.find((item) => item.slug === fields.pathway));
     } catch (error) {
       setErrors(formErrors(error, t));

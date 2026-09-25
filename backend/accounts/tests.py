@@ -54,6 +54,15 @@ class RegisterApiTests(APITestCase):
         self.assertEqual(user.profile.user_type, "student")
         self.assertEqual(user.profile.pathway_interest, "Digital")
 
+    def test_heard_about_is_saved(self):
+        self.client.post(REGISTER_URL, self.valid_payload(heard_about="friend_family"), format="json")
+        self.assertEqual(User.objects.get(username="ada").profile.heard_about, "friend_family")
+
+    def test_heard_about_must_be_a_real_choice(self):
+        response = self.client.post(REGISTER_URL, self.valid_payload(heard_about="tiktok"), format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("heard_about", response.data)
+
     def test_registration_signs_the_user_in(self):
         self.client.post(REGISTER_URL, self.valid_payload(), format="json")
         self.assertEqual(self.client.get(ME_URL).status_code, 200)

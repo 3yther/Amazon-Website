@@ -28,9 +28,18 @@ class ExpressionOfInterestApiTests(APITestCase):
             "user_type": "student",
             "pathway": "digital",
             "message": "",
+            "consent": True,
         }
         payload.update(overrides)
         return payload
+
+    def test_consent_is_needed_and_saved(self):
+        response = self.client.post(URL, self.valid_payload(consent=False), format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("consent", response.data)
+
+        self.client.post(URL, self.valid_payload(), format="json")
+        self.assertIsNotNone(ExpressionOfInterest.objects.get().consented_at)
 
     def test_valid_submission_is_saved(self):
         response = self.client.post(
@@ -51,7 +60,7 @@ class ExpressionOfInterestApiTests(APITestCase):
     def test_missing_fields_are_rejected(self):
         response = self.client.post(URL, {}, format="json")
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(set(response.data), {"full_name", "email", "user_type", "pathway"})
+        self.assertEqual(set(response.data), {"full_name", "email", "user_type", "pathway", "consent"})
 
     def test_bad_values_are_rejected(self):
         response = self.client.post(
@@ -185,6 +194,7 @@ class StaffSubmissionsListTests(APITestCase):
                 "email": "grace@example.com",
                 "user_type": "teacher",
                 "pathway": "digital",
+                "consent": True,
             },
             format="json",
         )

@@ -25,6 +25,9 @@ class ExpressionOfInterest(models.Model):
     )
     message = models.TextField(blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
+    # When they ticked "I'm happy for the Amazon Emerging Talent team to see these
+    # details". Empty for forms sent before this was saved.
+    consented_at = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
