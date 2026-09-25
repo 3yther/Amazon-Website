@@ -1,9 +1,7 @@
-"""
-Community moderation for staff, in Django admin.
+"""Community moderation in Django admin.
 
-Reports (the first list staff should check): each one says which post and
-why. The actions hide a post, or restore it and mark its reports dealt with.
-Hidden posts are kept, not deleted, so there is a record of what happened.
+Check Reports first. Posts can be hidden or restored. Hidden posts are kept,
+not deleted, so there's a record.
 """
 from django.contrib import admin
 

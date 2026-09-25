@@ -8,23 +8,14 @@ import { useSiteContent } from "../i18n/content.js";
 import { USER_TYPES } from "../labels.js";
 import { CheckboxField, FormError, SelectField, TextareaField, TextField } from "./FormFields.jsx";
 
-// The Expression of Interest form: the site's main way for someone to tell
-// Amazon they want a T-Level placement. Sends to POST /api/interest/ (the
-// interest app), which validates it again on the server and saves it for
-// Amazon staff to see. No account is needed.
-//
-// Used in two places: the Register interest page, and the box on the Sign up
-// page. Each decides what to show once it is sent, through onSent. Wording is
-// in i18n/messages (registerInterest).
+// The Expression of Interest form. Sends to POST /api/interest/, no account needed.
+// Used on the Register interest page and in the box on the Sign up page.
 
 const MESSAGE_LIMIT = 2000; // matches MESSAGE_MAX_LENGTH in interest/serializers.py
 
 const EMPTY = { full_name: "", email: "", user_type: "", pathway: "", message: "" };
 
-/**
- * Quick checks in the browser, so the common mistakes are caught before
- * anything is sent. The server checks everything again; its answer wins.
- */
+// Quick checks before sending. The server checks everything again.
 function checkFields(fields, consent, t) {
   const errors = {};
   if (fields.full_name.trim().length < 2) errors.full_name = t("registerInterest.errors.fullName");
@@ -42,10 +33,7 @@ function checkFields(fields, consent, t) {
   return errors;
 }
 
-/**
- * The form itself. `startingPathway` picks a pathway in advance; `onSent` is
- * called with the chosen pathway once the server has accepted it.
- */
+// startingPathway picks a pathway in advance. onSent runs once the server accepts it.
 export default function InterestForm({ startingPathway = "", onSent }) {
   const t = useT();
   const { PATHWAYS } = useSiteContent().about;

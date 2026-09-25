@@ -12,12 +12,7 @@ import {
   MediaIcon,
 } from "../components/Icons.jsx";
 
-// The T-Level finder (/t-level-near-you): a postcode, an optional pathway and
-// a distance go to GET /api/providers/search/, which measures every provider
-// it holds and answers with the ones inside the radius, nearest first.
-//
-// It searches when the button is pressed, not as you type. A search costs a
-// postcode lookup on the server, and half a postcode is not a place.
+// Find T-Levels near you. Searches GET /api/providers/search/ when you press Search.
 
 // The distances offered. 15 matches the server's default, so an untouched
 // form and a bare request agree.
@@ -33,12 +28,7 @@ const PATHWAY_ICONS = {
   engineering: EngineeringIcon,
 };
 
-/**
- * The loosest shape a UK postcode takes, so an obvious typo is caught before
- * anything is sent. Matches POSTCODE_PATTERN in backend/providers/postcodes.py
- * on purpose. Whether a postcode really exists is the server's answer, not
- * this one.
- */
+// Rough UK postcode check (same as POSTCODE_PATTERN in backend/providers/postcodes.py).
 const POSTCODE_PATTERN = /^[A-Za-z]{1,2}\d[A-Za-z\d]?\d[A-Za-z]{2}$/;
 
 export function checkPostcode(postcode) {
@@ -56,26 +46,14 @@ function focusPostcode() {
   document.getElementById(POSTCODE_FIELD_ID)?.focus();
 }
 
-/**
- * What to tell the visitor when a search fails.
- *
- * formErrors() handles the shared cases: a 400 comes back keyed by field, and
- * anything else lands under "form" as a general apology. The one thing it
- * cannot know about is our 503, which carries its own explanation in "detail"
- * (the postcode lookup service being down, rather than us), and saying that
- * is more use than "something went wrong".
- */
+// Error message for a failed search. A 503 comes with its own message in "detail".
 function searchError(error) {
   const found = formErrors(error);
   const detail = error instanceof ApiError ? error.body?.detail : null;
   return detail ? { ...found, form: detail } : found;
 }
 
-/**
- * "1 mile", "8.4 miles", and "Under 0.1 miles" for a provider on the doorstep,
- * because a chip reading "0 miles" looks like missing data rather than a
- * college at the end of the road.
- */
+// "Under 0.1 miles" looks better than "0 miles".
 export function formatDistance(miles) {
   if (miles === 0) return "Under 0.1 miles";
   return `${miles} ${miles === 1 ? "mile" : "miles"}`;
@@ -234,11 +212,7 @@ export default function NearYou() {
   );
 }
 
-/**
- * The one line under the form, read out as it changes (its parent is a live
- * region). Every state says something: a blank line would leave a screen
- * reader user with no idea whether the search had run.
- */
+// The line under the form. It's a live region so screen readers hear it change.
 function SearchStatus({ status, search }) {
   if (status === "loading") return "Searching";
   // Also the state after a search that could not run, which is why this does

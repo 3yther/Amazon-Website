@@ -1,23 +1,10 @@
 import { hasAny, normalise } from "./match.js";
 
-// Safeguarding comes before everything else Smiley does. Most visitors are 16
-// to 18, so:
-//
-// 1. Anything that sounds like somebody at risk gets calm, clear signposting
-//    to people who can actually help, and no jokes, whatever else it says.
-// 2. Personal details (an email, a phone number, a postcode) get a gentle
-//    "you don't need to share that".
-//
-// Messages caught here are answered in the browser and are NEVER sent to the
-// server or stored. The support numbers were checked against each service's
-// own website in September 2026:
-//   Childline 0800 1111, free, 24/7, not on the phone bill (childline.org.uk)
-//   Shout, text SHOUT to 85258, free, 24/7 (giveusashout.org)
-//   Samaritans 116 123, free, 24/7 (samaritans.org)
-//   999 in an emergency
-//
-// The word lists are deliberately broad: a false alarm costs somebody one
-// kind message; a miss could cost much more.
+// Safety checks come first because most visitors are 16 to 18.
+// Worrying messages get support numbers, and personal details get a warning.
+// These messages are never sent to the server.
+// Numbers checked September 2026: Childline 0800 1111, Shout 85258,
+// Samaritans 116 123, 999 in an emergency.
 
 const AT_RISK = [
   "kill myself",
@@ -88,10 +75,7 @@ const PHONE = /(\+44\s?|\b0)(\d[\s-]?){9,10}\b/;
 const POSTCODE = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/i;
 const ADDRESS_WORDS = ["my address is", "i live at", "my house is", "my school is"];
 
-/**
- * Checks a message for safeguarding concerns and personal details.
- * Returns { topic, private: true } or null. Always private: never sent on.
- */
+// Checks a message for safety worries or personal details.
 export function checkSafety(raw) {
   const clean = normalise(raw);
 

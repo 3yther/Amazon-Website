@@ -7,20 +7,16 @@ from content.models import Pathway
 
 from .models import ExpressionOfInterest
 
-# Letters from any language, joined by single spaces, hyphens, apostrophes or
-# full stops. Allows "Jean-Luc O'Brien" and "Dr. Ada Lovelace"; blocks digits,
-# symbols and markup.
+# Letters in any language with spaces, hyphens, apostrophes or full stops,
+# e.g. "Jean-Luc O'Brien". No numbers, symbols or HTML.
 NAME_PATTERN = re.compile(r"^[^\W\d_]+(?:[ '’.\-]+[^\W\d_]+)*\.?$")
 
 MESSAGE_MAX_LENGTH = 2000
 
 
 class ExpressionOfInterestSerializer(serializers.ModelSerializer):
-    """
-    Validates an Expression of Interest server side. The front end may check
-    too, but this is the check that counts.
-
-    Personal fields are write-only, so the response never echoes them back.
+    """Checks an Expression of Interest on the server.
+    Personal fields are write-only so they're never sent back.
     """
 
     pathway = serializers.SlugRelatedField(
@@ -59,14 +55,8 @@ class ExpressionOfInterestSerializer(serializers.ModelSerializer):
 
 
 class ExpressionOfInterestStaffSerializer(serializers.ModelSerializer):
-    """
-    What Amazon staff read on the submissions list.
-
-    Deliberately a second serializer rather than a flag on the one above.
-    That one keeps every personal field write_only so a submission is never
-    echoed back to whoever sent it, and it has to stay that way; staff
-    genuinely need to read those fields, so they get their own read-only
-    serializer instead of the public one being loosened.
+    """What Amazon staff see on the submissions list. Separate from the one above
+    so that one can keep the personal fields write-only.
     """
 
     pathway = serializers.SlugRelatedField(slug_field="slug", read_only=True)

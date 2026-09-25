@@ -4,16 +4,7 @@ import SmileyFace from "./SmileyFace.jsx";
 // How long a peek lasts: in, a look round, out. Matches the CSS animation.
 const PEEK_MS = 3200;
 
-/**
- * Smiley popping its head in from the edge of the screen (an easter egg).
- *
- * edge  "left", "right" or "bottom"
- * spot  how far along that edge, as a percentage
- *
- * Decorative, so hidden from screen readers; the corner button is still the
- * way to open the chat. Clicking the cameo opens it too, as a bonus. Never
- * rendered under reduced motion (see ChatWidget).
- */
+// Smiley peeking in from the edge of the screen (easter egg). Decoration only.
 export default function SmileyCameo({ edge, spot, outfit, onDone, onOpen }) {
   useEffect(() => {
     const timer = window.setTimeout(onDone, PEEK_MS);

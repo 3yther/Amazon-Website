@@ -1,26 +1,9 @@
 import { forwardRef, useId } from "react";
 
 /**
- * Smiley, drawn. This component only draws: what Smiley is feeling, where it
- * is looking and whether it is blinking all come in as props, from
- * useSmiley.js. Any number of these can be on a page; only the one attached to
- * useSmiley is "alive".
- *
- * DESIGN: inspired by the hooded, dark-faced, big-eyed style of TryHackMe's
- * Echo, but its own character. A round hood rather than a pointed one, a
- * T-shaped aerial for T-Levels, and a mouth, which Echo does not have. Drawn in
- * Amazon Orange and Amazon Dark Blue only.
- *
- * BRAND: the smile is a plain symmetric curve with rounded ends, inside the
- * face. No arrow, no swoosh, nothing that could be read as the Amazon smile,
- * which the brief says must never be altered. The real logo is left alone.
- *
- * COLOURS: the character uses the fixed brand tokens (--orange, --paper-dark,
- * --text-dark), not --blue and --paper, because dark mode swaps those two and
- * Smiley should look like Smiley in either theme.
- *
- * ACCESSIBILITY: purely decorative, so hidden from screen readers. Whatever
- * it shows is also said in words somewhere else.
+ * Draws Smiley. The mood, eyes and blinking come in as props from useSmiley.js.
+ * Only uses the brand colours, and the smile is not the Amazon smile.
+ * Hidden from screen readers because it is just decoration.
  */
 
 // Moods that keep round open eyes, and so can blink.
@@ -42,9 +25,7 @@ const POSES = {
 // Moods with rosy cheeks.
 const CHEEKY = new Set(["happy", "celebrating", "shy"]);
 
-// How far the eyes and the face move towards what Smiley is looking at, in
-// drawing units. The face moves a little and the eyes a little more, which
-// reads as Smiley turning its head.
+// How far the face and eyes move towards where Smiley is looking.
 const FACE_TRAVEL = { x: 0.9, y: 0.6 };
 const EYE_TRAVEL = { x: 3.2, y: 2 };
 
@@ -148,11 +129,7 @@ function Mouth({ mood, talking }) {
   }
 }
 
-/**
- * Seasonal hats (see seasonalOutfit in useSmiley.js), in the two brand
- * colours and paper only. They sit over the top of the hood; the aerial is
- * tucked away underneath while one is on.
- */
+// Seasonal hats (see seasonalOutfit in useSmiley.js).
 function Hat({ outfit }) {
   switch (outfit) {
     case "bobble":
@@ -274,9 +251,7 @@ const SmileyFace = forwardRef(function SmileyFace(
 
             <Hat outfit={outfit} />
 
-            {/* The face is drawn centred at y 39; this lifts it up into the
-                head. A separate group, because the look-around movement below
-                is a CSS transform, which would replace an SVG one. */}
+            {/* moves the face up into the head */}
             <g transform="translate(0 -4.5)">
               <g className="smiley__turn" style={shift(FACE_TRAVEL)}>
                 <ellipse className="smiley__face" cx="32" cy="39" rx="17" ry="14.5" />

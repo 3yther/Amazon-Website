@@ -1,19 +1,10 @@
-"""
-Says whether the near-you search has anything to search.
+"""Checks the near-you search has providers to search.
 
-    python manage.py check_providers          report, and fail if it is broken
-    python manage.py check_providers --quiet  only speak up when something is wrong
+    python manage.py check_providers          report, and fail if it's broken
+    python manage.py check_providers --quiet  only print if something's wrong
 
-Exists because of how the search failed the first time: the providers fixture
-was never loaded on the deployed site, so every search answered 200 with an
-empty list. Nothing was broken from the outside. The tests passed, the
-endpoint was healthy, the postcode resolved, the logs showed no error, and
-the only symptom was a visitor being told there are no colleges near them.
-
-No unit test can catch that, because the fault is in what a deploy ran, not
-in the code. A check that runs after the data is loaded can. Put it at the
-end of the pre-deploy command (see DEPLOYMENT.md) and a deploy that forgets
-to seed providers stops instead of going live empty.
+Runs at the end of the pre-deploy command (see DEPLOYMENT.md), so a deploy
+that forgot to load the providers fails instead of going live empty.
 """
 from django.core.management.base import BaseCommand
 

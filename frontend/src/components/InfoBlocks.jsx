@@ -12,9 +12,7 @@ export function PageHero({ label, title, lead, photo }) {
         <h1 id="page-title">{title}</h1>
         <p className="about-hero__lead">{lead}</p>
       </div>
-      {/* Decorative: the heading beside it carries the meaning, so alt is
-          empty and screen readers skip it. width and height stop the page
-          jumping while the photo loads. */}
+      {/* Decoration, so alt is empty */}
       <img className="about-hero__photo" src={photo} alt="" width="720" height="480" />
     </section>
   );
@@ -73,14 +71,7 @@ export function RouteSteps({ steps }) {
   );
 }
 
-/**
- * A bar split into parts by share, with a key underneath. The bar is the
- * picture; the key says the same thing in words, so the bar is hidden from
- * screen readers and the key is what they read.
- *
- * NEW CONCEPT: flex-grow. Each part of the bar grows in proportion to its
- * share (80 and 20), so the bar draws itself from the numbers in the data.
- */
+// A bar split into parts (e.g. 80/20) with a key underneath for screen readers.
 export function ShareBar({ parts, label }) {
   return (
     <figure className="share-bar">

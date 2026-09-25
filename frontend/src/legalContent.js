@@ -1,13 +1,6 @@
-// Copy for the Terms, Privacy, Cookie and Data Rights pages. Same idea as
-// aboutContent.js: the wording lives here, the page just lays it out. The
-// other languages are in i18n/content/, words only, in the same shape.
-//
-// TEAM: these are DRAFTS written from what the code actually does, checked
-// against the repo on 24 September 2026. They are not legal advice. Before
-// the site goes live, a mentor or someone who knows data protection should
-// read them, and the team should fill in the TODOs (how long data is kept).
-// If the code starts storing something new, update the matching list here.
-//
+// Words for the Terms, Privacy, Cookie and Data Rights pages.
+// TEAM: these are drafts, not legal advice. Get them checked before going live,
+// and fill in the TODOs (how long data is kept).
 // Each page is a list of sections: { heading, paragraphs, points }.
 
 const DRAFT_NOTE =

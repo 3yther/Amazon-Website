@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-// Where the Accessibility settings page keeps its choices (see
-// hooks/useAccessibilityPreferences.js). Read directly rather than through
-// that hook, because the hook also syncs with the server and one copy of it
-// running on the settings page is enough.
+// Where the accessibility settings are saved in the browser.
 const PREFERENCES_KEY = "tsmile:accessibility-preferences";
 
 /** True when the visitor turned on "Text to speech" in Accessibility settings. */
@@ -16,11 +13,7 @@ function speechWanted() {
   }
 }
 
-/**
- * A voice that runs on this device. Some browsers offer online voices that
- * send the text away to be spoken; those are skipped on purpose, so nothing
- * Smiley says leaves the browser. British English first, then any English.
- */
+// Only uses voices on the device, so nothing Smiley says gets sent away.
 function localVoice() {
   const voices = window.speechSynthesis.getVoices().filter((voice) => voice.localService);
   return (
@@ -30,10 +23,7 @@ function localVoice() {
   );
 }
 
-/**
- * Reads Smiley's messages aloud when the visitor has turned text to speech on,
- * and tells Smiley when it is talking so its mouth can move.
- */
+// Reads Smiley's messages out loud if text to speech is on.
 export function useSpeech({ onStart, onEnd }) {
   const supported = typeof window !== "undefined" && "speechSynthesis" in window;
   const handlers = useRef({ onStart, onEnd });

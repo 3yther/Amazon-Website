@@ -1,14 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-// Site footer, shown on every page by App.jsx: five link columns grouped by
-// purpose, then a copyright bar.
-//
-// One page per link: every link goes to its own real page, and its label
-// says what that page is. tests/footer.test.jsx checks that no two links
-// share a page and that every one goes to a route in App.jsx.
-//
-// Headings and labels are translation keys (i18n/messages, footer).
+// Footer on every page: five columns of links and a copyright bar.
+// tests/footer.test.jsx checks every link goes to a real page.
 
 const LINK_COLUMNS = [
   {

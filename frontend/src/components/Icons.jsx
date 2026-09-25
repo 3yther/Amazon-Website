@@ -117,9 +117,7 @@ export function AlertIcon() {
   );
 }
 
-// Stands in for the circular initial when nobody is signed in, so the header's
-// account button is still something to aim at on a narrow screen where its
-// label is hidden. The menu's Hello band uses it as its avatar too.
+// Used on the account button when nobody is signed in.
 export function PersonIcon() {
   return (
     <Icon>

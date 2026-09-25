@@ -7,14 +7,8 @@ import { useT } from "../i18n/I18nProvider.jsx";
 
 const NO_FILTERS = { topic: "", pathway: "", sort: "new", q: "" };
 
-/**
- * The Community (/community): questions about T Levels and Amazon placements,
- * asked and answered by students, parents, teachers and Amazon staff.
- *
- * Anyone can read. Asking, answering, marking helpful and reporting need an
- * account. Every post is checked before it is published, and reports hide a
- * post until staff review it (see backend/community).
- */
+// The Community page. Anyone can read, but you need an account to post.
+// Posts are checked before they go up (see backend/community).
 export default function Community() {
   const t = useT();
   const formatDate = useFormatDate();

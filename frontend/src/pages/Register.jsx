@@ -21,14 +21,10 @@ const EMPTY_FIELDS = {
   pathway_interest: "",
 };
 
-// Front end only for now: the backend has no column for this, so it is not
-// sent anywhere. Values are ready for a field to be added later.
-// The words for each are under register.heardAbout in the language files.
+// Not saved yet, there's no field for it in the backend. Words are under register.heardAbout.
 const HEARD_ABOUT_OPTIONS = ["search_engine", "social_media", "friend_family", "advert", "influencer", "ai", "other"];
 
-// Both tick boxes are a condition of signing up, checked here and never sent:
-// the age one is a yes or no confirmation, not a date of birth, and neither
-// has anywhere to be stored.
+// Both boxes have to be ticked to sign up. They aren't sent to the server.
 const CONFIRMATION_ERRORS = {
   over_sixteen: "register.errors.overSixteen",
   terms: "register.errors.terms",
@@ -237,13 +233,7 @@ export default function Register() {
   );
 }
 
-/**
- * Register interest without an account, in a box under the Sign up form.
- *
- * NEW CONCEPT: <details> and <summary>. The browser gives a box that opens
- * and closes on its own, keyboard and screen reader support included, so the
- * sign-up form is not buried under a second one until someone asks for it.
- */
+// Register interest box under the sign up form. Uses <details> so it opens and closes by itself.
 function InterestBox() {
   const t = useT();
   const [sentPathway, setSentPathway] = useState(null);

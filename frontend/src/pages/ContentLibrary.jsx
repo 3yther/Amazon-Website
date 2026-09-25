@@ -35,15 +35,7 @@ const PATHWAY_ICONS = {
   engineering: EngineeringIcon,
 };
 
-/**
- * A short name for the site a link goes to, for the "Open on ..." button.
- * Every gov.uk address becomes "gov.uk", because long ones such as
- * assets.publishing.service.gov.uk overflow a phone screen.
- *
- * NEW CONCEPT: the URL class. new URL() splits an address into parts
- * (hostname, path and so on) and throws if the text is not a valid address,
- * which is how we spot a bad link.
- */
+// Short site name for the "Open on ..." button. Any gov.uk address just says "gov.uk".
 export function siteName(link) {
   let host;
   try {
@@ -54,12 +46,7 @@ export function siteName(link) {
   return host === "gov.uk" || host.endsWith(".gov.uk") ? "gov.uk" : host;
 }
 
-/**
- * The resources page (/resources): the content library, which loads pathways
- * for the filter and lists content from /api/content/ with server-side
- * filtering. /resources?pathway=<slug> (used by the homepage pathway tiles)
- * opens it with that pathway already chosen.
- */
+// The resources page. /resources?pathway=digital opens it filtered to that pathway.
 export default function ContentLibrary() {
   const [searchParams] = useSearchParams();
   const [pathways, setPathways] = useState([]);

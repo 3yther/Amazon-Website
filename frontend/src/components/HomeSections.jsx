@@ -31,12 +31,7 @@ const STATS = [
 
 const COUNT_UP_MS = 1200;
 
-/**
- * 0 to 1 over COUNT_UP_MS, starting the first time the element is at least
- * half in view. It runs once only, so scrolling away and back leaves the
- * numbers alone. With reduced motion, or no IntersectionObserver, it is 1
- * straight away.
- */
+// Goes from 0 to 1 once the stats scroll into view. Straight to 1 with reduced motion.
 function useCountUp(ref) {
   const reducedMotion = useReducedMotion();
   const [progress, setProgress] = useState(reducedMotion ? 1 : 0);
@@ -105,28 +100,17 @@ export function StatsRow() {
 
 /* ---------- Audience cards ---------- */
 
-// Photos from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
-// free to use, attribution not required. Credited here for the asset log.
-// Saved at 720px wide from Pexels' own image server.
-//   audience-teacher.jpg: Antoni Shkraba,
-//     https://www.pexels.com/photo/a-female-professor-teaching-her-student-5306457/
-//   audience-parent.jpg: cottonbro studio,
-//     https://www.pexels.com/photo/a-mother-and-daughter-looking-at-the-paper-6471429/
-//   audience-student.jpg: Julia M Cameron,
-//     https://www.pexels.com/photo/boy-wearing-yellow-shirt-while-writing-on-white-paper-4144100/
-// Each card's words are home.audiences.<audience> in i18n/messages.
+// Photos from Pexels (free to use):
+//   audience-teacher.jpg: Antoni Shkraba, https://www.pexels.com/photo/a-female-professor-teaching-her-student-5306457/
+//   audience-parent.jpg: cottonbro studio, https://www.pexels.com/photo/a-mother-and-daughter-looking-at-the-paper-6471429/
+//   audience-student.jpg: Julia M Cameron, https://www.pexels.com/photo/boy-wearing-yellow-shirt-while-writing-on-white-paper-4144100/
 const AUDIENCE_CARDS = [
   { audience: "teacher", photo: teacherPhoto },
   { audience: "parent", photo: parentPhoto },
   { audience: "student", photo: studentPhoto },
 ];
 
-/**
- * The three audience cards double as the audience choice for the hero
- * subhead (see Home.jsx). Each card's headline is a real toggle button,
- * inside the h3 so the heading stays a heading, and its click area is
- * stretched over the whole card in styles.css.
- */
+// The three audience cards. Picking one changes the hero subhead (see Home.jsx).
 export function AudienceCards({ selected, onSelect }) {
   const t = useT();
   return (
@@ -155,9 +139,7 @@ export function AudienceCards({ selected, onSelect }) {
                 loading="lazy"
                 decoding="async"
               />
-              {/* A visible "Selected" as well as the orange border, so the
-                  choice never rests on colour alone. Screen readers get the
-                  button's pressed state instead. */}
+              {/* "Selected" text so it isn't shown by colour only */}
               {isSelected && (
                 <span className="audience-card__selected" aria-hidden="true">
                   {t("home.audiences.selected")}
@@ -187,9 +169,7 @@ export function AudienceCards({ selected, onSelect }) {
 
 /* ---------- Pathway tiles ---------- */
 
-// Slugs match backend/content/fixtures/pathways.json. Names and summaries
-// are pathways.<slug> and home.pathways.<slug> in i18n/messages. Each tile
-// opens the library already filtered to its pathway.
+// Each tile opens the resources page filtered to that pathway.
 const PATHWAYS = [
   { slug: "digital", Icon: DigitalIcon },
   { slug: "business", Icon: BusinessIcon },
@@ -226,9 +206,7 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
-// Each step's words are home.steps.<key> in i18n/messages. `link` goes to the
-// page a step talks about, and its label is home.steps.<key>.link. "Hear back"
-// has none: it is something we do, not somewhere to go.
+// The four steps. "Hear back" has no link because there's nowhere to go.
 const STEPS = [
   { key: "browse", link: "/resources" },
   { key: "register", link: "/register-interest" },
@@ -236,10 +214,7 @@ const STEPS = [
   { key: "getInvolved", link: "/register" },
 ];
 
-/**
- * Four "Level" cards, a nod to T-Levels. On desktop they step down left to
- * right like a staircase, Level 01 highest (see .steps in styles.css); on smaller screens they stack.
- */
+// Four "Level" cards that step down like stairs on desktop and stack on mobile.
 export function HowItWorks() {
   const t = useT();
   return (

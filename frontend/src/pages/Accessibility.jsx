@@ -21,13 +21,8 @@ function SignInPrompt() {
   );
 }
 
-/**
- * Settings that change how the site looks and behaves. Sight, display and
- * language settings work for anyone, signed in or not (they live in
- * localStorage either way, see useAccessibilityPreferences). Security and
- * account settings need a session, since they change the account itself.
- * Wording is in i18n/messages (settings).
- */
+// The settings page. Sight, display and language work for everyone.
+// Security and account need you to be signed in.
 export default function Accessibility() {
   const t = useT();
   const [searchParams, setSearchParams] = useSearchParams();

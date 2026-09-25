@@ -1,16 +1,8 @@
-"""
-The only place in T-SMILE that talks to an AI provider.
+"""The only file that talks to the AI (Anthropic's Claude).
 
-Everything else calls get_ai_response(prompt, context). Moving to a different
-provider means rewriting this one file, and nothing else changes.
-
-We call Anthropic's Claude. The key lives in the ANTHROPIC_API_KEY environment
-variable (backend/.env locally, set on the server in production) and is never
-sent to the browser, because every call goes through Django.
-
-Nothing here ever raises at the caller. Anything that goes wrong becomes
-AssistantUnavailable, the view turns that into a calm fallback message, and the
-rest of the site carries on working.
+Everything else calls get_ai_response(prompt, context). The key is in the
+ANTHROPIC_API_KEY environment variable and never goes to the browser.
+Any error becomes AssistantUnavailable, so the rest of the site keeps working.
 """
 import logging
 
@@ -44,9 +36,7 @@ def _get_client():
     """Build the Anthropic client once and reuse it, so connections are pooled."""
     global _client
     if _client is None:
-        # Imported here rather than at module level so the rest of the site,
-        # its tests and its migrations all run fine without the package
-        # installed or a key set.
+        # Imported here so the site and tests still run without the package or a key.
         import anthropic
 
         api_key = settings.ANTHROPIC_API_KEY
@@ -62,11 +52,8 @@ def _get_client():
 
 
 def _build_messages(prompt, history):
-    """
-    The conversation to send: earlier turns, then the new question.
-
-    history is a list of {"role": "user" | "assistant", "content": str}, oldest
-    first. The API is stateless, so the whole conversation goes every time.
+    """The conversation to send: earlier messages, then the new question.
+    The API doesn't remember anything, so the whole conversation is sent each time.
     """
     messages = [{"role": turn["role"], "content": turn["content"]} for turn in history]
     messages.append({"role": "user", "content": prompt})
@@ -74,15 +61,11 @@ def _build_messages(prompt, history):
 
 
 def get_ai_response(prompt, context, history=()):
-    """
-    Ask the assistant a question and return its reply as plain text.
+    """Asks the AI a question and returns the reply as text.
 
-    prompt   what the visitor typed
-    context  the system prompt: the rules plus the facts it may use
-             (see knowledge.build_system_prompt)
-    history  earlier turns of this conversation, oldest first
-
-    Raises AssistantUnavailable if there is no usable answer, for any reason.
+    prompt is what the visitor typed, context is the system prompt (rules and
+    facts) and history is the earlier messages. Raises AssistantUnavailable if
+    anything goes wrong.
     """
     # First, so a missing key fails straight away, without paying the second
     # or so it takes to import the SDK.
@@ -90,9 +73,7 @@ def get_ai_response(prompt, context, history=()):
 
     import anthropic
 
-    # The rules and facts are the same on every request, so they are marked
-    # cacheable: Anthropic then charges much less to read them again. The
-    # question itself comes after, where it does not disturb the cached part.
+    # The rules and facts are the same every time, so they're cached (cheaper).
     request = {
         "model": MODEL,
         "max_tokens": MAX_TOKENS,
@@ -105,10 +86,8 @@ def get_ai_response(prompt, context, history=()):
 
     try:
         if settings.ANTHROPIC_SERVER_SIDE_FALLBACK:
-            # If Claude declines a message, the API retries it on another model
-            # inside the same call instead of leaving us with nothing. Switch
-            # this off with ANTHROPIC_SERVER_SIDE_FALLBACK=false if the account
-            # does not have the feature.
+            # If Claude says no to a message, the API tries another model.
+            # Turn off with ANTHROPIC_SERVER_SIDE_FALLBACK=false if the account can't use it.
             response = client.beta.messages.create(
                 betas=["server-side-fallback-2026-07-01"],
                 fallbacks="default",
@@ -126,9 +105,7 @@ def get_ai_response(prompt, context, history=()):
     except anthropic.APIStatusError as error:
         logger.error("Anthropic returned %s: %s", error.status_code, error.message)
         if error.status_code == 400 and settings.ANTHROPIC_SERVER_SIDE_FALLBACK:
-            # Most likely cause of a 400 here: the account does not have the
-            # server-side fallback option. Say so, rather than leave somebody
-            # guessing at why every message fails.
+            # A 400 here usually means the account can't use the fallback option.
             logger.error(
                 "If this happens to every message, try ANTHROPIC_SERVER_SIDE_FALLBACK=false "
                 "in backend/.env."

@@ -3,16 +3,7 @@ import { GlobeIcon } from "../components/Icons.jsx";
 import { useI18n } from "./I18nProvider.jsx";
 import { LANGUAGES } from "./languages.js";
 
-/**
- * The language menu: a plain <select>, because it is the one control every
- * keyboard, screen reader and phone already knows how to use.
- *
- * Each language is listed in its own name (Polski, العربية), which is what
- * somebody who reads it will look for, and each option carries its own lang
- * attribute so a screen reader pronounces it in the right voice.
- *
- * Shown in the account menu and the side menu, always with its label.
- */
+// The language dropdown. Each language is shown in its own name.
 export default function LanguagePicker() {
   const { language, setLanguage, t } = useI18n();
   const id = useId();

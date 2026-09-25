@@ -9,11 +9,7 @@ const RUNNING_ROUTES = T_LEVEL_ROUTES.filter((route) =>
   route.subjects.some((subject) => !subject.comingIn),
 );
 
-/**
- * All T-Levels (/t-levels): every subject, not just the five pathways this
- * site focuses on, grouped into gov.uk's routes. Each subject links to its
- * official page, so the detail stays with the people who keep it current.
- */
+// All T-Levels page: every subject grouped by route, linking to the official pages.
 export default function TLevels() {
   return (
     <>

@@ -9,9 +9,7 @@ const EMPTY_FIELDS = { current_password: "", new_password: "", confirm_password:
 // Score 0 to 5, in order; the words are in i18n/messages (settings.security.strengths).
 const STRENGTH_KEYS = ["veryWeak", "weak", "fair", "good", "strong", "veryStrong"];
 
-/** A rough client-side estimate, only to guide the person typing; the
- * server-side validators in backend/config/settings.py AUTH_PASSWORD_VALIDATORS
- * are what actually decide whether a password is accepted. */
+// Rough strength guess to help while typing. The server decides if a password is allowed.
 function passwordStrength(password) {
   let score = 0;
   if (password.length >= 8) score += 1;
@@ -22,10 +20,7 @@ function passwordStrength(password) {
   return { score, key: STRENGTH_KEYS[score] };
 }
 
-/**
- * Change password, with a live strength hint, plus a read-only reminder of
- * when the password was last changed.
- */
+// Change password, with a strength hint and when it was last changed.
 export default function SecuritySettings({ lastChanged }) {
   const t = useT();
   const [fields, setFields] = useState(EMPTY_FIELDS);

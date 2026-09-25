@@ -17,13 +17,8 @@ function useIsMobile() {
   return isMobile;
 }
 
-/**
- * A set of named sections: a sidebar of tabs on desktop, a horizontal
- * scrolling strip of tabs on tablet, and a stack of accordions on mobile, so
- * nothing needs a sideways scroll on a small screen. `tabs` is
- * [{ id, label, content }]; `activeId` and `onChange` control which one shows
- * (which section opens, on mobile).
- */
+// Tabs down the side on desktop, a scrolling row on tablet and accordions on
+// mobile. tabs is [{ id, label, content }].
 export default function TabNav({ tabs, activeId, onChange }) {
   const isMobile = useIsMobile();
 

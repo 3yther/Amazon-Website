@@ -7,13 +7,7 @@ import AuthPanel from "../components/AuthPanel.jsx";
 import { FormError, TextField } from "../components/FormFields.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-/**
- * Step two of "forgotten password": the link from the email lands here with
- * ?uid=...&token=... in the URL. Both travel with every submit rather than
- * being exchanged for a session up front, so a half-read email link cannot
- * leave anything signed in - the server only acts on them together, once,
- * inside POST /api/accounts/password-reset/confirm/ (see api.js).
- */
+// Forgotten password, step 2. The email link brings ?uid=...&token=... here.
 export default function ResetPassword() {
   const t = useT();
   const navigate = useNavigate();

@@ -1,8 +1,4 @@
-// Copy for the Get involved page (/get-involved): what each kind of visitor can
-// do next. Same rule as helpContent.js: every link goes to a page on this site
-// or to a real service, and nothing promises something we have not built.
-//
-// `to` is a page on this site; `href` is another website.
+// Words for the Get involved page. `to` is a page on this site, `href` is another website.
 
 export const AUDIENCES = [
   {

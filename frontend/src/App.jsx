@@ -117,7 +117,7 @@ export default function App() {
           {/* Amazon staff only. The page itself sends anyone else to "/", and
               the API behind it refuses them regardless. */}
           <Route path="/staff" element={<PageTitle title="Submissions"><StaffDashboard /></PageTitle>} />
-          {/* /account is gone: profile and accessibility settings live at /accessibility now. */}
+          {/* old link, settings are on /accessibility now */}
           <Route path="/account" element={<Navigate to="/accessibility" replace />} />
           <Route path="*" element={<PageTitle title="Page not found"><NotFound /></PageTitle>} />
         </Routes>

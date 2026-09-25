@@ -20,18 +20,8 @@ const PATHWAY_ICONS = {
   engineering: EngineeringIcon,
 };
 
-// Tabbed switcher for the five pathways Amazon offers.
-//
-// NEW CONCEPT: the ARIA tabs pattern. A screen reader should hear "tab 2 of 5,
-// selected", not five unrelated buttons, so the markup carries:
-//   role="tablist" on the row, role="tab" on each button, aria-selected on the
-//   chosen one, aria-controls pointing at its panel, and role="tabpanel" with
-//   aria-labelledby pointing back at its tab.
-//
-// NEW CONCEPT: roving tabindex. In a tab list, Tab should move past the whole
-// row in one press, and the left and right arrow keys should move between the
-// tabs. So only the selected tab has tabIndex 0 and the rest have -1, and the
-// arrow keys move the selection and the focus together.
+// Tabs for the five pathways. Uses the ARIA tabs pattern, and the arrow keys
+// move between tabs (only the selected tab has tabIndex 0).
 
 export default function PathwaySwitcher() {
   const t = useT();
@@ -99,10 +89,7 @@ export default function PathwaySwitcher() {
           })}
         </div>
 
-        {/* NEW CONCEPT: all five panels are in the page, with the four that
-            are not selected carrying the hidden attribute. Each tab's
-            aria-controls has to point at an element that really exists, so
-            rendering only the open one would leave four broken references. */}
+        {/* All five panels are rendered so aria-controls always points at something. */}
         {PATHWAYS.map((pathway) => (
           <div
             key={pathway.slug}
@@ -135,9 +122,7 @@ export default function PathwaySwitcher() {
               <p>{pathway.suits}</p>
             </div>
 
-            {/* Only shown where Amazon has actually said something public about
-                that pathway, so the page never claims a placement exists that
-                we cannot point at a source for. */}
+            {/* Only shown if Amazon has said something public about this pathway. */}
             {pathway.amazonStatus && <p className="pathways__status">{pathway.amazonStatus}</p>}
 
             <div className="pathways__actions">
@@ -149,9 +134,6 @@ export default function PathwaySwitcher() {
               >
                 {t("about.switcher.registerIn", { name: pathway.name })}
               </Link>
-              {/* The content library does not read a pathway out of the URL
-                  yet, so this is a plain link rather than a promise it cannot
-                  keep. */}
               <Link className="button" to="/resources">
                 {t("home.browse")}
               </Link>

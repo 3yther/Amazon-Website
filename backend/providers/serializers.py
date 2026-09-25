@@ -6,12 +6,8 @@ from .models import Provider
 
 
 class ProviderSearchResultSerializer(serializers.ModelSerializer):
-    """
-    One provider in a search result.
-
-    distance_miles is not a model field: the view works it out for this
-    search and hangs it on each provider before serialising, because how far
-    away a college is depends on who is asking.
+    """One provider in a search result. distance_miles is worked out by the view,
+    it isn't stored.
     """
 
     pathways = PathwaySummarySerializer(many=True, read_only=True)

@@ -1,22 +1,11 @@
-"""
-Fills in each provider's position from its postcode, using postcodes.io.
+"""Fills in each provider's position from its postcode, using postcodes.io.
 
     python manage.py geocode_providers              only the ones that need it
-    python manage.py geocode_providers --refresh    look every one up again
+    python manage.py geocode_providers --refresh    look them all up again
 
-Safe to run as often as you like. By default it only touches providers still
-sitting at 0, 0 (the "never looked up" marker), so a second run does nothing
-and costs nothing. That is what makes it safe in the pre-deploy step, after
-`loaddata providers` (see DEPLOYMENT.md).
-
-Why this exists at all: the search must never call an outside service once per
-provider. Doing the lookups here, once, means a visitor's search costs one
-call for their own postcode and no more.
-
-A provider that cannot be placed is left alone and named in the output, and
-the command still exits 0. The seed fixture ships real coordinates, so a
-deploy is never blocked by somebody else's API being down; anything left
-unplaced is simply left out of the search until the next run.
+Safe to run any time: by default it only looks up providers still at 0, 0.
+Runs in the pre-deploy step after `loaddata providers` (see DEPLOYMENT.md).
+Providers it can't place are listed but it still exits 0.
 """
 from django.core.management.base import BaseCommand
 

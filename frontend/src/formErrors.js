@@ -1,10 +1,7 @@
 import { ApiError } from "./api.js";
 
-/**
- * Turn a failed API call into { fieldName: "message" } for a form. On a 400
- * the backend sends { field: ["message", ...] }. Anything not tied to one
- * field (a wrong password, the server being down) goes under "form".
- */
+// Turns a failed API call into { field: "message" } for a form.
+// Errors that aren't about one field go under "form".
 export function formErrors(error) {
   if (error instanceof ApiError && error.status === 400 && error.body) {
     const errors = {};

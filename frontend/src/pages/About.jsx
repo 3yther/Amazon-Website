@@ -9,23 +9,11 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 import aboutPhoto from "../assets/about-hero.jpg";
 
-// Hero photo from Pexels, under the Pexels Licence (https://www.pexels.com/license/):
-// free to use, attribution not required. Credited here for the asset log.
-// Saved at 720px wide from Pexels' own image server.
-//   about-hero.jpg: ThisIsEngineering,
-//     https://www.pexels.com/photo/engineers-in-workshop-3861960/
+// Hero photo from Pexels (free to use): about-hero.jpg by ThisIsEngineering,
+// https://www.pexels.com/photo/engineers-in-workshop-3861960/
 
-/**
- * About T-Level: what a T-Level is, how the placement works, the five
- * pathways, grades, who it suits, why do one and what it costs, plus the
- * pathway tabs, a quiz and an FAQ.
- *
- * Kept short on purpose: every point has a picture and one line, so the page
- * can be followed by someone who finds long text hard. The wording lives in
- * aboutContent.js (and its translations, see i18n/content.js), the page's own
- * headings in i18n/messages under "about", and every figure is sourced at the
- * foot of the page.
- */
+// About T-Level page. The words are in aboutContent.js and the headings are
+// under "about" in i18n/messages.
 export default function About() {
   const t = useT();
   const { AUDIENCE_POINTS, BENEFITS, COST_POINTS, GRADES, PLACEMENT_FACTS, ROUTE_STEPS, SOURCES, TIME_SPLIT } =
@@ -75,12 +63,7 @@ export default function About() {
           <p className="section-intro__lead">{t("about.grades.lead")}</p>
         </div>
 
-        {/* A real table, because this is tabular data. The caption names it for
-            screen readers, and scope tells them which heading owns each cell. */}
-        {/* NEW CONCEPT: a container that can scroll must be reachable by
-            keyboard, so it takes tabIndex 0. Anything focusable needs an
-            accessible name, which is why it is also a labelled region. Its name
-            differs from the section's, so the two landmarks are not confused. */}
+        {/* The table can scroll sideways, so it needs tabIndex 0 and a label for keyboard users. */}
         <div className="grades__scroll" tabIndex={0} role="region" aria-label={t("about.grades.tableName")}>
           <table className="grades">
             <caption className="sr-only">{t("about.grades.caption")}</caption>

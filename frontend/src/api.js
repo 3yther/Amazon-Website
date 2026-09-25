@@ -34,15 +34,10 @@ async function request(path, { params = {}, signal } = {}) {
   return readResponse(response);
 }
 
-// Cached CSRF token. Holds the pending request rather than the string, so
-// calls made at the same moment share one fetch instead of racing.
+// Cached CSRF token (the promise, so two calls at once share one fetch).
 let csrfToken = null;
 
-/**
- * The token Django expects in X-CSRFToken on every POST (see the comment at
- * the top of backend/accounts/views.py). Fetched once, then cached. Pass
- * { refresh: true } to fetch a new one, e.g. after login.
- */
+/** The token Django wants in X-CSRFToken on every POST. Pass { refresh: true } after login. */
 export function getCsrfToken({ refresh = false } = {}) {
   if (refresh || !csrfToken) {
     const pending = request("/api/accounts/csrf/").then((data) => data.csrf_token);
@@ -69,8 +64,7 @@ async function sendJson(method, path, body) {
 
   let response = await send(await getCsrfToken());
   if (response.status === 403) {
-    // The cached token may be stale (e.g. rotated by a login in another tab).
-    // Fetch a fresh one and retry once.
+    // The token might be old (e.g. logged in on another tab), so get a new one and retry once.
     response = await send(await getCsrfToken({ refresh: true }));
   }
 
@@ -96,23 +90,15 @@ export function getContent(filters, options) {
 }
 
 /**
- * Schools and colleges near a postcode, nearest first:
- * { postcode, radius_miles, count, results }. Each result has id, name,
- * address, postcode, distance_miles, website_url and pathways.
- *
- * filters: postcode (required), pathway (a slug, optional), radius (miles,
- * optional, default 15). Throws ApiError(400) with field errors when the
- * postcode does not exist or a filter is unknown, and ApiError(503) when the
- * postcode lookup service itself is down.
+ * Schools and colleges near a postcode, nearest first.
+ * filters: postcode, pathway (optional slug), radius (optional, miles).
+ * Returns { postcode, radius_miles, count, results }.
  */
 export function searchProviders(filters, options) {
   return request("/api/providers/search/", { ...options, params: filters });
 }
 
-/**
- * The signed-in user: { id, username, user_type, pathway_interest }.
- * Resolves to null when nobody is signed in, since that is a normal state.
- */
+/** The signed-in user, or null if nobody is signed in. */
 export async function getCurrentUser(options) {
   try {
     return await request("/api/accounts/me/", options);
@@ -122,143 +108,92 @@ export async function getCurrentUser(options) {
   }
 }
 
-// Django issues a new CSRF token when a session starts. If fetching it fails
-// here, the cache is cleared and the next POST fetches one itself.
+// Django makes a new CSRF token when you sign in, so fetch it again.
 async function refreshCsrfTokenAfterSignIn() {
   await getCsrfToken({ refresh: true }).catch(() => {});
 }
 
-/**
- * Create an account and sign in.
- * fields: username, password, password_confirm, user_type, pathway_interest (optional).
- * Resolves to { id, username, user_type }.
- */
+/** Create an account and sign in. */
 export async function register(fields) {
   const user = await postJson("/api/accounts/register/", fields);
   await refreshCsrfTokenAfterSignIn();
   return user;
 }
 
-/** Sign in. Resolves to { id, username, user_type }. */
+/** Sign in. */
 export async function login(username, password) {
   const user = await postJson("/api/accounts/login/", { username, password });
   await refreshCsrfTokenAfterSignIn();
   return user;
 }
 
-/** Sign out. Resolves to null. */
+/** Sign out. */
 export function logout() {
   return postJson("/api/accounts/logout/");
 }
 
-/**
- * Ask for a password reset email. Resolves to { detail }, always the same
- * message whether or not the username exists - the backend never reveals
- * that (see PasswordResetRequestView in backend/accounts/views.py).
- */
+/** Ask for a password reset email. The reply is the same whether or not the username exists. */
 export function requestPasswordReset(username) {
   return postJson("/api/accounts/password-reset/", { username });
 }
 
-/**
- * Finish a reset with the uid and token from the emailed link.
- * fields: uid, token, new_password, confirm_password.
- * Resolves to { success: true } and signs the visitor in, same as login().
- */
+/** Finish a reset with the uid and token from the email link. Also signs you in. */
 export async function confirmPasswordReset(fields) {
   const result = await postJson("/api/accounts/password-reset/confirm/", fields);
   await refreshCsrfTokenAfterSignIn();
   return result;
 }
 
-/**
- * Update the signed-in user's name, email or phone.
- * fields: any of first_name, last_name, email, phone.
- * Resolves to the same shape as getCurrentUser().
- */
+/** Update the signed-in user's name, email or phone. */
 export function updateProfile(fields) {
   return patchJson("/api/accounts/me/", fields);
 }
 
-/**
- * The signed-in user's accessibility preferences, created with defaults on
- * first request. See backend/accounts/models.py UserPreference for the fields.
- */
+/** The signed-in user's saved settings (UserPreference in backend/accounts/models.py). */
 export function getPreferences(options) {
   return request("/api/accounts/user-preferences/", options);
 }
 
-/** Partially update the signed-in user's accessibility preferences. */
+/** Save some of the signed-in user's settings. */
 export function updatePreferences(fields) {
   return patchJson("/api/accounts/user-preferences/", fields);
 }
 
-/**
- * Change the signed-in user's password.
- * fields: current_password, new_password, confirm_password.
- * Resolves to { success: true }, or throws ApiError(400) with field errors.
- */
+/** Change password. fields: current_password, new_password, confirm_password. */
 export function changePassword(fields) {
   return postJson("/api/accounts/change-password/", fields);
 }
 
-/**
- * Deactivate the signed-in user's account after confirming their password.
- * Ends the session server-side, so call refresh() afterwards.
- */
+/** Deactivate the account (needs the password). Call refresh() afterwards. */
 export function deactivateAccount(password) {
   return postJson("/api/accounts/deactivate-account/", { password });
 }
 
-/**
- * Send an Expression of Interest.
- * fields: full_name, email, user_type, pathway (a slug), message (optional).
- * Resolves to { id, pathway, submitted_at }.
- */
+/** Send an Expression of Interest. */
 export function submitInterest(fields) {
   return postJson("/api/interest/", fields);
 }
 
-/**
- * One page of Expression of Interest submissions: { count, next, previous,
- * results }. Amazon staff only; anyone else gets ApiError 403. The check
- * that matters is the server's (accounts/permissions.py IsAmazonStaff), not
- * anything the front end does with this.
- */
+/** One page of interest submissions. Amazon staff only (the server checks this). */
 export function getInterestSubmissions(params, options) {
   return request("/api/interest/submissions/", { ...options, params });
 }
 
-/**
- * Send feedback about the site. Open to anyone: signed in or not.
- * fields: category, message, email (optional; ignored server-side if signed in).
- * Resolves to { success: true }.
- */
+/** Send feedback about the site. Anyone can, signed in or not. */
 export function submitFeedback(fields) {
   return postJson("/api/accounts/feedback/", fields);
 }
 
 /**
- * Send a message to Smiley, the AI assistant, and get its reply: { reply }.
- *
- * Both options are optional, and neither is stored (only the message is):
- *   quiz      set when a wrong quiz answer started the conversation:
- *             { question, correctAnswer, chosenAnswer, explanation }. It
- *             grounds the reply in that question.
- *   audience  "student", "parent" or "teacher", from the question Smiley asks
- *             first, so the reply can be pitched for them.
- *
- * Nothing about how the visitor moved around the site is sent: idle time,
- * scrolling and mouse movement stay in the browser.
- *
- * Throws ApiError with status 503 when the assistant itself is unavailable, so
- * the widget can show its fallback message.
+ * Send a message to Smiley and get { reply }.
+ * quiz: the question they got wrong, if that started the chat.
+ * audience: student, parent or teacher. Throws a 503 ApiError if the AI is down.
  */
 export function sendChatMessage(message, { quiz, audience, language } = {}) {
   return postJson("/api/chat/", {
     message,
     ...(audience && { audience }),
-    // The site language, so Smiley's AI replies in it. Not stored.
+    // so Smiley answers in the site's language
     ...(language && { language }),
     ...(quiz && {
       quiz_question: quiz.question,
@@ -269,20 +204,14 @@ export function sendChatMessage(message, { quiz, audience, language } = {}) {
   });
 }
 
-/**
- * This visitor's recent chat messages: { messages: [{ role, message, created_at }] }.
- * Empty for a visitor who has not chatted before.
- */
+/** This visitor's recent chat messages. */
 export function getChatHistory(options) {
   return request("/api/chat/", options);
 }
 
 // --- the Community -----------------------------------------------------------
 
-/**
- * One page of Community questions: { count, next, previous, results }.
- * filters: topic, pathway (a slug), sort (new | helpful | unanswered), q, page.
- */
+/** One page of Community questions. filters: topic, pathway, sort, q, page. */
 export function getQuestions(filters, options) {
   return request("/api/community/questions/", { ...options, params: filters });
 }
@@ -292,11 +221,7 @@ export function getQuestion(id, options) {
   return request(`/api/community/questions/${id}/`, options);
 }
 
-/**
- * Ask a question: { title, body, topic, pathway }. A 400 with
- * { moderation: [reason] } means it was stopped before publishing (see
- * backend/community/moderation.py).
- */
+/** Ask a question. A 400 with "moderation" means the filter stopped it. */
 export function askQuestion(fields) {
   return postJson("/api/community/questions/", fields);
 }

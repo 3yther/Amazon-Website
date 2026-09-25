@@ -5,10 +5,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 // Values from the backend's Feedback.Category; labels in i18n/messages (contact).
 const CATEGORIES = ["general", "feature"];
 
-/**
- * Contact us: a short form that sends a message to the team. Problems with
- * the site go to Report an Issue instead, so each page has one job.
- */
+// Contact us page. Problems with the site go to Report an issue instead.
 export default function Contact() {
   const t = useT();
 

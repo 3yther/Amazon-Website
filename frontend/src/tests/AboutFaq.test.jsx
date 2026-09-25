@@ -4,9 +4,7 @@ import userEvent from "@testing-library/user-event";
 import AboutFaq from "../components/AboutFaq.jsx";
 import { FAQS } from "../aboutContent.js";
 
-// NEW CONCEPT: Testing Library finds things the way a person would, by role
-// and name ("the button called ...") rather than by class name. If a test can
-// find it that way, a screen reader can too.
+// Testing Library finds things by role and name, like a screen reader would.
 
 /** The button for one FAQ question, found by its visible text. */
 function questionButton(faq) {
@@ -25,10 +23,7 @@ describe("About page FAQ", () => {
   });
 
   it("opens an answer when its question is clicked", async () => {
-    // NEW CONCEPT: userEvent acts like a real person: it moves focus, presses
-    // keys and clicks, firing the same events a browser would. delay: null
-    // skips the tiny pause it normally leaves between actions, which only
-    // slows tests down. The same setting is used in every test file.
+    // delay: null makes userEvent skip the pause between actions, so tests run faster.
     const user = userEvent.setup({ delay: null });
     render(<AboutFaq />);
 

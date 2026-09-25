@@ -10,15 +10,8 @@ import { USER_TYPES } from "../labels.js";
 // place rather than truncating with no way to read the rest.
 const MESSAGE_PREVIEW = 90;
 
-/**
- * Expression of Interest submissions, for Amazon staff.
- *
- * The redirect below is for a sensible experience, not for security: the
- * real gate is the server's IsAmazonStaff permission on
- * /api/interest/submissions/, which is what actually decides whether these
- * personal details are ever sent. Someone typing the URL in without a staff
- * account gets bounced here and would get a 403 from the API anyway.
- */
+// Interest submissions, for Amazon staff. The redirect is just for convenience,
+// the API is what actually blocks non-staff.
 export default function StaffDashboard() {
   const { user, checked } = useAuth();
   const [page, setPage] = useState(1);

@@ -21,12 +21,7 @@ function RangeField({ id, label, value, valueLabel, ...inputProps }) {
   );
 }
 
-/**
- * Font size, contrast, text spacing, colour-vision correction and the chat
- * assistant's voice: the settings someone with low vision or colour blindness
- * is most likely to need. Reduce motion lives here too, reusing the same
- * preference useReducedMotion.js already reads everywhere else on the site.
- */
+// Font size, contrast, spacing, colour blindness, reduce motion and text to speech.
 export default function SightLossSettings({ preferences, updatePreference }) {
   const t = useT();
 
@@ -84,11 +79,7 @@ export default function SightLossSettings({ preferences, updatePreference }) {
         </select>
       </div>
 
-      {/* Named for what it actually does. It used to say "Read page content
-          aloud", which promised a screen reader for the whole site; all it
-          drives is Smiley's replies (assistant/useSpeech.js). Reading the
-          page itself is still to build, so the label says so rather than
-          leaving someone to find out by turning it on. */}
+      {/* This only reads out Smiley's replies, not the whole page. */}
       <CheckboxField
         id="pref-text-to-speech"
         label={t("settings.sight.speech")}

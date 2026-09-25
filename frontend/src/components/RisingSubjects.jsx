@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { T_LEVEL_SUBJECTS } from "../tlevelSubjects.js";
 
-// Decorative background for the homepage: T-Level subject names drifting
-// upwards behind the content. Hidden from assistive tech, never takes clicks,
-// and not shown at all to visitors who ask for reduced motion (see styles.css).
+// Subject names floating up behind the homepage hero. Decoration only, and hidden with reduced motion.
 
 let nextId = 0;
 

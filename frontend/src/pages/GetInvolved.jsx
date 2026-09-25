@@ -3,10 +3,7 @@ import Pictogram from "../components/Pictogram.jsx";
 import { AUDIENCES, FEEDBACK_ACTION } from "../getInvolvedContent.js";
 import "../about.css";
 
-/**
- * Get involved (/get-involved): the next step for each kind of visitor.
- * Links to this site open in place; links to other sites are ordinary links.
- */
+// Get involved page: the next step for each type of visitor.
 export default function GetInvolved() {
   return (
     <>

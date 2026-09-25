@@ -5,10 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import SiteNav from "../components/SiteNav.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
-// The drawer is pages and nothing else now. Sign up, Login and Log out used
-// to sit at the bottom of it, which meant the site answered "am I signed in?"
-// in two places, and put logging out one press from every page. All three are
-// behind the header's account button instead (AccountDropdown.jsx).
+// The drawer only has page links. Sign in and log out are in the account menu.
 
 // jsdom has no <dialog> support, so showModal and close are stood in for. The
 // drawer's contents are what these tests are about, not the dialog element.

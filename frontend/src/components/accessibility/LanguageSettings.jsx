@@ -2,14 +2,9 @@ import { useI18n } from "../../i18n/I18nProvider.jsx";
 import { LANGUAGES } from "../../i18n/languages.js";
 import { SelectField } from "../FormFields.jsx";
 
-// The interface language is the same setting as the language menu in the
-// header and the side menu (see i18n/I18nProvider.jsx), so changing it in any
-// of the three changes all of them, and it is saved to the account too.
+// Same setting as the language picker in the account menu and side menu.
 
-/**
- * Interface language. Dates and numbers are always written the UK way (see
- * formats.js), so they have no setting.
- */
+// Interface language. Dates and numbers are always UK style (see formats.js).
 export default function LanguageSettings() {
   const { language, setLanguage, t } = useI18n();
 

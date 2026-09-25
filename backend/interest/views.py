@@ -9,13 +9,10 @@ from .serializers import ExpressionOfInterestSerializer, ExpressionOfInterestSta
 
 
 class ExpressionOfInterestCreateView(generics.CreateAPIView):
-    """
-    POST /api/interest/
+    """POST /api/interest/
 
-    Body: full_name, email, user_type (student | parent | teacher),
-    pathway (a pathway slug), message (optional).
-    Returns 201 with id, pathway and submitted_at, or 400 with field errors.
-    Rate limited per IP (see DEFAULT_THROTTLE_RATES in settings).
+    Body: full_name, email, user_type, pathway (slug), message (optional).
+    Rate limited per IP.
     """
 
     serializer_class = ExpressionOfInterestSerializer
@@ -29,21 +26,11 @@ class ExpressionOfInterestCreateView(generics.CreateAPIView):
 
 
 class ExpressionOfInterestListView(generics.ListAPIView):
-    """
-    GET /api/interest/submissions/
+    """GET /api/interest/submissions/
 
-    Every Expression of Interest, newest first, for Amazon staff only.
-
-    This is a separate endpoint rather than a GET added to the create view
-    above, so that the public POST path is untouched: /api/interest/ still
-    answers 405 to GET for everyone, still throttles, and still echoes none
-    of the personal fields back. Keeping the read path on its own URL means
-    a change to one cannot quietly alter the other.
-
-    Staff is a Profile.user_type that only Django admin can set; see
-    accounts/permissions.py. Paginated by the project-wide
-    PageNumberPagination (PAGE_SIZE in settings.py), since this list only
-    ever grows.
+    All Expressions of Interest, newest first, for Amazon staff only
+    (see accounts/permissions.py). Kept separate from the POST endpoint so
+    the public one never lists anything. 20 per page.
     """
 
     serializer_class = ExpressionOfInterestStaffSerializer

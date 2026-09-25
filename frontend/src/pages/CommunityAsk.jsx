@@ -7,14 +7,8 @@ import { SelectField, TextareaField, TextField } from "../components/FormFields.
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-/**
- * Asking the Community a question (/community/ask). Needs an account.
- *
- * The guidelines sit beside the form, so they are read before posting. The
- * server checks every question (backend/community/moderation.py); if it is
- * stopped, the reason is shown here in the poster's own language, and if it
- * sounds like somebody at risk they get the support numbers instead.
- */
+// Ask a question (/community/ask). Needs an account.
+// The server checks each question (backend/community/moderation.py).
 export default function CommunityAsk() {
   const t = useT();
   const navigate = useNavigate();

@@ -1,15 +1,6 @@
-// How the site writes a date or a number. Always the UK forms: T-SMILE is a
-// UK site for UK students, so there is no setting for it. These are the only
-// functions that should format a date or a number, so it stays consistent.
+// Date and number formatting, always the UK way.
 
-/**
- * A date as DD/MM/YYYY, e.g. "31/01/2026".
- *
- * Written out rather than left to toLocaleDateString, which follows the
- * browser's language and would print 1/31/2026 on a US-set machine.
- * Takes anything new Date() takes. Returns "" for a missing or unparseable
- * value, so a half-loaded profile prints nothing rather than "Invalid Date".
- */
+// A date as DD/MM/YYYY. Returns "" if the date is missing or invalid.
 export function formatDate(value) {
   if (value === null || value === undefined || value === "") return "";
   const date = new Date(value);

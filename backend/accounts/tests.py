@@ -662,9 +662,8 @@ class PasswordResetConfirmApiTests(APITestCase):
         self.assertIn("new_password", response.data)
 
     def test_a_password_change_since_the_link_was_sent_invalidates_it(self):
-        # Django's default token generator bakes the password hash into the
-        # token, so changing the password (e.g. the account owner remembered
-        # it and logged in normally) invalidates any link sent earlier.
+        # The reset token includes the password hash, so changing the password
+        # makes old links stop working.
         uid, token = self.link_for(self.user)
         self.user.set_password("a-different-password-1")
         self.user.save()

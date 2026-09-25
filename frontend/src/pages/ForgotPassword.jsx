@@ -6,15 +6,8 @@ import AuthPanel from "../components/AuthPanel.jsx";
 import { FormError, TextField } from "../components/FormFields.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-/**
- * Step one of "forgotten password": a username goes to the server, which
- * always answers the same way whether or not it matched an account (see
- * requestPasswordReset in api.js) - so the confirmation below never says
- * "sent" or "not found", only that a message goes out *if* the account
- * exists and has an email on file. That is deliberate: telling visitors
- * apart here would let a stranger use this form to find out who has an
- * account.
- */
+// Forgotten password, step 1. The server gives the same answer whether or not
+// the account exists, so nobody can use this to check who has an account.
 export default function ForgotPassword() {
   const t = useT();
   const [username, setUsername] = useState("");

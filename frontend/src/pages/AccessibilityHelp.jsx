@@ -3,9 +3,7 @@ import { IconList } from "../components/InfoBlocks.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
-// How to use the site in the way that suits you. Each point is something the
-// site really does (checked against the code), not a promise. The words are
-// in i18n/messages (accessibilityHelp.ways), keyed by `key` below.
+// Ways to use the site. Words are in i18n/messages (accessibilityHelp.ways).
 const WAYS = [
   { icon: "tools", key: "settings" },
   { icon: "key", key: "keyboard" },
@@ -15,10 +13,7 @@ const WAYS = [
   { icon: "chat", key: "speech" },
 ];
 
-/**
- * Accessibility Help: how to use the site, and how to tell us when something
- * gets in the way. The settings themselves are on /accessibility.
- */
+// Accessibility help page. The actual settings are on /accessibility.
 export default function AccessibilityHelp() {
   const t = useT();
 

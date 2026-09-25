@@ -3,11 +3,7 @@ import AboutFaq from "../components/AboutFaq.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
-/**
- * FAQs: the same questions as the About page, on a page of their own so the
- * footer link lands straight on them. The answers live in aboutContent.js,
- * so both pages always say the same thing.
- */
+// FAQs page. Same questions as the About page (from aboutContent.js).
 export default function Faqs() {
   const t = useT();
   return (

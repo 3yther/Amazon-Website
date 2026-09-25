@@ -4,10 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import StaffDashboard from "../pages/StaffDashboard.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
-// This page needs a signed-in staff account and a reply from the staff-only
-// API, so both are stood in for here. The real gate is the server's
-// IsAmazonStaff permission; these tests cover what the page does once the
-// server has already decided.
+// Fake staff user and API. The server's IsAmazonStaff check is tested in the backend.
 
 const { mockUseAuth, mockGetInterestSubmissions } = vi.hoisted(() => ({
   mockUseAuth: vi.fn(),
