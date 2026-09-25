@@ -181,8 +181,6 @@ const es = {
       lead: "{count} preguntas sobre los T-Levels, las prácticas en Amazon y esta web. No se guarda nada y nadie ve tu puntuación.",
     },
     label: "Comprueba lo que sabes",
-    title: "¿Qué sabes de los T-Levels?",
-    lead: "{count} preguntas, una a una. Fallar una también sirve: Smiley se ofrecerá a explicártela.",
     scored: "Has sacado {score} de {total}",
     doneLead: "Si algo no te queda claro, pregunta a Smiley en la esquina. Te dirá si no lo sabe.",
     questionOf: "Pregunta {number} de {total}",

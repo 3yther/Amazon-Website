@@ -181,8 +181,6 @@ const ro = {
       lead: "{count} întrebări despre T-Levels, stagiile la Amazon și acest site. Nimic nu este salvat și nimeni nu îți vede scorul.",
     },
     label: "Test de cunoștințe",
-    title: "Ce știi despre T-Levels?",
-    lead: "{count} întrebări, pe rând. Și un răspuns greșit e util: Smiley se va oferi să ți-l explice.",
     scored: "Ai obținut {score} din {total}",
     doneLead: "Dacă nu ești sigur de ceva, întreabă-l pe Smiley din colț. Îți va spune dacă nu știe.",
     questionOf: "Întrebarea {number} din {total}",

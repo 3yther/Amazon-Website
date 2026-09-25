@@ -109,11 +109,7 @@ export default function KnowledgeQuiz({
   }
 
   return (
-    <section className="knowledge-quiz" aria-labelledby="knowledge-quiz-title">
-      <p className="label">{t("quiz.label")}</p>
-      <h2 id="knowledge-quiz-title">{t("quiz.title")}</h2>
-      <p className="knowledge-quiz__lead">{t("quiz.lead", { count: questions.length })}</p>
-
+    <section className="knowledge-quiz" aria-label={t("quiz.label")}>
       {/* The bar is only a picture of the "Question 2 of 7" text below, so
           screen readers skip it rather than hear the progress twice. */}
       <div className="knowledge-quiz__progress" aria-hidden="true">

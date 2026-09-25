@@ -182,8 +182,6 @@ const pt = {
       lead: "{count} perguntas sobre os T-Levels, os estágios na Amazon e este site. Nada é guardado e ninguém vê a tua pontuação.",
     },
     label: "Teste de conhecimentos",
-    title: "O que sabes sobre os T-Levels?",
-    lead: "{count} perguntas, uma de cada vez. Errar uma também é útil: o Smiley oferece-se para a explicar.",
     scored: "Tiveste {score} em {total}",
     doneLead: "Se tiveres dúvidas, pergunta ao Smiley no canto. Ele diz-te se não souber.",
     questionOf: "Pergunta {number} de {total}",
