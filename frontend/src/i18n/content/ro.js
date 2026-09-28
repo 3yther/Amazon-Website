@@ -423,7 +423,7 @@ export default {
             "Înregistrarea interesului: numele, emailul, dacă ești elev, părinte sau profesor, un parcurs și un mesaj opțional. Ca echipa Amazon Emerging Talent să vadă că ești interesat și să te contacteze.",
             "Un cont: un nume de utilizator, o parolă (stocată criptat, niciodată lizibilă), rolul și parcursul tău. Mai târziu, dacă le adaugi, numele, emailul și numărul de telefon. Ca să te poți autentifica, să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.",
             "Setările de accesibilitate: mărimea textului, contrastul, tema și alte alegeri asemănătoare. Ca site-ul să arate cum l-ai setat.",
-            "Chatul cu Smiley: ce scrii și răspunsurile lui Smiley. Ca Smiley să poată urmări conversația.",
+            "Chatul cu Smiley: întrebările pe care Smiley trebuie să le caute și răspunsurile lui. Ca Smiley să poată urmări conversația. Întrebările la care răspunde singur rămân în browserul tău.",
             "Postările din Comunitate: întrebările și răspunsurile pe care le postezi, afișate cu numele tău de utilizator. Ca alți vizitatori să le poată citi și să răspundă.",
             "Păreri și mesaje de contact: mesajul tău și emailul, dacă îl dai. Ca să putem repara lucrurile și să îți răspundem.",
           ],
@@ -432,7 +432,7 @@ export default {
           heading: "Cine le vede",
           points: [
             "Echipa T-SMILE și, pentru formularele de interes, personalul Amazon Emerging Talent.",
-            "Anthropic, compania a cărei inteligență artificială scrie răspunsurile lui Smiley. Mesajele tale din chat sunt trimise la ei ca să primești un răspuns.",
+            "Anthropic, compania al cărei AI scrie unele dintre răspunsurile lui Smiley. Întrebările la care Smiley nu poate răspunde singur îi sunt trimise ca să obțină un răspuns.",
             "Compania care găzduiește site-ul (Railway pentru versiunea de test, Amazon Web Services mai târziu).",
             "Nimeni altcineva. Nu vindem date și nu le folosim pentru reclame.",
           ],
@@ -479,7 +479,7 @@ export default {
             "Acestea nu sunt cookie-uri și nu părăsesc niciodată dispozitivul tău.",
           ],
           points: [
-            "Setările tale de accesibilitate, ca să rămână când revii.",
+            "Setările tale de accesibilitate și limba aleasă, ca să rămână când revii.",
             "Dacă Smiley te-a salutat deja, până închizi fila.",
           ],
         },

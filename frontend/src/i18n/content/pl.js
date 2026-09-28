@@ -423,7 +423,7 @@ export default {
             "Zgłoszenie zainteresowania: Twoje imię i nazwisko, e-mail, to, czy jesteś uczniem, rodzicem czy nauczycielem, ścieżka i opcjonalna wiadomość. Aby zespół Amazon Emerging Talent widział, że jesteś zainteresowany, i mógł się odezwać.",
             "Konto: nazwa użytkownika, hasło (zapisane w zaszyfrowanej postaci, nigdy do odczytania), Twoja rola i ścieżka. Później, jeśli je dodasz, imię i nazwisko, e-mail i numer telefonu. Abyś mógł się zalogować, zadawać pytania i odpowiadać w Społeczności oraz mieć swoje ustawienia na każdym urządzeniu.",
             "Ustawienia dostępności: rozmiar tekstu, kontrast, motyw i podobne wybory. Aby strona wyglądała tak, jak ją ustawisz.",
-            "Czat ze Smileyem: to, co piszesz, i odpowiedzi Smileya. Aby Smiley mógł śledzić rozmowę.",
+            "Czat ze Smileyem: pytania, które Smiley musi sprawdzić, i jego odpowiedzi. Żeby Smiley mógł śledzić rozmowę. Pytania, na które odpowiada sam, zostają w twojej przeglądarce.",
             "Wpisy w Społeczności: pytania i odpowiedzi, które publikujesz, widoczne z Twoją nazwą użytkownika. Aby inni odwiedzający mogli je czytać i odpowiadać.",
             "Opinie i wiadomości kontaktowe: Twoja wiadomość i e-mail, jeśli go podasz. Abyśmy mogli coś naprawić i odpowiedzieć.",
           ],
@@ -432,7 +432,7 @@ export default {
           heading: "Kto je widzi",
           points: [
             "Zespół T-SMILE, a w przypadku formularzy zainteresowania pracownicy Amazon Emerging Talent.",
-            "Anthropic, firma, której AI pisze odpowiedzi Smileya. Twoje wiadomości z czatu są do niej wysyłane, aby uzyskać odpowiedź.",
+            "Anthropic, firma, której AI pisze część odpowiedzi Smileya. Pytania, na które Smiley nie odpowie sam, są do niej wysyłane, żeby uzyskać odpowiedź.",
             "Firma, która hostuje stronę (Railway dla wersji testowej, później Amazon Web Services).",
             "Nikt inny. Nie sprzedajemy danych ani nie używamy ich do reklam.",
           ],
@@ -479,7 +479,7 @@ export default {
             "To nie są pliki cookie i nigdy nie opuszczają Twojego urządzenia.",
           ],
           points: [
-            "Twoje ustawienia dostępności, aby zostały, gdy wrócisz.",
+            "Twoje ustawienia dostępności i wybrany język, żeby zostały, gdy wrócisz.",
             "Czy Smiley już się przywitał, do zamknięcia karty.",
           ],
         },

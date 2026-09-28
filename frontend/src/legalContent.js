@@ -69,7 +69,7 @@ export const PRIVACY = {
         "Register interest: your name, email, whether you are a student, parent or teacher, a pathway and an optional message. So the Amazon Emerging Talent team can see you are interested and get in touch.",
         "An account: a username, a password (stored scrambled, never readable), your role and pathway. Later, if you add them, your name, email and phone number. So you can sign in, ask and answer in the Community, and keep your settings on any device.",
         "Accessibility settings: text size, contrast, theme and similar choices. So the site looks the way you set it.",
-        "Chat with Smiley: what you type and Smiley's replies. So Smiley can follow the conversation.",
+        "Chat with Smiley: questions Smiley has to look up, and its replies. So Smiley can follow the conversation. Questions it answers by itself stay in your browser.",
         "Community posts: the questions and answers you post, shown with your username. So other visitors can read them and reply.",
         "Feedback and contact messages: your message, and your email if you give it. So we can fix things and reply.",
       ],
@@ -78,7 +78,7 @@ export const PRIVACY = {
       heading: "Who sees it",
       points: [
         "The T-SMILE team, and Amazon Emerging Talent staff for interest forms.",
-        "Anthropic, the company whose AI writes Smiley's replies. Your chat messages are sent to them to get an answer.",
+        "Anthropic, the company whose AI writes some of Smiley's replies. Questions Smiley cannot answer by itself are sent to them to get an answer.",
         "The company hosting the site (Railway for the preview, Amazon Web Services later).",
         "Nobody else. We do not sell data or use it for adverts.",
       ],
@@ -125,7 +125,7 @@ export const COOKIES = {
       heading: "Saved in your browser",
       paragraphs: ["These are not cookies, and never leave your device."],
       points: [
-        "Your accessibility settings, so they stay when you come back.",
+        "Your accessibility settings and the language you chose, so they stay when you come back.",
         "Whether Smiley has already said hello, until you close the tab.",
       ],
     },

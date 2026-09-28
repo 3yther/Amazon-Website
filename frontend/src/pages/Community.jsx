@@ -122,7 +122,7 @@ export default function Community() {
             <option value="">{t("community.allPathways")}</option>
             {pathways.map((pathway) => (
               <option key={pathway.slug} value={pathway.slug}>
-                {pathway.name}
+                {t(`pathways.${pathway.slug}`)}
               </option>
             ))}
           </select>
@@ -178,7 +178,7 @@ export default function Community() {
             {question.hidden && <p className="community-hidden">{t("community.hiddenNotice")}</p>}
             <p className="community-card__meta">
               <span className="tag">{t(`community.topics.${question.topic}`)}</span>
-              {question.pathway && <span className="tag">{question.pathway.name}</span>}
+              {question.pathway && <span className="tag">{t(`pathways.${question.pathway.slug}`)}</span>}
               <Author author={question.author} />
               <span className="community-meta">{t("community.askedOn", { date: formatDate(question.created_at) })}</span>
             </p>

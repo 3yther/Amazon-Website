@@ -6,6 +6,7 @@ import { Guidelines, TOPICS, moderationMessage } from "../community/CommunityPar
 import { CharacterCount, SelectField, TextareaField, TextField } from "../components/FormFields.jsx";
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
+import { translateServerMessage } from "../i18n/serverMessages.js";
 
 // Match the server's own limits (backend/community: Question.title max_length,
 // and body max_length in community/serializers.py), so the count runs out at
@@ -64,7 +65,7 @@ export default function CommunityAsk() {
     }
   }
 
-  const firstError = (name) => fieldErrors[name]?.[0];
+  const firstError = (name) => translateServerMessage(fieldErrors[name]?.[0], t);
 
   return (
     <section aria-labelledby="page-title">
@@ -133,7 +134,7 @@ export default function CommunityAsk() {
             <option value="">{t("community.allPathways")}</option>
             {pathways.map((pathway) => (
               <option key={pathway.slug} value={pathway.slug}>
-                {pathway.name}
+                {t(`pathways.${pathway.slug}`)}
               </option>
             ))}
           </SelectField>

@@ -4,7 +4,7 @@ import { getInterestSubmissions } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { FormError } from "../components/FormFields.jsx";
 import { formatDate, formatNumber } from "../formats.js";
-import { USER_TYPES } from "../labels.js";
+import { useT } from "../i18n/I18nProvider.jsx";
 
 // How much of a message shows before it is folded away. Long ones open in
 // place rather than truncating with no way to read the rest.
@@ -13,6 +13,7 @@ const MESSAGE_PREVIEW = 90;
 // Interest submissions, for Amazon staff. The redirect is just for convenience,
 // the API is what actually blocks non-staff.
 export default function StaffDashboard() {
+  const t = useT();
   const { user, checked } = useAuth();
   const [page, setPage] = useState(1);
   const [data, setData] = useState(null);
@@ -51,60 +52,63 @@ export default function StaffDashboard() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">Amazon staff</p>
-        <h1 id="page-title">Expression of Interest submissions</h1>
-        <p className="lead">
-          Everyone who has registered their interest, newest first. These are real people&rsquo;s
-          contact details, so treat them accordingly.
-        </p>
+        <p className="label">{t("account.roles.amazon_staff")}</p>
+        <h1 id="page-title">{t("staff.title")}</h1>
+        <p className="lead">{t("staff.lead")}</p>
       </section>
 
       {status === "error" && (
-        <FormError message="Could not load submissions. Refresh to try again." />
+        <FormError message={t("staff.loadError")} />
       )}
 
-      {status === "loading" && <p className="results-status">Loading submissions.</p>}
+      {status === "loading" && <p className="results-status">{t("staff.loading")}</p>}
 
       {status === "ready" && results.length === 0 && (
-        <p className="results-status">No submissions yet.</p>
+        <p className="results-status">{t("staff.empty")}</p>
       )}
 
       {status === "ready" && results.length > 0 && (
         <>
           <p className="results-status" role="status">
-            {formatNumber(data.count)} submission
-            {data.count === 1 ? "" : "s"}, showing {results.length} on this page.
+            {t(data.count === 1 ? "staff.countOne" : "staff.count", {
+              count: formatNumber(data.count),
+              shown: results.length,
+            })}
           </p>
 
           {/* A scrollable region needs to be reachable by keyboard, so it
               takes tabIndex 0, and anything focusable needs a name. */}
-          <div className="staff-table__scroll" tabIndex={0} role="region" aria-label="Submissions">
+          <div className="staff-table__scroll" tabIndex={0} role="region" aria-label={t("account.submissions")}>
             <table className="staff-table">
-              <caption className="sr-only">
-                Expression of Interest submissions, newest first
-              </caption>
+              <caption className="sr-only">{t("staff.caption")}</caption>
               <thead>
                 <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Pathway</th>
-                  <th scope="col">Message</th>
-                  <th scope="col">Submitted</th>
+                  <th scope="col">{t("staff.columns.name")}</th>
+                  <th scope="col">{t("staff.columns.email")}</th>
+                  <th scope="col">{t("staff.columns.type")}</th>
+                  <th scope="col">{t("staff.columns.pathway")}</th>
+                  <th scope="col">{t("staff.columns.message")}</th>
+                  <th scope="col">{t("staff.columns.submitted")}</th>
                 </tr>
               </thead>
               <tbody>
                 {results.map((row) => (
                   <tr key={row.id}>
-                    <td>{row.full_name || row.username}</td>
+                    {/* Sign-up asks for no real name and no email, so a row
+                        can honestly have neither. The username always
+                        identifies who it was; the rest say so in words. */}
+                    <td>{row.full_name || row.username || <Nothing />}</td>
                     <td>
-                      {/* Sign-up does not ask for an email, so a row can
-                          honestly have none. A mailto: to nowhere is worse
-                          than a dash. */}
-                      {row.email ? <a href={`mailto:${row.email}`}>{row.email}</a> : "-"}
+                      {row.email ? <a href={`mailto:${row.email}`}>{row.email}</a> : <Nothing />}
                     </td>
-                    <td>{USER_TYPES[row.user_type] ?? row.user_type ?? "-"}</td>
-                    <td>{row.pathway ?? "-"}</td>
+                    <td>
+                      {row.user_type ? (
+                        known(t, `account.roles.${row.user_type}`, row.user_type)
+                      ) : (
+                        <Nothing />
+                      )}
+                    </td>
+                    <td>{row.pathway ?? <Nothing />}</td>
                     <td>
                       <SubmissionMessage message={row.message} />
                     </td>
@@ -115,23 +119,23 @@ export default function StaffDashboard() {
             </table>
           </div>
 
-          <nav className="staff-pager" aria-label="Submission pages">
+          <nav className="staff-pager" aria-label={t("staff.pages")}>
             <button
               type="button"
               className="button"
               disabled={!data.previous}
               onClick={() => setPage((current) => Math.max(1, current - 1))}
             >
-              Previous
+              {t("staff.previous")}
             </button>
-            <p className="label">Page {page}</p>
+            <p className="label">{t("staff.page", { page })}</p>
             <button
               type="button"
               className="button"
               disabled={!data.next}
               onClick={() => setPage((current) => current + 1)}
             >
-              Next
+              {t("staff.next")}
             </button>
           </nav>
         </>
@@ -140,9 +144,28 @@ export default function StaffDashboard() {
   );
 }
 
+/**
+ * An empty cell, in words rather than a dash.
+ *
+ * Since registering interest became a tick box, the name, email, type and
+ * pathway are copied off the account, and an account can genuinely have none
+ * of them. Blank cells would read as a loading bug.
+ */
+function Nothing() {
+  const t = useT();
+  return <span className="staff-table__empty">{t("staff.none")}</span>;
+}
+
+// A translation when there is one, otherwise the value the API sent.
+function known(t, key, fallback) {
+  const words = t(key);
+  return words === key ? fallback : words;
+}
+
 /** A long message folds away rather than being cut off with no way to read it. */
 function SubmissionMessage({ message }) {
-  if (!message) return <span className="staff-table__empty">None</span>;
+  const t = useT();
+  if (!message) return <span className="staff-table__empty">{t("staff.none")}</span>;
   if (message.length <= MESSAGE_PREVIEW) return <>{message}</>;
 
   return (

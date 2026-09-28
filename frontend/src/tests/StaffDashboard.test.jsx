@@ -139,4 +139,51 @@ describe("Staff dashboard", () => {
     await screen.findByText("Ada Lovelace");
     await expectNoAxeViolations(container);
   });
+
+  describe("a submission from an account that filled nothing in", () => {
+    // Registering interest is a tick box now, so the name, email, type and
+    // pathway are copied off the account, and sign-up asks for none of them.
+    // An empty row is ordinary, and must not read as a loading bug.
+    const BARE = {
+      id: 2,
+      username: "quietone",
+      full_name: "",
+      email: "",
+      user_type: "",
+      pathway: null,
+      message: "",
+      submitted_at: "2026-09-02T10:00:00Z",
+    };
+
+    beforeEach(() => {
+      mockGetInterestSubmissions.mockResolvedValue({
+        count: 1,
+        next: null,
+        previous: null,
+        results: [BARE],
+      });
+      signedInAs("amazon_staff");
+    });
+
+    it("still says who it was, using the username", async () => {
+      renderDashboard();
+
+      expect(await screen.findByText("quietone")).toBeInTheDocument();
+    });
+
+    it("says None rather than leaving cells blank", async () => {
+      renderDashboard();
+
+      await screen.findByText("quietone");
+      // Email, type, pathway and message: four cells with nothing in them.
+      expect(screen.getAllByText("None")).toHaveLength(4);
+    });
+
+    it("does not offer a mailto: link to nowhere", async () => {
+      renderDashboard();
+
+      await screen.findByText("quietone");
+      expect(screen.queryByRole("link", { name: /@/ })).not.toBeInTheDocument();
+    });
+  });
 });
