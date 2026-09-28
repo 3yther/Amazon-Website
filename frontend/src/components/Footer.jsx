@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../auth.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
 // Footer on every page: five columns of links and a copyright bar.
@@ -17,6 +16,10 @@ const LINK_COLUMNS = [
       { to: "/resources", label: "footer.links.resources" },
       { to: "/faqs", label: "footer.links.faqs" },
       { to: "/community", label: "footer.links.community" },
+      // Shown to everybody. Hiding it was never the protection:
+      // /admin-portal sends anyone who is not signed-in staff back to the
+      // homepage, and every endpoint behind it refuses them, PIN or no PIN.
+      { to: "/admin-portal", label: "admin.title" },
     ],
   },
   {
@@ -48,26 +51,8 @@ const LINK_COLUMNS = [
   },
 ];
 
-/**
- * The Admin Portal, the one link in this footer that is not for everybody.
- *
- * Shown only to signed-in Amazon staff, the same condition AccountDropdown
- * uses for its own staff link. Hiding it is tidiness, not security: the page
- * redirects anyone else away and every endpoint behind it refuses them, PIN
- * or no PIN.
- */
-const STAFF_LINK = { to: "/admin-portal", label: "admin.title" };
-
 export default function Footer() {
   const t = useT();
-  // No provider above this in some tests, hence the optional chaining.
-  const isStaff = useAuth()?.user?.user_type === "amazon_staff";
-
-  const columns = LINK_COLUMNS.map((column) =>
-    column.heading === "footer.navigation" && isStaff
-      ? { ...column, links: [...column.links, STAFF_LINK] }
-      : column,
-  );
 
   return (
     <footer className="site-footer">
@@ -77,7 +62,7 @@ export default function Footer() {
           <p>{t("footer.aboutText")}</p>
         </div>
 
-        {columns.map((column) => (
+        {LINK_COLUMNS.map((column) => (
           <nav className="footer-column" aria-label={t(column.heading)} key={column.heading}>
             <p className="label">{t(column.heading)}</p>
             <ul>

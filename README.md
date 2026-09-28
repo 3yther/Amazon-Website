@@ -95,11 +95,12 @@ be pointed at Railway or a future AWS deployment by accident.
 
 ### The Admin Portal
 
-`/admin-portal`, linked from the footer for signed-in Amazon staff. It needs a
-4-digit PIN on top of the staff sign-in, which is a screen-lock for a shared
-computer rather than the real access control (every endpoint behind it checks
-staff as well). Set `ADMIN_PORTAL_PIN` in `backend/.env`; without one the
-portal cannot be opened at all.
+`/admin-portal`, linked from the footer on every page. Anyone who is not signed
+in as Amazon staff is sent back to the homepage. It needs a 4-digit PIN on top
+of the staff sign-in, which is a screen-lock for a shared computer rather than
+the real access control (every endpoint behind it checks staff as well). Set
+`ADMIN_PORTAL_PIN` in `backend/.env`; without one the portal cannot be opened
+at all. Every deployed environment needs its own value set separately.
 
 Frontend (second terminal):
 

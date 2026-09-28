@@ -1,9 +1,8 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Footer from "../components/Footer.jsx";
-import { AuthProvider } from "../auth.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
 // The footer is on every page, so a broken or misleading link there is
@@ -24,33 +23,6 @@ function footerLinks() {
   );
   return screen.getAllByRole("link");
 }
-
-/**
- * The footer signed in as somebody. fetch is stubbed rather than auth.jsx
- * mocked, because a module mock here took the real module away from other
- * test files when the whole suite ran.
- */
-function renderAs(user) {
-  vi.stubGlobal(
-    "fetch",
-    vi.fn(async (url) =>
-      String(url).endsWith("/api/accounts/me/")
-        ? Response.json(user ?? { detail: "no" }, { status: user ? 200 : 401 })
-        : Response.json({}, { status: 404 }),
-    ),
-  );
-  return render(
-    <MemoryRouter initialEntries={["/"]}>
-      <AuthProvider>
-        <Footer />
-      </AuthProvider>
-    </MemoryRouter>,
-  );
-}
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
 
 describe("Footer", () => {
   it("only links to pages that exist", () => {
@@ -74,38 +46,12 @@ describe("Footer", () => {
     expect(current).toHaveLength(1);
   });
 
-  // The Admin Portal link is the one link here that is not for everybody, so
-  // the rules above are re-run with it present rather than relaxed for it.
-  describe("the staff-only Admin Portal link", () => {
-    it("is not there for a visitor who is not signed in", async () => {
-      renderAs(null);
-
-      await waitFor(() => expect(screen.getAllByRole("link").length).toBeGreaterThan(0));
-      expect(screen.queryByRole("link", { name: "Admin Portal" })).not.toBeInTheDocument();
-    });
-
-    it("is not there for a student", async () => {
-      renderAs({ id: 2, username: "ada", user_type: "student" });
-
-      await waitFor(() => expect(screen.getAllByRole("link").length).toBeGreaterThan(0));
-      expect(screen.queryByRole("link", { name: "Admin Portal" })).not.toBeInTheDocument();
-    });
-
-    it("is there for staff, and goes to a real page", async () => {
-      renderAs({ id: 1, username: "staffer", user_type: "amazon_staff" });
-
-      const link = await screen.findByRole("link", { name: "Admin Portal" });
-      expect(link).toHaveAttribute("href", "/admin-portal");
-      expect(appRoutes()).toContain("/admin-portal");
-    });
-
-    it("does not duplicate a page the footer already links to", async () => {
-      renderAs({ id: 1, username: "staffer", user_type: "amazon_staff" });
-
-      await screen.findByRole("link", { name: "Admin Portal" });
-      const hrefs = screen.getAllByRole("link").map((link) => link.getAttribute("href"));
-      expect(new Set(hrefs).size).toBe(hrefs.length);
-    });
+  // The Admin Portal link used to be shown to staff only. It is a plain link
+  // now, covered by the rules above, but worth naming so nobody puts the
+  // condition back by accident.
+  it("shows the Admin Portal link to every visitor, signed in or not", () => {
+    const link = footerLinks().find((item) => item.textContent === "Admin Portal");
+    expect(link).toHaveAttribute("href", "/admin-portal");
   });
 
   it("has no WCAG 2.2 AA problems axe can find", async () => {
