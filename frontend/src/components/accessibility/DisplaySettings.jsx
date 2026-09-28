@@ -44,6 +44,7 @@ export default function DisplaySettings({ preferences, updatePreference }) {
       <SelectField
         id="pref-page-background"
         label={t("settings.display.background")}
+        hint={t("settings.display.backgroundHint")}
         value={preferences.page_background}
         onChange={(event) => updatePreference("page_background", event.target.value)}
       >

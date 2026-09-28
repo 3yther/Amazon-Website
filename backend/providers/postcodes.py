@@ -1,7 +1,8 @@
 """The only file that calls postcodes.io (a free UK postcode lookup, no key needed).
 
-Used by the geocode_providers command to place providers, and by the search
-to find the visitor's postcode.
+Used by the geocode_providers command to place providers (falling back to
+retired postcodes for the ones bulk lookup misses), and by the search to find
+the visitor's postcode.
 """
 import json
 import logging
@@ -72,6 +73,20 @@ def lookup(postcode):
 
     result = _call(f"/postcodes/{quote(cleaned)}")
     return _point(result)
+
+
+def lookup_terminated(postcode):
+    """A postcode Royal Mail has withdrawn, as (latitude, longitude), or None.
+
+    postcodes.io 404s these on the ordinary endpoint but still holds where they
+    were. The register carries a fair few, so this keeps those providers
+    searchable. The caller should SAY it used one: the address may be stale.
+    """
+    cleaned = normalise(postcode)
+    if not looks_like_a_postcode(cleaned):
+        return None
+
+    return _point(_call(f"/terminated_postcodes/{quote(cleaned)}"))
 
 
 def lookup_many(postcodes):

@@ -4,73 +4,75 @@ import { submitInterest } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import { useT } from "../i18n/I18nProvider.jsx";
-import { useSiteContent } from "../i18n/content.js";
-import { USER_TYPES } from "../labels.js";
-import { CheckboxField, FormError, SelectField, TextareaField, TextField } from "./FormFields.jsx";
+import { CheckboxField, FormError } from "./FormFields.jsx";
 
-// The Expression of Interest form. Sends to POST /api/interest/, no account needed.
-// Used on the Register interest page and in the box on the Sign up page.
+// The "I'm interested in an Amazon placement" tick box. Sends to POST
+// /api/interest/, which needs an account.
+//
+// This was a six-field form (name, email, role, pathway, message, consent).
+// The site already holds the first four, so it asked everyone who had an
+// account to type them in a second time. Now it sends nothing: the server
+// copies them off the account.
+//
+// That is also why it needs signing in. Once the fields are gone there is
+// nothing left to identify an anonymous tick by, so instead of quietly
+// putting the form back for signed-out visitors, the box says what it needs
+// and offers a way to get there. It stays optional either way: nothing else
+// on the site depends on it.
 
-const MESSAGE_LIMIT = 2000; // matches MESSAGE_MAX_LENGTH in interest/serializers.py
-
-const EMPTY = { full_name: "", email: "", user_type: "", pathway: "", message: "" };
-
-// Quick checks before sending. The server checks everything again.
-function checkFields(fields, consent, t) {
-  const errors = {};
-  if (fields.full_name.trim().length < 2) errors.full_name = t("registerInterest.errors.fullName");
-  if (!/^\S+@\S+\.\S+$/.test(fields.email.trim())) {
-    errors.email = t("registerInterest.errors.email");
-  }
-  if (!fields.user_type) errors.user_type = t("registerInterest.errors.userType");
-  if (!fields.pathway) errors.pathway = t("registerInterest.errors.pathway");
-  if (fields.message.length > MESSAGE_LIMIT) {
-    errors.message = t("registerInterest.errors.message", { limit: MESSAGE_LIMIT });
-  }
-  if (!consent) errors.consent = t("registerInterest.errors.consent");
-  return errors;
-}
-
-// startingPathway picks a pathway in advance. onSent runs once the server accepts it.
-export default function InterestForm({ startingPathway = "", onSent }) {
+// onSent runs once the server accepts it, with { pathway }: the slug that was
+// recorded, or null when the account has not chosen one. An object rather than
+// the slug itself, so "sent, no pathway" is still truthy to the caller.
+export default function InterestForm({ onSent }) {
   const t = useT();
-  const { PATHWAYS } = useSiteContent().about;
-  // Nobody signed in (or no sign-in check yet) just means nothing to prefill.
-  const user = useAuth()?.user;
+  // Optional chaining because there is not always a provider above this (the
+  // old form did the same): no provider means nobody is signed in and there
+  // is nothing to wait for.
+  const auth = useAuth();
+  const user = auth?.user ?? null;
+  const checked = auth ? auth.checked : true;
 
-  const [fields, setFields] = useState(() => ({
-    ...EMPTY,
-    email: user?.email ?? "",
-    user_type: user?.user_type && USER_TYPES[user.user_type] ? user.user_type : "",
-    pathway: startingPathway,
-  }));
-  const [consent, setConsent] = useState(false);
+  const [ticked, setTicked] = useState(false);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting
 
-  function updateField(event) {
-    const { name, value } = event.target;
-    setFields((current) => ({ ...current, [name]: value }));
+  // Don't flash the signed-out message at someone who is signed in, while the
+  // first /me call is still in the air.
+  if (!checked) return null;
+
+  if (!user) {
+    return (
+      <div className="interest-signin">
+        <p>{t("registerInterest.signedOut")}</p>
+        <p className="interest__note">{t("registerInterest.optional")}</p>
+        <p className="interest-signin__actions">
+          {/* Reusing the account pages' own labels, so these read the same
+              here as they do on the buttons they lead to, in every language. */}
+          <Link className="button button--primary" to="/login">
+            {t("login.submit")}
+          </Link>
+          <Link className="button" to="/register">
+            {t("register.title")}
+          </Link>
+        </p>
+      </div>
+    );
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const found = checkFields(fields, consent, t);
-    if (Object.keys(found).length > 0) {
-      setErrors(found);
-      // Put focus on the first problem, so keyboard and screen reader users
-      // land on it rather than having to search the form.
-      const first = Object.keys(found)[0];
-      document.getElementById(`interest-${first.replace("_", "-")}`)?.focus();
+    if (!ticked) {
+      setErrors({ consent: t("registerInterest.errors.consent") });
+      document.getElementById("interest-consent")?.focus();
       return;
     }
 
     setStatus("submitting");
     setErrors({});
     try {
-      await submitInterest({ ...fields, consent });
-      onSent(PATHWAYS.find((item) => item.slug === fields.pathway));
+      const recorded = await submitInterest();
+      onSent({ pathway: recorded?.pathway ?? null });
     } catch (error) {
       setErrors(formErrors(error, t));
       setStatus("idle");
@@ -81,84 +83,21 @@ export default function InterestForm({ startingPathway = "", onSent }) {
     <form className="account-form" onSubmit={handleSubmit} noValidate>
       {errors.form && <FormError message={errors.form} />}
 
-      <TextField
-        id="interest-full-name"
-        label={t("registerInterest.fullName")}
-        name="full_name"
-        value={fields.full_name}
-        onChange={updateField}
-        autoComplete="name"
-        required
-        error={errors.full_name}
-      />
-      <TextField
-        id="interest-email"
-        label={t("registerInterest.email")}
-        name="email"
-        type="email"
-        value={fields.email}
-        onChange={updateField}
-        autoComplete="email"
-        required
-        error={errors.email}
-      />
-      <SelectField
-        id="interest-user-type"
-        label={t("registerInterest.iAmA")}
-        name="user_type"
-        value={fields.user_type}
-        onChange={updateField}
-        required
-        error={errors.user_type}
-      >
-        <option value="">{t("register.chooseOne")}</option>
-        {Object.keys(USER_TYPES).map((value) => (
-          <option key={value} value={value}>
-            {t(`account.roles.${value}`)}
-          </option>
-        ))}
-      </SelectField>
-      <SelectField
-        id="interest-pathway"
-        label={t("registerInterest.pathway")}
-        name="pathway"
-        value={fields.pathway}
-        onChange={updateField}
-        required
-        error={errors.pathway}
-      >
-        <option value="">{t("register.chooseOne")}</option>
-        {PATHWAYS.map((pathway) => (
-          <option key={pathway.slug} value={pathway.slug}>
-            {pathway.name}
-          </option>
-        ))}
-      </SelectField>
-      <TextareaField
-        id="interest-message"
-        label={t("registerInterest.message")}
-        name="message"
-        hint={t("registerInterest.messageHint")}
-        value={fields.message}
-        onChange={updateField}
-        maxLength={MESSAGE_LIMIT}
-        error={errors.message}
-      />
       <CheckboxField
         id="interest-consent"
         name="consent"
-        checked={consent}
-        onChange={(event) => setConsent(event.target.checked)}
-        required
+        checked={ticked}
+        onChange={(event) => setTicked(event.target.checked)}
+        hint={t("registerInterest.usingAccount")}
         error={errors.consent}
-        label={
-          <>
-            {t("registerInterest.consent")} {t("registerInterest.privacyBefore")}{" "}
-            <Link to="/privacy">{t("registerInterest.privacyLink")}</Link>
-            {t("registerInterest.privacyAfter")}
-          </>
-        }
+        label={t("registerInterest.tickBox")}
       />
+
+      <p className="interest__note">
+        {t("registerInterest.privacyBefore")}{" "}
+        <Link to="/privacy">{t("registerInterest.privacyLink")}</Link>
+        {t("registerInterest.privacyAfter")}
+      </p>
 
       <button type="submit" className="button button--primary" disabled={status === "submitting"}>
         {status === "submitting" ? t("registerInterest.submitting") : t("registerInterest.submit")}

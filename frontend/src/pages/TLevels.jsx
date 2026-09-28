@@ -31,9 +31,11 @@ export default function TLevels() {
               {route.subjects.map((subject) => (
                 <li key={subject.name}>
                   {subject.page ? (
-                    <a href={subjectPage(subject)}>
+                    <a href={subjectPage(subject)} target="_blank" rel="noopener noreferrer">
                       {subject.name}
-                      <span className="sr-only">{t("tLevelsPage.onGovUk")}</span>
+                      <span className="sr-only">
+                        {t("tLevelsPage.onGovUk")} {t("shell.newTab")}
+                      </span>
                     </a>
                   ) : (
                     <span>{subject.name}</span>
@@ -74,9 +76,10 @@ export default function TLevels() {
             </Link>
           </li>
           <li>
-            <a href="https://www.tlevels.gov.uk/students/find">
+            <a href="https://www.tlevels.gov.uk/students/find" target="_blank" rel="noopener noreferrer">
               <span className="signpost__label">{t("tLevelsPage.searchEngland")}</span>
               <span className="signpost__detail label">tlevels.gov.uk</span>
+              <span className="sr-only"> {t("shell.newTab")}</span>
             </a>
           </li>
         </ul>

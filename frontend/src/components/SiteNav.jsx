@@ -4,7 +4,8 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import LanguagePicker from "../i18n/LanguagePicker.jsx";
-import { CloseIcon, MenuIcon, PersonIcon } from "./Icons.jsx";
+import { AccountAvatar, greetingName } from "./AccountDropdown.jsx";
+import { CloseIcon, MenuIcon } from "./Icons.jsx";
 
 // The side menu. The menu button opens a <dialog> drawer from the left.
 // Only page links go here, sign in and settings are in the account menu.
@@ -65,7 +66,8 @@ export default function SiteNav() {
 
     // Play the closing animation then close. The timer is a backup in case it never finishes.
     dialog.classList.add(closing);
-    const animations = dialog.getAnimations();
+    // getAnimations is missing in some test browsers; no animations means close now.
+    const animations = dialog.getAnimations?.() ?? [];
     if (animations.length === 0) {
       finishClosing();
     } else {
@@ -77,6 +79,22 @@ export default function SiteNav() {
   }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
+
+  // A click on the blurred page beside the drawer closes it. The ::backdrop
+  // belongs to the <dialog>, so that click arrives on the dialog itself, just
+  // outside the panel's box. A click inside the panel (on its padding, say)
+  // also lands on the dialog, so the position is what tells them apart.
+  function closeOnBackdrop(event) {
+    if (event.target !== event.currentTarget) return; // a link, button or text inside
+    if (event.detail === 0) return; // keyboard "clicks" have no position
+    const box = event.currentTarget.getBoundingClientRect();
+    const inside =
+      event.clientX >= box.left &&
+      event.clientX <= box.right &&
+      event.clientY >= box.top &&
+      event.clientY <= box.bottom;
+    if (!inside) closeMenu();
+  }
 
   return (
     <>
@@ -113,6 +131,7 @@ export default function SiteNav() {
             closeMenu();
           }}
           onClose={closeMenu}
+          onClick={closeOnBackdrop}
         >
           <Hello onNavigate={closeMenu} />
 
@@ -140,14 +159,15 @@ function Hello({ onNavigate }) {
   return (
     <div className="menu-hello">
       <div className="container menu-hello__inner">
+        {/* The same picture as the account button in the header. */}
         <span className="menu-hello__avatar" aria-hidden="true">
-          <PersonIcon />
+          <AccountAvatar user={checked ? user : null} />
         </span>
 
         {/* Nothing until the first session check, so "sign in" never flashes
             up for somebody who is already signed in. */}
         {checked && user && (
-          <p className="menu-hello__text">{t("menu.helloUser", { name: user.username })}</p>
+          <p className="menu-hello__text">{t("menu.helloUser", { name: greetingName(user) })}</p>
         )}
         {checked && !user && (
           <Link className="menu-hello__text" to="/login" onClick={onNavigate}>

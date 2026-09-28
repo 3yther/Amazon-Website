@@ -10,10 +10,10 @@ class ExpressionOfInterestAdmin(admin.ModelAdmin):
     never changed; deleting is still allowed for data removal requests.
     """
 
-    list_display = ["full_name", "email", "user_type", "pathway", "submitted_at"]
+    list_display = ["who", "email", "user_type", "pathway", "submitted_at"]
     list_filter = ["user_type", "pathway", "submitted_at"]
-    search_fields = ["full_name", "email", "message"]
-    list_select_related = ["pathway"]
+    search_fields = ["full_name", "email", "message", "user__username"]
+    list_select_related = ["pathway", "user"]
     date_hierarchy = "submitted_at"
     readonly_fields = [
         "full_name",
@@ -23,8 +23,16 @@ class ExpressionOfInterestAdmin(admin.ModelAdmin):
         "message",
         "user",
         "submitted_at",
-        "consented_at",
     ]
+
+    @admin.display(description="Who", ordering="full_name")
+    def who(self, interest):
+        """The name if the account has one, otherwise the username.
+
+        Sign-up collects no real name, so full_name is blank for most rows and
+        a list of empty cells would be useless.
+        """
+        return interest.full_name or (interest.user.username if interest.user else "(unknown)")
 
     def has_add_permission(self, request):
         return False

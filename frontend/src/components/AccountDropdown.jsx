@@ -24,6 +24,23 @@ const STAFF_ITEM = { to: "/staff", label: "account.submissions" };
  * The account button in the header and its menu.
  * Signed in it shows your name and account links, signed out it shows sign in and sign up.
  */
+// The account picture: the first letter of the name in an orange circle, or
+// the person icon when signed out. The menu's Hello band shows the same one.
+export function AccountAvatar({ user }) {
+  return user ? (
+    <span className="account-button__initial" aria-hidden="true">
+      {(user.first_name || user.username || "?").charAt(0).toUpperCase()}
+    </span>
+  ) : (
+    <PersonIcon />
+  );
+}
+
+// The name "Hello, …" uses: the first name, or the username without one.
+export function greetingName(user) {
+  return user ? user.first_name || user.username : "";
+}
+
 export default function AccountDropdown() {
   const t = useT();
   const { user, checked } = useAuth();
@@ -61,7 +78,6 @@ export default function AccountDropdown() {
   const displayName = signedIn
     ? [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username
     : "";
-  const greetingName = signedIn ? user.first_name || user.username : "";
 
   return (
     <div className="account-menu" ref={rootRef}>
@@ -76,17 +92,11 @@ export default function AccountDropdown() {
         aria-label={signedIn ? t("account.menuFor", { name: displayName }) : t("account.signInOrUp")}
         onClick={() => setOpen((current) => !current)}
       >
-        {signedIn ? (
-          <span className="account-button__initial" aria-hidden="true">
-            {(user.first_name || user.username || "?").charAt(0).toUpperCase()}
-          </span>
-        ) : (
-          <PersonIcon />
-        )}
+        <AccountAvatar user={user} />
         {/* Hidden below the narrow breakpoint, where the header has no room
             for it; the icon or initial beside it still says what this is. */}
         <span className="account-button__greeting" aria-hidden="true">
-          {signedIn ? t("menu.helloUser", { name: greetingName }) : t("menu.helloGuest")}
+          {signedIn ? t("menu.helloUser", { name: greetingName(user) }) : t("menu.helloGuest")}
         </span>
       </button>
 

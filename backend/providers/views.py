@@ -41,8 +41,21 @@ class ProviderSearchView(APIView):
     ?pathway=   optional slug
     ?radius=    optional, miles, default 15, max 200
 
-    Returns { postcode, radius_miles, count, results }, nearest first.
+    Returns { postcode, radius_miles, pathway, count, results,
+    unconfirmed_count, unconfirmed }, each list nearest first.
     A bad value gives a 400 naming the field. No account needed.
+
+    TWO LISTS when a pathway is chosen. The official register says only THAT a
+    school runs T-Levels, not which subjects, and for most of the 360 we hold
+    nobody has checked (see Provider.pathways_confirmed). So:
+
+      results      checked, and they offer this pathway
+      unconfirmed  near you, but we do not know their subjects
+
+    Merging them would claim a college teaches something nobody looked up.
+    Dropping them would empty the page the moment anyone used the filter.
+    With no pathway chosen there is nothing to be unsure about: everything
+    inside the radius is in "results" and "unconfirmed" is empty.
 
     Not paginated on purpose: every provider inside the radius comes back,
     because NearYou.jsx reads them all at once. There are tests for this.
@@ -55,18 +68,26 @@ class ProviderSearchView(APIView):
         origin = self.locate(postcode)
 
         providers = Provider.objects.geocoded().prefetch_related("pathways")
-        if pathway:
-            providers = providers.filter(pathways__slug=pathway)
 
-        results = self.within(providers, origin, radius)
-        if not results:
+        if pathway:
+            matching = self.within(providers.filter(pathways__slug=pathway), origin, radius)
+            unknown = self.within(providers.filter(pathways_confirmed=False), origin, radius)
+        else:
+            matching = self.within(providers, origin, radius)
+            unknown = []
+
+        if not matching and not unknown:
             self.explain_empty()
+
         return Response(
             {
                 "postcode": postcode,
                 "radius_miles": radius,
-                "count": len(results),
-                "results": ProviderSearchResultSerializer(results, many=True).data,
+                "pathway": pathway,
+                "count": len(matching),
+                "results": ProviderSearchResultSerializer(matching, many=True).data,
+                "unconfirmed_count": len(unknown),
+                "unconfirmed": ProviderSearchResultSerializer(unknown, many=True).data,
             }
         )
 

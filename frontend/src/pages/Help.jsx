@@ -48,7 +48,10 @@ export default function Help() {
         <IconCards items={SERVICES}>
           {(service) => (
             <p>
-              <a href={service.href}>{service.linkText}</a>
+              <a href={service.href} target="_blank" rel="noopener noreferrer">
+                {service.linkText}
+                <span className="sr-only"> {t("shell.newTab")}</span>
+              </a>
             </p>
           )}
         </IconCards>

@@ -49,7 +49,14 @@ function ActionList({ actions }) {
         );
         return (
           <li key={action.id}>
-            {action.to ? <Link to={action.to}>{inner}</Link> : <a href={action.href}>{inner}</a>}
+            {action.to ? (
+              <Link to={action.to}>{inner}</Link>
+            ) : (
+              <a href={action.href} target="_blank" rel="noopener noreferrer">
+                {inner}
+                <span className="sr-only"> {t("shell.newTab")}</span>
+              </a>
+            )}
           </li>
         );
       })}

@@ -3,10 +3,21 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import RegisterInterest from "../pages/RegisterInterest.jsx";
+import { expectNoAxeViolations } from "./axe.js";
 
-// vi.stubGlobal swaps fetch for a fake server, so the real form code runs
-// without Django. `sent` records what was posted.
-function fakeServer(interestReply) {
+// Registering interest is one tick box now. It used to be a six field form
+// asking for a name, email, role and pathway the site already held, which is
+// what these tests used to drive.
+
+const SIGNED_IN = { user: { id: 1, username: "ada" }, checked: true, refresh: vi.fn() };
+const SIGNED_OUT = { user: null, checked: true, refresh: vi.fn() };
+
+let auth = SIGNED_IN;
+vi.mock("../auth.jsx", () => ({ useAuth: () => auth }));
+
+// vi.stubGlobal swaps fetch for a fake server, so the real page code runs
+// without Django. `sent` records each POST body.
+function fakeServer(reply = { status: 201, body: { id: 1, pathway: "digital" } }) {
   const sent = [];
   vi.stubGlobal(
     "fetch",
@@ -15,8 +26,8 @@ function fakeServer(interestReply) {
         return Response.json({ csrf_token: "test-token" });
       }
       if (url.endsWith("/api/interest/")) {
-        sent.push(JSON.parse(options.body));
-        return Response.json(interestReply.body, { status: interestReply.status });
+        sent.push(JSON.parse(options.body ?? "{}"));
+        return Response.json(reply.body, { status: reply.status });
       }
       return Response.json({}, { status: 404 });
     }),
@@ -25,107 +36,151 @@ function fakeServer(interestReply) {
 }
 
 afterEach(() => {
+  auth = SIGNED_IN;
   vi.unstubAllGlobals();
 });
 
-function renderForm(address = "/register-interest") {
+function renderPage() {
   return render(
-    <MemoryRouter initialEntries={[address]}>
+    <MemoryRouter initialEntries={["/register-interest"]}>
       <RegisterInterest />
     </MemoryRouter>,
   );
 }
 
-async function fillIn(user) {
-  await user.type(screen.getByLabelText("Full name"), "Ada Lovelace");
-  await user.type(screen.getByLabelText("Email"), "ada@example.com");
-  await user.selectOptions(screen.getByLabelText("I am a"), "student");
-  await user.selectOptions(screen.getByLabelText("Pathway"), "digital");
-  await user.click(screen.getByRole("checkbox"));
-}
+const tickBox = () => screen.getByLabelText("I'm interested in an Amazon placement");
+const submit = () => screen.getByRole("button", { name: "Register interest" });
 
-const send = () => screen.getByRole("button", { name: "Register interest" });
+describe("Register your interest", () => {
+  it("asks one question, not six", () => {
+    fakeServer();
+    renderPage();
 
-describe("Register interest form", () => {
-  it("does not need an account", () => {
-    renderForm();
-    expect(screen.getByText(/You do not need an account/)).toBeInTheDocument();
+    expect(tickBox()).toBeInTheDocument();
+    for (const gone of ["Full name", "Email", "I am a", "Pathway"]) {
+      expect(screen.queryByLabelText(gone)).not.toBeInTheDocument();
+    }
   });
 
-  it("will not send until the required fields are done", async () => {
-    const sent = fakeServer({ status: 201, body: {} });
-    const user = userEvent.setup({ delay: null });
-    renderForm();
-
-    await user.click(send());
-
-    expect(sent).toHaveLength(0);
-    expect(screen.getByText("Enter your full name.")).toBeInTheDocument();
-    expect(screen.getByText("Choose a pathway.")).toBeInTheDocument();
-    // Focus goes to the first problem, so keyboard users land on it.
-    expect(screen.getByLabelText("Full name")).toHaveFocus();
-  });
-
-  it("needs the consent box ticked", async () => {
-    const sent = fakeServer({ status: 201, body: {} });
-    const user = userEvent.setup({ delay: null });
-    renderForm();
-
-    await fillIn(user);
-    await user.click(screen.getByRole("checkbox")); // untick it again
-    await user.click(send());
-
-    expect(sent).toHaveLength(0);
-    expect(screen.getByRole("checkbox")).toHaveFocus();
-  });
-
-  it("picks the pathway from the address, e.g. ?pathway=media", () => {
-    renderForm("/register-interest?pathway=media");
-    expect(screen.getByLabelText("Pathway")).toHaveValue("media");
-  });
-
-  it("ignores a pathway in the address that does not exist", () => {
-    renderForm("/register-interest?pathway=nonsense");
-    expect(screen.getByLabelText("Pathway")).toHaveValue("");
-  });
-
-  it("sends exactly the fields the API expects, then says thank you", async () => {
-    const sent = fakeServer({ status: 201, body: { id: 1 } });
-    const user = userEvent.setup({ delay: null });
-    renderForm();
-
-    await fillIn(user);
-    await user.click(send());
-
-    const thanks = await screen.findByRole("heading", { name: "Thanks, you are on the list" });
-    expect(sent).toEqual([
-      {
-        full_name: "Ada Lovelace",
-        email: "ada@example.com",
-        user_type: "student",
-        pathway: "digital",
-        message: "",
-        consent: true,
-      },
-    ]);
-    await waitFor(() => expect(thanks).toHaveFocus());
-    expect(screen.getByText(/Digital pathway/)).toBeInTheDocument();
-  });
-
-  it("shows the server's error next to the right field", async () => {
-    fakeServer({
-      status: 400,
-      body: { full_name: ["Use letters, spaces, hyphens or apostrophes only."] },
-    });
-    const user = userEvent.setup({ delay: null });
-    renderForm();
-
-    await fillIn(user);
-    await user.click(send());
+  it("says it will use what the account already holds", () => {
+    fakeServer();
+    renderPage();
 
     expect(
-      await screen.findByText("Use letters, spaces, hyphens or apostrophes only."),
+      screen.getByText("We send the name, email and pathway already on your account."),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText("Full name")).toHaveAttribute("aria-invalid", "true");
+  });
+
+  it("sends nothing but the tick, then says thank you", async () => {
+    const sent = fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPage();
+
+    await user.click(tickBox());
+    await user.click(submit());
+
+    await waitFor(() => expect(sent).toHaveLength(1));
+    // No personal details in the body: the server reads them off the account.
+    expect(sent[0]).toEqual({});
+    expect(await screen.findByRole("heading", { name: "Thanks, you are on the list" })).toHaveFocus();
+  });
+
+  it("names the pathway the server recorded", async () => {
+    fakeServer({ status: 201, body: { id: 1, pathway: "digital" } });
+    const user = userEvent.setup({ delay: null });
+    renderPage();
+
+    await user.click(tickBox());
+    await user.click(submit());
+
+    expect(await screen.findByText(/interest in the Digital pathway has been sent/)).toBeInTheDocument();
+  });
+
+  it("still thanks someone whose account has no pathway", async () => {
+    // pathway_interest is optional at sign-up, so this is ordinary.
+    fakeServer({ status: 201, body: { id: 1, pathway: null } });
+    const user = userEvent.setup({ delay: null });
+    renderPage();
+
+    await user.click(tickBox());
+    await user.click(submit());
+
+    expect(
+      await screen.findByText("Your interest has been sent to the Amazon Emerging Talent team."),
+    ).toBeInTheDocument();
+  });
+
+  it("will not send an unticked box", async () => {
+    const sent = fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPage();
+
+    await user.click(submit());
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Tick the box to register your interest.",
+    );
+    expect(sent).toHaveLength(0);
+    expect(tickBox()).toHaveFocus();
+  });
+
+  it("reports a server error rather than pretending it sent", async () => {
+    fakeServer({ status: 500, body: {} });
+    const user = userEvent.setup({ delay: null });
+    renderPage();
+
+    await user.click(tickBox());
+    await user.click(submit());
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Thanks, you are on the list" })).not.toBeInTheDocument();
+  });
+
+  describe("signed out", () => {
+    it("asks for an account instead of the fields back", async () => {
+      auth = SIGNED_OUT;
+      fakeServer();
+      renderPage();
+
+      expect(
+        screen.getByText("This one needs an account, so we do not ask you for details the site already holds."),
+      ).toBeInTheDocument();
+      expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute("href", "/login");
+      expect(screen.getByRole("link", { name: "Create your account" })).toHaveAttribute(
+        "href",
+        "/register",
+      );
+    });
+
+    it("never reads as a requirement to use the site", async () => {
+      auth = SIGNED_OUT;
+      fakeServer();
+      renderPage();
+
+      expect(
+        screen.getByText("It is optional. Everything else on the site works without it."),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("has exactly one h1", () => {
+    fakeServer();
+    renderPage();
+
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+  });
+
+  it("has no WCAG 2.2 AA problems axe can find, ticked and thanked", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const { container } = renderPage();
+
+    await expectNoAxeViolations(container);
+
+    await user.click(tickBox());
+    await user.click(submit());
+    await screen.findByRole("heading", { name: "Thanks, you are on the list" });
+    await expectNoAxeViolations(container);
   });
 });

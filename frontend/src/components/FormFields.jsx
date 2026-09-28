@@ -140,6 +140,39 @@ export function CheckboxField({ id, label, hint, error, ...inputProps }) {
   );
 }
 
+/**
+ * "123 characters left" under a field with a length limit.
+ *
+ * maxLength on its own stops the typing and says nothing, so someone writing a
+ * long answer just finds their keyboard has gone dead. This counts down
+ * instead, and says so louder once they are close.
+ *
+ * The visible count is hidden from screen readers, because announcing it on
+ * every keystroke would bury what the person is actually typing. The live
+ * region beside it is empty until the last tenth of the limit, so it speaks
+ * once there is something worth saying.
+ */
+export function CharacterCount({ id, value, limit }) {
+  const t = useT();
+  const left = limit - value.length;
+  const nearlyFull = left <= Math.ceil(limit / 10);
+
+  return (
+    <>
+      <p
+        id={id}
+        className={nearlyFull ? "character-count character-count--low" : "character-count"}
+        aria-hidden="true"
+      >
+        {t("forms.charactersLeft", { count: left })}
+      </p>
+      <p className="sr-only" role="status">
+        {nearlyFull ? t("forms.charactersLeftLong", { count: left }) : ""}
+      </p>
+    </>
+  );
+}
+
 /** An error that belongs to the whole form, e.g. a wrong password. */
 export function FormError({ message }) {
   return (

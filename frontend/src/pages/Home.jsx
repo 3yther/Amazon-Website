@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { useReducedMotion } from "../useReducedMotion.js";
-import { AudienceCards, HowItWorks, PathwayTiles, StatsRow } from "../components/HomeSections.jsx";
+import { AudienceCards, HowItWorks, PathwayTiles } from "../components/HomeSections.jsx";
 import { ArrowIcon } from "../components/Icons.jsx";
 import RisingSubjects from "../components/RisingSubjects.jsx";
 
@@ -37,7 +37,6 @@ export default function Home() {
   return (
     <>
       <Hero audience={audience} subheadRef={subhead} />
-      <StatsRow />
       <AudienceCards selected={audience} onSelect={chooseAudience} />
       <PathwayTiles />
       <HowItWorks />

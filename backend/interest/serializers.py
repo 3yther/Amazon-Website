@@ -1,79 +1,48 @@
-import re
-
-from django.contrib.auth.base_user import BaseUserManager
-from django.utils import timezone
 from rest_framework import serializers
-
-from content.models import Pathway
 
 from .models import ExpressionOfInterest
 
-# Letters in any language with spaces, hyphens, apostrophes or full stops,
-# e.g. "Jean-Luc O'Brien". No numbers, symbols or HTML.
-NAME_PATTERN = re.compile(r"^[^\W\d_]+(?:[ '’.\-]+[^\W\d_]+)*\.?$")
 
-MESSAGE_MAX_LENGTH = 2000
-
-
-class ExpressionOfInterestSerializer(serializers.ModelSerializer):
-    """Checks an Expression of Interest on the server.
-    Personal fields are write-only so they're never sent back.
+class InterestOptInSerializer(serializers.ModelSerializer):
     """
+    The answer to ticking "I'm interested in an Amazon placement".
 
-    pathway = serializers.SlugRelatedField(
-        slug_field="slug",
-        queryset=Pathway.objects.all(),
-        error_messages={
-            "does_not_exist": "Choose a valid pathway.",
-            "invalid": "Choose a valid pathway.",
-        },
-    )
-    message = serializers.CharField(
-        required=False, allow_blank=True, max_length=MESSAGE_MAX_LENGTH, write_only=True
-    )
-    # The consent tick box. Has to be ticked, and the time is saved as consented_at.
-    consent = serializers.BooleanField(write_only=True)
-
-    class Meta:
-        model = ExpressionOfInterest
-        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "consent", "submitted_at"]
-        read_only_fields = ["id", "submitted_at"]
-        extra_kwargs = {
-            "full_name": {"write_only": True, "min_length": 2},
-            "email": {"write_only": True},
-            "user_type": {"write_only": True},
-        }
-
-    def validate_full_name(self, value):
-        name = " ".join(value.split())  # collapse repeated spaces
-        if not NAME_PATTERN.match(name):
-            raise serializers.ValidationError(
-                "Use letters, spaces, hyphens or apostrophes only."
-            )
-        return name
-
-    def validate_email(self, value):
-        # Lower-case the domain part, as Django does for user emails.
-        return BaseUserManager.normalize_email(value.strip())
-
-    def validate_consent(self, value):
-        if not value:
-            raise serializers.ValidationError("Tick the box to say the team can see your details.")
-        return value
-
-    def create(self, validated_data):
-        validated_data.pop("consent")
-        return super().create({**validated_data, "consented_at": timezone.now()})
-
-
-class ExpressionOfInterestStaffSerializer(serializers.ModelSerializer):
-    """What Amazon staff see on the submissions list. Separate from the one above
-    so that one can keep the personal fields write-only.
+    Takes no input at all. That is the point of the change: the site already
+    holds the name, email, role and pathway this used to ask for, so the view
+    copies them off the account (see ExpressionOfInterest.record_for). What
+    comes back is only what was recorded, so the page can say it back without
+    the visitor having to trust that anything was stored.
     """
 
     pathway = serializers.SlugRelatedField(slug_field="slug", read_only=True)
 
     class Meta:
         model = ExpressionOfInterest
-        fields = ["id", "full_name", "email", "user_type", "pathway", "message", "submitted_at", "consented_at"]
+        fields = ["id", "pathway", "submitted_at"]
+        read_only_fields = fields
+
+
+class ExpressionOfInterestStaffSerializer(serializers.ModelSerializer):
+    """What Amazon staff see on the submissions list.
+
+    username comes along because the other four fields are now optional: an
+    account that never filled in a name or email still needs to be somebody
+    the team can go and find.
+    """
+
+    pathway = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+    username = serializers.CharField(source="user.username", read_only=True, default="")
+
+    class Meta:
+        model = ExpressionOfInterest
+        fields = [
+            "id",
+            "username",
+            "full_name",
+            "email",
+            "user_type",
+            "pathway",
+            "message",
+            "submitted_at",
+        ]
         read_only_fields = fields

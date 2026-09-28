@@ -66,9 +66,21 @@ export default function App() {
           <SiteNav />
 
           <div className="site-header__brand">
-            {/* Approved logo file, used unaltered: transparent, sitting
-                straight on the dark header. */}
-            <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
+            {/* Both halves of the lockup go home, because people click the
+                logo expecting that and nothing happened. Two links rather
+                than one around the pair, so the wordmark keeps the easter
+                egg counter to itself. The label is on the link because the
+                image's own alt says "Amazon", which is true of the picture
+                but not of where the link goes. */}
+            <Link
+              className="site-header__logo-link"
+              to="/"
+              aria-label={t("menu.pages.home")}
+            >
+              {/* Approved logo file, used unaltered: transparent, sitting
+                  straight on the dark header. */}
+              <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
+            </Link>
             <Link className="wordmark" to="/" onClick={countWordmarkClick}>
               T-<span className="wordmark__accent">SMILE</span>
             </Link>

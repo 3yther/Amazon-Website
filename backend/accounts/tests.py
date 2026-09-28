@@ -810,3 +810,66 @@ class AdminStylesTests(APITestCase):
     def test_admin_css_is_served(self):
         response = self.client.get("/static/admin/css/base.css")
         self.assertEqual(response.status_code, 200)
+
+
+class BlankUsernameTests(APITestCase):
+    """
+    A username that is empty, or only spaces, must never create an account.
+
+    Reported as "the sign-up form accepts a blank username". The front end was
+    the half that was wrong: its form is noValidate, which turns off the
+    browser's own `required` handling, so nothing stopped an empty box being
+    sent. These tests pin the server's half, which was already right and has to
+    stay right whatever the page does.
+
+    DRF closes it without help: CharField trims whitespace by default and then
+    refuses an empty string, so no .strip() of our own is needed anywhere.
+    """
+
+    def setUp(self):
+        cache.clear()
+
+    def payload(self, username):
+        return {
+            "username": username,
+            "password": "harbour-lantern-47",
+            "password_confirm": "harbour-lantern-47",
+            "user_type": "student",
+        }
+
+    def test_an_empty_username_is_refused(self):
+        response = self.client.post(REGISTER_URL, self.payload(""), format="json")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("username", response.data)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_spaces_on_their_own_are_refused(self):
+        for username in ("   ", "\t", "\n", " \t\n "):
+            with self.subTest(username=repr(username)):
+                response = self.client.post(REGISTER_URL, self.payload(username), format="json")
+
+                self.assertEqual(response.status_code, 400)
+                self.assertIn("username", response.data)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_the_message_says_which_field_and_why(self):
+        response = self.client.post(REGISTER_URL, self.payload("  "), format="json")
+
+        self.assertIn("blank", str(response.data["username"]).lower())
+
+    def test_padding_around_a_real_username_is_trimmed_not_refused(self):
+        response = self.client.post(REGISTER_URL, self.payload("  ada  "), format="json")
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(User.objects.filter(username="ada").exists())
+
+    def test_a_username_of_only_spaces_cannot_sneak_past_as_a_name(self):
+        """
+        Belt and braces: even if something upstream stopped trimming, the
+        username validator would refuse a space inside a username anyway.
+        """
+        response = self.client.post(REGISTER_URL, self.payload("ada lovelace"), format="json")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("username", response.data)
