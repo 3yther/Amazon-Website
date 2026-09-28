@@ -2145,3 +2145,219 @@ input[type="range"] {
   gap: 16px;
   margin-top: 24px;
 }
+
+/* ---------- Admin Portal (pages/AdminPortal.jsx) ---------- */
+
+/* The PIN screen. Narrow on purpose: it is one field, and a full-width form
+   for four digits looks like something has failed to load. */
+.admin-pin {
+  max-width: 28rem;
+}
+
+.admin-pin__form {
+  margin-top: 24px;
+}
+
+/* input, not just the class: ".field input" is more specific than a lone
+   class, so a bare .admin-pin__input loses to it and the box stretches. */
+input.admin-pin__input {
+  width: 8ch;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  letter-spacing: 0.4em;
+  text-align: center;
+}
+
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The numbers above the charts. */
+.admin-totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+  gap: 16px;
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-total {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.admin-total__value {
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.admin-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 32px;
+}
+
+.admin-chart {
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.admin-chart__title {
+  margin-bottom: 16px;
+  font-size: 1.125rem;
+}
+
+.admin-chart__empty,
+.admin-key__value {
+  color: var(--ink-muted);
+}
+
+.admin-chart__data {
+  margin-top: 16px;
+  font-size: 0.9375rem;
+}
+
+/* Bars, hand-built like the growth bars on the Amazon page: a flex row of
+   groups, each bar sized by an inline height. No library, and nothing
+   animates, so there is no motion for reduce-motion to turn off. */
+.admin-bars {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  height: 160px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-bars__group {
+  position: relative;
+  flex: 1;
+  height: 100%;
+}
+
+.admin-bars__stack {
+  display: flex;
+  align-items: end;
+  gap: 2px;
+  height: 100%;
+}
+
+.admin-bars__bar {
+  flex: 1;
+  min-height: 2px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  /* Orange and dark blue only (CONTEXT.md). The third series borrows the
+     header's own navy, which reads as a third tone in both themes without
+     inventing a colour. */
+  background: var(--orange);
+}
+
+.admin-bars__bar--parent,
+.admin-bars__bar--answers {
+  background: var(--blue);
+}
+
+.admin-bars__bar--teacher {
+  background: var(--ink-muted);
+}
+
+.admin-bars__label {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+.admin-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+}
+
+.admin-key--stacked {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-key li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-key__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--orange);
+}
+
+.admin-key__swatch--blue,
+.admin-key__swatch--parent,
+.admin-key__swatch--answers {
+  background: var(--blue);
+}
+
+.admin-key__swatch--teacher {
+  background: var(--ink-muted);
+}
+
+.admin-donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+.admin-donut__ring {
+  width: 160px;
+  height: 160px;
+  flex: none;
+}
+
+/* A ring of stroked circles, each offset around the circumference. Simpler
+   than five arc paths and it stays a perfect circle at any size. */
+.admin-donut__segment {
+  fill: none;
+  stroke-width: 22;
+}
+
+.admin-donut__segment--orange {
+  stroke: var(--orange);
+}
+
+.admin-donut__segment--blue {
+  stroke: var(--blue);
+}
+
+.admin-donut__total {
+  fill: var(--blue);
+  font-size: 1.75rem;
+  font-weight: 800;
+}

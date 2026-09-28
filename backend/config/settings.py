@@ -232,6 +232,11 @@ REST_FRAMEWORK = {
         "community_action": "120/hour",
         # Both password reset endpoints share this.
         "password_reset": "5/hour",
+        # Unlocking the Admin Portal. A 4-digit PIN is only 10,000
+        # combinations, so this is the thing actually standing between a
+        # guesser and the portal. Tight enough to make guessing hopeless,
+        # loose enough that a staff member fumbling the keypad is fine.
+        "admin_portal_pin": "10/hour",
     },
 }
 
@@ -248,6 +253,17 @@ if DEBUG:
 
 # No email account for the prototype, so emails are printed to the console
 # (including the reset link). PRODUCTION: point EMAIL_BACKEND at Amazon SES.
+# The Admin Portal's PIN. A SECOND factor on top of being signed in as Amazon
+# staff, not a replacement for it: every endpoint behind it still checks
+# IsAmazonStaff. Think screen-lock on a shared staff laptop, not access
+# control. Unset means the portal cannot be unlocked at all, which is the
+# right way round to fail.
+ADMIN_PORTAL_PIN = os.environ.get("ADMIN_PORTAL_PIN", "")
+
+# How long an unlock lasts, refreshed on each portal request. Short, because
+# the point is re-locking a device somebody walked away from.
+ADMIN_PORTAL_UNLOCK_MINUTES = int(os.environ.get("ADMIN_PORTAL_UNLOCK_MINUTES", "30"))
+
 EMAIL_BACKEND = os.environ.get(
     "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
 )

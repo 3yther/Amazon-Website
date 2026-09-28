@@ -18,7 +18,12 @@ const MENU_ITEMS = [
 // Log out isn't in this menu, it's on the Account tab of /accessibility.
 
 // Only shown to Amazon staff. The API does the real check.
-const STAFF_ITEM = { to: "/staff", label: "account.submissions" };
+//
+// Kept as well as the footer link rather than replaced by it: this is the
+// shortcut staff actually use, several times a day, and the footer is a long
+// scroll away. Both land on the same PIN screen, so keeping it costs nothing
+// and removing it would just make the portal harder to reach.
+const STAFF_ITEM = { to: "/admin-portal", label: "admin.title" };
 
 /**
  * The account button in the header and its menu.

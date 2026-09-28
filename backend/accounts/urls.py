@@ -1,5 +1,14 @@
 from django.urls import path
 
+from .admin_portal import (
+    DeactivateView,
+    FeedbackListView,
+    LockView,
+    OverviewView,
+    PeopleView,
+    StatusView,
+    UnlockView,
+)
 from .views import (
     ChangePasswordView,
     CsrfTokenView,
@@ -30,4 +39,17 @@ urlpatterns = [
     ),
     path("deactivate-account/", DeactivateAccountView.as_view(), name="accounts-deactivate-account"),
     path("feedback/", FeedbackCreateView.as_view(), name="accounts-feedback"),
+    # The Admin Portal. Everything but unlock/lock/status is behind the PIN as
+    # well as the staff check (see permissions.IsAmazonStaffAndUnlocked).
+    path("admin-portal/unlock/", UnlockView.as_view(), name="admin-portal-unlock"),
+    path("admin-portal/lock/", LockView.as_view(), name="admin-portal-lock"),
+    path("admin-portal/status/", StatusView.as_view(), name="admin-portal-status"),
+    path("admin-portal/overview/", OverviewView.as_view(), name="admin-portal-overview"),
+    path("admin-portal/people/", PeopleView.as_view(), name="admin-portal-people"),
+    path(
+        "admin-portal/people/<int:pk>/deactivate/",
+        DeactivateView.as_view(),
+        name="admin-portal-deactivate",
+    ),
+    path("admin-portal/feedback/", FeedbackListView.as_view(), name="admin-portal-feedback"),
 ]

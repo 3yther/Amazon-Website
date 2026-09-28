@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 
-from accounts.permissions import IsAmazonStaff
+from accounts.permissions import IsAmazonStaffAndUnlocked
 
 from .models import ExpressionOfInterest
 from .serializers import ExpressionOfInterestStaffSerializer, InterestOptInSerializer
@@ -45,8 +45,13 @@ class ExpressionOfInterestListView(generics.ListAPIView):
     All Expressions of Interest, newest first, for Amazon staff only
     (see accounts/permissions.py). Kept separate from the POST endpoint so
     the public one never lists anything. 20 per page.
+
+    Behind the Admin Portal's PIN as well as the staff check, because this is
+    now a tab inside the portal. Leaving it on the staff check alone would
+    have meant the one list of real people's contact details was the only
+    thing in there reachable without the PIN, which is the wrong way round.
     """
 
     serializer_class = ExpressionOfInterestStaffSerializer
-    permission_classes = [IsAuthenticated, IsAmazonStaff]
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
     queryset = ExpressionOfInterest.objects.select_related("pathway", "user")

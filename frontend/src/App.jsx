@@ -35,7 +35,7 @@ const Quiz = lazy(() => import("./pages/Quiz.jsx"));
 const Register = lazy(() => import("./pages/Register.jsx"));
 const RegisterInterest = lazy(() => import("./pages/RegisterInterest.jsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.jsx"));
-const StaffDashboard = lazy(() => import("./pages/StaffDashboard.jsx"));
+const AdminPortal = lazy(() => import("./pages/AdminPortal.jsx"));
 const ReportIssue = lazy(() => import("./pages/ReportIssue.jsx"));
 const Terms = lazy(() => import("./pages/Terms.jsx"));
 const TLevels = lazy(() => import("./pages/TLevels.jsx"));
@@ -129,9 +129,13 @@ export default function App() {
             <Route path="/accessibility" element={<PageTitle title="Accessibility"><Accessibility /></PageTitle>} />
             <Route path="/contact" element={<PageTitle title="Contact us"><Contact /></PageTitle>} />
             <Route path="/feedback" element={<PageTitle title="Feedback"><Feedback /></PageTitle>} />
-            {/* Amazon staff only. The page itself sends anyone else to "/", and
-                the API behind it refuses them regardless. */}
-            <Route path="/staff" element={<PageTitle title="Submissions"><StaffDashboard /></PageTitle>} />
+            {/* Amazon staff only, and then a PIN on top of that. The page
+                sends anyone else to "/", and the API behind it refuses them
+                regardless. */}
+            <Route path="/admin-portal" element={<PageTitle title="Admin Portal"><AdminPortal /></PageTitle>} />
+            {/* The old staff page. Redirected rather than removed so an
+                existing bookmark still lands somewhere useful. */}
+            <Route path="/staff" element={<Navigate to="/admin-portal" replace />} />
             {/* old link, settings are on /accessibility now */}
             <Route path="/account" element={<Navigate to="/accessibility" replace />} />
             <Route path="*" element={<PageTitle title="Page not found"><NotFound /></PageTitle>} />
