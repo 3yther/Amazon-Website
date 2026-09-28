@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { adminPortalLock, adminPortalStatus, adminPortalUnlock } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import TabNav from "../components/TabNav.jsx";
@@ -14,16 +14,18 @@ import {
 import { formErrors } from "../formErrors.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-// The Admin Portal (/admin-portal), reached from the footer link that only
-// staff can see.
+// The Admin Portal (/admin-portal), reached from the footer link on every page.
 //
 // TWO GATES, AND THEY ARE NOT THE SAME GATE.
 //
 // Being signed in as Amazon staff is the real one, and it is enforced on every
-// endpoint by the server. The redirect below is only so a student who guesses
-// the URL gets the homepage instead of an empty page full of errors; the same
-// "not a security boundary, just a good experience" note the old /staff page
-// carried applies here unchanged.
+// endpoint by the server. What happens below is only so somebody who cannot
+// get in gets something sensible instead of an empty page full of errors; the
+// same "not a security boundary, just a good experience" note the old /staff
+// page carried applies here unchanged. It splits in two, because being signed
+// out and being signed in as a student are different problems: the first is
+// probably a staff member who has not signed in yet and needs telling, the
+// second is somebody who has no business here and needs no explanation.
 //
 // The PIN on top is a screen-lock for a shared staff laptop. It is checked
 // server-side, rate limited, and it expires, but it is deliberately NOT the
@@ -64,6 +66,7 @@ export default function AdminPortal() {
   // Nothing until the first session check, so a staff member is never bounced
   // in the moment before we know who they are.
   if (!checked) return null;
+  if (!user) return <SignInGate />;
   if (!isStaff) return <Navigate to="/" replace />;
   if (asking) return null;
 
@@ -99,6 +102,33 @@ export default function AdminPortal() {
 
       <TabNav tabs={tabs} activeId={activeId} onChange={setActiveId} />
     </>
+  );
+}
+
+/**
+ * The signed-out screen, for a staff member who has not signed in yet. Laid
+ * out like PinGate so the portal's gates look like each other.
+ *
+ * The link carries ?next= so signing in comes back here rather than dropping
+ * them on the homepage, and it is built from the current location so a link to
+ * a particular tab survives the round trip.
+ */
+function SignInGate() {
+  const t = useT();
+  const location = useLocation();
+  const next = encodeURIComponent(`${location.pathname}${location.search}`);
+
+  return (
+    <section className="admin-pin" aria-labelledby="page-title">
+      <p className="label">{t("account.roles.amazon_staff")}</p>
+      <h1 id="page-title">{t("admin.signedOut.title")}</h1>
+      <p className="lead">{t("admin.signedOut.lead")}</p>
+      <p>
+        <Link className="button button--primary" to={`/login?next=${next}`}>
+          {t("account.signIn")}
+        </Link>
+      </p>
+    </section>
   );
 }
 

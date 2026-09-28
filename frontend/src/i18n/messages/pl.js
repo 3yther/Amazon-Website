@@ -993,6 +993,10 @@ const pl = {
       feedback: "Opinie według kategorii",
       feedbackCaption: "Przesłane opinie, według kategorii.",
     },
+    signedOut: {
+      title: "Zaloguj się, aby otworzyć Panel administratora",
+      lead: "Ta strona jest dla personelu Amazon. Zaloguj się na konto personelu, aby kontynuować.",
+    },
     pin: {
       title: "Wpisz PIN panelu",
       lead: "Jeszcze jeden krok. To blokuje panel na wspólnym komputerze, oprócz logowania jako personel.",

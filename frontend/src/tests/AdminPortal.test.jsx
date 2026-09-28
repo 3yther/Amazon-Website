@@ -127,13 +127,49 @@ describe("Admin Portal: who gets in", () => {
     expect(await screen.findByRole("heading", { name: "Home" })).toBeInTheDocument();
   });
 
-  it("sends a signed-out visitor to the homepage", async () => {
+  // Signed out is not the same as signed in and not staff. A student needs no
+  // explanation, but somebody with no session at all may just be a staff
+  // member who has not signed in yet, so they get told rather than bounced.
+  it("asks a signed-out visitor to sign in instead of bouncing them home", async () => {
     auth = { user: null, checked: true, refresh: vi.fn() };
     fakeServer();
 
     renderPortal();
 
-    expect(await screen.findByRole("heading", { name: "Home" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "Sign in to open the Admin Portal" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Home" })).not.toBeInTheDocument();
+  });
+
+  it("sends a signed-out visitor back here after they sign in", async () => {
+    auth = { user: null, checked: true, refresh: vi.fn() };
+    fakeServer();
+
+    renderPortal();
+
+    const link = await screen.findByRole("link", { name: "Sign in" });
+    expect(link).toHaveAttribute("href", "/login?next=%2Fadmin-portal");
+  });
+
+  it("keeps the tab they asked for across the sign-in", async () => {
+    auth = { user: null, checked: true, refresh: vi.fn() };
+    fakeServer();
+
+    renderPortal("/admin-portal?tab=people");
+
+    const link = await screen.findByRole("link", { name: "Sign in" });
+    expect(link).toHaveAttribute("href", "/login?next=%2Fadmin-portal%3Ftab%3Dpeople");
+  });
+
+  it("asks the server nothing at all for a signed-out visitor", async () => {
+    auth = { user: null, checked: true, refresh: vi.fn() };
+    const calls = fakeServer();
+
+    renderPortal();
+    await screen.findByRole("heading", { name: "Sign in to open the Admin Portal" });
+
+    expect(calls).toEqual([]);
   });
 
   it("waits for the session check rather than bouncing staff mid-load", () => {

@@ -969,6 +969,10 @@ const en = {
       feedback: "Feedback by category",
       feedbackCaption: "Feedback submitted, by category.",
     },
+    signedOut: {
+      title: "Sign in to open the Admin Portal",
+      lead: "This page is for Amazon staff. Sign in with your staff account to continue.",
+    },
     pin: {
       title: "Enter the portal PIN",
       lead: "One more step. This locks the portal on a shared computer, on top of your staff sign-in.",
