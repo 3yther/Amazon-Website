@@ -761,9 +761,6 @@ const en = {
       privacy:
         "I only save questions I have to look up, so we can pick up where we left off. Anything I answer myself, and anything " +
         "about how you move around the site, stays in your browser. The Privacy Policy has the details.",
-      acronymGap:
-        "Good question, and a common one. The team hasn't confirmed what {acronym} stands for yet, so I won't guess. " +
-        "Your school or college can tell you, or you could ask in the Community.",
       dontKnow: "I don't know that one yet, and I'd rather not guess. Here's what I can help with:",
       closest: "I'm not completely sure what you mean, but this is the closest thing I know:",
     },

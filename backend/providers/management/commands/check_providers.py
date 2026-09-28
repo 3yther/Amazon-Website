@@ -44,7 +44,7 @@ class Command(BaseCommand):
             default=None,
             help=(
                 "Fail if more than this many providers have no position. "
-                f"Default: {DEFAULT_MAX_UNPLACED_SHARE:.0%} of the table."
+                f"Default: {DEFAULT_MAX_UNPLACED_SHARE:.0%}% of the table."  # %% for argparse
             ),
         )
 

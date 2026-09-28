@@ -118,7 +118,7 @@ export default {
       {
         question: "Como sou avaliado?",
         answer:
-          "Em duas partes. O núcleo (core) tem notas de A estrela a E e cobre os conhecimentos do teu setor. A especialização profissional (occupational specialism) tem as notas pass, merit ou distinction e é a parte prática. As duas aparecem no teu certificado, junto com uma nota final.",
+          "Em duas partes. O núcleo (core) tem notas de A estrela a E e cobre os conhecimentos do teu setor. A especialização profissional (occupational specialism) tem as notas pass, merit ou distinction e é a parte prática. As duas aparecem no teu certificado, junto com uma nota final. O núcleo inclui também um projeto definido pelo empregador (employer-set project, ESP), e a especialização profissional é muitas vezes abreviada para OS.",
       },
       {
         question: "Ainda posso ir para a universidade?",
@@ -440,7 +440,10 @@ export default {
         {
           heading: "Durante quanto tempo os guardamos",
           paragraphs: [
-            "Ainda não definimos isto, e vamos fazê-lo antes de o site ficar público. Até lá, pede-nos e apagamos os teus dados.",
+            "Mensagens com o Smiley: 90 dias.",
+            "Formulários de interesse e opiniões: 12 meses.",
+            "A tua conta e publicações na Comunidade: até as apagares.",
+            "Podes pedir-nos para apagar qualquer coisa mais cedo.",
           ],
         },
         {

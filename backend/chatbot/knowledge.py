@@ -157,6 +157,13 @@ VERIFIED_FACTS = (
         "industry. The occupational specialism is graded pass, merit or distinction and is "
         "the practical side. Both show on your certificate, along with one overall grade.",
     ),
+    # OS and ESP checked against gov.uk "Supporting higher education providers to
+    # understand T Levels" (September 2026).
+    quoted(
+        "What OS and ESP stand for",
+        "The core also includes an employer-set project (ESP), and the occupational "
+        "specialism is often shortened to OS.",
+    ),
     quoted(
         "T-Levels and university",
         "Yes. A Distinction star is worth 168 UCAS points, a Distinction 144, a Merit 120 "
@@ -330,28 +337,6 @@ VERIFIED_FACTS = (
             "Amazon's own page names digital, creative, business and engineering and does "
             "not mention finance. The team note says to ask the Emerging Talent contact "
             "before claiming a finance placement exists."
-        ),
-    ),
-    Fact(
-        topic="What OS stands for",
-        text=None,
-        source="",
-        note=(
-            "CONTENT GAP, flagged in the team's research as one of the two acronyms students "
-            "find most confusing. The About page now explains the occupational specialism "
-            "(FAQ 'How am I assessed?'), but no copy anywhere says that OS is short for it. "
-            "Once somebody confirms that against the awarding body, add it here. Do not "
-            "guess an expansion."
-        ),
-    ),
-    Fact(
-        topic="What ESP stands for",
-        text=None,
-        source="",
-        note=(
-            "CONTENT GAP, the other acronym flagged in the team's research. Still not "
-            "defined anywhere in the repo, so it needs writing and checking rather than "
-            "guessing."
         ),
     ),
 )

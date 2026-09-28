@@ -18,6 +18,15 @@ class Profile(models.Model):
         TEACHER = "teacher", "Teacher or school"
         AMAZON_STAFF = "amazon_staff", "Amazon staff"
 
+    class HeardAbout(models.TextChoices):
+        SEARCH_ENGINE = "search_engine", "Search engine"
+        SOCIAL_MEDIA = "social_media", "Social media"
+        FRIEND_FAMILY = "friend_family", "Friend or family"
+        ADVERT = "advert", "Advert"
+        INFLUENCER = "influencer", "Influencer"
+        AI = "ai", "AI assistant"
+        OTHER = "other", "Other"
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
@@ -26,6 +35,8 @@ class Profile(models.Model):
         max_length=20, choices=PathwayName.choices, null=True, blank=True
     )
     phone = models.CharField(max_length=32, blank=True, default="")
+    # The optional "How did you hear about us?" question on the sign up page.
+    heard_about = models.CharField(max_length=20, choices=HeardAbout.choices, blank=True, default="")
     is_deactivated = models.BooleanField(default=False)
     deactivated_at = models.DateTimeField(null=True, blank=True)
     # Set once at profile creation (registration), then updated by hand in
@@ -73,8 +84,6 @@ class UserPreference(models.Model):
     page_background = models.CharField(max_length=20, default="white")
 
     language = models.CharField(max_length=10, default="en")
-    date_format = models.CharField(max_length=20, default="MM/DD/YYYY")
-    number_format = models.CharField(max_length=10, default="US")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

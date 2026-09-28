@@ -59,11 +59,11 @@ describe("facts come from the site's own copy", () => {
     expect(ask("which pathways does amazon offer").text).toContain("Finance: Amazon hasn't confirmed");
   });
 
-  it("never guesses what an acronym stands for", () => {
-    const reply = ask("what does OS stand for");
-    expect(reply.id).toBe("whatIsOS");
-    expect(reply.text).toContain("won't guess");
-    expect(reply.text.toLowerCase()).not.toContain("occupational");
+  it("explains OS and ESP from the About page FAQ", () => {
+    const os = ask("what does OS stand for");
+    expect(os.id).toBe("whatIsOS");
+    expect(os.text).toContain("occupational specialism is often shortened to OS");
+    expect(ask("what is the ESP").text).toContain("employer-set project (ESP)");
   });
 
   it("gives every topic a real chip label and a real answer", () => {

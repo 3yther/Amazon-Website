@@ -1,6 +1,5 @@
 // Words for the Terms, Privacy, Cookie and Data Rights pages.
-// TEAM: these are drafts, not legal advice. Get them checked before going live,
-// and fill in the TODOs (how long data is kept).
+// TEAM: these are drafts, not legal advice. Get them checked before going live.
 // Each page is a list of sections: { heading, paragraphs, points }.
 
 const DRAFT_NOTE =
@@ -86,8 +85,11 @@ export const PRIVACY = {
     {
       heading: "How long we keep it",
       paragraphs: [
-        // TODO (team): set a real time for each kind of data before launch.
-        "We have not set this yet, and will before the site goes live. Until then, ask us and we will delete your data.",
+        // Matches KEEP in backend/accounts/management/commands/delete_old_data.py.
+        "Chat messages with Smiley: 90 days.",
+        "Interest forms and feedback: 12 months.",
+        "Your account and Community posts: until you delete them.",
+        "You can ask us to delete anything sooner.",
       ],
     },
     {

@@ -734,9 +734,6 @@ const pt = {
       privacy:
         "Só guardo as perguntas que tenho de consultar, para podermos continuar onde ficámos. O que respondo sozinho, e a forma como " +
         "navegas no site, fica no teu navegador. A Política de Privacidade tem os detalhes.",
-      acronymGap:
-        "Boa pergunta, e muito comum. A equipa ainda não confirmou o que significa {acronym}, por isso não vou adivinhar. " +
-        "A tua escola ou college pode dizer-te, ou podes perguntar na Comunidade.",
       dontKnow: "Ainda não sei isso, e prefiro não adivinhar. Posso ajudar com isto:",
       closest: "Não tenho bem a certeza do que queres dizer, mas isto é o mais parecido que sei:",
     },

@@ -1,5 +1,5 @@
 // Words and data for the About page, kept out of the components so they're easy to edit.
-// Every figure was checked in September 2026 against the SOURCES at the bottom.
+// Every figure was checked again on 25 September 2026 against the SOURCES at the bottom.
 // Check again before hand-in: placement hours, UCAS points, the bursary and the number of subjects.
 
 /** The three steps from GCSEs to an Amazon placement (the design doc's numbered route). */
@@ -196,7 +196,7 @@ export const FAQS = [
     id: "assessed",
     question: "How am I assessed?",
     answer:
-      "Two parts. The core is graded A star to E and covers the knowledge for your industry. The occupational specialism is graded pass, merit or distinction and is the practical side. Both show on your certificate, along with one overall grade.",
+      "Two parts. The core is graded A star to E and covers the knowledge for your industry. The occupational specialism is graded pass, merit or distinction and is the practical side. Both show on your certificate, along with one overall grade. The core also includes an employer-set project (ESP), and the occupational specialism is often shortened to OS.",
   },
   {
     id: "university",

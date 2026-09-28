@@ -1,4 +1,4 @@
-"""Chat history for the AI chatbot (Task 4). Model only for now, no endpoints yet."""
+"""Chat history for Smiley, the chat helper."""
 from django.conf import settings
 from django.db import models
 

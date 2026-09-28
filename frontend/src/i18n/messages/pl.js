@@ -733,9 +733,6 @@ const pl = {
       privacy:
         "Zapisuję tylko pytania, które muszę sprawdzić, żebyśmy mogli wrócić do rozmowy. To, na co odpowiadam sam, i to, jak " +
         "poruszasz się po stronie, zostaje w twojej przeglądarce. Szczegóły są w Polityce prywatności.",
-      acronymGap:
-        "Dobre pytanie i częste. Zespół nie potwierdził jeszcze, co oznacza {acronym}, więc nie będę zgadywać. " +
-        "Twoja szkoła lub college ci powie, możesz też zapytać w Społeczności.",
       dontKnow: "Jeszcze tego nie wiem i wolę nie zgadywać. W tym mogę pomóc:",
       closest: "Nie jestem pewien, o co chodzi, ale to najbliższa rzecz, jaką znam:",
     },

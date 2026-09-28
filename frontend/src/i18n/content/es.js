@@ -118,7 +118,7 @@ export default {
       {
         question: "¿Cómo me evalúan?",
         answer:
-          "En dos partes. El núcleo (core) se califica de A estrella a E y cubre los conocimientos de tu sector. La especialidad profesional (occupational specialism) se califica con pass, merit o distinction y es la parte práctica. Las dos aparecen en tu certificado, junto con una nota final.",
+          "En dos partes. El núcleo (core) se califica de A estrella a E y cubre los conocimientos de tu sector. La especialidad profesional (occupational specialism) se califica con pass, merit o distinction y es la parte práctica. Las dos aparecen en tu certificado, junto con una nota final. La parte común también incluye un proyecto encargado por un empleador (employer-set project, ESP), y la especialización profesional suele abreviarse como OS.",
       },
       {
         question: "¿Puedo ir a la universidad después?",
@@ -440,7 +440,10 @@ export default {
         {
           heading: "Cuánto tiempo los guardamos",
           paragraphs: [
-            "Todavía no lo hemos fijado, y lo haremos antes de que la web esté en marcha. Hasta entonces, pídenoslo y borraremos tus datos.",
+            "Mensajes con Smiley: 90 días.",
+            "Formularios de interés y comentarios: 12 meses.",
+            "Tu cuenta y tus publicaciones en la Comunidad: hasta que las borres.",
+            "Puedes pedirnos que borremos cualquier cosa antes.",
           ],
         },
         {

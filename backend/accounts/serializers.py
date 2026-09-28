@@ -54,8 +54,6 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
             "button_outline_style",
             "page_background",
             "language",
-            "date_format",
-            "number_format",
             "updated_at",
         ]
         read_only_fields = ["updated_at"]
@@ -115,6 +113,9 @@ class RegisterSerializer(serializers.Serializer):
     pathway_interest = serializers.ChoiceField(
         choices=PathwayName.choices, required=False, allow_null=True, allow_blank=True
     )
+    heard_about = serializers.ChoiceField(
+        choices=Profile.HeardAbout.choices, required=False, allow_blank=True
+    )
 
     def validate_username(self, value):
         username = User.normalize_username(value)
@@ -153,6 +154,7 @@ class RegisterSerializer(serializers.Serializer):
                     user=user,
                     user_type=validated_data["user_type"],
                     pathway_interest=validated_data.get("pathway_interest"),
+                    heard_about=validated_data.get("heard_about", ""),
                 )
         except IntegrityError:
             # Two sign-ups raced for the same username and the database refused one.

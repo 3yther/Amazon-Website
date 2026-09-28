@@ -1,10 +1,19 @@
+from datetime import timedelta
+from io import StringIO
+
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
 from django.core.cache import cache
+from django.core.management import call_command
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from rest_framework.test import APIClient, APITestCase
+
+from chatbot.models import ChatMessage
+from content.models import Pathway
+from interest.models import ExpressionOfInterest
 
 from .models import Feedback, Profile, UserPreference
 
@@ -44,6 +53,15 @@ class RegisterApiTests(APITestCase):
         self.assertTrue(user.check_password(PASSWORD))
         self.assertEqual(user.profile.user_type, "student")
         self.assertEqual(user.profile.pathway_interest, "Digital")
+
+    def test_heard_about_is_saved(self):
+        self.client.post(REGISTER_URL, self.valid_payload(heard_about="friend_family"), format="json")
+        self.assertEqual(User.objects.get(username="ada").profile.heard_about, "friend_family")
+
+    def test_heard_about_must_be_a_real_choice(self):
+        response = self.client.post(REGISTER_URL, self.valid_payload(heard_about="tiktok"), format="json")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("heard_about", response.data)
 
     def test_registration_signs_the_user_in(self):
         self.client.post(REGISTER_URL, self.valid_payload(), format="json")
@@ -751,6 +769,47 @@ class PasswordResetEndToEndApiTests(APITestCase):
             LOGIN_URL, {"username": "ada", "password": "picked-a-new-one-3"}, format="json"
         )
         self.assertEqual(login_response.status_code, 200)
+
+
+class DeleteOldDataTests(APITestCase):
+    """delete_old_data removes what the Privacy page says we don't keep, and nothing else."""
+
+    def make(self, model, field, days_ago, **fields):
+        row = model.objects.create(**fields)
+        model.objects.filter(pk=row.pk).update(**{field: timezone.now() - timedelta(days=days_ago)})
+        return row
+
+    def test_deletes_only_old_rows(self):
+        pathway = Pathway.objects.create(name="Digital", slug="digital", summary="s", description="d")
+        interest = {"full_name": "Ada", "email": "ada@example.com", "user_type": "student", "pathway": pathway}
+        old_chat = self.make(ChatMessage, "created_at", 91, session_id="s", role="user", message="hi")
+        new_chat = self.make(ChatMessage, "created_at", 89, session_id="s", role="user", message="hi")
+        old_interest = self.make(ExpressionOfInterest, "submitted_at", 366, **interest)
+        new_interest = self.make(ExpressionOfInterest, "submitted_at", 364, **interest)
+        old_feedback = self.make(Feedback, "created_at", 366, message="old")
+        new_feedback = self.make(Feedback, "created_at", 364, message="new")
+
+        call_command("delete_old_data", stdout=StringIO())
+
+        for row in (old_chat, old_interest, old_feedback):
+            self.assertFalse(type(row).objects.filter(pk=row.pk).exists())
+        for row in (new_chat, new_interest, new_feedback):
+            self.assertTrue(type(row).objects.filter(pk=row.pk).exists())
+
+    def test_dry_run_deletes_nothing(self):
+        self.make(Feedback, "created_at", 400, message="old")
+        out = StringIO()
+        call_command("delete_old_data", "--dry-run", stdout=out)
+        self.assertEqual(Feedback.objects.count(), 1)
+        self.assertIn("1 feedback messages", out.getvalue())
+
+
+class AdminStylesTests(APITestCase):
+    """WhiteNoise serves the admin's CSS even with DEBUG off (it was unstyled on Railway)."""
+
+    def test_admin_css_is_served(self):
+        response = self.client.get("/static/admin/css/base.css")
+        self.assertEqual(response.status_code, 200)
 
 
 class BlankUsernameTests(APITestCase):

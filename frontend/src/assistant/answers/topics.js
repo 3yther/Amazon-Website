@@ -378,18 +378,18 @@ const FACTS = [
     related: ["contact"],
     reply: ({ t }) => ({ text: t("smiley.answers.privacy"), chips: [linkChip(t, "smiley.links.privacy", "/privacy")] }),
   },
-  // --- honest gaps: things the team has not confirmed -------------------------------
+  // --- acronyms: answered from the About page FAQ ------------------------------------
   {
     id: "whatIsOS",
     patterns: [[["os", "o s"], ["stand", "stands", "mean", "means", "meaning", "what is", "short for"]]],
-    related: ["tlevelAssessment", "community"],
-    reply: ({ t }) => ({ text: t("smiley.answers.acronymGap", { acronym: "OS" }), mood: "thinking" }),
+    related: ["tlevelAssessment", "whatIsESP"],
+    reply: ({ about }) => ({ text: faq(about, "assessed") }),
   },
   {
     id: "whatIsESP",
     patterns: [[["esp", "e s p", "employer set project"]]],
-    related: ["tlevelAssessment", "community"],
-    reply: ({ t }) => ({ text: t("smiley.answers.acronymGap", { acronym: "ESP" }), mood: "thinking" }),
+    related: ["tlevelAssessment", "whatIsOS"],
+    reply: ({ about }) => ({ text: faq(about, "assessed") }),
   },
 ].map((topic) => ({ kind: "fact", ...topic }));
 

@@ -14,6 +14,7 @@ sqlparse==0.6.0
 
 # Deployment (Railway preview now, AWS later). Not needed for local development,
 # which uses SQLite and the Django dev server.
+whitenoise==6.12.0               # serves the admin's CSS and JS when DEBUG is off
 gunicorn==26.2.0                 # production app server; runserver is for development only
 psycopg[binary]==3.3.6           # PostgreSQL driver, used when DATABASE_URL is set
 typing-extensions==4.16.0        # pulled in by psycopg on Python 3.11, pinned like the above

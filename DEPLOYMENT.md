@@ -18,7 +18,7 @@ People only use the frontend's address. Caddy passes `/api` to Django, like Vite
 | --- | --- |
 | `backend/railway.toml` | Build, pre-deploy and start commands. **Railway doesn't actually read it** (see below) |
 | `backend/.python-version` | Python 3.11 |
-| `backend/requirements.txt` | Includes `gunicorn` and `psycopg[binary]` |
+| `backend/requirements.txt` | Includes `gunicorn`, `psycopg[binary]` and `whitenoise` (admin styling) |
 | `frontend/railway.toml` | Build with Railpack, which serves the Vite build with Caddy |
 | `frontend/Caddyfile` | Serves the React app and passes `/api` and `/media` to Django |
 
@@ -92,7 +92,6 @@ python -c "from django.core.management.utils import get_random_secret_key as k; 
 
 ## Known problems
 
-- The admin pages have no styling (debug is off, so nothing serves Django's CSS). They still work.
 - Uploaded files are lost on each deploy. Files should go on S3 when we move to AWS.
 - The pathways, resources and providers are reloaded every deploy, so edit the fixture files instead of changing them in the admin.
 - The preview has its own database, separate from everyone's local one.
