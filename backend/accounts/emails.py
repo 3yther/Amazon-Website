@@ -1,8 +1,8 @@
 """Sends the password reset email.
 
-There's no email account for the prototype yet, so EMAIL_BACKEND in
-settings.py prints the email to the server console. For production, point
-EMAIL_BACKEND at Amazon SES.
+There's no email account for the prototype yet, so MAILERS in settings.py
+prints the email to the server console. For production, set EMAIL_BACKEND
+to Amazon SES.
 """
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
@@ -27,5 +27,4 @@ def send_password_reset_email(user):
         ),
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[user.email],
-        fail_silently=False,
     )

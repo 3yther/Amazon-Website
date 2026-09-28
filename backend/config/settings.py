@@ -247,10 +247,12 @@ if DEBUG:
 # ---------------------------------------------------------------------------
 
 # No email account for the prototype, so emails are printed to the console
-# (including the reset link). PRODUCTION: point EMAIL_BACKEND at Amazon SES.
-EMAIL_BACKEND = os.environ.get(
-    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
-)
+# (including the reset link). PRODUCTION: set EMAIL_BACKEND to Amazon SES.
+MAILERS = {
+    "default": {
+        "BACKEND": os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"),
+    },
+}
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@t-smile.example")
 
 # The front end address, used for the link in the password reset email.

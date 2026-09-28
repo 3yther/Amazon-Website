@@ -17,7 +17,7 @@ People only use the frontend's address. Caddy passes `/api` to Django, like Vite
 | File | What it does |
 | --- | --- |
 | `backend/railway.toml` | Build, pre-deploy and start commands. **Railway doesn't actually read it** (see below) |
-| `backend/.python-version` | Python 3.11 |
+| `backend/.python-version` | Python 3.14 |
 | `backend/requirements.txt` | Includes `gunicorn`, `psycopg[binary]` and `whitenoise` (admin styling) |
 | `frontend/railway.toml` | Build with Railpack, which serves the Vite build with Caddy |
 | `frontend/Caddyfile` | Serves the React app and passes `/api` and `/media` to Django |
