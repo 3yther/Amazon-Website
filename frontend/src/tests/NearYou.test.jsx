@@ -201,7 +201,12 @@ describe("Find T-Levels Near You page", () => {
     expect(links[0]).toHaveAttribute("href", "https://www.barnetsouthgate.ac.uk");
     // The name is in the link's accessible name, so "Visit website" is never
     // ambiguous when a screen reader lists the links on the page.
-    expect(links[0]).toHaveAccessibleName("Visit website, Barnet and Southgate College");
+    // The provider's own site opens in a new tab, and the name says so.
+    expect(links[0]).toHaveAccessibleName(
+      "Visit website, Barnet and Southgate College (opens in a new tab)",
+    );
+    expect(links[0]).toHaveAttribute("target", "_blank");
+    expect(links[0]).toHaveAttribute("rel", "noopener noreferrer");
   });
 
   it("says it is searching while it waits", async () => {

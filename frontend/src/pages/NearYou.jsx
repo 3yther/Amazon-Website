@@ -290,9 +290,9 @@ function ProviderCard({ provider }) {
       </dl>
 
       {provider.website_url && (
-        <a className="button button--primary card__action" href={provider.website_url}>
+        <a className="button button--primary card__action" href={provider.website_url} target="_blank" rel="noopener noreferrer">
           {t("nearYou.website")}
-          <span className="sr-only">, {provider.name}</span>
+          <span className="sr-only">, {provider.name} {t("shell.newTab")}</span>
           <ArrowIcon />
         </a>
       )}

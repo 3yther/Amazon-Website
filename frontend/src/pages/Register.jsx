@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
 import { PATHWAY_NAMES, USER_TYPES } from "../labels.js";
 import AuthPanel from "../components/AuthPanel.jsx";
-import InterestForm from "../components/InterestForm.jsx";
 import { ChevronDownIcon } from "../components/Icons.jsx";
 import "../about.css";
 import { CheckboxField, FormError, SelectField, TextField } from "../components/FormFields.jsx";
@@ -39,6 +38,7 @@ export default function Register() {
   const [confirmed, setConfirmed] = useState({ over_sixteen: false, terms: false });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting
+  const usernameBox = useRef(null);
   const overSixteenBox = useRef(null);
   const termsBox = useRef(null);
 
@@ -60,15 +60,22 @@ export default function Register() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    // Nothing is sent until both boxes are ticked. Each missing one says so
-    // beside itself, and the first lands the cursor, so it is easy to find.
+    // Nothing is sent until the form is answered. Each problem says so beside
+    // itself, and the first one lands the cursor, so it is easy to find.
+    //
+    // The username is checked here because the form is noValidate, which turns
+    // off the browser's own handling of `required`. The server rejects a blank
+    // or whitespace-only username too (DRF trims and then refuses an empty
+    // string), so this is the quick answer, not the only one.
     const missing = {};
+    if (!fields.username.trim()) missing.username = t("register.errors.username");
     for (const name of ["over_sixteen", "terms"]) {
       if (!confirmed[name]) missing[name] = t(CONFIRMATION_ERRORS[name]);
     }
     if (Object.keys(missing).length > 0) {
       setErrors(missing);
-      (missing.over_sixteen ? overSixteenBox : termsBox).current?.focus();
+      if (missing.username) usernameBox.current?.focus();
+      else (missing.over_sixteen ? overSixteenBox : termsBox).current?.focus();
       return;
     }
 
@@ -110,6 +117,7 @@ export default function Register() {
             id="register-username"
             label={t("login.username")}
             name="username"
+            ref={usernameBox}
             hint={t("register.usernameHint")}
             value={fields.username}
             onChange={updateField}
@@ -206,7 +214,7 @@ export default function Register() {
                 {t("register.termsBefore")}{" "}
                 <Link to="/terms" target="_blank" rel="noopener noreferrer">
                   {t("register.termsLink")}
-                  <span className="sr-only"> {t("register.newTab")}</span>
+                  <span className="sr-only"> {t("shell.newTab")}</span>
                 </Link>
                 {t("register.termsAfter")}
               </>
@@ -234,16 +242,14 @@ export default function Register() {
 }
 
 // Register interest box under the sign up form. Uses <details> so it opens and closes by itself.
+//
+// This used to hold the whole interest form, because registering interest
+// needed no account. It is a tick box on an account now, and everybody reading
+// this page is signed out by definition, so the form here would only ever have
+// shown "you need an account" directly underneath the form that makes one.
+// A pointer to the page is the honest version.
 function InterestBox() {
   const t = useT();
-  const [sentPathway, setSentPathway] = useState(null);
-  const thanks = useRef(null);
-
-  // Replace the form with a thank-you and put focus on it, as the Register
-  // interest page does.
-  useEffect(() => {
-    if (sentPathway) thanks.current?.focus();
-  }, [sentPathway]);
 
   return (
     <details className="interest-box">
@@ -252,16 +258,10 @@ function InterestBox() {
         <ChevronDownIcon />
       </summary>
       <div className="interest-box__body">
-        {sentPathway ? (
-          <p className="interest-box__thanks" tabIndex={-1} ref={thanks}>
-            {t("registerInterest.thanks.lead", { pathway: sentPathway.name })}
-          </p>
-        ) : (
-          <>
-            <p className="interest__note">{t("registerInterest.box.text")}</p>
-            <InterestForm onSent={setSentPathway} />
-          </>
-        )}
+        <p className="interest__note">{t("registerInterest.box.text")}</p>
+        <Link className="button" to="/register-interest">
+          {t("registerInterest.box.link")}
+        </Link>
       </div>
     </details>
   );

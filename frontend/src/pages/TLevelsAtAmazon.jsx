@@ -140,8 +140,9 @@ export default function TLevelsAtAmazon() {
         <ol>
           {AMAZON_SOURCES.map((source) => (
             <li key={source.url}>
-              <a href={source.url} lang="en-GB">
+              <a href={source.url} lang="en-GB" target="_blank" rel="noopener noreferrer">
                 {source.title}
+                <span className="sr-only"> {t("shell.newTab")}</span>
               </a>
             </li>
           ))}

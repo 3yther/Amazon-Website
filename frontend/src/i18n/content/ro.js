@@ -288,12 +288,12 @@ export default {
 
   interest: {
     NEXT_STEPS: [
-      { text: "Ne spui parcursul tău. Durează cam un minut." },
+      { text: "Bifezi o căsuță. Durează o clipă." },
       { text: "Echipa Amazon Emerging Talent poate vedea cine este interesat." },
       { text: "Stagiile se organizează cu școala sau colegiul tău, așa că echipa i-ar putea contacta." },
     ],
     WHY_WE_ASK:
-      "Cerem doar ce are nevoie echipa Amazon Emerging Talent ca să știe că ești interesat. Fără adresă, dată de naștere sau școală.",
+      "Trimitem doar ce îi trebuie echipei Amazon Emerging Talent ca să știe că te interesează: numele, e-mailul și traseul care sunt deja în contul tău. Fără adresă, dată de naștere sau școală.",
   },
 
   quiz: {

@@ -169,9 +169,13 @@ export function deactivateAccount(password) {
   return postJson("/api/accounts/deactivate-account/", { password });
 }
 
-/** Send an Expression of Interest. */
-export function submitInterest(fields) {
-  return postJson("/api/interest/", fields);
+/**
+ * Tick "I'm interested in an Amazon placement" for the signed-in account.
+ * Takes nothing: the server copies the name, email, role and pathway off the
+ * account. Answers { id, pathway, submitted_at }. Needs an account (401 if not).
+ */
+export function submitInterest() {
+  return postJson("/api/interest/", {});
 }
 
 /** One page of interest submissions. Amazon staff only (the server checks this). */

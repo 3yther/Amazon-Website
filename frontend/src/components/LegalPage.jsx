@@ -31,7 +31,10 @@ export default function LegalPage({ name }) {
           ))}
           {section.link && (
             <p>
-              <a href={section.link.href}>{section.link.text}</a>
+              <a href={section.link.href} target="_blank" rel="noopener noreferrer">
+                {section.link.text}
+                <span className="sr-only"> {t("shell.newTab")}</span>
+              </a>
             </p>
           )}
         </section>

@@ -962,6 +962,25 @@
   font-size: 0.9375rem;
 }
 
+/* What a signed-out visitor sees where the tick box would be. Registering
+   interest needs an account now, so this explains that and offers the two ways
+   in, rather than leaving a tick box that could not work. */
+.interest-signin {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.interest-signin__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 0;
+}
+
 /* ---------- Interest box on the Sign up page (Register.jsx) ---------- */
 
 .interest-box {

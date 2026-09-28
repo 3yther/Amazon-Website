@@ -10,9 +10,12 @@ import {
   moderationMessage,
   useFormatDate,
 } from "../community/CommunityParts.jsx";
-import { TextareaField } from "../components/FormFields.jsx";
+import { CharacterCount, TextareaField } from "../components/FormFields.jsx";
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
+
+// Same limit the server puts on an answer body (community/serializers.py).
+const ANSWER_LIMIT = 2000;
 
 // One question with its answers. The accepted answer shows first, then the most helpful.
 export default function CommunityQuestion() {
@@ -246,15 +249,17 @@ export default function CommunityQuestion() {
                 </div>
               </div>
             )}
+            <p className="community-meta">{t("community.moderationNote")}</p>
             <TextareaField
               id="answer-body"
               label={t("community.yourAnswer")}
               hint={t("community.answerHint")}
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
-              maxLength={2000}
+              maxLength={ANSWER_LIMIT}
               rows={4}
             />
+            <CharacterCount value={draft} limit={ANSWER_LIMIT} />
             <button type="submit" className="button button--primary" disabled={posting || !draft.trim()}>
               {posting ? t("community.posting") : t("community.postAnswer")}
             </button>

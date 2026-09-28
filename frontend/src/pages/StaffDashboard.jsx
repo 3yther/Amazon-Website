@@ -96,12 +96,15 @@ export default function StaffDashboard() {
               <tbody>
                 {results.map((row) => (
                   <tr key={row.id}>
-                    <td>{row.full_name}</td>
+                    <td>{row.full_name || row.username}</td>
                     <td>
-                      <a href={`mailto:${row.email}`}>{row.email}</a>
+                      {/* Sign-up does not ask for an email, so a row can
+                          honestly have none. A mailto: to nowhere is worse
+                          than a dash. */}
+                      {row.email ? <a href={`mailto:${row.email}`}>{row.email}</a> : "-"}
                     </td>
-                    <td>{USER_TYPES[row.user_type] ?? row.user_type}</td>
-                    <td>{row.pathway}</td>
+                    <td>{USER_TYPES[row.user_type] ?? row.user_type ?? "-"}</td>
+                    <td>{row.pathway ?? "-"}</td>
                     <td>
                       <SubmissionMessage message={row.message} />
                     </td>
