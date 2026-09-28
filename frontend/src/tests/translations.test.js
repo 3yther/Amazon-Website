@@ -118,6 +118,22 @@ describe.each(OTHERS)("%s page copy", (code) => {
     }
   });
 
+  it("translates every word on the page", () => {
+    // Everything a visitor reads, except what stays English on purpose: links
+    // and values, official qualification and grade names, and source titles.
+    const KEPT = /(^|\.)(icon|slug|value|to|href|url|number|points|id|year)$|SOURCES\[|\.tLevels\[|^about\.GRADES\[[0-2]\]\.grade$/;
+    const words = contentStrings(file ?? {});
+    const missing = [...contentStrings(ENGLISH_CONTENT).keys()].filter((path) => !KEPT.test(path) && !words.has(path));
+    expect(missing).toEqual([]);
+  });
+
+  it("only gives words the English has somewhere to go", () => {
+    // A mistyped key would be dropped without a word, and the English shown.
+    const source = contentStrings(ENGLISH_CONTENT);
+    const stray = [...contentStrings(file ?? {}).keys()].filter((path) => !source.has(path));
+    expect(stray).toEqual([]);
+  });
+
   it("gives every quiz question a right answer that is one of its options", () => {
     for (const question of merged.quiz.KNOWLEDGE_QUESTIONS) {
       expect(question.options, question.id).toContain(question.correctAnswer);

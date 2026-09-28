@@ -18,6 +18,14 @@ async function readResponse(response) {
   return response.status === 204 ? null : response.json();
 }
 
+// The visitor's language, from the lang I18nProvider puts on <html>, so
+// Django answers in it where it can (see LocaleMiddleware in settings.py).
+// English is always the fallback.
+function languageHeader() {
+  const lang = typeof document === "undefined" ? "" : document.documentElement.lang;
+  return !lang || lang.toLowerCase().startsWith("en") ? "en-GB" : `${lang}, en-GB;q=0.5`;
+}
+
 async function request(path, { params = {}, signal } = {}) {
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
@@ -26,7 +34,7 @@ async function request(path, { params = {}, signal } = {}) {
   const search = query.toString();
 
   const response = await fetch(`${API_BASE}${path}${search ? `?${search}` : ""}`, {
-    headers: { Accept: "application/json" },
+    headers: { Accept: "application/json", "Accept-Language": languageHeader() },
     credentials: "include", // send the Django session cookie
     signal,
   });
@@ -55,6 +63,7 @@ async function sendJson(method, path, body) {
       method,
       headers: {
         Accept: "application/json",
+        "Accept-Language": languageHeader(),
         "Content-Type": "application/json",
         "X-CSRFToken": token,
       },
