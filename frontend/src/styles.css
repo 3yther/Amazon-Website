@@ -36,6 +36,9 @@
   --surface-inverse: #232f3e;
   --ink-inverse: #fafaf7;
 
+  /* The tile behind the Amazon logo in the header, the same in every theme. */
+  --logo-tile: #ffffff;
+
   /* Text on orange is always dark navy. */
   --ink-on-orange: #232f3e;
 
@@ -233,6 +236,12 @@ h3 {
   letter-spacing: -0.02em;
   line-height: 1.1;
   text-wrap: balance;
+  /* A long word that can't fit ("Accessibility" at 150% text on a phone)
+     is hyphenated or broken instead of pushing the page sideways. "anywhere"
+     rather than "break-word", because only it lets a grid or flex column
+     shrink below the word. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 p {
@@ -329,28 +338,42 @@ main:focus {
   padding-block: 10px;
 }
 
+/* The whole lockup takes you home. The logo and the wordmark are two links
+   that meet in the middle and are as tall as the logo, so a click between
+   them, or just above or below "T-SMILE", goes home too, not only a click
+   on the picture or the letters. */
 .site-header__brand {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  gap: 4px 16px;
 }
 
-/* The logo is a link home, the same as the wordmark beside it. Flex so the
-   link box is exactly the image and the focus ring traces it, rather than
-   picking up the line box's extra height. */
-.site-header__logo-link {
+.site-header__logo-link,
+.site-header__brand > .wordmark {
   display: flex;
+  align-items: center;
+  padding-inline: 8px;
   border-radius: var(--radius);
 }
 
-/* Shown at half the file's 190px width so it stays sharp on high-density screens. */
+/* Here the 3px nudge (see .wordmark) comes from padding, so the text moves
+   up but the clickable box stays the full height. */
+.site-header__brand > .wordmark {
+  padding-block-end: 6px;
+  transform: none;
+}
+
+/* Shown at half the file's 190px width so it stays sharp on high-density screens.
+   The logo's lettering is black, only 1.55:1 against the dark header in either
+   theme, and the brief says it can't be recoloured. So the file stays as it
+   is and sits on a white tile instead: black on white is 21:1. */
 .site-header__logo {
   display: block;
   width: 95px;
   height: auto;
   border-radius: var(--radius);
+  background: var(--logo-tile);
 }
 
 .site-header :focus-visible {
@@ -399,6 +422,10 @@ main:focus {
    (the logo image has the smile under it). */
 .wordmark {
   display: inline-block;
+  /* The name reads left to right in every language. Without this, Arabic
+     and Urdu pages showed it as "SMILE-T". */
+  direction: ltr;
+  unicode-bidi: isolate;
   color: var(--ink-inverse);
   font-size: 1.375rem;
   font-weight: 800;
@@ -543,10 +570,57 @@ main {
   white-space: nowrap;
 }
 
+/* Settings gear, beside the account button. Filled in on hover and while you
+   are on the settings page, like the menu button when it is open. */
+.settings-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--control-h);
+  height: var(--control-h);
+  border-radius: var(--radius);
+  color: var(--ink-inverse);
+}
+
+.settings-link > .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.settings-link:hover,
+.settings-link[aria-current="page"] {
+  background: var(--ink-inverse);
+  color: var(--surface-inverse);
+}
+
 /* On narrow screens hide the greeting so the brand stays centred. */
 @media (max-width: 720px) {
   .account-button__greeting {
     display: none;
+  }
+}
+
+/* On the narrowest phones, tighter spacing so the header still fits at 150%
+   text. The gear keeps its full height and stays well over the 24px minimum
+   target width. */
+@media (max-width: 400px) {
+  .site-header__inner {
+    column-gap: 8px;
+  }
+
+  /* Doubled up to outrank the base rule in i18n.css, which loads later. */
+  .site-header .site-header__end {
+    gap: 4px;
+  }
+
+  .settings-link {
+    width: 36px;
+  }
+
+  .site-header__logo-link,
+  .site-header__brand > .wordmark {
+    padding-inline: 4px;
   }
 }
 

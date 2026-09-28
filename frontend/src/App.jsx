@@ -1,10 +1,11 @@
 import { lazy, Suspense, useLayoutEffect } from "react";
-import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Link, NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import amazonLogo from "./assets/amazon-wordmark.png";
 import ChatWidget from "./assistant/ChatWidget.jsx";
 import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
 import Footer from "./components/Footer.jsx";
+import { GearIcon } from "./components/Icons.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
 import { useT } from "./i18n/I18nProvider.jsx";
@@ -77,8 +78,8 @@ export default function App() {
               to="/"
               aria-label={t("menu.pages.home")}
             >
-              {/* Approved logo file, used unaltered: transparent, sitting
-                  straight on the dark header. */}
+              {/* Approved logo file, used unaltered, on a white tile so the
+                  black lettering shows on the dark header (see styles.css). */}
               <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
             </Link>
             <Link className="wordmark" to="/" onClick={countWordmarkClick}>
@@ -86,9 +87,14 @@ export default function App() {
             </Link>
           </div>
 
-          {/* Third column, balancing the menu button on the left: the account
-              menu, which also holds the language menu. */}
+          {/* Third column, balancing the menu button on the left: a gear for
+              the settings page, then the account menu, which also holds the
+              language menu. The gear shows signed out too, because settings
+              are saved in the browser until you sign in. */}
           <div className="site-header__end">
+            <NavLink className="settings-link" to="/accessibility" aria-label={t("settings.label")}>
+              <GearIcon />
+            </NavLink>
             <AccountDropdown />
           </div>
         </div>

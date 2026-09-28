@@ -27,10 +27,10 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function renderHeader() {
+function renderHeader(path = "/help") {
   fakeServer();
   return render(
-    <MemoryRouter initialEntries={["/help"]}>
+    <MemoryRouter initialEntries={[path]}>
       <AuthProvider>
         <App />
       </AuthProvider>
@@ -63,5 +63,31 @@ describe("Site header brand", () => {
 
     const header = within(screen.getByRole("banner"));
     expect(header.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/");
+  });
+});
+
+describe("Settings gear", () => {
+  it("sits in the header and goes to the settings page", () => {
+    renderHeader();
+
+    const header = within(screen.getByRole("banner"));
+    expect(header.getByRole("link", { name: "Settings" })).toHaveAttribute("href", "/accessibility");
+  });
+
+  it("comes just before the account button, so it sits beside it", async () => {
+    renderHeader();
+
+    const header = within(screen.getByRole("banner"));
+    const gear = header.getByRole("link", { name: "Settings" });
+    const account = await header.findByRole("button", { name: "Sign in or sign up" });
+    expect(gear.parentElement).toBe(account.closest(".site-header__end"));
+    expect(gear.compareDocumentPosition(account) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("says so when you are already on the settings page", () => {
+    renderHeader("/accessibility");
+
+    const header = within(screen.getByRole("banner"));
+    expect(header.getByRole("link", { name: "Settings" })).toHaveAttribute("aria-current", "page");
   });
 });
