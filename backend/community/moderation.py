@@ -4,10 +4,18 @@ A post is stopped for:
   wellbeing         sounds like someone is at risk (they get support numbers instead)
   personal_details  an email, phone number, postcode or social handle
   link              links to anything except a few official sites
-  strong_language   swearing and slurs
+
+Swearing is NOT here any more. It was a hand-kept list of eighteen words that
+only Community used; it is now backend/moderation/, which every field on the
+site shares, catches substituted spellings, and reads the whole sentence. The
+words this list had that the shared one shipped without were carried over, so
+nothing that used to be stopped is let through (see EXTRA_WORDS there, and the
+test that pins it).
+
+What is left here is the part that is genuinely about a POST rather than about
+language: what it reveals, and where it points.
 
 3 reports hide a post, and staff can hide posts in admin.
-Staff can add words to STRONG_WORDS.
 """
 import re
 
@@ -45,29 +53,6 @@ CONTACT_PHRASES = [
     "text me",
     "my number is",
 ]
-
-# Whole words only, so "Scunthorpe" and "assessment" are fine.
-STRONG_WORDS = [
-    "fuck",
-    "fucking",
-    "fucked",
-    "shit",
-    "shitty",
-    "cunt",
-    "wanker",
-    "twat",
-    "bitch",
-    "bastard",
-    "dickhead",
-    "prick",
-    "slag",
-    "slut",
-    "whore",
-    "bollocks",
-    "piss off",
-    "retard",
-]
-STRONG = re.compile(r"\b(" + "|".join(re.escape(word) for word in STRONG_WORDS) + r")\b", re.IGNORECASE)
 
 
 # Links are only allowed to these official sites.
@@ -110,8 +95,5 @@ def check_post(*texts):
 
     if has_outside_link(text):
         return "link"
-
-    if STRONG.search(text):
-        return "strong_language"
 
     return None

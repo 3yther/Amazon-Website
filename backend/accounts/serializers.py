@@ -12,6 +12,8 @@ from rest_framework import serializers
 from content.models import PathwayName
 
 from .emails import send_password_reset_email
+from moderation import check_appropriate
+
 from .models import Feedback, Profile, UserPreference
 
 # Staff accounts are created in Django admin only, never through sign-up.
@@ -75,6 +77,17 @@ class CurrentUserSerializer(AccountSerializer):
         preference, _ = UserPreference.objects.get_or_create(user=instance)
         return UserPreferenceSerializer(preference).data
 
+    # The real name on the account. Since registering interest became a tick
+    # box, this is where ExpressionOfInterest.full_name is copied from, so it
+    # is the writable end of the name the Amazon team reads on the staff list.
+    def validate_first_name(self, value):
+        check_appropriate(value)
+        return value
+
+    def validate_last_name(self, value):
+        check_appropriate(value)
+        return value
+
     class Meta(AccountSerializer.Meta):
         fields = [
             *AccountSerializer.Meta.fields,
@@ -123,6 +136,10 @@ class RegisterSerializer(serializers.Serializer):
         # cannot both exist.
         if User.objects.filter(username__iexact=username).exists():
             raise serializers.ValidationError(USERNAME_TAKEN)
+        # Last, so a username that is taken or the wrong shape still fails on
+        # its own plain reason first. A username is shown on every Community
+        # post its owner writes, which is why it is checked at all.
+        check_appropriate(username)
         return username
 
     def validate_password(self, value):
@@ -309,6 +326,12 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
 class FeedbackSerializer(serializers.ModelSerializer):
     """Checks a feedback message. Email is optional."""
+
+    def validate_message(self, value):
+        # Staff read every one of these, so the same bar as the public fields.
+        # Being rude about the site is still allowed: see the moderation tests.
+        check_appropriate(value)
+        return value
 
     class Meta:
         model = Feedback

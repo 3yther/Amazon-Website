@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from chatbot.serializers import sanitise
 from content.models import Pathway
+from moderation import check_appropriate
 
 from .models import Answer, Question, Report, Topic
 from .moderation import check_post
@@ -90,6 +91,7 @@ class AnswerSerializer(CountsMixin, serializers.ModelSerializer):
         value = sanitise(value)
         if len(value) < 2:
             raise serializers.ValidationError("Write an answer first.")
+        check_appropriate(value)
         return value
 
     def validate(self, attrs):
@@ -149,14 +151,20 @@ class QuestionSerializer(CountsMixin, serializers.ModelSerializer):
         user = self.context["request"].user
         return user.is_authenticated and question.author_id == user.id
 
+    # Checked per field rather than in validate(), so the error lands on the
+    # box that needs fixing instead of on the form as a whole: a title and a
+    # body are two separate things to rewrite.
     def validate_title(self, value):
         value = sanitise(value)
         if len(value) < 8:
             raise serializers.ValidationError("Make the question a little longer so people know what you mean.")
+        check_appropriate(value)
         return value
 
     def validate_body(self, value):
-        return sanitise(value)
+        value = sanitise(value)
+        check_appropriate(value)
+        return value
 
     def validate(self, attrs):
         moderate(attrs.get("title", ""), attrs.get("body", ""))
