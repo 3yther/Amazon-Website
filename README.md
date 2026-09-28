@@ -69,8 +69,37 @@ python -c "from django.core.management.utils import get_random_secret_key as k; 
 python manage.py migrate
 python manage.py loaddata pathways resources providers
 python manage.py createsuperuser
+python manage.py seed_demo_data        # optional, see below
 python manage.py runserver
 ```
+
+### Fake data for development
+
+The Admin Portal's Overview tab is charts, and on an empty database every one
+of them is a flat line, which looks identical to a broken chart. This fills a
+local database with invented accounts, interest, questions, answers, feedback
+and reports, spread unevenly over the past couple of months so the charts have
+a shape:
+
+```bash
+python manage.py seed_demo_data        # seed (clears its own previous batch first)
+python manage.py seed_demo_data --clear  # remove it again
+```
+
+Safe to run as often as you like: everything it makes is named `demo.`
+something, and it clears exactly that before seeding again, so it never
+touches a real account. Every demo account's password is `demo-password-2026`.
+
+**Development only.** It refuses to run when `DEBUG` is `False`, so it cannot
+be pointed at Railway or a future AWS deployment by accident.
+
+### The Admin Portal
+
+`/admin-portal`, linked from the footer for signed-in Amazon staff. It needs a
+4-digit PIN on top of the staff sign-in, which is a screen-lock for a shared
+computer rather than the real access control (every endpoint behind it checks
+staff as well). Set `ADMIN_PORTAL_PIN` in `backend/.env`; without one the
+portal cannot be opened at all.
 
 Frontend (second terminal):
 

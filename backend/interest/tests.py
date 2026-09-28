@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.test import override_settings
 from rest_framework.test import APITestCase
 
 from accounts.models import Profile
@@ -216,10 +217,18 @@ class RecordForTests(APITestCase):
         self.assertEqual(interest.user_type, "")
 
 
+ADMIN_PIN = "4821"
+UNLOCK_URL = "/api/accounts/admin-portal/unlock/"
+
+
+@override_settings(ADMIN_PORTAL_PIN=ADMIN_PIN)
 class StaffSubmissionsListTests(APITestCase):
     """
     The staff-only read path. Everything here is about who is allowed to see
     other people's submitted personal details, so each case is spelled out.
+
+    It is a tab in the Admin Portal now, so staff also have to have entered the
+    PIN: sign_in_as does both.
     """
 
     @classmethod
@@ -245,6 +254,9 @@ class StaffSubmissionsListTests(APITestCase):
     def sign_in_as(self, username, user_type):
         make_user(username, user_type)
         self.client.login(username=username, password=PASSWORD)
+        # Staff also need the portal's PIN now. A non-staff account is refused
+        # by the unlock endpoint itself, so this changes nothing for them.
+        self.client.post(UNLOCK_URL, {"pin": ADMIN_PIN}, format="json")
 
     def test_anonymous_is_denied(self):
         response = self.client.get(SUBMISSIONS_URL)

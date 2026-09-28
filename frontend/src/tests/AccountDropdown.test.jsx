@@ -99,12 +99,17 @@ describe("Signed in", () => {
     expect(screen.queryByText(/log ?out/i)).toBeNull();
   });
 
-  it("shows staff their submissions link", async () => {
+  it("shows staff their shortcut to the Admin Portal", async () => {
+    // Kept alongside the footer link: this is the one staff use daily, and
+    // both land on the same PIN screen.
     signedInAs({ ...USER, user_type: "amazon_staff" });
     renderHeader();
     await openMenu(/Account menu for Ada Lovelace/);
 
-    expect(screen.getByRole("menuitem", { name: "Submissions" })).toHaveAttribute("href", "/staff");
+    expect(screen.getByRole("menuitem", { name: "Admin Portal" })).toHaveAttribute(
+      "href",
+      "/admin-portal",
+    );
   });
 
   it("has no accessibility problems axe can find", async () => {
