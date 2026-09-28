@@ -321,6 +321,7 @@ const ro = {
   },
 
   forms: {
+    contentChecked: "Păstrează un ton potrivit. Limbajul nepotrivit este respins.",
     charactersLeft: "{count} rămase",
     charactersLeftLong: "Au mai rămas {count} caractere",
     hidePassword: "Ascunde parola",
@@ -331,6 +332,7 @@ const ro = {
   },
 
   serverErrors: {
+    inappropriate: "Conține un limbaj care nu este potrivit pentru acest site.",
     requiredField: "Acest câmp este obligatoriu.",
     blankField: "Acest câmp nu poate fi gol.",
     passwordCommon: "Această parolă este prea des folosită.",
@@ -365,7 +367,7 @@ const ro = {
   register: {
     title: "Creează-ți contul",
     lead: "Durează un minut și este gratuit.",
-    usernameHint: "Doar litere, cifre și @ . + - _",
+    usernameHint: "Doar litere, cifre și @ . + - _. Păstrează un ton potrivit: apare la fiecare postare a ta.",
     passwordHint: "Cel puțin 8 caractere. Nu doar cifre, nu o parolă comună și nu prea asemănătoare cu numele de utilizator.",
     confirmPassword: "Confirmă parola",
     accountType: "Tipul contului",
@@ -451,7 +453,7 @@ const ro = {
   },
 
   community: {
-    moderationNote: "Rămâi la subiect și păstrează un ton potrivit. Un moderator poate șterge ce nu respectă asta.",
+    moderationNote: "Rămâi la subiect și păstrează un ton potrivit. Limbajul nepotrivit este respins, iar restul poate fi șters de un moderator.",
     label: "Întreabă și răspunde",
     title: "Comunitate",
     lead: "Întrebări despre T-Levels și stagiile la Amazon, cu răspunsuri de la elevi, părinți, profesori și angajați Amazon.",

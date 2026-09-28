@@ -322,6 +322,7 @@ const pt = {
   },
 
   forms: {
+    contentChecked: "Mantém a linguagem adequada. Linguagem inadequada é recusada.",
     charactersLeft: "faltam {count}",
     charactersLeftLong: "Faltam {count} caracteres",
     hidePassword: "Ocultar palavra-passe",
@@ -332,6 +333,7 @@ const pt = {
   },
 
   serverErrors: {
+    inappropriate: "Isto contém linguagem que não é apropriada para o site.",
     requiredField: "Este campo é obrigatório.",
     blankField: "Este campo não pode ficar vazio.",
     passwordCommon: "Esta palavra-passe é demasiado comum.",
@@ -366,7 +368,7 @@ const pt = {
   register: {
     title: "Cria a tua conta",
     lead: "Demora um minuto e é grátis.",
-    usernameHint: "Só letras, números e @ . + - _",
+    usernameHint: "Apenas letras, números e @ . + - _. Mantém-no apropriado: aparece em cada publicação tua.",
     passwordHint: "Pelo menos 8 caracteres. Não só números, não uma palavra-passe comum e não muito parecida com o nome de utilizador.",
     confirmPassword: "Confirmar palavra-passe",
     accountType: "Tipo de conta",
@@ -452,7 +454,7 @@ const pt = {
   },
 
   community: {
-    moderationNote: "Mantém-te no tema e com linguagem adequada. Um moderador pode remover o que não estiver.",
+    moderationNote: "Mantém-te no tema e com linguagem adequada. Linguagem inadequada é recusada, e um moderador pode remover o resto.",
     label: "Pergunta e responde",
     title: "Comunidade",
     lead: "Perguntas sobre os T-Levels e os estágios na Amazon, respondidas por estudantes, pais, professores e pela equipa da Amazon.",

@@ -97,6 +97,7 @@ export default function Feedback() {
           id="feedback-message"
           label={t("feedbackPage.message")}
           name="message"
+          hint={t("forms.contentChecked")}
           value={fields.message}
           onChange={updateField}
           required

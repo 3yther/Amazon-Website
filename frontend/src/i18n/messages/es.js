@@ -321,6 +321,7 @@ const es = {
   },
 
   forms: {
+    contentChecked: "Mantén un tono adecuado. El lenguaje inapropiado se rechaza.",
     charactersLeft: "quedan {count}",
     charactersLeftLong: "Quedan {count} caracteres",
     hidePassword: "Ocultar contraseña",
@@ -331,6 +332,7 @@ const es = {
   },
 
   serverErrors: {
+    inappropriate: "Esto contiene lenguaje que no es apropiado para el sitio.",
     requiredField: "Este campo es obligatorio.",
     blankField: "Este campo no puede estar vacío.",
     passwordCommon: "Esta contraseña es demasiado común.",
@@ -365,7 +367,7 @@ const es = {
   register: {
     title: "Crea tu cuenta",
     lead: "Se tarda un minuto y es gratis.",
-    usernameHint: "Solo letras, números y @ . + - _",
+    usernameHint: "Solo letras, números y @ . + - _. Mantenlo apropiado: aparece en cada publicación tuya.",
     passwordHint: "Al menos 8 caracteres. No solo números, no una contraseña común y no demasiado parecida a tu nombre de usuario.",
     confirmPassword: "Confirma la contraseña",
     accountType: "Tipo de cuenta",
@@ -451,7 +453,7 @@ const es = {
   },
 
   community: {
-    moderationNote: "Cíñete al tema y usa un tono adecuado. Un moderador puede eliminar lo que no lo esté.",
+    moderationNote: "Cíñete al tema y usa un tono adecuado. El lenguaje inapropiado se rechaza, y un moderador puede eliminar lo demás.",
     label: "Pregunta y responde",
     title: "Comunidad",
     lead: "Preguntas sobre los T-Levels y las prácticas en Amazon, respondidas por estudiantes, familias, docentes y personal de Amazon.",

@@ -321,6 +321,7 @@ const pl = {
   },
 
   forms: {
+    contentChecked: "Zachowaj kulturę. Nieodpowiedni język jest odrzucany.",
     charactersLeft: "pozostało {count}",
     charactersLeftLong: "Pozostało {count} znaków",
     hidePassword: "Ukryj hasło",
@@ -331,6 +332,7 @@ const pl = {
   },
 
   serverErrors: {
+    inappropriate: "Zawiera to język, który nie jest odpowiedni na tej stronie.",
     requiredField: "To pole jest wymagane.",
     blankField: "To pole nie może być puste.",
     passwordCommon: "To hasło jest zbyt popularne.",
@@ -365,7 +367,7 @@ const pl = {
   register: {
     title: "Załóż konto",
     lead: "To zajmie minutę i jest bezpłatne.",
-    usernameHint: "Tylko litery, cyfry oraz @ . + - _",
+    usernameHint: "Tylko litery, cyfry i @ . + - _. Zachowaj kulturę: nazwa jest widoczna przy każdym Twoim wpisie.",
     passwordHint: "Co najmniej 8 znaków. Nie same cyfry, nie popularne hasło i niezbyt podobne do nazwy użytkownika.",
     confirmPassword: "Potwierdź hasło",
     accountType: "Rodzaj konta",
@@ -451,7 +453,7 @@ const pl = {
   },
 
   community: {
-    moderationNote: "Trzymaj się tematu i zachowaj kulturę. Moderator może usunąć wszystko, co się do tego nie stosuje.",
+    moderationNote: "Trzymaj się tematu i zachowaj kulturę. Nieodpowiedni język jest odrzucany, a resztę może usunąć moderator.",
     label: "Pytaj i odpowiadaj",
     title: "Społeczność",
     lead: "Pytania o T-Levels i praktyki w Amazon, na które odpowiadają uczniowie, rodzice, nauczyciele i pracownicy Amazon.",

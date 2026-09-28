@@ -814,3 +814,124 @@ class BlankUsernameTests(APITestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertIn("username", response.data)
+
+
+class AppropriatenessTests(APITestCase):
+    """
+    The shared content check (backend/moderation/) on the account fields.
+
+    Its own behaviour is tested in moderation/tests.py. What matters here is
+    that each field refuses with its own field-level error, so the page can
+    point at the box to fix.
+    """
+
+    def setUp(self):
+        cache.clear()
+
+    # --- username: public, it appears on every Community post they write ----
+
+    def test_an_inappropriate_username_cannot_be_registered(self):
+        response = self.client.post(
+            REGISTER_URL,
+            {
+                "username": "fuckthissite",
+                "password": "harbour-lantern-47",
+                "password_confirm": "harbour-lantern-47",
+                "user_type": "student",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("username", response.data)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_an_ordinary_username_still_registers(self):
+        response = self.client.post(
+            REGISTER_URL,
+            {
+                "username": "ada.lovelace",
+                "password": "harbour-lantern-47",
+                "password_confirm": "harbour-lantern-47",
+                "user_type": "student",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertTrue(User.objects.filter(username="ada.lovelace").exists())
+
+    def test_a_taken_username_still_fails_on_being_taken(self):
+        """
+        The content check runs last on purpose. A plain "that name is gone"
+        is more use than a moderation message when the name was only taken.
+        """
+        User.objects.create_user("ada", password=PASSWORD)
+
+        response = self.client.post(
+            REGISTER_URL,
+            {
+                "username": "ada",
+                "password": "harbour-lantern-47",
+                "password_confirm": "harbour-lantern-47",
+                "user_type": "student",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("already exists", str(response.data["username"]))
+
+    # --- feedback: staff read every one of these ----------------------------
+
+    def test_inappropriate_feedback_is_refused(self):
+        response = self.client.post(
+            FEEDBACK_URL,
+            {"category": "bug", "message": "your website is fucking broken you idiots"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("message", response.data)
+        self.assertEqual(Feedback.objects.count(), 0)
+
+    def test_ordinary_feedback_still_sends(self):
+        response = self.client.post(
+            FEEDBACK_URL,
+            {"category": "bug", "message": "The sign up page kept crashing on my phone, which was annoying."},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Feedback.objects.count(), 1)
+
+    # --- the real name on the account ---------------------------------------
+    #
+    # Registering interest is a tick box now, so this is where the name on the
+    # staff-visible ExpressionOfInterest is copied from. It is the writable end
+    # of that field.
+
+    def test_an_inappropriate_first_name_is_refused(self):
+        user = User.objects.create_user("ada", password=PASSWORD)
+        Profile.objects.create(user=user, user_type="student")
+        self.client.force_login(user)
+
+        response = self.client.patch(ME_URL, {"first_name": "fuckface"}, format="json")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("first_name", response.data)
+        user.refresh_from_db()
+        self.assertEqual(user.first_name, "")
+
+    def test_an_ordinary_name_still_saves(self):
+        user = User.objects.create_user("ada", password=PASSWORD)
+        Profile.objects.create(user=user, user_type="student")
+        self.client.force_login(user)
+
+        response = self.client.patch(
+            ME_URL, {"first_name": "Ada", "last_name": "Lovelace"}, format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        user.refresh_from_db()
+        self.assertEqual(user.get_full_name(), "Ada Lovelace")

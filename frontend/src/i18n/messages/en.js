@@ -336,6 +336,7 @@ const en = {
 
   // Shared by the account forms.
   forms: {
+    contentChecked: "Keep it appropriate. Inappropriate language is refused.",
     charactersLeft: "{count} left",
     charactersLeftLong: "{count} characters left",
     hidePassword: "Hide password",
@@ -348,6 +349,7 @@ const en = {
   // Messages the API sends in English, shown in the visitor's language
   // (i18n/serverMessages.js matches them to these keys).
   serverErrors: {
+    inappropriate: "This contains language that isn't appropriate for the site.",
     requiredField: "This field is required.",
     blankField: "This field may not be blank.",
     passwordCommon: "This password is too common.",
@@ -382,7 +384,7 @@ const en = {
   register: {
     title: "Create your account",
     lead: "It takes a minute, and it is free.",
-    usernameHint: "Letters, numbers and @ . + - _ only.",
+    usernameHint: "Letters, numbers and @ . + - _ only. Keep it appropriate: it is shown on every post you write.",
     passwordHint: "At least 8 characters. Not all numbers, not a common password, and not too like your username.",
     confirmPassword: "Confirm password",
     accountType: "Account type",
@@ -472,7 +474,7 @@ const en = {
   // The Community: questions asked and answered by students, parents,
   // teachers and Amazon staff.
   community: {
-    moderationNote: "Keep it on topic and appropriate. A moderator can remove anything that isn't.",
+    moderationNote: "Keep it on topic and appropriate. Inappropriate language is refused, and a moderator can remove anything else.",
     label: "Ask and answer",
     title: "Community",
     lead: "Questions about T-Levels and Amazon placements, answered by students, parents, teachers and Amazon staff.",
