@@ -239,16 +239,16 @@ function ContentCard({ item }) {
       ) : (
         <>
           {item.link && (
-            <a className="button button--primary card__action" href={item.link}>
+            <a className="button button--primary card__action" href={item.link} target="_blank" rel="noopener noreferrer">
               {t("resources.openOn", { site: siteName(item.link) ?? t("resources.anotherWebsite") })}
-              <span className="sr-only">, {item.title}</span>
+              <span className="sr-only">, {item.title} {t("shell.newTab")}</span>
               <ArrowIcon />
             </a>
           )}
           {item.file && (
-            <a className="button button--primary card__action" href={item.file}>
+            <a className="button button--primary card__action" href={item.file} target="_blank" rel="noopener noreferrer">
               {t("resources.open")}
-              <span className="sr-only"> {item.title}</span>
+              <span className="sr-only"> {item.title} {t("shell.newTab")}</span>
               <ArrowIcon />
             </a>
           )}

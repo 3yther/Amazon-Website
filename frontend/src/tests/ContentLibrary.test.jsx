@@ -138,6 +138,20 @@ describe("Resources page", () => {
     await waitFor(() => expect(queries.length).toBeGreaterThan(before));
   });
 
+  it("opens a resource in a new tab, and says so", async () => {
+    // Clicking a resource used to replace the library with whatever gov.uk
+    // page it pointed at, losing the visitor's filters and their place.
+    fakeServer();
+    renderPage();
+
+    const open = await screen.findByRole("link", { name: /Open on gov.uk/ });
+    expect(open).toHaveAttribute("target", "_blank");
+    // noreferrer as well as noopener: the new page gets no handle on this one.
+    expect(open).toHaveAttribute("rel", "noopener noreferrer");
+    // Nobody using a screen reader should be surprised by the new window.
+    expect(open).toHaveAccessibleName(expect.stringContaining("(opens in a new tab)"));
+  });
+
   it("has no accessibility problems", async () => {
     fakeServer();
     const { container } = renderPage();

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import parentPhoto from "../assets/audience-parent.jpg";
 import studentPhoto from "../assets/audience-student.jpg";
@@ -8,93 +7,10 @@ import digitalPhoto from "../assets/pathway-digital.jpg";
 import engineeringPhoto from "../assets/pathway-engineering.jpg";
 import financePhoto from "../assets/pathway-finance.jpg";
 import mediaPhoto from "../assets/pathway-media.jpg";
-import { AUDIENCES, CONTENT_TYPES, PATHWAY_NAMES } from "../labels.js";
-import { T_LEVEL_SUBJECTS } from "../tlevelSubjects.js";
 import { useT } from "../i18n/I18nProvider.jsx";
-import { useReducedMotion } from "../useReducedMotion.js";
 import { ArrowIcon } from "./Icons.jsx";
 
 // Homepage sections below the hero (see pages/Home.jsx), in page order.
-
-/* ---------- Stats ---------- */
-
-// Counted from the project's own data, so the numbers stay accurate.
-// Labels are translation keys (i18n/messages, home.stats).
-const STATS = [
-  { value: T_LEVEL_SUBJECTS.length, label: "home.stats.tLevels" },
-  { value: PATHWAY_NAMES.length, label: "home.stats.pathways" },
-  { value: Object.keys(CONTENT_TYPES).length, label: "home.stats.resourceTypes" },
-  { value: Object.keys(AUDIENCES).filter((key) => key !== "all").length, label: "home.stats.audiences" },
-];
-
-const COUNT_UP_MS = 1200;
-
-// Goes from 0 to 1 once the stats scroll into view. Straight to 1 with reduced motion.
-function useCountUp(ref) {
-  const reducedMotion = useReducedMotion();
-  const [progress, setProgress] = useState(reducedMotion ? 1 : 0);
-
-  useEffect(() => {
-    if (reducedMotion || !("IntersectionObserver" in window)) {
-      setProgress(1);
-      return;
-    }
-
-    let frame = 0;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        observer.disconnect(); // once only
-        const start = performance.now();
-        const tick = (now) => {
-          const t = Math.min((now - start) / COUNT_UP_MS, 1);
-          setProgress(t);
-          if (t < 1) frame = requestAnimationFrame(tick);
-        };
-        frame = requestAnimationFrame(tick);
-      },
-      { threshold: 0.5 },
-    );
-    observer.observe(ref.current);
-
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-    };
-  }, [ref, reducedMotion]);
-
-  return progress;
-}
-
-export function StatsRow() {
-  const t = useT();
-  const list = useRef(null);
-  const progress = useCountUp(list);
-  const eased = 1 - (1 - progress) ** 3; // fast start, gentle landing
-
-  return (
-    <section className="stats" aria-labelledby="stats-title">
-      <h2 id="stats-title" className="sr-only">
-        {t("home.stats.title")}
-      </h2>
-      <ul ref={list} className="stats__list">
-        {STATS.map((stat) => (
-          <li key={stat.label} className="stats__item">
-            {/* Seen: the counting number over its label. Heard: the final
-                value and label as one phrase, never the steps on the way up. */}
-            <span className="stats__value" aria-hidden="true">
-              {Math.round(stat.value * eased)}
-            </span>
-            <span className="label" aria-hidden="true">
-              {t(stat.label)}
-            </span>
-            <span className="sr-only">{`${stat.value} ${t(stat.label)}`}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
 
 /* ---------- Audience cards ---------- */
 

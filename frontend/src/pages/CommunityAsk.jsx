@@ -3,10 +3,16 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { askQuestion, getPathways } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { Guidelines, TOPICS, moderationMessage } from "../community/CommunityParts.jsx";
-import { SelectField, TextareaField, TextField } from "../components/FormFields.jsx";
+import { CharacterCount, SelectField, TextareaField, TextField } from "../components/FormFields.jsx";
 import { AlertIcon } from "../components/Icons.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import { translateServerMessage } from "../i18n/serverMessages.js";
+
+// Match the server's own limits (backend/community: Question.title max_length,
+// and body max_length in community/serializers.py), so the count runs out at
+// the same point the server would refuse it.
+const TITLE_LIMIT = 150;
+const BODY_LIMIT = 2000;
 
 // Ask a question (/community/ask). Needs an account.
 // The server checks each question (backend/community/moderation.py).
@@ -80,6 +86,10 @@ export default function CommunityAsk() {
             </div>
           )}
 
+          {/* The rules, next to the box they apply to. The fuller list is in
+              <Guidelines /> beside the form. */}
+          <p className="community-meta">{t("community.moderationNote")}</p>
+
           <TextField
             id="ask-title"
             name="title"
@@ -88,9 +98,10 @@ export default function CommunityAsk() {
             error={firstError("title")}
             value={fields.title}
             onChange={update}
-            maxLength={150}
+            maxLength={TITLE_LIMIT}
             required
           />
+          <CharacterCount value={fields.title} limit={TITLE_LIMIT} />
 
           <TextareaField
             id="ask-body"
@@ -100,9 +111,10 @@ export default function CommunityAsk() {
             error={firstError("body")}
             value={fields.body}
             onChange={update}
-            maxLength={2000}
+            maxLength={BODY_LIMIT}
             rows={5}
           />
+          <CharacterCount value={fields.body} limit={BODY_LIMIT} />
 
           <SelectField id="ask-topic" name="topic" label={t("community.topic")} value={fields.topic} onChange={update}>
             {TOPICS.map((topic) => (

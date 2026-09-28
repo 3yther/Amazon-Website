@@ -288,12 +288,12 @@ export default {
 
   interest: {
     NEXT_STEPS: [
-      { text: "Podajesz swoją ścieżkę. Zajmuje to około minuty." },
+      { text: "Zaznaczasz jedno pole. To chwila." },
       { text: "Zespół Amazon Emerging Talent widzi, kto jest zainteresowany." },
       { text: "Praktyki są organizowane z twoją szkołą lub college'em, więc zespół może się z nimi skontaktować." },
     ],
     WHY_WE_ASK:
-      "Pytamy tylko o to, czego zespół Amazon Emerging Talent potrzebuje, żeby wiedzieć, że jesteś zainteresowany. Bez adresu, daty urodzenia i szkoły.",
+      "Wysyłamy tylko to, czego zespół Amazon Emerging Talent potrzebuje, by wiedzieć, że jesteś zainteresowany: imię, e-mail i kierunek, które już są na Twoim koncie. Bez adresu, daty urodzenia i szkoły.",
   },
 
   quiz: {

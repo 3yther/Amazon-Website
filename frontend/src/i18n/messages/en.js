@@ -40,13 +40,6 @@ const en = {
       student: "Guides and prep packs to help you pick a T-Level and get ready for it.",
     },
     browse: "Browse resources",
-    stats: {
-      title: "T-Levels at a glance",
-      tLevels: "Named T-Levels",
-      pathways: "Pathways",
-      resourceTypes: "Resource types",
-      audiences: "Audiences",
-    },
     audiences: {
       label: "Who it is for",
       title: "Teachers, parents and students",
@@ -218,6 +211,7 @@ const en = {
   },
 
   shell: {
+    newTab: "(opens in a new tab)",
     skip: "Skip to content",
     error404: "Error 404",
     notFound: "Page not found",
@@ -342,9 +336,11 @@ const en = {
 
   // Shared by the account forms.
   forms: {
+    charactersLeft: "{count} left",
+    charactersLeftLong: "{count} characters left",
     hidePassword: "Hide password",
     showPassword: "Show password",
-    panelLine: "Free resources for Amazon’s Digital T-Level pathway.",
+    panelLine: "Free resources for the T-Level pathway.",
     somethingWrong: "Something went wrong. Try again.",
     noConnection: "Could not reach the server. Check your connection and try again.",
   },
@@ -387,7 +383,7 @@ const en = {
     title: "Create your account",
     lead: "It takes a minute, and it is free.",
     usernameHint: "Letters, numbers and @ . + - _ only.",
-    passwordHint: "At least 8 characters. Not all numbers, not a common password.",
+    passwordHint: "At least 8 characters. Not all numbers, not a common password, and not too like your username.",
     confirmPassword: "Confirm password",
     accountType: "Account type",
     chooseOne: "Choose one",
@@ -409,11 +405,11 @@ const en = {
     termsBefore: "I have read and agree to the",
     termsLink: "Terms and Conditions",
     termsAfter: ".",
-    newTab: "(opens in a new tab)",
     submitting: "Signing up",
     submit: "Sign up",
     haveAccount: "Already registered?",
     errors: {
+      username: "Enter a username.",
       overSixteen: "Confirm you are 16 or over to create an account.",
       terms: "Agree to the Terms and Conditions to create an account.",
     },
@@ -431,7 +427,7 @@ const en = {
   resetPassword: {
     title: "Choose a new password",
     newPassword: "New password",
-    passwordHint: "At least 8 characters. Not all numbers, not a common password.",
+    passwordHint: "At least 8 characters. Not all numbers, not a common password, and not too like your username.",
     confirmPassword: "Confirm new password",
     submitting: "Saving",
     submit: "Save new password",
@@ -443,14 +439,11 @@ const en = {
   registerInterest: {
     label: "Amazon Emerging Talent",
     title: "Register your interest",
-    lead: "Want a T-Level placement at Amazon? Tell us which pathway. You do not need an account.",
-    fullName: "Full name",
-    email: "Email",
-    iAmA: "I am a",
-    pathway: "Pathway",
-    message: "Anything to add? (optional)",
-    messageHint: "For example, a question about the placement.",
-    consent: "I am happy for the Amazon Emerging Talent team to see these details and contact me.",
+    lead: "Optional. Tick the box and the Amazon Emerging Talent team will know you would like a placement.",
+    tickBox: "I'm interested in an Amazon placement",
+    usingAccount: "We send the name, email and pathway already on your account.",
+    optional: "It is optional. Everything else on the site works without it.",
+    signedOut: "This one needs an account, so we do not ask you for details the site already holds.",
     privacyBefore: "See our",
     privacyLink: "Privacy Policy",
     privacyAfter: ".",
@@ -460,28 +453,26 @@ const en = {
     underSixteen: "Under 16? Ask a parent or carer before you send this.",
     box: {
       summary: "Want an Amazon placement? Register your interest",
-      text: "No account needed. Tell us your pathway and we pass it to the Amazon Emerging Talent team. Under 16? Ask a parent or carer first.",
+      text: "Tick one box on your account and we pass it to the Amazon Emerging Talent team. Under 16? Ask a parent or carer first.",
+      link: "Go to Register your interest",
     },
     thanks: {
       title: "Thanks, you are on the list",
       lead: "Your interest in the {pathway} pathway has been sent to the Amazon Emerging Talent team.",
+      leadNoPathway: "Your interest has been sent to the Amazon Emerging Talent team.",
       whileYouWait: "While you wait, see",
       placementLink: "what an Amazon placement looks like",
       after: ".",
     },
     errors: {
-      fullName: "Enter your full name.",
-      email: "Enter an email address in the format name@example.com.",
-      userType: "Choose student, parent or teacher.",
-      pathway: "Choose a pathway.",
-      message: "Keep your message under {limit} characters.",
-      consent: "Tick the box so we can share your details with Amazon.",
+      consent: "Tick the box to register your interest.",
     },
   },
 
   // The Community: questions asked and answered by students, parents,
   // teachers and Amazon staff.
   community: {
+    moderationNote: "Keep it on topic and appropriate. A moderator can remove anything that isn't.",
     label: "Ask and answer",
     title: "Community",
     lead: "Questions about T-Levels and Amazon placements, answered by students, parents, teachers and Amazon staff.",
@@ -988,6 +979,7 @@ const en = {
         dashed: "Dashed",
       },
       background: "Page background",
+      backgroundHint: "Applies to the light theme. The dark theme keeps its own background.",
       backgrounds: {
         white: "White",
         cream: "Cream",

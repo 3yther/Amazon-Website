@@ -288,12 +288,12 @@ export default {
 
   interest: {
     NEXT_STEPS: [
-      { text: "Nos dices tu itinerario. Se tarda un minuto más o menos." },
+      { text: "Marcas una casilla. Es cosa de un momento." },
       { text: "El equipo de Amazon Emerging Talent puede ver quién está interesado." },
       { text: "Las prácticas se organizan con tu instituto o college, así que puede que se pongan en contacto con ellos." },
     ],
     WHY_WE_ASK:
-      "Solo pedimos lo que el equipo de Amazon Emerging Talent necesita para saber que te interesa. Ni dirección, ni fecha de nacimiento, ni centro educativo.",
+      "Solo enviamos lo que el equipo de Amazon Emerging Talent necesita para saber que te interesa: el nombre, el correo y el área que ya están en tu cuenta. Ni dirección, ni fecha de nacimiento, ni centro educativo.",
   },
 
   quiz: {

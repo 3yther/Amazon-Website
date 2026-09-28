@@ -94,12 +94,21 @@ export default function StaffDashboard() {
               <tbody>
                 {results.map((row) => (
                   <tr key={row.id}>
-                    <td>{row.full_name}</td>
+                    {/* Sign-up asks for no real name and no email, so a row
+                        can honestly have neither. The username always
+                        identifies who it was; the rest say so in words. */}
+                    <td>{row.full_name || row.username || <Nothing />}</td>
                     <td>
-                      <a href={`mailto:${row.email}`}>{row.email}</a>
+                      {row.email ? <a href={`mailto:${row.email}`}>{row.email}</a> : <Nothing />}
                     </td>
-                    <td>{known(t, `account.roles.${row.user_type}`, row.user_type)}</td>
-                    <td>{row.pathway}</td>
+                    <td>
+                      {row.user_type ? (
+                        known(t, `account.roles.${row.user_type}`, row.user_type)
+                      ) : (
+                        <Nothing />
+                      )}
+                    </td>
+                    <td>{row.pathway ?? <Nothing />}</td>
                     <td>
                       <SubmissionMessage message={row.message} />
                     </td>
@@ -133,6 +142,18 @@ export default function StaffDashboard() {
       )}
     </>
   );
+}
+
+/**
+ * An empty cell, in words rather than a dash.
+ *
+ * Since registering interest became a tick box, the name, email, type and
+ * pathway are copied off the account, and an account can genuinely have none
+ * of them. Blank cells would read as a loading bug.
+ */
+function Nothing() {
+  const t = useT();
+  return <span className="staff-table__empty">{t("staff.none")}</span>;
 }
 
 // A translation when there is one, otherwise the value the API sent.
