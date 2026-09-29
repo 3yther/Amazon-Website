@@ -2,12 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { adminPortalLock, adminPortalStatus, adminPortalUnlock } from "../api.js";
 import { useAuth } from "../auth.jsx";
-import TabNav from "../components/TabNav.jsx";
+import FilterBar from "../components/admin/FilterBar.jsx";
+import Overview from "../components/admin/Overview.jsx";
+import Sidebar, { NAV_IDS } from "../components/admin/Sidebar.jsx";
+import useDashboardFilters from "../components/admin/useDashboardFilters.js";
 import { FormError } from "../components/FormFields.jsx";
 import {
   FeedbackTab,
   InterestTab,
-  OverviewTab,
   PeopleTab,
   PostsTab,
   ReportsTab,
@@ -33,12 +35,35 @@ import { useT } from "../i18n/I18nProvider.jsx";
 // thing keeping anybody out: a correct PIN on a student account still gets
 // 403 from every endpoint behind it.
 
-const TAB_IDS = ["overview", "interest", "reports", "posts", "feedback", "people"];
+/**
+ * Which part of the greeting to use. Split at 12 and 18, the same boundaries
+ * the words themselves imply; a dashboard opened at 02:00 says evening rather
+ * than guessing at something cleverer.
+ */
+function greetingKey(hour) {
+  if (hour < 12) return "admin.greeting.morning";
+  if (hour < 18) return "admin.greeting.afternoon";
+  return "admin.greeting.evening";
+}
+
+/**
+ * What to call somebody in the greeting.
+ *
+ * The username, because there is no first name to use: sign-up never asks for
+ * one (CONTEXT.md's rule is to hold the minimum) and neither Profile nor the
+ * /me/ payload carries a name. Adding a real name to greet people by would
+ * mean collecting one from every account on the site, which is a much bigger
+ * decision than a nicer heading.
+ */
+function greetingNameOf(user) {
+  return user?.username || "";
+}
 
 export default function AdminPortal() {
   const t = useT();
   const { user, checked } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { filters, range, setFilter, clearAll, anySet } = useDashboardFilters();
 
   const [lock, setLock] = useState(null); // { unlocked, configured, minutes }
   const [asking, setAsking] = useState(true);
@@ -76,34 +101,53 @@ export default function AdminPortal() {
   }
 
   const requested = searchParams.get("tab");
-  const activeId = TAB_IDS.includes(requested) ? requested : "overview";
-  const setActiveId = (id) =>
-    setSearchParams(id === "overview" ? {} : { tab: id }, { replace: true });
+  const activeId = NAV_IDS.includes(requested) ? requested : "overview";
+  const setActiveId = (id) => {
+    // The other filters survive a move between sections, so narrowing to 90
+    // days on the Overview and then opening People keeps the 90 days.
+    const next = new URLSearchParams(searchParams);
+    if (id === "overview") next.delete("tab");
+    else next.set("tab", id);
+    setSearchParams(next, { replace: true });
+  };
 
-  const tabs = [
-    { id: "overview", label: t("admin.tabs.overview"), content: <OverviewTab /> },
-    { id: "interest", label: t("admin.tabs.interest"), content: <InterestTab /> },
-    { id: "reports", label: t("admin.tabs.reports"), content: <ReportsTab /> },
-    { id: "posts", label: t("admin.tabs.posts"), content: <PostsTab /> },
-    { id: "feedback", label: t("admin.tabs.feedback"), content: <FeedbackTab /> },
-    { id: "people", label: t("admin.tabs.people"), content: <PeopleTab /> },
-  ];
+  const panels = {
+    overview: <Overview filters={filters} />,
+    interest: <InterestTab />,
+    reports: <ReportsTab />,
+    posts: <PostsTab />,
+    feedback: <FeedbackTab />,
+    people: <PeopleTab />,
+  };
 
   return (
-    <>
-      <section className="intro" aria-labelledby="page-title">
-        <p className="label">{t("account.roles.amazon_staff")}</p>
-        <h1 id="page-title">{t("admin.title")}</h1>
-        <p className="lead">{t("admin.lead")}</p>
-        <p>
-          <button type="button" className="button" onClick={relock}>
-            {t("admin.lockAgain")}
-          </button>
-        </p>
-      </section>
+    <div className="admin-shell">
+      <Sidebar activeId={activeId} onChange={setActiveId} onLock={relock} />
 
-      <TabNav tabs={tabs} activeId={activeId} onChange={setActiveId} />
-    </>
+      <div className="admin-main">
+        <header className="admin-head">
+          <p className="label">{t("account.roles.amazon_staff")}</p>
+          <h1 id="page-title">
+            {t(greetingKey(new Date().getHours()), { name: greetingNameOf(user) })}
+          </h1>
+          <p className="lead">{t("admin.lead")}</p>
+        </header>
+
+        {/* One filter bar for the whole dashboard, so a range chosen here
+            means the same thing on every section and in every export. */}
+        <FilterBar
+          filters={filters}
+          range={range}
+          setFilter={setFilter}
+          clearAll={clearAll}
+          anySet={anySet}
+        />
+
+        <main className="admin-panel" aria-labelledby="page-title">
+          {panels[activeId]}
+        </main>
+      </div>
+    </div>
   );
 }
 

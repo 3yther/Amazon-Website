@@ -292,6 +292,19 @@ export function adminOverview(options) {
   return request("/api/accounts/admin-portal/overview/", options);
 }
 
+/**
+ * The dashboard's KPI cards, each with the period before it and a sparkline.
+ * filters: range (7d/30d/90d/12m/all/custom), from, to.
+ */
+export function adminDashboard(filters, options) {
+  return request("/api/accounts/admin-portal/dashboard/", { ...options, params: filters });
+}
+
+/** The series behind the dashboard's charts. Same filters as adminDashboard. */
+export function adminDashboardCharts(filters, options) {
+  return request("/api/accounts/admin-portal/dashboard/charts/", { ...options, params: filters });
+}
+
 /** One page of accounts. filters: user_type, q, page. */
 export function adminPeople(filters, options) {
   return request("/api/accounts/admin-portal/people/", { ...options, params: filters });

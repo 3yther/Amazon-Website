@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useSearchParams } from "react-router-dom";
 import AdminPortal from "../pages/AdminPortal.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
@@ -58,6 +58,67 @@ const PERSON = {
   answers: 2,
 };
 
+/** The KPI cards, as the dashboard endpoint sends them. */
+const DASHBOARD = {
+  range: { preset: "30d", from: "2026-08-30", to: "2026-09-29" },
+  kpis: [
+    { key: "accounts", value: 40, unit: "count", spark: [1, 2, 3], previous: 32, change: 8, percent: 25 },
+    { key: "signups", value: 8, unit: "count", spark: [1, 2, 5], previous: 4, change: 4, percent: 100 },
+    // A card with nothing before it: the page must say so, not divide by zero.
+    { key: "active", value: 6, unit: "count", spark: [], previous: 0, change: 6, percent: null },
+    { key: "interest", value: 10, unit: "count", spark: [], previous: 10, change: 0, percent: 0 },
+    { key: "questions", value: 3, unit: "count", spark: [], previous: 1, change: 2, percent: 200 },
+    { key: "answers", value: 5, unit: "count", spark: [], previous: 5, change: 0, percent: 0 },
+    { key: "unanswered", value: 1, unit: "count", spark: [], previous: 2, change: -1, percent: -50 },
+    { key: "feedback", value: 4, unit: "count", spark: [], previous: 2, change: 2, percent: 100 },
+    { key: "open_reports", value: 2, unit: "count", spark: [], previous: 1, change: 1, percent: 100 },
+    {
+      key: "time_to_first_answer",
+      value: 3.5,
+      unit: "hours",
+      spark: [],
+      previous: 5,
+      change: -1.5,
+      percent: -30,
+      lower_is_better: true,
+    },
+  ],
+};
+
+const DASHBOARD_CHARTS = {
+  range: { preset: "30d", from: "2026-08-30", to: "2026-09-29" },
+  signups_over_time: [
+    { label: "2026-09-14", values: { student: 3, parent: 1, teacher: 0 } },
+    { label: "2026-09-21", values: { student: 4, parent: 0, teacher: 1 } },
+  ],
+  users_by_type: [
+    { label: "student", value: 30 },
+    { label: "parent", value: 6 },
+    { label: "teacher", value: 3 },
+    { label: "amazon_staff", value: 1 },
+  ],
+  interest_by_pathway: [
+    { label: "Digital", value: 7 },
+    { label: "Business", value: 3 },
+  ],
+  community_activity: [{ label: "2026-09-21", values: { questions: 2, answers: 5 } }],
+  answer_rate: [
+    { label: "Answered", value: 2 },
+    { label: "Still waiting", value: 1 },
+  ],
+  active_topics: [{ label: "tlevels", value: 4 }],
+  feedback_over_time: [
+    { label: "2026-09-14", values: { bug: 1, feature: 0, general: 2, accessibility: 0 } },
+    { label: "2026-09-21", values: { bug: 0, feature: 1, general: 1, accessibility: 1 } },
+  ],
+  reports_activity: [{ label: "2026-09-21", values: { opened: 2, resolved: 1 } }],
+  languages: [
+    { label: "en", value: 38 },
+    { label: "pl", value: 2 },
+  ],
+  provider_coverage: [{ label: "North West", values: { placed: 12, unplaced: 2 } }],
+};
+
 const POST = {
   kind: "question",
   id: 5,
@@ -92,6 +153,8 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
         return Response.json({ unlocked: true });
       }
       if (path.endsWith("/admin-portal/overview/")) return Response.json(OVERVIEW);
+      if (path.endsWith("/admin-portal/dashboard/")) return Response.json(DASHBOARD);
+      if (path.endsWith("/admin-portal/dashboard/charts/")) return Response.json(DASHBOARD_CHARTS);
       // The list first: an action path contains the list path, so matching
       // the action loosely would swallow the list too.
       if (path.endsWith("/api/community/admin-portal/reports/")) {
@@ -124,11 +187,44 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+/**
+ * The sidebar, once the shell has rendered.
+ *
+ * Navigation, not a tablist: these change what the whole page is about and
+ * they are in the URL, so they are announced as navigation and carry
+ * aria-current rather than aria-selected. There are two in the document (the
+ * phone drawer and the desktop column, one of which CSS hides), so this takes
+ * the first.
+ */
+async function sidebar() {
+  const navs = await screen.findAllByRole("navigation");
+  return navs[0];
+}
+
+/** Move to a section the way a staff member would. */
+async function openSection(user, name) {
+  await user.click(await within(await sidebar()).findByRole("button", { name }));
+}
+
+/** Prints the router's current query string, so a test can assert on it. */
+function ShowsTheUrl() {
+  const [params] = useSearchParams();
+  return <output data-testid="url">{params.toString()}</output>;
+}
+
 function renderPortal(path = "/admin-portal") {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <Routes>
-        <Route path="/admin-portal" element={<AdminPortal />} />
+        <Route
+          path="/admin-portal"
+          element={
+            <>
+              <AdminPortal />
+              <ShowsTheUrl />
+            </>
+          }
+        />
         <Route path="/" element={<h1>Home</h1>} />
       </Routes>
     </MemoryRouter>,
@@ -219,7 +315,9 @@ describe("Admin Portal: the PIN gate", () => {
     await user.type(await screen.findByLabelText("PIN"), "4821");
     await user.click(screen.getByRole("button", { name: "Unlock" }));
 
-    expect(await screen.findByRole("heading", { name: "Admin Portal", level: 1 })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), staffer/, level: 1 }),
+    ).toBeInTheDocument();
   });
 
   it("rejects a wrong PIN without saying how many tries are left", async () => {
@@ -270,35 +368,93 @@ describe("Admin Portal: the PIN gate", () => {
   });
 });
 
-describe("Admin Portal: the tabs", () => {
-  it("shows all five", async () => {
+describe("Admin Portal: the sidebar", () => {
+
+  it("shows every section", async () => {
     fakeServer();
 
     renderPortal();
 
+    const nav = await sidebar();
     for (const name of ["Overview", "Interest", "Reported posts", "Feedback", "People"]) {
-      expect(await screen.findByRole("tab", { name })).toBeInTheDocument();
+      expect(within(nav).getByRole("button", { name })).toBeInTheDocument();
     }
   });
 
-  it("opens the tab named in the address", async () => {
+  it("opens the section named in the address", async () => {
     fakeServer();
 
     renderPortal("/admin-portal?tab=people");
 
-    expect(await screen.findByRole("tab", { name: "People", selected: true })).toBeInTheDocument();
+    const link = await within(await sidebar()).findByRole("button", { name: "People" });
+    expect(link).toHaveAttribute("aria-current", "page");
+  });
+
+  it("keeps the chosen date range when you move between sections", async () => {
+    // A range narrowed on the Overview should still mean the same thing on
+    // People, which is the whole reason the filters live in the URL.
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal("/admin-portal?range=90d");
+
+    await openSection(user, "People");
+
+    const url = screen.getByTestId("url").textContent;
+    expect(url).toContain("range=90d");
+    expect(url).toContain("tab=people");
   });
 });
 
 describe("Admin Portal: Overview", () => {
-  it("shows the totals and the charts", async () => {
+  it("shows a card for every key number, and the charts", async () => {
     fakeServer();
 
     renderPortal();
 
-    expect(await screen.findByText("40")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Interest by pathway" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Sign-ups by week" })).toBeInTheDocument();
+    const accounts = (await screen.findByText("Accounts")).closest("article");
+    expect(within(accounts).getByText("40")).toBeInTheDocument();
+
+    for (const name of ["Sign-ups by week", "Accounts by type", "Interest by pathway"]) {
+      expect(screen.getByRole("heading", { name })).toBeInTheDocument();
+    }
+  });
+
+  it("shows a change against the period before, with an arrow and a sign", async () => {
+    // Colour is never the only signal: the sign and the arrow have to carry
+    // it on their own for greyscale and the colour-vision filters.
+    fakeServer();
+
+    renderPortal();
+
+    const accounts = (await screen.findByText("Accounts")).closest("article");
+    expect(within(accounts).getByText(/\+8 \(\+25%\)/)).toBeInTheDocument();
+    // The arrow is decorative and has no role on purpose, so it is found as
+    // an element rather than by role.
+    expect(accounts.querySelector(".admin-kpi__arrow")).not.toBeNull();
+
+    // And the whole thing as one sentence for a screen reader.
+    expect(
+      within(accounts).getByText(/up 8 \(25%\) on the period before/),
+    ).toBeInTheDocument();
+  });
+
+  it("says so rather than dividing by zero when nothing came before", async () => {
+    fakeServer();
+
+    renderPortal();
+
+    const active = (await screen.findByText("Signed in")).closest("article");
+    expect(within(active).getByText(/no earlier figure/)).toBeInTheDocument();
+  });
+
+  it("does not call a faster answer time a loss", async () => {
+    // Down is good here, and a dashboard that paints it red is lying.
+    fakeServer();
+
+    renderPortal();
+
+    const card = (await screen.findByText("Time to first answer")).closest("article");
+    expect(card.querySelector(".admin-kpi__change--good")).not.toBeNull();
   });
 
   it("gives every chart the same numbers as text", async () => {
@@ -308,22 +464,30 @@ describe("Admin Portal: Overview", () => {
     const user = userEvent.setup({ delay: null });
     renderPortal();
 
-    const chart = (await screen.findByRole("heading", { name: "Interest by pathway" })).closest(
+    const ring = (await screen.findByRole("heading", { name: "Accounts by type" })).closest(
       "section",
     );
-    await user.click(within(chart).getByText("Show the numbers"));
+    await user.click(within(ring).getByText("Show the numbers"));
 
-    const table = within(chart).getByRole("table");
-    expect(within(table).getByRole("rowheader", { name: "Digital" })).toBeInTheDocument();
-    // 7 of 10 is 70%.
-    expect(within(table).getByText("70%")).toBeInTheDocument();
+    const ringTable = within(ring).getByRole("table");
+    expect(within(ringTable).getByRole("rowheader", { name: "Student" })).toBeInTheDocument();
+    // 30 of 40 is 75%.
+    expect(within(ringTable).getByText("75%")).toBeInTheDocument();
+
+    // The bars carry the same guarantee, with counts rather than shares.
+    const bars = screen.getByRole("heading", { name: "Interest by pathway" }).closest("section");
+    await user.click(within(bars).getByText("Show the numbers"));
+
+    const barTable = within(bars).getByRole("table");
+    expect(within(barTable).getByRole("rowheader", { name: "Digital" })).toBeInTheDocument();
+    expect(within(barTable).getByText("7")).toBeInTheDocument();
   });
 });
 
 describe("Admin Portal: deleting a reported post", () => {
   async function openReports(user) {
     renderPortal();
-    await user.click(await screen.findByRole("tab", { name: "Reported posts" }));
+    await openSection(user, "Reported posts");
     return screen.findByText("A reported question");
   }
 
@@ -547,7 +711,7 @@ describe("Admin Portal: accessibility", () => {
     fakeServer();
     renderPortal();
 
-    await screen.findByRole("heading", { name: "Admin Portal", level: 1 });
+    await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), staffer/, level: 1 });
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
   });
 });

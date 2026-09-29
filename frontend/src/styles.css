@@ -2753,3 +2753,330 @@ input.admin-pin__input {
     display: none;
   }
 }
+
+/* ---------- Admin dashboard shell (pages/AdminPortal.jsx) ---------- */
+
+/* Sidebar beside content on desktop, stacked on a phone. The palette lives on
+   this element (see the data palette block above), so everything inside can
+   reach --admin-1..7 and nothing outside can. */
+.admin-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.admin-main {
+  min-width: 0; /* or a wide chart stretches the grid instead of scrolling */
+}
+
+.admin-head h1 {
+  margin: 4px 0 8px;
+}
+
+/* ---- navigation ---- */
+
+.admin-nav__group + .admin-nav__group {
+  margin-top: 24px;
+}
+
+.admin-nav__heading {
+  margin: 0 0 8px;
+}
+
+.admin-nav ul,
+.admin-nav__drawer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-inline-start: 3px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.admin-nav__link:hover {
+  background: var(--surface);
+}
+
+/* The current section is marked by a bar and a weight, not by colour alone. */
+.admin-nav__link[aria-current="page"] {
+  border-inline-start-color: var(--orange);
+  background: var(--surface);
+  font-weight: 700;
+}
+
+.admin-nav__badge {
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: 11px;
+  background: var(--blue);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* The phone drawer. Hidden on desktop, where the column is shown instead. */
+.admin-nav__drawer {
+  display: none;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-nav__drawer > summary {
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-nav__drawer nav {
+  padding: 0 8px 12px;
+}
+
+/* ---- filter bar ---- */
+
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px 16px;
+  margin: 16px 0 24px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-filters__field select,
+.admin-filters__field input {
+  min-height: var(--control-h);
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+}
+
+.admin-filters__clear {
+  min-height: var(--control-h);
+}
+
+/* ---- KPI cards ---- */
+
+.admin-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.admin-kpi {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-kpi__label {
+  margin: 0 0 4px;
+}
+
+.admin-kpi__value {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.admin-kpi__change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* The colour is the third signal here, after the arrow and the sign. */
+.admin-kpi__change--good {
+  color: var(--admin-up);
+}
+
+.admin-kpi__change--bad {
+  color: var(--admin-down);
+}
+
+.admin-kpi__change--flat {
+  color: var(--ink-muted);
+}
+
+.admin-kpi__arrow {
+  flex: none;
+}
+
+.admin-kpi__spark {
+  display: block;
+  width: 100%;
+  height: 24px;
+  margin-top: 8px;
+}
+
+.admin-kpi__spark polyline {
+  fill: none;
+  stroke: var(--admin-mark-edge);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---- charts ---- */
+
+.admin-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.admin-line {
+  width: 100%;
+  height: 160px;
+}
+
+.admin-line__line {
+  fill: none;
+  stroke-width: 2;
+  /* Keeps the stroke an even weight despite the stretched viewBox. */
+  vector-effect: non-scaling-stroke;
+}
+
+.admin-line__area {
+  stroke: none;
+}
+
+.admin-line__line--s1 { stroke: var(--admin-1); }
+.admin-line__line--s2 { stroke: var(--admin-2); }
+.admin-line__line--s3 { stroke: var(--admin-3); }
+.admin-line__line--s4 { stroke: var(--admin-4); }
+.admin-line__line--s5 { stroke: var(--admin-5); }
+.admin-line__line--s6 { stroke: var(--admin-6); }
+.admin-line__line--s7 { stroke: var(--admin-7); }
+
+.admin-line__area--s1 { fill: var(--admin-1-fill); }
+.admin-line__area--s2 { fill: var(--admin-2-fill); }
+.admin-line__area--s3 { fill: var(--admin-3-fill); }
+.admin-line__area--s4 { fill: var(--admin-4-fill); }
+.admin-line__area--s5 { fill: var(--admin-5-fill); }
+.admin-line__area--s6 { fill: var(--admin-6-fill); }
+.admin-line__area--s7 { fill: var(--admin-7-fill); }
+
+/* Ranked bars: the value sits beside every bar, so the length is a
+   convenience rather than the only way to read it. */
+.admin-ranked {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-ranked__row {
+  display: grid;
+  grid-template-columns: minmax(80px, 30%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 0.9375rem;
+}
+
+.admin-ranked__track {
+  height: 14px;
+  background: var(--paper);
+}
+
+.admin-ranked__bar {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border: 1px solid var(--admin-mark-edge);
+}
+
+.admin-ranked__bar--s1 { background: var(--admin-1); }
+.admin-ranked__bar--s2 { background: var(--admin-2); }
+.admin-ranked__bar--s3 { background: var(--admin-3); }
+.admin-ranked__bar--s4 { background: var(--admin-4); }
+.admin-ranked__bar--s5 { background: var(--admin-5); }
+.admin-ranked__bar--s6 { background: var(--admin-6); }
+.admin-ranked__bar--s7 { background: var(--admin-7); }
+
+.admin-ranked__value {
+  font-family: var(--font-mono);
+}
+
+/* ---- loading and error ---- */
+
+/* No pulse. Every animation here has to stop under reduced motion, and a
+   skeleton that needs a media query to be safe is more trouble than a plain
+   block that never moves. */
+.admin-skeleton {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-skeleton__bar {
+  height: 56px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.admin-error {
+  padding: 16px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+}
+
+.admin-error p {
+  margin: 0 0 12px;
+}
+
+@media (max-width: 899px) {
+  .admin-shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  /* Swap the column for the drawer. */
+  .admin-nav {
+    display: none;
+  }
+
+  .admin-nav__drawer {
+    display: block;
+  }
+}
+
+.admin-kpi__change-visual {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

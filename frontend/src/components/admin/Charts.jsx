@@ -31,7 +31,7 @@ const PALETTE_SIZE = 7;
 export const toneFor = (index) => `s${(index % PALETTE_SIZE) + 1}`;
 
 /** A data table saying exactly what the chart says, for screen readers. */
-function ChartTable({ caption, rows, columns }) {
+export function ChartTable({ caption, rows, columns }) {
   const t = useT();
   return (
     <details className="admin-chart__data">
@@ -77,7 +77,10 @@ function EmptyChart() {
  *
  * series is [{ key, label }], rows is [{ label, values: { key: number } }].
  */
-export function GroupedBars({ title, rows, series, caption }) {
+export function GroupedBars({ title, rows, series, caption, formatLabel }) {
+  // Labels here are usually ISO weeks, where only the month and day fit.
+  // Anything else (a region name, a topic) passes its own formatter.
+  const label = formatLabel ?? ((text) => String(text).slice(5));
   const t = useT();
   const most = Math.max(1, ...rows.flatMap((row) => series.map((one) => row.values[one.key] ?? 0)));
   const total = rows.reduce(
@@ -109,7 +112,7 @@ export function GroupedBars({ title, rows, series, caption }) {
                     />
                   ))}
                 </div>
-                <span className="admin-bars__label">{row.label.slice(5)}</span>
+                <span className="admin-bars__label">{label(row.label)}</span>
               </div>
             ))}
           </div>
@@ -126,7 +129,7 @@ export function GroupedBars({ title, rows, series, caption }) {
           <ChartTable
             caption={caption}
             columns={[t("admin.week"), ...series.map((one) => one.label)]}
-            rows={rows.map((row) => [row.label, ...series.map((one) => row.values[one.key] ?? 0)])}
+            rows={rows.map((row) => [label(row.label), ...series.map((one) => row.values[one.key] ?? 0)])}
           />
         </>
       )}
@@ -225,6 +228,144 @@ export function Donut({ title, segments, caption }) {
         caption={caption}
         columns={[t("admin.name"), t("admin.count"), t("admin.share")]}
         rows={drawn.map((piece) => [piece.label, piece.value, `${piece.percent}%`])}
+      />
+    </section>
+  );
+}
+
+
+/**
+ * A line per series over time, with a pale area under it.
+ *
+ * The one chart here that is not bars, because a trend over twelve months is
+ * a shape and bars make you read it point by point. Same contract as the
+ * rest: the numbers underneath are the same array the line is drawn from, so
+ * the picture and the table cannot drift apart.
+ *
+ * Lines are told apart by the key and by the table, never by colour alone.
+ * The area fills are the palette's pale tints, which exist for exactly this
+ * and nothing else.
+ */
+export function LineChart({ title, rows, series, caption, formatLabel = (label) => label }) {
+  const t = useT();
+
+  const most = Math.max(1, ...rows.flatMap((row) => series.map((one) => row.values[one.key] ?? 0)));
+  const total = rows.reduce(
+    (sum, row) => sum + series.reduce((inner, one) => inner + (row.values[one.key] ?? 0), 0),
+    0,
+  );
+
+  if (rows.length < 2 || total === 0) {
+    return (
+      <section className="admin-chart" aria-labelledby={`chart-${title}`}>
+        <h3 id={`chart-${title}`} className="admin-chart__title">
+          {title}
+        </h3>
+        <EmptyChart />
+      </section>
+    );
+  }
+
+  const step = 100 / (rows.length - 1);
+  const pointsFor = (one) =>
+    rows.map((row, index) => [index * step, 40 - ((row.values[one.key] ?? 0) / most) * 38]);
+
+  return (
+    <section className="admin-chart" aria-labelledby={`chart-${title}`}>
+      <h3 id={`chart-${title}`} className="admin-chart__title">
+        {title}
+      </h3>
+
+      {/* Decorative: every number is in the key and the table below. */}
+      <svg
+        className="admin-line"
+        viewBox="0 0 100 40"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        {series.map((one, index) => {
+          const points = pointsFor(one);
+          const line = points.map(([x, y]) => `${x},${y}`).join(" ");
+          // Closed back along the baseline, so the fill has a bottom edge.
+          const area = `${line} ${100},40 0,40`;
+          return (
+            <g key={one.key}>
+              <polygon className={`admin-line__area admin-line__area--${toneFor(index)}`} points={area} />
+              <polyline className={`admin-line__line admin-line__line--${toneFor(index)}`} points={line} />
+            </g>
+          );
+        })}
+      </svg>
+
+      <ul className="admin-key" aria-hidden="true">
+        {series.map((one, index) => (
+          <li key={one.key}>
+            <span className={`admin-key__swatch admin-key__swatch--${toneFor(index)}`} />
+            {one.label}
+          </li>
+        ))}
+      </ul>
+
+      <ChartTable
+        caption={caption}
+        columns={[t("admin.week"), ...series.map((one) => one.label)]}
+        rows={rows.map((row) => [
+          formatLabel(row.label),
+          ...series.map((one) => row.values[one.key] ?? 0),
+        ])}
+      />
+    </section>
+  );
+}
+
+/**
+ * A plain horizontal bar per row, for "most of X" lists: topics, languages,
+ * providers per region. A ring would be wrong for these because there are too
+ * many slices and no meaningful whole.
+ */
+export function RankedBars({ title, rows, caption, nameColumn }) {
+  const t = useT();
+  const most = Math.max(1, ...rows.map((row) => row.value));
+
+  if (rows.length === 0 || most === 0) {
+    return (
+      <section className="admin-chart" aria-labelledby={`chart-${title}`}>
+        <h3 id={`chart-${title}`} className="admin-chart__title">
+          {title}
+        </h3>
+        <EmptyChart />
+      </section>
+    );
+  }
+
+  return (
+    <section className="admin-chart" aria-labelledby={`chart-${title}`}>
+      <h3 id={`chart-${title}`} className="admin-chart__title">
+        {title}
+      </h3>
+
+      {/* The value sits beside every bar, so the length is a convenience
+          rather than the only way to read it. */}
+      <ul className="admin-ranked" aria-hidden="true">
+        {rows.map((row, index) => (
+          <li className="admin-ranked__row" key={row.label}>
+            <span className="admin-ranked__name">{row.label}</span>
+            <span className="admin-ranked__track">
+              <span
+                className={`admin-ranked__bar admin-ranked__bar--${toneFor(index)}`}
+                style={{ width: `${(row.value / most) * 100}%` }}
+              />
+            </span>
+            <span className="admin-ranked__value">{row.value}</span>
+          </li>
+        ))}
+      </ul>
+
+      <ChartTable
+        caption={caption}
+        columns={[nameColumn ?? t("admin.name"), t("admin.count")]}
+        rows={rows.map((row) => [row.label, row.value])}
       />
     </section>
   );
