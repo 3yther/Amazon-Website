@@ -1,6 +1,6 @@
 import { lazy, Suspense, useLayoutEffect } from "react";
 import { Link, NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import amazonLogo from "./assets/amazon-wordmark.png";
+import amazonLogo from "./assets/amazon-wordmark-white.png";
 import ChatWidget from "./assistant/ChatWidget.jsx";
 import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
@@ -83,8 +83,8 @@ export default function App() {
               to="/"
               aria-label={t("menu.pages.home")}
             >
-              {/* Approved logo file, used unaltered, on a white tile so the
-                  black lettering shows on the dark header (see styles.css). */}
+              {/* White lettering for the dark header, made from the approved
+                  file (amazon-wordmark.png) with the smile left as it is. */}
               <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="120" height="67" />
             </Link>
             <Link className="wordmark" to="/" onClick={countWordmarkClick}>
