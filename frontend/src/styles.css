@@ -2231,6 +2231,14 @@ input[type="range"] {
   color: var(--surface-inverse);
 }
 
+/* The "what happens" list in a confirm dialog. */
+.modal__list {
+  margin: 0 0 16px;
+  padding-inline-start: 1.25rem;
+  display: grid;
+  gap: 6px;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
