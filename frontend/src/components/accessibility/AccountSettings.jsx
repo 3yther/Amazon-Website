@@ -199,7 +199,7 @@ export default function AccountSettings() {
                 <p>{t("settings.account.confirmIntro")}</p>
                 <ul className="modal__list">
                   <li>{t("settings.account.whatSignOut")}</li>
-                  <li>{t("settings.account.whatSignIn")}</li>
+                  <li>{t("settings.account.whatDeleted")}</li>
                   <li>{t("settings.account.whatPosts")}</li>
                 </ul>
                 <div className="account-card__actions">

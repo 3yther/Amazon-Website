@@ -261,36 +261,90 @@ class PeopleView(generics.ListAPIView):
         return people.order_by("-date_joined")
 
 
-class DeactivateView(APIView):
-    """POST /api/accounts/admin-portal/people/<id>/deactivate/
+class RemoveAccountView(APIView):
+    """POST /api/accounts/admin-portal/people/<id>/remove/
 
-    Turns off an account, the same is_active flag the person's own
-    "deactivate my account" uses, so nothing new is invented and signing in
-    stops working the same way.
+    Body: { "confirm_username": "ada" }
 
-    Undone by staff in Django admin, not by the person, which is why the page
-    asks for confirmation first.
+    Deletes the account from the database. It does not switch it off and keep
+    the row: the person cannot sign in because there is nobody left to sign
+    in as, and their questions, answers, reports, preferences and profile go
+    with them (all CASCADE on the models). Feedback they sent stays, with the
+    sender blanked, because that row is the site's, not theirs (SET_NULL).
+
+    IRREVERSIBLE, and there is no audit log to say it happened. So:
+
+      * the caller must type the username back (checked here as well as in
+        the page, so a script cannot skip the question),
+      * you cannot remove yourself, and
+      * you cannot remove another staff account or a superuser. Take their
+        admin access away first (RevokeStaffView), then remove them: two
+        deliberate steps, and no way to wipe out every admin in one go.
     """
 
     permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
 
     def post(self, request, pk):
-        person = generics.get_object_or_404(User, pk=pk)
+        person = generics.get_object_or_404(User.objects.select_related("profile"), pk=pk)
 
         if person == request.user:
-            # Nothing technically stops it, but locking yourself out of the
-            # portal you are standing in is never what was meant.
             return Response(
-                {"detail": "You cannot deactivate your own account here."},
+                {"detail": "You cannot remove your own account here."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        person.is_active = False
-        person.save(update_fields=["is_active"])
-        Profile.objects.filter(user=person).update(
-            is_deactivated=True, deactivated_at=timezone.now()
-        )
-        return Response({"id": person.id, "is_active": False})
+        if person.is_superuser or _is_staff_account(person):
+            return Response(
+                {"detail": "Remove their admin access first, then remove the account."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if request.data.get("confirm_username") != person.username:
+            return Response(
+                {"confirm_username": ["Type the username exactly to confirm."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        person_id = person.id
+        person.delete()
+        return Response({"id": person_id, "deleted": True})
+
+
+class RevokeStaffView(APIView):
+    """POST /api/accounts/admin-portal/people/<id>/revoke-staff/
+
+    Takes admin access away: the account goes back to a student, the same
+    change `manage.py make_staff --revoke` makes. The person keeps their
+    account and everything they wrote.
+
+    You cannot do it to yourself, which also means the last admin can never
+    remove the last admin: whoever is calling is staff, and is never the
+    target, so at least one staff account is always left standing.
+    """
+
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
+
+    def post(self, request, pk):
+        person = generics.get_object_or_404(User.objects.select_related("profile"), pk=pk)
+
+        if person == request.user:
+            return Response(
+                {"detail": "You cannot remove your own admin access."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not _is_staff_account(person):
+            return Response(
+                {"detail": "That account is not an admin."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        Profile.objects.filter(user=person).update(user_type=Profile.UserType.STUDENT)
+        return Response({"id": person.id, "user_type": Profile.UserType.STUDENT})
+
+
+def _is_staff_account(user):
+    profile = getattr(user, "profile", None)
+    return getattr(profile, "user_type", None) == Profile.UserType.AMAZON_STAFF
 
 
 class AdminFeedbackSerializer(serializers.ModelSerializer):

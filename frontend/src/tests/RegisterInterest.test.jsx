@@ -3,17 +3,20 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import RegisterInterest from "../pages/RegisterInterest.jsx";
+import { AuthProvider } from "../auth.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
 // Registering interest is one tick box now. It used to be a six field form
 // asking for a name, email, role and pathway the site already held, which is
 // what these tests used to drive.
 
-const SIGNED_IN = { user: { id: 1, username: "ada" }, checked: true, refresh: vi.fn() };
-const SIGNED_OUT = { user: null, checked: true, refresh: vi.fn() };
+// Signed in or out is decided by the fake server's answer to /me/, not by
+// vi.mock: the test files share modules (isolate: false), so a mocked auth.jsx
+// can lose a race with another file that loaded the real one.
+const SIGNED_IN = { id: 1, username: "ada" };
+const SIGNED_OUT = null;
 
 let auth = SIGNED_IN;
-vi.mock("../auth.jsx", () => ({ useAuth: () => auth }));
 
 // vi.stubGlobal swaps fetch for a fake server, so the real page code runs
 // without Django. `sent` records each POST body.
@@ -22,6 +25,9 @@ function fakeServer(reply = { status: 201, body: { id: 1, pathway: "digital" } }
   vi.stubGlobal(
     "fetch",
     vi.fn(async (url, options = {}) => {
+      if (url.endsWith("/api/accounts/me/")) {
+        return auth ? Response.json(auth) : Response.json({}, { status: 401 });
+      }
       if (url.endsWith("/api/accounts/csrf/")) {
         return Response.json({ csrf_token: "test-token" });
       }
@@ -43,31 +49,34 @@ afterEach(() => {
 function renderPage() {
   return render(
     <MemoryRouter initialEntries={["/register-interest"]}>
-      <RegisterInterest />
+      <AuthProvider>
+        <RegisterInterest />
+      </AuthProvider>
     </MemoryRouter>,
   );
 }
 
-const tickBox = () => screen.getByLabelText("I'm interested in an Amazon placement");
+// Found with findBy: the page waits for the sign-in check first.
+const tickBox = () => screen.findByLabelText("I'm interested in an Amazon placement");
 const submit = () => screen.getByRole("button", { name: "Register interest" });
 
 describe("Register your interest", () => {
-  it("asks one question, not six", () => {
+  it("asks one question, not six", async () => {
     fakeServer();
     renderPage();
 
-    expect(tickBox()).toBeInTheDocument();
+    expect(await tickBox()).toBeInTheDocument();
     for (const gone of ["Full name", "Email", "I am a", "Pathway"]) {
       expect(screen.queryByLabelText(gone)).not.toBeInTheDocument();
     }
   });
 
-  it("says it will use what the account already holds", () => {
+  it("says it will use what the account already holds", async () => {
     fakeServer();
     renderPage();
 
     expect(
-      screen.getByText("We send the name, email and pathway already on your account."),
+      await screen.findByText("We send the name, email and pathway already on your account."),
     ).toBeInTheDocument();
   });
 
@@ -76,7 +85,7 @@ describe("Register your interest", () => {
     const user = userEvent.setup({ delay: null });
     renderPage();
 
-    await user.click(tickBox());
+    await user.click(await tickBox());
     await user.click(submit());
 
     await waitFor(() => expect(sent).toHaveLength(1));
@@ -90,7 +99,7 @@ describe("Register your interest", () => {
     const user = userEvent.setup({ delay: null });
     renderPage();
 
-    await user.click(tickBox());
+    await user.click(await tickBox());
     await user.click(submit());
 
     expect(await screen.findByText(/interest in the Digital pathway has been sent/)).toBeInTheDocument();
@@ -102,7 +111,7 @@ describe("Register your interest", () => {
     const user = userEvent.setup({ delay: null });
     renderPage();
 
-    await user.click(tickBox());
+    await user.click(await tickBox());
     await user.click(submit());
 
     expect(
@@ -115,13 +124,14 @@ describe("Register your interest", () => {
     const user = userEvent.setup({ delay: null });
     renderPage();
 
+    await tickBox(); // wait for the form
     await user.click(submit());
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Tick the box to register your interest.",
     );
     expect(sent).toHaveLength(0);
-    expect(tickBox()).toHaveFocus();
+    expect(await tickBox()).toHaveFocus();
   });
 
   it("reports a server error rather than pretending it sent", async () => {
@@ -129,7 +139,7 @@ describe("Register your interest", () => {
     const user = userEvent.setup({ delay: null });
     renderPage();
 
-    await user.click(tickBox());
+    await user.click(await tickBox());
     await user.click(submit());
 
     expect(await screen.findByRole("alert")).toBeInTheDocument();
@@ -143,7 +153,7 @@ describe("Register your interest", () => {
       renderPage();
 
       expect(
-        screen.getByText("This one needs an account, so we do not ask you for details the site already holds."),
+        await screen.findByText("This one needs an account, so we do not ask you for details the site already holds."),
       ).toBeInTheDocument();
       expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
       expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute("href", "/login");
@@ -159,7 +169,7 @@ describe("Register your interest", () => {
       renderPage();
 
       expect(
-        screen.getByText("It is optional. Everything else on the site works without it."),
+        await screen.findByText("It is optional. Everything else on the site works without it."),
       ).toBeInTheDocument();
     });
   });
@@ -176,9 +186,10 @@ describe("Register your interest", () => {
     const user = userEvent.setup({ delay: null });
     const { container } = renderPage();
 
+    await tickBox();
     await expectNoAxeViolations(container);
 
-    await user.click(tickBox());
+    await user.click(await tickBox());
     await user.click(submit());
     await screen.findByRole("heading", { name: "Thanks, you are on the list" });
     await expectNoAxeViolations(container);
