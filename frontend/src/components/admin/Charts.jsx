@@ -18,6 +18,18 @@ import { useT } from "../../i18n/I18nProvider.jsx";
  * reduce and nothing for prefers-reduced-motion to turn off.
  */
 
+/**
+ * Which of the palette's seven series a mark takes, by position.
+ *
+ * The palette is ORDERED so that neighbours differ in lightness, not just hue
+ * (styles.css explains why, and `npm run check:palette` measures it), so the
+ * position in the list is the whole point: picking by key name would put teal
+ * next to green and lose both in greyscale. Beyond seven it wraps, which is
+ * more series than any chart here has.
+ */
+const PALETTE_SIZE = 7;
+export const toneFor = (index) => `s${(index % PALETTE_SIZE) + 1}`;
+
 /** A data table saying exactly what the chart says, for screen readers. */
 function ChartTable({ caption, rows, columns }) {
   const t = useT();
@@ -89,10 +101,10 @@ export function GroupedBars({ title, rows, series, caption }) {
             {rows.map((row) => (
               <div className="admin-bars__group" key={row.label}>
                 <div className="admin-bars__stack">
-                  {series.map((one) => (
+                  {series.map((one, index) => (
                     <span
                       key={one.key}
-                      className={`admin-bars__bar admin-bars__bar--${one.key}`}
+                      className={`admin-bars__bar admin-bars__bar--${toneFor(index)}`}
                       style={{ height: `${((row.values[one.key] ?? 0) / most) * 100}%` }}
                     />
                   ))}
@@ -103,9 +115,9 @@ export function GroupedBars({ title, rows, series, caption }) {
           </div>
 
           <ul className="admin-key" aria-hidden="true">
-            {series.map((one) => (
+            {series.map((one, index) => (
               <li key={one.key}>
-                <span className={`admin-key__swatch admin-key__swatch--${one.key}`} />
+                <span className={`admin-key__swatch admin-key__swatch--${toneFor(index)}`} />
                 {one.label}
               </li>
             ))}
@@ -131,10 +143,11 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 /**
  * A donut, e.g. interest by pathway.
  *
- * Only two colours exist on this site, so segments alternate between them and
- * are told apart by the key and the percentages rather than by hue: nothing
- * here rests on colour alone, which is the same rule the distance chips and
- * the "selected" tag already follow.
+ * Segments take their colour from the admin data palette by POSITION, which
+ * is ordered so neighbours differ in lightness as well as hue (see
+ * styles.css). They are still told apart by the key and the percentages
+ * rather than by hue: nothing here rests on colour alone, which is the same
+ * rule the distance chips and the "selected" tag already follow.
  */
 export function Donut({ title, segments, caption }) {
   const t = useT();
@@ -162,7 +175,7 @@ export function Donut({ title, segments, caption }) {
         percent: Math.round(share * 100),
         length: share * CIRCUMFERENCE,
         offset: -travelled * CIRCUMFERENCE,
-        tone: index % 2 === 0 ? "orange" : "blue",
+        tone: toneFor(index),
       };
       travelled += share;
       return piece;

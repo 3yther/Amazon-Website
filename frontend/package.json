@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:palette": "node scripts/check-palette.mjs"
   },
   "dependencies": {
     "react": "19.3.0",

@@ -20,6 +20,7 @@ Who it's for: students (16 to 18), parents and guardians, teachers and schools, 
 ## Design rules
 
 - Colours: Amazon Orange #FF9900 and Amazon Dark Blue #232F3E on off-white #FAFAF7. No purple, no gradients.
+  The one exception is the Admin Portal's charts, below.
 - Square buttons with a small radius, no pill shapes. SVG line icons, no emoji.
 - Write "T-Level" and "T-Levels" with a hyphen. Only exception: the exact title of a source we cite.
 - No em dashes. No filler text. No fake reviews, numbers or accounts.
@@ -28,6 +29,32 @@ Who it's for: students (16 to 18), parents and guardians, teachers and schools, 
 - Any animation has to stop with reduced motion.
 - Aim for WCAG 2.2 AA.
 - Orange is too faint for text (about 2:1), so only use it for decoration and fills. Text, focus rings and selected states are dark blue.
+
+### The Admin Portal's data palette (the one colour exception)
+
+Charts with six series cannot be read in two colours, so `styles.css` defines
+seven data colours scoped to `.admin-shell`: orange and dark blue first, then
+sky, teal, amber, green and a soft neutral. Still no purple and no gradients,
+and they are solid fills with a pale tint of each for the area under a line.
+
+Rules that come with the exception:
+
+- **Admin only.** They are defined under `.admin-shell` and no public page can
+  reach them. Nothing outside the Admin Portal may use them.
+- **Ordered by lightness, not hue.** Neighbouring series alternate dark and
+  light so a chart survives greyscale and the colour-vision filters. Picking
+  by hue would put teal next to green and lose both.
+- **Colour is never the only signal.** Every series has a label in the key and
+  its own row in the `ChartTable` underneath. Every KPI change carries an arrow
+  and a sign as well as a colour, and up is not always good (open reports going
+  up is bad), so the card says what the direction means.
+- **Every mark has an edge.** Orange is 2.14:1 on white and amber and sky are
+  fainter, so bars, swatches and ring segments are drawn with
+  `--admin-mark-edge`. The edge makes the mark findable; the fill only tells it
+  apart from its neighbours.
+- **Four themes.** Light, dark, high contrast and dark-high-contrast each have
+  their own values. `npm run check:palette` measures every adjacent gap and
+  every edge, in all four, and fails if one drifts too close.
 
 ## Conventions
 
