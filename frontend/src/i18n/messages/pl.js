@@ -9,6 +9,13 @@ const pl = {
     settingHint: "Dziewięć języków oprócz angielskiego, tłumaczonych maszynowo. Wiążąca jest wersja angielska.",
   },
 
+  cookieNotice: {
+    label: "Pliki cookie",
+    text: "Używamy tylko plików cookie potrzebnych do działania strony. Bez śledzenia i reklam.",
+    link: "Polityka plików cookie",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Ta strona została przetłumaczona maszynowo ({language}), więc niektóre sformułowania mogą być nieprecyzyjne. " +
@@ -71,7 +78,7 @@ const pl = {
       step: "Krok",
       browse: { title: "Przeglądaj materiały", text: "Poradniki, materiały i filmy dla wszystkich pięciu ścieżek.", link: "Przeglądaj materiały" },
       register: { title: "Zgłoś zainteresowanie", text: "Napisz nam, którą ścieżkę chcesz poznać.", link: "Zgłoś zainteresowanie" },
-      hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem." },
+      hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem.", link: "Kontakt" },
       getInvolved: { title: "Dołącz", text: "Zarejestruj się, aby zadawać pytania i odpowiadać w Społeczności oraz mieć swoje ustawienia na każdym urządzeniu.", link: "Zarejestruj się" },
     },
   },
@@ -165,6 +172,12 @@ const pl = {
       title: "Zapytaj człowieka",
       text: "Porozmawiaj z nauczycielem lub doradcą zawodowym. Możesz też bezpłatnie zadzwonić do National Careers Service pod numer",
     },
+    faq: {
+      label: "Pytania",
+      title: "Masz więcej pytań?",
+      text: "Strona O T-Levels odpowiada na najczęstsze, na przykład o praktykach, ocenach i kosztach.",
+      link: "Przeczytaj najczęstsze pytania",
+    },
   },
 
   quiz: {
@@ -236,6 +249,7 @@ const pl = {
     Feedback: "Opinie",
     "Admin Portal": "Panel administratora",
     "Page not found": "Nie znaleziono strony",
+    Settings: "Ustawienia",
   },
 
   footer: {
@@ -967,11 +981,13 @@ const pl = {
     count: "Liczba",
     share: "Udział",
     allOf: "Wszystkie",
+    typeToConfirm: "Wpisz {text}, aby potwierdzić",
     actionFailed: "Nie udało się. Spróbuj ponownie.",
     tabs: {
       overview: "Przegląd",
       interest: "Zainteresowanie",
       reports: "Zgłoszone wpisy",
+      posts: "Społeczność",
       feedback: "Opinie",
       people: "Osoby",
     },
@@ -1049,16 +1065,35 @@ const pl = {
       filter: "Typ konta",
       caption: "Konta na stronie",
       empty: "Żadne konto nie pasuje.",
-      active: "Aktywne",
-      deactivated: "Zdezaktywowane",
-      deactivate: "Dezaktywuj",
-      deactivateTitle: "Dezaktywować to konto?",
-      deactivateBody: "{username} nie będzie mógł się zalogować. Nie cofnie tego samodzielnie, tylko personel.",
+      remove: "Usuń konto",
+      removeTitle: "Usunąć to konto na stałe?",
+      removeBody: "Konto {username} zostanie usunięte z bazy danych razem ze wszystkimi pytaniami i odpowiedziami, które napisał(a). Nie będzie już można się zalogować i nikt nie może tego cofnąć. Przesłane opinie zostają, bez nazwy użytkownika.",
+      revoke: "Odbierz dostęp administratora",
+      revokeTitle: "Odebrać dostęp administratora?",
+      revokeBody: "{username} wraca do roli ucznia i nie może już otwierać Panelu administratora. Konto i wszystko, co napisał(a), pozostaje bez zmian.",
       columns: {
         username: "Nazwa użytkownika",
         type: "Typ",
         joined: "Dołączył",
         posts: "Wpisy",
+        actions: "Działania",
+      },
+    },
+    posts: {
+      search: "Szukaj wpisów i autorów",
+      show: "Pokaż",
+      questions: "Pytania",
+      answers: "Odpowiedzi",
+      caption: "Wszystkie wpisy Społeczności",
+      empty: "Żaden wpis nie pasuje.",
+      replyTo: "Odpowiedź na: {title}",
+      answerCountOne: "1 odpowiedź",
+      answerCount: "Odpowiedzi: {count}",
+      deleteQuestionBody: "To usuwa pytanie i jego odpowiedzi ({count}) na stałe. Ukrycie zgłoszonego wpisu można cofnąć; tego nie.",
+      columns: {
+        post: "Wpis",
+        author: "Autor",
+        posted: "Dodano",
         state: "Stan",
         actions: "Działania",
       },
@@ -1067,11 +1102,11 @@ const pl = {
 
   settings: {
     label: "Ustawienia",
-    title: "Dostępność",
+    title: "Ustawienia",
     lead: "Zmień, jak T-SMILE wygląda i działa dla Ciebie. Po zalogowaniu te ustawienia działają na każdym urządzeniu; bez logowania zostają w tej przeglądarce.",
     signInPrompt: "Zaloguj się, aby tym zarządzać.",
     tabs: {
-      sightLoss: "Wzrok",
+      sightLoss: "Dostępność",
       display: "Wygląd",
       language: "Język",
       security: "Bezpieczeństwo",
@@ -1139,6 +1174,7 @@ const pl = {
       confirm: "Potwierdź nowe hasło",
       saving: "Zapisywanie",
       submit: "Zmień hasło",
+      note: "Zmiana hasła wyloguje Cię na Twoich innych urządzeniach.",
     },
     account: {
       saved: "Profil zapisany.",
@@ -1154,13 +1190,21 @@ const pl = {
       loggingOut: "Wylogowywanie",
       logOut: "Wyloguj się",
       dangerLabel: "Strefa zagrożenia",
-      dangerText: "Dezaktywacja konta wylogowuje Cię i blokuje logowanie, dopóki konto nie zostanie ponownie aktywowane.",
+      dangerText: "Dezaktywacja konta usuwa je na stałe: wylogowuje Cię i usuwa konto oraz wszystko, co napisałeś(aś). Tego nie można cofnąć.",
       deactivate: "Dezaktywuj konto",
       confirmText: "Wpisz hasło, aby potwierdzić. Zostaniesz od razu wylogowany.",
       password: "Hasło",
       deactivating: "Dezaktywowanie",
       wrongPassword: "Nieprawidłowe hasło.",
+      editNote: "Zmiana adresu e-mail zmienia to, dokąd trafiają e-maile do resetu hasła.",
+      confirmTitle: "Dezaktywować konto?",
+      confirmIntro: "Oto co się stanie:",
+      whatSignOut: "Od razu zostaniesz wylogowany.",
+      whatDeleted: "Twoje konto zostanie usunięte na zawsze i nie da się tego cofnąć.",
+      whatPosts: "Twoje posty w Społeczności, ustawienia i historia czatu też zostaną usunięte.",
+      continue: "Dalej",
     },
+    eyebrow: "Dostępność i konto",
   },
 
   resources: {

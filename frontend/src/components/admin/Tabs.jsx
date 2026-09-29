@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  adminDeactivate,
+  adminDeletePost,
   adminFeedback,
   adminOverview,
   adminPeople,
+  adminPosts,
+  adminRemoveAccount,
   adminReportAction,
   adminReports,
+  adminRevokeStaff,
   getInterestSubmissions,
 } from "../../api.js";
 import { useAuth } from "../../auth.jsx";
@@ -16,7 +19,7 @@ import { Donut, GroupedBars } from "./Charts.jsx";
 import ConfirmDialog from "./ConfirmDialog.jsx";
 import { Folded, Nothing, StaffList, known, useStaffList } from "./StaffList.jsx";
 
-// The Admin Portal's five tabs. Everything they call needs Amazon staff and
+// The Admin Portal's six tabs. Everything they call needs Amazon staff and
 // the PIN; the server checks both, and the page only ever gets here once the
 // PIN is in (see AdminPortal.jsx).
 
@@ -342,6 +345,144 @@ export function FeedbackTab() {
   );
 }
 
+/* ---------- Community ---------- */
+
+/**
+ * Every question and answer, so staff can take one down without waiting for a
+ * report. Deleting asks first, and says what else goes with it.
+ */
+export function PostsTab() {
+  const t = useT();
+  const [kind, setKind] = useState("question");
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
+  const [confirming, setConfirming] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [problem, setProblem] = useState("");
+
+  const filters = useMemo(() => ({ kind, q: query }), [kind, query]);
+  const list = useStaffList(adminPosts, filters);
+
+  const runSearch = useCallback(
+    (event) => {
+      event.preventDefault();
+      setQuery(search.trim());
+    },
+    [search],
+  );
+
+  async function remove(post) {
+    setProblem("");
+    setBusy(true);
+    try {
+      await adminDeletePost(post.kind, post.id);
+      list.reload();
+    } catch {
+      setProblem(t("admin.actionFailed"));
+    } finally {
+      setBusy(false);
+      setConfirming(null);
+    }
+  }
+
+  return (
+    <>
+      {problem && <FormError message={problem} />}
+
+      <form className="admin-filters" onSubmit={runSearch} role="search">
+        <label className="label" htmlFor="admin-posts-search">
+          {t("admin.posts.search")}
+        </label>
+        <input
+          id="admin-posts-search"
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        <label className="label" htmlFor="admin-posts-kind">
+          {t("admin.posts.show")}
+        </label>
+        <select id="admin-posts-kind" value={kind} onChange={(event) => setKind(event.target.value)}>
+          <option value="question">{t("admin.posts.questions")}</option>
+          <option value="answer">{t("admin.posts.answers")}</option>
+        </select>
+        <button type="submit" className="button">
+          {t("community.searchButton")}
+        </button>
+      </form>
+
+      <StaffList
+        label={t("admin.tabs.posts")}
+        caption={t("admin.posts.caption")}
+        empty={t("admin.posts.empty")}
+        {...list}
+      >
+        <thead>
+          <tr>
+            {["post", "author", "posted", "state", "actions"].map((column) => (
+              <th key={column} scope="col">
+                {t(`admin.posts.columns.${column}`)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {(list.data?.results ?? []).map((row) => (
+            <tr key={`${row.kind}-${row.id}`}>
+              <td>
+                {row.kind === "answer" ? (
+                  <>
+                    <span className="label">{t("admin.posts.replyTo", { title: row.title })}</span>
+                    <Folded text={row.body} />
+                  </>
+                ) : (
+                  <>
+                    <strong>{row.title}</strong>
+                    <Folded text={row.body} />
+                    <span className="label">
+                      {t(row.answers === 1 ? "admin.posts.answerCountOne" : "admin.posts.answerCount", {
+                        count: row.answers,
+                      })}
+                    </span>
+                  </>
+                )}
+              </td>
+              <td>{row.author || <Nothing />}</td>
+              <td>{formatDate(row.created_at)}</td>
+              <td>{row.hidden ? t("admin.reports.hidden") : t("admin.reports.live")}</td>
+              <td>
+                <button
+                  type="button"
+                  className="button button--danger"
+                  disabled={busy}
+                  onClick={() => setConfirming(row)}
+                >
+                  {t("admin.reports.delete")}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </StaffList>
+
+      {confirming && (
+        <ConfirmDialog
+          title={t("admin.reports.deleteTitle")}
+          body={
+            confirming.kind === "question"
+              ? t("admin.posts.deleteQuestionBody", { count: confirming.answers })
+              : t("admin.reports.deleteAnswerBody")
+          }
+          confirmLabel={t("admin.reports.delete")}
+          busy={busy}
+          onConfirm={() => remove(confirming)}
+          onCancel={() => setConfirming(null)}
+        />
+      )}
+    </>
+  );
+}
+
 /* ---------- People ---------- */
 
 export function PeopleTab() {
@@ -350,6 +491,7 @@ export function PeopleTab() {
   const [userType, setUserType] = useState("");
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
+  // What is being confirmed: { kind: "remove" | "revoke", person }.
   const [confirming, setConfirming] = useState(null);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState("");
@@ -365,11 +507,11 @@ export function PeopleTab() {
     [search],
   );
 
-  async function deactivate(person) {
+  async function run(action) {
     setProblem("");
     setBusy(true);
     try {
-      await adminDeactivate(person.id);
+      await action();
       list.reload();
     } catch {
       setProblem(t("admin.actionFailed"));
@@ -378,6 +520,9 @@ export function PeopleTab() {
       setConfirming(null);
     }
   }
+
+  const remove = (person, typed) => run(() => adminRemoveAccount(person.id, typed));
+  const revoke = (person) => run(() => adminRevokeStaff(person.id));
 
   return (
     <>
@@ -421,7 +566,7 @@ export function PeopleTab() {
       >
         <thead>
           <tr>
-            {["username", "type", "joined", "posts", "state", "actions"].map((column) => (
+            {["username", "type", "joined", "posts", "actions"].map((column) => (
               <th key={column} scope="col">
                 {t(`admin.people.columns.${column}`)}
               </th>
@@ -429,39 +574,65 @@ export function PeopleTab() {
           </tr>
         </thead>
         <tbody>
-          {(list.data?.results ?? []).map((row) => (
-            <tr key={row.id}>
-              <td>{row.username}</td>
-              <td>{row.user_type ? known(t, `account.roles.${row.user_type}`, row.user_type) : <Nothing />}</td>
-              <td>{formatDate(row.date_joined)}</td>
-              <td>{formatNumber(row.questions + row.answers)}</td>
-              <td>{row.is_active ? t("admin.people.active") : t("admin.people.deactivated")}</td>
-              <td>
-                {row.is_active && row.username !== user?.username ? (
-                  <button
-                    type="button"
-                    className="button button--danger"
-                    disabled={busy}
-                    onClick={() => setConfirming(row)}
-                  >
-                    {t("admin.people.deactivate")}
-                  </button>
-                ) : (
-                  <Nothing />
-                )}
-              </td>
-            </tr>
-          ))}
+          {(list.data?.results ?? []).map((row) => {
+            const isYou = row.username === user?.username;
+            const isAdmin = row.user_type === "amazon_staff";
+            return (
+              <tr key={row.id}>
+                <td>{row.username}</td>
+                <td>{row.user_type ? known(t, `account.roles.${row.user_type}`, row.user_type) : <Nothing />}</td>
+                <td>{formatDate(row.date_joined)}</td>
+                <td>{formatNumber(row.questions + row.answers)}</td>
+                <td>
+                  {isYou ? (
+                    <Nothing />
+                  ) : isAdmin ? (
+                    // An admin is not removed in one step: their access goes
+                    // first, and only then can the account itself.
+                    <button
+                      type="button"
+                      className="button"
+                      disabled={busy}
+                      onClick={() => setConfirming({ kind: "revoke", person: row })}
+                    >
+                      {t("admin.people.revoke")}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="button button--danger"
+                      disabled={busy}
+                      onClick={() => setConfirming({ kind: "remove", person: row })}
+                    >
+                      {t("admin.people.remove")}
+                    </button>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </StaffList>
 
-      {confirming && (
+      {confirming?.kind === "remove" && (
         <ConfirmDialog
-          title={t("admin.people.deactivateTitle")}
-          body={t("admin.people.deactivateBody", { username: confirming.username })}
-          confirmLabel={t("admin.people.deactivate")}
+          title={t("admin.people.removeTitle")}
+          body={t("admin.people.removeBody", { username: confirming.person.username })}
+          confirmLabel={t("admin.people.remove")}
+          confirmText={confirming.person.username}
           busy={busy}
-          onConfirm={() => deactivate(confirming)}
+          onConfirm={(typed) => remove(confirming.person, typed)}
+          onCancel={() => setConfirming(null)}
+        />
+      )}
+
+      {confirming?.kind === "revoke" && (
+        <ConfirmDialog
+          title={t("admin.people.revokeTitle")}
+          body={t("admin.people.revokeBody", { username: confirming.person.username })}
+          confirmLabel={t("admin.people.revoke")}
+          busy={busy}
+          onConfirm={() => revoke(confirming.person)}
           onCancel={() => setConfirming(null)}
         />
       )}

@@ -2,13 +2,8 @@ import { Link } from "react-router-dom";
 import parentPhoto from "../assets/audience-parent.jpg";
 import studentPhoto from "../assets/audience-student.jpg";
 import teacherPhoto from "../assets/audience-teacher.jpg";
-import businessPhoto from "../assets/pathway-business.jpg";
-import digitalPhoto from "../assets/pathway-digital.jpg";
-import engineeringPhoto from "../assets/pathway-engineering.jpg";
-import financePhoto from "../assets/pathway-finance.jpg";
-import mediaPhoto from "../assets/pathway-media.jpg";
 import { useT } from "../i18n/I18nProvider.jsx";
-import { ArrowIcon } from "./Icons.jsx";
+import { ArrowIcon, PATHWAY_ICONS } from "./Icons.jsx";
 
 // Homepage sections below the hero (see pages/Home.jsx), in page order.
 
@@ -84,20 +79,6 @@ export function AudienceCards({ selected, onSelect }) {
 /* ---------- Pathway tiles ---------- */
 
 // Each tile opens the resources page filtered to that pathway.
-// Photos from Pexels (free to use):
-//   pathway-digital.jpg: ThisIsEngineering, https://www.pexels.com/photo/female-software-engineer-coding-on-computer-3861951/
-//   pathway-business.jpg: Pavel Danilyuk, https://www.pexels.com/photo/three-people-working-in-the-office-7654168/
-//   pathway-media.jpg: cottonbro studio, https://www.pexels.com/photo/a-cameraman-recording-a-scene-6883811/
-//   pathway-finance.jpg: Mikhail Nilov, https://www.pexels.com/photo/woman-in-black-long-sleeve-shirt-8297043/
-//   pathway-engineering.jpg: Rizky Rafael, https://www.pexels.com/photo/man-in-green-uniform-holding-a-machine-4281613/
-const PATHWAYS = [
-  { slug: "digital", photo: digitalPhoto },
-  { slug: "business", photo: businessPhoto },
-  { slug: "media", photo: mediaPhoto },
-  { slug: "finance", photo: financePhoto },
-  { slug: "engineering", photo: engineeringPhoto },
-];
-
 export function PathwayTiles() {
   const t = useT();
   return (
@@ -109,17 +90,12 @@ export function PathwayTiles() {
       </div>
 
       <ul className="pathway-grid">
-        {PATHWAYS.map(({ slug, photo }) => (
+        {Object.entries(PATHWAY_ICONS).map(([slug, Icon]) => (
           <li key={slug}>
             <Link className="pathway-tile" to={`/resources?pathway=${slug}`}>
-              {/* Decorative: the pathway's name beside it carries the meaning. */}
-              <img
-                className="pathway-tile__photo"
-                src={photo}
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
+              <span className="pathway-tile__icon" aria-hidden="true">
+                <Icon />
+              </span>
               <span className="pathway-tile__name">{t(`pathways.${slug}`)}</span>
               <span className="pathway-tile__summary">{t(`home.pathways.${slug}`)}</span>
               <ArrowIcon />
@@ -133,11 +109,11 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
-// The four steps. "Hear back" has no link because there's nowhere to go.
+// The four steps. Each one links to the page it talks about.
 const STEPS = [
   { key: "browse", link: "/resources" },
   { key: "register", link: "/register-interest" },
-  { key: "hearBack" },
+  { key: "hearBack", link: "/contact" },
   { key: "getInvolved", link: "/register" },
 ];
 

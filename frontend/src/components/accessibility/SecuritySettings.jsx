@@ -59,6 +59,8 @@ export default function SecuritySettings({ lastChanged }) {
         </p>
       )}
 
+      <p className="field__hint">{t("settings.security.note")}</p>
+
       <form className="account-form" onSubmit={handleSubmit} noValidate>
         {errors.form && <FormError message={errors.form} />}
         {status === "success" && (

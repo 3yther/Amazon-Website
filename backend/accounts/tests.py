@@ -405,24 +405,21 @@ class DeactivateAccountApiTests(APITestCase):
     def test_wrong_password_rejected(self):
         response = self.client.post(DEACTIVATE_URL, {"password": "not-the-password"}, format="json")
         self.assertEqual(response.status_code, 400)
-        self.user.refresh_from_db()
-        self.assertTrue(self.user.is_active)
-        self.assertFalse(self.user.profile.is_deactivated)
+        self.assertTrue(User.objects.filter(username="ada").exists())
 
-    def test_successful_deactivation_signs_out_and_blocks_login(self):
+    def test_successful_deactivation_removes_the_account_and_signs_out(self):
         response = self.client.post(DEACTIVATE_URL, {"password": PASSWORD}, format="json")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, {"success": True})
 
-        self.user.refresh_from_db()
-        self.assertFalse(self.user.is_active)
-        self.assertTrue(self.user.profile.is_deactivated)
-        self.assertIsNotNone(self.user.profile.deactivated_at)
+        # Gone from the database, profile and all, not just switched off.
+        self.assertFalse(User.objects.filter(username="ada").exists())
+        self.assertFalse(Profile.objects.filter(user_id=self.user.pk).exists())
 
         # The session ended...
         self.assertEqual(self.client.get(ME_URL).status_code, 401)
 
-        # ...and a deactivated account cannot sign back in.
+        # ...and there is no account left to sign back in to.
         login_response = self.client.post(
             LOGIN_URL, {"username": "ada", "password": PASSWORD}, format="json"
         )

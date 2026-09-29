@@ -483,7 +483,8 @@ export default {
           ],
           points: [
             "Setările tale de accesibilitate și limba aleasă, ca să rămână când revii.",
-            "Dacă Smiley te-a salutat deja, până închizi fila.",
+            "Dacă Smiley te-a salutat deja și cine i-ai spus că ești, până închizi fila.",
+            "Dacă ai închis mesajul despre cookie-uri.",
           ],
         },
         {

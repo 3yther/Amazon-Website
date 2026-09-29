@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useT } from "../../i18n/I18nProvider.jsx";
 
 /**
@@ -10,15 +10,31 @@ import { useT } from "../../i18n/I18nProvider.jsx";
  *
  * Neither of these fires on one click, on purpose. Hide is one click because
  * it is reversible; these are not.
+ *
+ * `confirmText` makes it harder still: the button stays off until that exact
+ * text has been typed, the way GitHub asks for a repository's name. Used
+ * where a slip of the mouse would delete a person.
  */
-export default function ConfirmDialog({ title, body, confirmLabel, busy, onConfirm, onCancel }) {
+export default function ConfirmDialog({
+  title,
+  body,
+  confirmLabel,
+  confirmText,
+  busy,
+  onConfirm,
+  onCancel,
+}) {
   const t = useT();
   const confirmRef = useRef(null);
+  const typedRef = useRef(null);
+  const [typed, setTyped] = useState("");
+  const armed = !confirmText || typed === confirmText;
 
   // Land on the dialog rather than leaving focus behind on the row, and let
-  // Escape out of it like any other dialog.
+  // Escape out of it like any other dialog. With something to type, focus goes
+  // to the field, because that is the next thing anybody has to do.
   useEffect(() => {
-    confirmRef.current?.focus();
+    (typedRef.current ?? confirmRef.current)?.focus();
     const onKeyDown = (event) => {
       if (event.key === "Escape") onCancel();
     };
@@ -37,13 +53,33 @@ export default function ConfirmDialog({ title, body, confirmLabel, busy, onConfi
       >
         <h2 id="confirm-title">{title}</h2>
         <p>{body}</p>
+        {confirmText && (
+          <div className="field">
+            <label className="label" htmlFor="confirm-typed">
+              {t("admin.typeToConfirm", { text: confirmText })}
+            </label>
+            <input
+              id="confirm-typed"
+              ref={typedRef}
+              type="text"
+              value={typed}
+              autoComplete="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              onChange={(event) => setTyped(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && armed && !busy) onConfirm(typed);
+              }}
+            />
+          </div>
+        )}
         <div className="account-card__actions">
           <button
             type="button"
             className="button button--danger"
             ref={confirmRef}
-            disabled={busy}
-            onClick={onConfirm}
+            disabled={busy || !armed}
+            onClick={() => onConfirm(typed)}
           >
             {busy ? t("admin.working") : confirmLabel}
           </button>

@@ -9,6 +9,7 @@ import {
   InterestTab,
   OverviewTab,
   PeopleTab,
+  PostsTab,
   ReportsTab,
 } from "../components/admin/Tabs.jsx";
 import { formErrors } from "../formErrors.js";
@@ -32,7 +33,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 // thing keeping anybody out: a correct PIN on a student account still gets
 // 403 from every endpoint behind it.
 
-const TAB_IDS = ["overview", "interest", "reports", "feedback", "people"];
+const TAB_IDS = ["overview", "interest", "reports", "posts", "feedback", "people"];
 
 export default function AdminPortal() {
   const t = useT();
@@ -83,6 +84,7 @@ export default function AdminPortal() {
     { id: "overview", label: t("admin.tabs.overview"), content: <OverviewTab /> },
     { id: "interest", label: t("admin.tabs.interest"), content: <InterestTab /> },
     { id: "reports", label: t("admin.tabs.reports"), content: <ReportsTab /> },
+    { id: "posts", label: t("admin.tabs.posts"), content: <PostsTab /> },
     { id: "feedback", label: t("admin.tabs.feedback"), content: <FeedbackTab /> },
     { id: "people", label: t("admin.tabs.people"), content: <PeopleTab /> },
   ];

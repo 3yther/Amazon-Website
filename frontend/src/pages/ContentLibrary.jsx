@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getContent, getPathways } from "../api.js";
-import { AlertIcon, ArrowIcon, LockIcon, PATHWAY_ICONS } from "../components/Icons.jsx";
+import { AlertIcon, ArrowIcon, LockIcon, PATHWAY_ICONS, PlayIcon } from "../components/Icons.jsx";
 import Pictogram from "../components/Pictogram.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
@@ -196,13 +196,47 @@ export default function ContentLibrary() {
   );
 }
 
+// The YouTube video id from a youtube.com or youtu.be link, or null.
+export function youtubeId(link) {
+  try {
+    const url = new URL(link);
+    const host = url.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") return url.pathname.slice(1) || null;
+    if (host === "youtube.com" || host === "m.youtube.com") return url.searchParams.get("v");
+  } catch {
+    // not a link
+  }
+  return null;
+}
+
+// A picture at the top of video cards: the YouTube thumbnail if there is one,
+// otherwise a play button tile. Decoration only.
+function VideoThumbnail({ link }) {
+  const id = link ? youtubeId(link) : null;
+  return (
+    <div className="card__thumb" aria-hidden="true">
+      {id ? (
+        <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" decoding="async" />
+      ) : (
+        <PlayIcon />
+      )}
+    </div>
+  );
+}
+
+// The whole card is one link: the title's link stretches over the card
+// (see .card--link in styles.css), so screen readers still get one clear link.
 function ContentCard({ item }) {
   const t = useT();
   const signupOnly = item.access_level === "signup";
   const PathwayIcon = item.pathway ? PATHWAY_ICONS[item.pathway.slug] : null;
+  const href = item.locked ? null : item.link || item.file;
+  const site = item.link ? siteName(item.link) ?? t("resources.anotherWebsite") : null;
 
   return (
-    <li className="card">
+    <li className="card card--link">
+      {item.content_type === "video" && <VideoThumbnail link={item.link} />}
+
       <div className="card__tags">
         <span className="label card__type">
           <Pictogram name={TYPE_PICTURES[item.content_type]} size="small" />
@@ -214,7 +248,21 @@ function ContentCard({ item }) {
       </div>
 
       {/* h2 because the cards sit straight under the page's h1 */}
-      <h2 className="card__title">{item.title}</h2>
+      <h2 className="card__title">
+        {href ? (
+          <a className="card__link" href={href} target="_blank" rel="noopener noreferrer">
+            {item.title}
+            <span className="sr-only">
+              {site ? `, ${t("resources.openOn", { site })}` : ""} {t("shell.newTab")}
+            </span>
+          </a>
+        ) : (
+          <Link className="card__link" to="/register">
+            {item.title}
+            <span className="sr-only">, {t("resources.signUp")}</span>
+          </Link>
+        )}
+      </h2>
       <p className="card__text">{item.description}</p>
 
       <dl className="card__meta">
@@ -231,29 +279,20 @@ function ContentCard({ item }) {
         </div>
       </dl>
 
-      {item.locked ? (
-        <Link className="card__locked" to="/register">
-          <LockIcon />
-          {t("resources.signUp")}
-        </Link>
-      ) : (
-        <>
-          {item.link && (
-            <a className="button button--primary card__action" href={item.link} target="_blank" rel="noopener noreferrer">
-              {t("resources.openOn", { site: siteName(item.link) ?? t("resources.anotherWebsite") })}
-              <span className="sr-only">, {item.title} {t("shell.newTab")}</span>
-              <ArrowIcon />
-            </a>
-          )}
-          {item.file && (
-            <a className="button button--primary card__action" href={item.file} target="_blank" rel="noopener noreferrer">
-              {t("resources.open")}
-              <span className="sr-only"> {item.title} {t("shell.newTab")}</span>
-              <ArrowIcon />
-            </a>
-          )}
-        </>
-      )}
+      {/* What clicking the card does. Not a separate link, the whole card is. */}
+      <span className="card__cue" aria-hidden="true">
+        {href ? (
+          <>
+            {site ? t("resources.openOn", { site }) : t("resources.open")}
+            <ArrowIcon />
+          </>
+        ) : (
+          <>
+            <LockIcon />
+            {t("resources.signUp")}
+          </>
+        )}
+      </span>
     </li>
   );
 }

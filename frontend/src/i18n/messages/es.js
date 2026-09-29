@@ -9,6 +9,13 @@ const es = {
     settingHint: "Nueve idiomas además del inglés, traducidos automáticamente. La versión en inglés es la que cuenta.",
   },
 
+  cookieNotice: {
+    label: "Cookies",
+    text: "Solo usamos las cookies que la web necesita para funcionar. Sin rastreo ni anuncios.",
+    link: "Política de cookies",
+    ok: "Vale",
+  },
+
   translation: {
     notice:
       "Esta página se ha traducido automáticamente ({language}), así que puede que alguna palabra no sea exacta. " +
@@ -71,7 +78,7 @@ const es = {
       step: "Paso",
       browse: { title: "Ver recursos", text: "Guías, materiales y vídeos para los cinco itinerarios.", link: "Ver recursos" },
       register: { title: "Registra tu interés", text: "Dinos qué itinerario quieres explorar.", link: "Registrar interés" },
-      hearBack: { title: "Recibe respuesta", text: "Revisamos cada solicitud y respondemos por correo electrónico." },
+      hearBack: { title: "Recibe respuesta", text: "Revisamos cada solicitud y respondemos por correo electrónico.", link: "Contacto" },
       getInvolved: { title: "Participa", text: "Regístrate para preguntar y responder en la Comunidad y tener tus ajustes en cualquier dispositivo.", link: "Registrarse" },
     },
   },
@@ -165,6 +172,12 @@ const es = {
       title: "Pregunta a una persona",
       text: "Habla con tu profesor o tu orientador profesional. O llama gratis al National Careers Service al",
     },
+    faq: {
+      label: "Preguntas",
+      title: "¿Tienes más preguntas?",
+      text: "La página Sobre los T-Levels responde a las más comunes, como prácticas, notas y costes.",
+      link: "Leer las preguntas frecuentes",
+    },
   },
 
   quiz: {
@@ -236,6 +249,7 @@ const es = {
     Feedback: "Comentarios",
     "Admin Portal": "Portal de administración",
     "Page not found": "Página no encontrada",
+    Settings: "Ajustes",
   },
 
   footer: {
@@ -967,11 +981,13 @@ const es = {
     count: "Recuento",
     share: "Proporción",
     allOf: "Todas",
+    typeToConfirm: "Escribe {text} para confirmar",
     actionFailed: "No ha funcionado. Inténtalo otra vez.",
     tabs: {
       overview: "Resumen",
       interest: "Interés",
       reports: "Publicaciones denunciadas",
+      posts: "Comunidad",
       feedback: "Comentarios",
       people: "Personas",
     },
@@ -1049,16 +1065,35 @@ const es = {
       filter: "Tipo de cuenta",
       caption: "Cuentas del sitio",
       empty: "Ninguna cuenta coincide.",
-      active: "Activa",
-      deactivated: "Desactivada",
-      deactivate: "Desactivar",
-      deactivateTitle: "¿Desactivar esta cuenta?",
-      deactivateBody: "{username} no podrá iniciar sesión. No puede deshacerlo por su cuenta, solo el personal.",
+      remove: "Eliminar cuenta",
+      removeTitle: "¿Eliminar esta cuenta para siempre?",
+      removeBody: "{username} se elimina de la base de datos, junto con todas las preguntas y respuestas que escribió. Ya no podrá iniciar sesión y nadie puede deshacerlo. Los comentarios que envió se conservan, sin su nombre.",
+      revoke: "Quitar acceso de administrador",
+      revokeTitle: "¿Quitar el acceso de administrador?",
+      revokeBody: "{username} vuelve a ser estudiante y ya no puede abrir el Portal de administración. Su cuenta y todo lo que escribió se quedan como están.",
       columns: {
         username: "Nombre de usuario",
         type: "Tipo",
         joined: "Se unió",
         posts: "Publicaciones",
+        actions: "Acciones",
+      },
+    },
+    posts: {
+      search: "Buscar publicaciones y autores",
+      show: "Mostrar",
+      questions: "Preguntas",
+      answers: "Respuestas",
+      caption: "Todas las publicaciones de la Comunidad",
+      empty: "Ninguna publicación coincide.",
+      replyTo: "Respuesta a: {title}",
+      answerCountOne: "1 respuesta",
+      answerCount: "{count} respuestas",
+      deleteQuestionBody: "Esto elimina la pregunta y sus {count} respuestas para siempre. Ocultar una publicación denunciada se puede deshacer; esto no.",
+      columns: {
+        post: "Publicación",
+        author: "Escrita por",
+        posted: "Publicada",
         state: "Estado",
         actions: "Acciones",
       },
@@ -1067,11 +1102,11 @@ const es = {
 
   settings: {
     label: "Ajustes",
-    title: "Accesibilidad",
+    title: "Ajustes",
     lead: "Cambia cómo se ve y cómo funciona T-SMILE para ti. Con la sesión iniciada, estos ajustes te siguen en cualquier dispositivo; sin sesión, se quedan en este navegador.",
     signInPrompt: "Inicia sesión para gestionar esto.",
     tabs: {
-      sightLoss: "Vista",
+      sightLoss: "Accesibilidad",
       display: "Apariencia",
       language: "Idioma",
       security: "Seguridad",
@@ -1139,6 +1174,7 @@ const es = {
       confirm: "Confirma la contraseña nueva",
       saving: "Guardando",
       submit: "Cambiar contraseña",
+      note: "Cambiar la contraseña cierra tu sesión en tus otros dispositivos.",
     },
     account: {
       saved: "Perfil guardado.",
@@ -1154,13 +1190,21 @@ const es = {
       loggingOut: "Cerrando sesión",
       logOut: "Cerrar sesión",
       dangerLabel: "Zona de peligro",
-      dangerText: "Desactivar tu cuenta cierra tu sesión y bloquea el inicio de sesión hasta que se reactive.",
+      dangerText: "Desactivar tu cuenta la elimina para siempre: cierra tu sesión y borra tu cuenta y todo lo que escribiste. No se puede deshacer.",
       deactivate: "Desactivar la cuenta",
       confirmText: "Escribe tu contraseña para confirmar. Tu sesión se cerrará al momento.",
       password: "Contraseña",
       deactivating: "Desactivando",
       wrongPassword: "Contraseña incorrecta.",
+      editNote: "Si cambias tu email, cambia adónde llegan los emails para restablecer la contraseña.",
+      confirmTitle: "¿Desactivar tu cuenta?",
+      confirmIntro: "Esto es lo que pasa:",
+      whatSignOut: "Se cierra tu sesión al momento.",
+      whatDeleted: "Tu cuenta se borra para siempre y no se puede deshacer.",
+      whatPosts: "Tus publicaciones en la Comunidad, tus ajustes y tu historial de chat también se borran.",
+      continue: "Continuar",
     },
+    eyebrow: "Accesibilidad y cuenta",
   },
 
   resources: {

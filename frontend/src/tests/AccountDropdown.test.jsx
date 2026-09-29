@@ -156,15 +156,12 @@ describe("Signed out", () => {
     expect(screen.queryByRole("menuitem", { name: "Contact Us" })).toBeNull();
   });
 
-  it("holds the language menu, outside the menu's own list", async () => {
-    // A <select> isn't a menu item, so it sits next to the list, not in it.
+  it("doesn't have a language menu (it's the globe button in the header)", async () => {
     signedInAs(null);
     renderHeader();
     await openMenu("Sign in or sign up");
 
-    const picker = screen.getByLabelText("Language");
-    expect(picker.tagName).toBe("SELECT");
-    expect(picker.closest('[role="menu"]')).toBeNull();
+    expect(screen.queryByLabelText("Language")).toBeNull();
   });
 
   it("has no accessibility problems axe can find", async () => {

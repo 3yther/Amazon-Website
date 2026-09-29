@@ -29,6 +29,16 @@ export function ArrowIcon() {
   );
 }
 
+// A play button, for video resources without a thumbnail.
+export function PlayIcon() {
+  return (
+    <Icon>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M10 8.5l5 3.5-5 3.5z" />
+    </Icon>
+  );
+}
+
 export function LockIcon() {
   return (
     <Icon>

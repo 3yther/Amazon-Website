@@ -10,6 +10,13 @@ const pt = {
     settingHint: "Nove idiomas além do inglês, traduzidos automaticamente. A versão em inglês é a que conta.",
   },
 
+  cookieNotice: {
+    label: "Cookies",
+    text: "Só usamos os cookies de que o site precisa para funcionar. Sem rastreio nem anúncios.",
+    link: "Política de Cookies",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Esta página foi traduzida automaticamente ({language}), por isso algumas palavras podem não estar certas. " +
@@ -72,7 +79,7 @@ const pt = {
       step: "Passo",
       browse: { title: "Ver recursos", text: "Guias, materiais e vídeos para os cinco percursos.", link: "Ver recursos" },
       register: { title: "Regista o teu interesse", text: "Diz-nos que percurso queres explorar.", link: "Registar interesse" },
-      hearBack: { title: "Recebe resposta", text: "Analisamos cada pedido e respondemos por email." },
+      hearBack: { title: "Recebe resposta", text: "Analisamos cada pedido e respondemos por email.", link: "Contacto" },
       getInvolved: { title: "Participa", text: "Cria conta para perguntar e responder na Comunidade e manter as tuas definições em qualquer dispositivo.", link: "Criar conta" },
     },
   },
@@ -166,6 +173,12 @@ const pt = {
       title: "Pergunta a uma pessoa",
       text: "Fala com o teu professor ou orientador vocacional. Ou liga grátis para o National Careers Service através do",
     },
+    faq: {
+      label: "Perguntas",
+      title: "Tens mais perguntas?",
+      text: "A página Sobre os T-Levels responde às mais comuns, como estágios, notas e custos.",
+      link: "Ler as perguntas frequentes",
+    },
   },
 
   quiz: {
@@ -237,6 +250,7 @@ const pt = {
     Feedback: "Opinião",
     "Admin Portal": "Portal de administração",
     "Page not found": "Página não encontrada",
+    Settings: "Definições",
   },
 
   footer: {
@@ -968,11 +982,13 @@ const pt = {
     count: "Contagem",
     share: "Proporção",
     allOf: "Todos",
+    typeToConfirm: "Escreve {text} para confirmar",
     actionFailed: "Não resultou. Tenta outra vez.",
     tabs: {
       overview: "Resumo",
       interest: "Interesse",
       reports: "Publicações denunciadas",
+      posts: "Comunidade",
       feedback: "Comentários",
       people: "Pessoas",
     },
@@ -1050,16 +1066,35 @@ const pt = {
       filter: "Tipo de conta",
       caption: "Contas no site",
       empty: "Nenhuma conta corresponde.",
-      active: "Ativa",
-      deactivated: "Desativada",
-      deactivate: "Desativar",
-      deactivateTitle: "Desativar esta conta?",
-      deactivateBody: "{username} deixará de conseguir iniciar sessão. Não pode desfazer isto sozinho, só a equipa.",
+      remove: "Eliminar conta",
+      removeTitle: "Eliminar esta conta para sempre?",
+      removeBody: "{username} é eliminado da base de dados, juntamente com todas as perguntas e respostas que escreveu. Deixa de poder iniciar sessão e ninguém pode desfazer isto. O feedback que enviou fica, sem o nome.",
+      revoke: "Remover acesso de administrador",
+      revokeTitle: "Remover o acesso de administrador?",
+      revokeBody: "{username} volta a ser estudante e deixa de poder abrir o Portal de administração. A conta e tudo o que escreveu ficam como estão.",
       columns: {
         username: "Nome de utilizador",
         type: "Tipo",
         joined: "Entrou",
         posts: "Publicações",
+        actions: "Ações",
+      },
+    },
+    posts: {
+      search: "Pesquisar publicações e autores",
+      show: "Mostrar",
+      questions: "Perguntas",
+      answers: "Respostas",
+      caption: "Todas as publicações da Comunidade",
+      empty: "Nenhuma publicação corresponde.",
+      replyTo: "Resposta a: {title}",
+      answerCountOne: "1 resposta",
+      answerCount: "{count} respostas",
+      deleteQuestionBody: "Isto elimina a pergunta e as suas {count} respostas para sempre. Ocultar uma publicação denunciada pode ser desfeito; isto não.",
+      columns: {
+        post: "Publicação",
+        author: "Escrita por",
+        posted: "Publicada",
         state: "Estado",
         actions: "Ações",
       },
@@ -1068,11 +1103,11 @@ const pt = {
 
   settings: {
     label: "Definições",
-    title: "Acessibilidade",
+    title: "Definições",
     lead: "Muda o aspeto e o comportamento do T-SMILE para ti. Com sessão iniciada, estas definições acompanham-te em qualquer dispositivo; sem sessão, ficam neste navegador.",
     signInPrompt: "Inicia sessão para gerir isto.",
     tabs: {
-      sightLoss: "Visão",
+      sightLoss: "Acessibilidade",
       display: "Aspeto",
       language: "Idioma",
       security: "Segurança",
@@ -1140,6 +1175,7 @@ const pt = {
       confirm: "Confirmar nova palavra-passe",
       saving: "A guardar",
       submit: "Alterar palavra-passe",
+      note: "Mudar a palavra-passe termina a sessão nos teus outros dispositivos.",
     },
     account: {
       saved: "Perfil guardado.",
@@ -1155,13 +1191,21 @@ const pt = {
       loggingOut: "A terminar sessão",
       logOut: "Terminar sessão",
       dangerLabel: "Zona de perigo",
-      dangerText: "Desativar a conta termina a sessão e bloqueia o início de sessão até ser reativada.",
+      dangerText: "Desativar a conta elimina-a para sempre: termina a sessão e remove a conta e tudo o que escreveste. Não pode ser desfeito.",
       deactivate: "Desativar conta",
       confirmText: "Escreve a palavra-passe para confirmar. A sessão termina de imediato.",
       password: "Palavra-passe",
       deactivating: "A desativar",
       wrongPassword: "Palavra-passe incorreta.",
+      editNote: "Mudar o teu email muda para onde vão os emails de recuperação da palavra-passe.",
+      confirmTitle: "Desativar a tua conta?",
+      confirmIntro: "Isto é o que acontece:",
+      whatSignOut: "Terminas a sessão logo.",
+      whatDeleted: "A tua conta é apagada para sempre e isto não pode ser desfeito.",
+      whatPosts: "As tuas publicações na Comunidade, definições e histórico de conversas também são apagados.",
+      continue: "Continuar",
     },
+    eyebrow: "Acessibilidade e conta",
   },
 
   resources: {

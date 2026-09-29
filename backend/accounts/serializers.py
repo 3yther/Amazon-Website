@@ -220,7 +220,14 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class DeactivateAccountSerializer(serializers.Serializer):
-    """Checks the password, then deactivates the account in .save()."""
+    """
+    Checks the password, then removes the account in .save().
+
+    "Deactivate" is the word the person sees, but the account is deleted from
+    the database rather than switched off: nothing is kept to sign in to, and
+    their profile, preferences, questions and answers go with it. Feedback
+    they sent stays, with the sender blanked.
+    """
 
     password = serializers.CharField(
         write_only=True, trim_whitespace=False, style={"input_type": "password"}
@@ -234,9 +241,7 @@ class DeactivateAccountSerializer(serializers.Serializer):
 
     def save(self):
         user = self.context["request"].user
-        user.is_active = False
-        user.save(update_fields=["is_active"])
-        Profile.objects.filter(user=user).update(is_deactivated=True, deactivated_at=timezone.now())
+        user.delete()
         return user
 
 

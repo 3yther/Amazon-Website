@@ -9,6 +9,13 @@ const ro = {
     settingHint: "Nouă limbi pe lângă engleză, traduse automat. Versiunea în engleză este cea care contează.",
   },
 
+  cookieNotice: {
+    label: "Cookie-uri",
+    text: "Folosim doar cookie-urile de care site-ul are nevoie ca să funcționeze. Fără urmărire sau reclame.",
+    link: "Politica privind cookie-urile",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Această pagină a fost tradusă automat ({language}), așa că unele formulări pot fi inexacte. " +
@@ -71,7 +78,7 @@ const ro = {
       step: "Pasul",
       browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
       register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
-      hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },
+      hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email.", link: "Contact" },
       getInvolved: { title: "Implică-te", text: "Creează un cont ca să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.", link: "Creează cont" },
     },
   },
@@ -165,6 +172,12 @@ const ro = {
       title: "Întreabă o persoană",
       text: "Vorbește cu profesorul sau cu consilierul de carieră. Sau sună gratuit la National Careers Service la",
     },
+    faq: {
+      label: "Întrebări",
+      title: "Mai ai întrebări?",
+      text: "Pagina Despre T-Levels răspunde la cele mai comune, de exemplu despre stagii, note și costuri.",
+      link: "Citește întrebările frecvente",
+    },
   },
 
   quiz: {
@@ -236,6 +249,7 @@ const ro = {
     Feedback: "Păreri",
     "Admin Portal": "Panou de administrare",
     "Page not found": "Pagina nu a fost găsită",
+    Settings: "Setări",
   },
 
   footer: {
@@ -967,11 +981,13 @@ const ro = {
     count: "Număr",
     share: "Pondere",
     allOf: "Toate",
+    typeToConfirm: "Scrie {text} pentru a confirma",
     actionFailed: "Nu a mers. Încearcă din nou.",
     tabs: {
       overview: "Prezentare",
       interest: "Interes",
       reports: "Postări raportate",
+      posts: "Comunitate",
       feedback: "Feedback",
       people: "Persoane",
     },
@@ -1049,16 +1065,35 @@ const ro = {
       filter: "Tip de cont",
       caption: "Conturi pe site",
       empty: "Niciun cont nu corespunde.",
-      active: "Activ",
-      deactivated: "Dezactivat",
-      deactivate: "Dezactivează",
-      deactivateTitle: "Dezactivezi acest cont?",
-      deactivateBody: "{username} nu se va mai putea autentifica. Nu poate anula singur, doar personalul.",
+      remove: "Șterge contul",
+      removeTitle: "Ștergi definitiv acest cont?",
+      removeBody: "{username} este șters din baza de date, împreună cu toate întrebările și răspunsurile scrise. Nu se mai poate autentifica, iar nimeni nu poate anula asta. Feedbackul trimis rămâne, fără numele persoanei.",
+      revoke: "Retrage accesul de administrator",
+      revokeTitle: "Retragi accesul de administrator?",
+      revokeBody: "{username} redevine elev și nu mai poate deschide Panoul de administrare. Contul și tot ce a scris rămân neschimbate.",
       columns: {
         username: "Nume de utilizator",
         type: "Tip",
         joined: "Înscris",
         posts: "Postări",
+        actions: "Acțiuni",
+      },
+    },
+    posts: {
+      search: "Caută postări și autori",
+      show: "Arată",
+      questions: "Întrebări",
+      answers: "Răspunsuri",
+      caption: "Toate postările din Comunitate",
+      empty: "Nicio postare nu se potrivește.",
+      replyTo: "Răspuns la: {title}",
+      answerCountOne: "1 răspuns",
+      answerCount: "{count} răspunsuri",
+      deleteQuestionBody: "Aceasta șterge definitiv întrebarea și cele {count} răspunsuri ale ei. Ascunderea unei postări raportate se poate anula; asta nu.",
+      columns: {
+        post: "Postare",
+        author: "Scris de",
+        posted: "Postat",
         state: "Stare",
         actions: "Acțiuni",
       },
@@ -1067,11 +1102,11 @@ const ro = {
 
   settings: {
     label: "Setări",
-    title: "Accesibilitate",
+    title: "Setări",
     lead: "Schimbă cum arată și cum se comportă T-SMILE pentru tine. Când ești autentificat, setările te urmează pe orice dispozitiv; altfel, rămân în acest browser.",
     signInPrompt: "Autentifică-te ca să gestionezi asta.",
     tabs: {
-      sightLoss: "Vedere",
+      sightLoss: "Accesibilitate",
       display: "Afișare",
       language: "Limbă",
       security: "Securitate",
@@ -1139,6 +1174,7 @@ const ro = {
       confirm: "Confirmă parola nouă",
       saving: "Se salvează",
       submit: "Schimbă parola",
+      note: "Dacă îți schimbi parola, ești deconectat pe celelalte dispozitive.",
     },
     account: {
       saved: "Profil salvat.",
@@ -1154,13 +1190,21 @@ const ro = {
       loggingOut: "Se deconectează",
       logOut: "Deconectează-te",
       dangerLabel: "Zonă de pericol",
-      dangerText: "Dezactivarea contului te deconectează și blochează autentificarea până când contul este reactivat.",
+      dangerText: "Dezactivarea contului îl șterge definitiv: te deconectează și elimină contul și tot ce ai scris. Nu se poate anula.",
       deactivate: "Dezactivează contul",
       confirmText: "Introdu parola ca să confirmi. Vei fi deconectat imediat.",
       password: "Parolă",
       deactivating: "Se dezactivează",
       wrongPassword: "Parolă greșită.",
+      editNote: "Dacă îți schimbi adresa de email, se schimbă și unde primești emailurile de resetare a parolei.",
+      confirmTitle: "Îți dezactivezi contul?",
+      confirmIntro: "Iată ce se întâmplă:",
+      whatSignOut: "Ești deconectat imediat.",
+      whatDeleted: "Contul tău este șters definitiv și asta nu se poate anula.",
+      whatPosts: "Postările tale din Comunitate, setările și istoricul chatului sunt șterse și ele.",
+      continue: "Continuă",
     },
+    eyebrow: "Accesibilitate și cont",
   },
 
   resources: {

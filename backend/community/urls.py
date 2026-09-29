@@ -1,6 +1,12 @@
 from django.urls import path
 
-from .moderation_views import ReportActionView, ReportedCountsView, ReportListView
+from .moderation_views import (
+    PostDeleteView,
+    PostListView,
+    ReportActionView,
+    ReportedCountsView,
+    ReportListView,
+)
 from .views import (
     AcceptView,
     AnswerCreateView,
@@ -28,6 +34,12 @@ urlpatterns = [
         "admin-portal/reports/counts/",
         ReportedCountsView.as_view(),
         name="admin-portal-report-counts",
+    ),
+    path("admin-portal/posts/", PostListView.as_view(), name="admin-portal-posts"),
+    path(
+        "admin-portal/posts/<str:kind>/<int:pk>/delete/",
+        PostDeleteView.as_view(),
+        name="admin-portal-post-delete",
     ),
     *[
         path(

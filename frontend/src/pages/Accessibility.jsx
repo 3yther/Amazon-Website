@@ -68,7 +68,7 @@ export default function Accessibility() {
   return (
     <>
       <section className="intro" aria-labelledby="page-title">
-        <p className="label">{t("settings.label")}</p>
+        <p className="label">{t("settings.eyebrow")}</p>
         <h1 id="page-title">{t("settings.title")}</h1>
         <p className="lead">{t("settings.lead")}</p>
       </section>

@@ -173,3 +173,100 @@ class ReportedPostsTests(APITestCase):
 
         self.assertIn(response.status_code, (401, 403))
         self.assertTrue(Question.objects.filter(pk=self.question.pk).exists())
+
+
+POSTS_URL = "/api/community/admin-portal/posts/"
+
+
+@override_settings(ADMIN_PORTAL_PIN=PIN)
+class CommunityPostsTests(APITestCase):
+    """Staff can delete any post, reported or not."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.staff = make_user("staffer", "amazon_staff")
+        cls.author = make_user("ada")
+        cls.other = make_user("bruce")
+        cls.question = Question.objects.create(
+            author=cls.author, title="Which pathway?", body="Torn between two.", topic="amazon"
+        )
+        cls.answer = Answer.objects.create(author=cls.other, question=cls.question, body="Digital.")
+        cls.unreported = Question.objects.create(
+            author=cls.other, title="Nobody reported this", body="Still needs to go.", topic="amazon"
+        )
+
+    def setUp(self):
+        cache.clear()
+        self.client.login(username="staffer", password=PASSWORD)
+        self.client.post(UNLOCK_URL, {"pin": PIN}, format="json")
+
+    def delete(self, kind, post):
+        return self.client.post(f"{POSTS_URL}{kind}/{post.id}/delete/")
+
+    def test_it_lists_questions_including_ones_nobody_reported(self):
+        response = self.client.get(POSTS_URL)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 2)
+        titles = {row["title"] for row in response.data["results"]}
+        self.assertIn("Nobody reported this", titles)
+
+    def test_a_question_row_says_how_many_answers_it_has(self):
+        rows = {row["id"]: row for row in self.client.get(POSTS_URL).data["results"]}
+
+        self.assertEqual(rows[self.question.id]["answers"], 1)
+        self.assertEqual(rows[self.question.id]["kind"], "question")
+
+    def test_it_lists_answers_with_their_question_title(self):
+        response = self.client.get(POSTS_URL, {"kind": "answer"})
+
+        self.assertEqual(response.data["count"], 1)
+        row = response.data["results"][0]
+        self.assertEqual(row["kind"], "answer")
+        self.assertEqual(row["title"], "Which pathway?")
+
+    def test_it_searches_text_and_authors(self):
+        by_text = self.client.get(POSTS_URL, {"q": "Torn between"})
+        by_author = self.client.get(POSTS_URL, {"q": "bruce"})
+
+        self.assertEqual(by_text.data["count"], 1)
+        self.assertEqual(by_author.data["count"], 1)
+
+    def test_staff_can_delete_a_question_nobody_reported(self):
+        response = self.delete("question", self.unreported)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Question.objects.filter(pk=self.unreported.pk).exists())
+
+    def test_deleting_a_question_takes_its_answers_and_says_so(self):
+        response = self.delete("question", self.question)
+
+        self.assertEqual(response.data["answers_deleted"], 1)
+        self.assertFalse(Answer.objects.filter(pk=self.answer.pk).exists())
+
+    def test_staff_can_delete_one_answer_and_leave_the_question(self):
+        response = self.delete("answer", self.answer)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Answer.objects.filter(pk=self.answer.pk).exists())
+        self.assertTrue(Question.objects.filter(pk=self.question.pk).exists())
+
+    def test_an_unknown_kind_or_a_missing_post_is_a_404(self):
+        self.assertEqual(self.client.post(f"{POSTS_URL}chat/1/delete/").status_code, 404)
+        self.assertEqual(self.client.post(f"{POSTS_URL}question/99999/delete/").status_code, 404)
+
+    def test_a_student_cannot_list_or_delete_posts(self):
+        self.client.logout()
+        self.client.login(username="ada", password=PASSWORD)
+
+        self.assertEqual(self.client.get(POSTS_URL).status_code, 403)
+        self.assertEqual(self.delete("question", self.unreported).status_code, 403)
+        self.assertTrue(Question.objects.filter(pk=self.unreported.pk).exists())
+
+    def test_staff_without_the_pin_cannot_list_or_delete_posts(self):
+        self.client.post(LOCK_URL)
+
+        self.assertEqual(self.client.get(POSTS_URL).status_code, 403)
+        self.assertEqual(self.delete("question", self.unreported).status_code, 403)
+        self.assertTrue(Question.objects.filter(pk=self.unreported.pk).exists())
+
