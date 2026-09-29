@@ -10,6 +10,13 @@ const pt = {
     settingHint: "Nove idiomas além do inglês, traduzidos automaticamente. A versão em inglês é a que conta.",
   },
 
+  cookieNotice: {
+    label: "Cookies",
+    text: "Só usamos os cookies de que o site precisa para funcionar. Sem rastreio nem anúncios.",
+    link: "Política de Cookies",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Esta página foi traduzida automaticamente ({language}), por isso algumas palavras podem não estar certas. " +
@@ -166,6 +173,12 @@ const pt = {
       title: "Pergunta a uma pessoa",
       text: "Fala com o teu professor ou orientador vocacional. Ou liga grátis para o National Careers Service através do",
     },
+    faq: {
+      label: "Perguntas",
+      title: "Tens mais perguntas?",
+      text: "A página Sobre os T-Levels responde às mais comuns, como estágios, notas e custos.",
+      link: "Ler as perguntas frequentes",
+    },
   },
 
   quiz: {
@@ -237,6 +250,7 @@ const pt = {
     Feedback: "Opinião",
     "Admin Portal": "Portal de administração",
     "Page not found": "Página não encontrada",
+    Settings: "Definições",
   },
 
   footer: {
@@ -1068,11 +1082,11 @@ const pt = {
 
   settings: {
     label: "Definições",
-    title: "Acessibilidade",
+    title: "Definições",
     lead: "Muda o aspeto e o comportamento do T-SMILE para ti. Com sessão iniciada, estas definições acompanham-te em qualquer dispositivo; sem sessão, ficam neste navegador.",
     signInPrompt: "Inicia sessão para gerir isto.",
     tabs: {
-      sightLoss: "Visão",
+      sightLoss: "Acessibilidade",
       display: "Aspeto",
       language: "Idioma",
       security: "Segurança",
@@ -1140,6 +1154,7 @@ const pt = {
       confirm: "Confirmar nova palavra-passe",
       saving: "A guardar",
       submit: "Alterar palavra-passe",
+      note: "Mudar a palavra-passe termina a sessão nos teus outros dispositivos.",
     },
     account: {
       saved: "Perfil guardado.",
@@ -1161,7 +1176,15 @@ const pt = {
       password: "Palavra-passe",
       deactivating: "A desativar",
       wrongPassword: "Palavra-passe incorreta.",
+      editNote: "Mudar o teu email muda para onde vão os emails de recuperação da palavra-passe.",
+      confirmTitle: "Desativar a tua conta?",
+      confirmIntro: "Isto é o que acontece:",
+      whatSignOut: "Terminas a sessão logo.",
+      whatSignIn: "Não podes voltar a entrar até a equipa reativar a tua conta.",
+      whatPosts: "As tuas publicações na Comunidade ficam com o teu nome de utilizador. Se não quiseres isso, apaga-as antes ou pede-nos na página RGPD e direitos sobre os dados.",
+      continue: "Continuar",
     },
+    eyebrow: "Acessibilidade e conta",
   },
 
   resources: {

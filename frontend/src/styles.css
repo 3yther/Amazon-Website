@@ -2539,3 +2539,52 @@ input.admin-pin__input {
   font-size: 1.75rem;
   font-weight: 800;
 }
+
+/* The one-time cookie note, bottom left so it stays clear of Smiley. */
+.cookie-notice {
+  position: fixed;
+  inset-inline-start: 16px;
+  bottom: 16px;
+  z-index: 25;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: min(26rem, calc(100vw - 112px));
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--orange);
+  border-radius: var(--radius);
+  color: var(--blue);
+}
+
+.cookie-notice p {
+  flex: 1 1 14rem;
+}
+
+/* Phones: there's no room for the logo and the name side by side, so they
+   stack, smaller, without the divider. */
+@media (max-width: 599px) {
+  .site-header__brand {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .site-header__logo {
+    width: 4.75rem;
+  }
+
+  .site-header__brand > .wordmark {
+    border-inline-start: 0;
+    margin-block: 2px 0;
+    padding-block-end: 0;
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .language-menu__code {
+    display: none;
+  }
+}

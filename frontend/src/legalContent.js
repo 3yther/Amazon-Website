@@ -128,7 +128,8 @@ export const COOKIES = {
       paragraphs: ["These are not cookies, and never leave your device."],
       points: [
         "Your accessibility settings and the language you chose, so they stay when you come back.",
-        "Whether Smiley has already said hello, until you close the tab.",
+        "Whether Smiley has said hello, and who you told it you are, until you close the tab.",
+        "Whether you've closed the cookie notice.",
       ],
     },
     {

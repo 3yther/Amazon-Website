@@ -9,6 +9,13 @@ const ro = {
     settingHint: "Nouă limbi pe lângă engleză, traduse automat. Versiunea în engleză este cea care contează.",
   },
 
+  cookieNotice: {
+    label: "Cookie-uri",
+    text: "Folosim doar cookie-urile de care site-ul are nevoie ca să funcționeze. Fără urmărire sau reclame.",
+    link: "Politica privind cookie-urile",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Această pagină a fost tradusă automat ({language}), așa că unele formulări pot fi inexacte. " +
@@ -165,6 +172,12 @@ const ro = {
       title: "Întreabă o persoană",
       text: "Vorbește cu profesorul sau cu consilierul de carieră. Sau sună gratuit la National Careers Service la",
     },
+    faq: {
+      label: "Întrebări",
+      title: "Mai ai întrebări?",
+      text: "Pagina Despre T-Levels răspunde la cele mai comune, de exemplu despre stagii, note și costuri.",
+      link: "Citește întrebările frecvente",
+    },
   },
 
   quiz: {
@@ -236,6 +249,7 @@ const ro = {
     Feedback: "Păreri",
     "Admin Portal": "Panou de administrare",
     "Page not found": "Pagina nu a fost găsită",
+    Settings: "Setări",
   },
 
   footer: {
@@ -1067,11 +1081,11 @@ const ro = {
 
   settings: {
     label: "Setări",
-    title: "Accesibilitate",
+    title: "Setări",
     lead: "Schimbă cum arată și cum se comportă T-SMILE pentru tine. Când ești autentificat, setările te urmează pe orice dispozitiv; altfel, rămân în acest browser.",
     signInPrompt: "Autentifică-te ca să gestionezi asta.",
     tabs: {
-      sightLoss: "Vedere",
+      sightLoss: "Accesibilitate",
       display: "Afișare",
       language: "Limbă",
       security: "Securitate",
@@ -1139,6 +1153,7 @@ const ro = {
       confirm: "Confirmă parola nouă",
       saving: "Se salvează",
       submit: "Schimbă parola",
+      note: "Dacă îți schimbi parola, ești deconectat pe celelalte dispozitive.",
     },
     account: {
       saved: "Profil salvat.",
@@ -1160,7 +1175,15 @@ const ro = {
       password: "Parolă",
       deactivating: "Se dezactivează",
       wrongPassword: "Parolă greșită.",
+      editNote: "Dacă îți schimbi adresa de email, se schimbă și unde primești emailurile de resetare a parolei.",
+      confirmTitle: "Îți dezactivezi contul?",
+      confirmIntro: "Iată ce se întâmplă:",
+      whatSignOut: "Ești deconectat imediat.",
+      whatSignIn: "Nu te mai poți conecta până când echipa nu îți reactivează contul.",
+      whatPosts: "Postările tale din Comunitate rămân sub numele tău de utilizator. Dacă nu vrei asta, șterge-le înainte sau cere-ne pe pagina GDPR și drepturile asupra datelor.",
+      continue: "Continuă",
     },
+    eyebrow: "Accesibilitate și cont",
   },
 
   resources: {

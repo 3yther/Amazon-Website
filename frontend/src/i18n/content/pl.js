@@ -483,7 +483,8 @@ export default {
           ],
           points: [
             "Twoje ustawienia dostępności i wybrany język, żeby zostały, gdy wrócisz.",
-            "Czy Smiley już się przywitał, do zamknięcia karty.",
+            "Czy Smiley już się przywitał i kim według Ciebie jesteś, dopóki nie zamkniesz karty.",
+            "Czy zamknąłeś informację o plikach cookie.",
           ],
         },
         {

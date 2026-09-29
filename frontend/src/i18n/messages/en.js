@@ -14,6 +14,13 @@ const en = {
       "Nine languages besides English, translated by machine. English is the version that counts.",
   },
 
+  cookieNotice: {
+    label: "Cookies",
+    text: "We only use the cookies the site needs to work. No tracking or adverts.",
+    link: "Cookie Policy",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "This page was translated into {language} by machine, so some wording may be off. " +
@@ -252,6 +259,7 @@ const en = {
     "Accessibility help": "Accessibility help",
     "Report an issue": "Report an issue",
     Accessibility: "Accessibility",
+    Settings: "Settings",
     "Contact us": "Contact us",
     Feedback: "Feedback",
     "Admin Portal": "Admin Portal",
@@ -1049,11 +1057,12 @@ const en = {
 
   settings: {
     label: "Settings",
-    title: "Accessibility",
+    eyebrow: "Accessibility and account",
+    title: "Settings",
     lead: "Change how T-SMILE looks and behaves for you. Signed in, these settings follow you to any device; signed out, they stay on this browser.",
     signInPrompt: "Log in to manage this.",
     tabs: {
-      sightLoss: "Sight and vision",
+      sightLoss: "Accessibility",
       display: "Display",
       language: "Language",
       security: "Security",
