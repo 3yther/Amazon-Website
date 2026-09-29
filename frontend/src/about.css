@@ -1049,6 +1049,60 @@
 
 /* ---------- Resources cards (ContentLibrary.jsx) ---------- */
 
+/* Calmer spacing, like FutureLearn's subject cards: more room between and
+   inside the cards, looser lines, and each card says only a few things. */
+.card-grid.card-grid--resources {
+  gap: 28px;
+  margin-top: 8px;
+}
+
+.card.card--resource {
+  gap: 14px;
+  padding: 28px;
+}
+
+.card--resource .card__title {
+  margin-top: 4px;
+  font-size: 1.1875rem;
+  line-height: 1.35;
+}
+
+/* Three lines at most, so every card is about the same height. */
+.card--resource .card__text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+/* "Digital · Students" in one quiet line instead of a table. */
+.card__about {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.card__about .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.card--resource .card__cue {
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* The video picture is shorter, so video cards don't tower over the rest. */
+.card--resource .card__thumb {
+  aspect-ratio: 21 / 9;
+  margin: -28px -28px 0;
+}
+
 /* The picture sits beside the type label, and the pathway icon beside its name. */
 .card__type {
   display: inline-flex;
