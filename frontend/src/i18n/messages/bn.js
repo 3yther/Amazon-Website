@@ -1031,8 +1031,6 @@ const bn = {
       interestCaption: "আগ্রহ প্রকাশ, অ্যাকাউন্টে থাকা পথ অনুযায়ী।",
       community: "কমিউনিটি কার্যকলাপ",
       communityCaption: "প্রতি সপ্তাহে দেওয়া প্রশ্ন ও উত্তর।",
-      feedback: "শ্রেণি অনুযায়ী মতামত",
-      feedbackCaption: "পাঠানো মতামত, শ্রেণি অনুযায়ী।",
     },
     greeting: {
       morning: "সুপ্রভাত, {name}",

@@ -1027,8 +1027,6 @@ const pl = {
       interestCaption: "Zgłoszenia zainteresowania, według kierunku na koncie.",
       community: "Aktywność społeczności",
       communityCaption: "Pytania i odpowiedzi dodane tygodniowo.",
-      feedback: "Opinie według kategorii",
-      feedbackCaption: "Przesłane opinie, według kategorii.",
     },
     greeting: {
       morning: "Dzień dobry, {name}",

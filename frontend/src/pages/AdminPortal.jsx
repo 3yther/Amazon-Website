@@ -53,16 +53,15 @@ function greetingKey(hour) {
 }
 
 /**
- * What to call somebody in the greeting.
+ * What to call somebody in the greeting: the first name, or the username when
+ * the account has not given one.
  *
- * The username, because there is no first name to use: sign-up never asks for
- * one (CONTEXT.md's rule is to hold the minimum) and neither Profile nor the
- * /me/ payload carries a name. Adding a real name to greet people by would
- * mean collecting one from every account on the site, which is a much bigger
- * decision than a nicer heading.
+ * The same rule and the same fallback as the header's "Hello, ..." band (see
+ * nameFor in AccountDropdown.jsx). Two greetings on one page calling the same
+ * person different things would look like a bug.
  */
 function greetingNameOf(user) {
-  return user?.username || "";
+  return user?.first_name || user?.username || "";
 }
 
 export default function AdminPortal() {

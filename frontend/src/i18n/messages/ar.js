@@ -1029,8 +1029,6 @@ const ar = {
       interestCaption: "طلبات الاهتمام، حسب المسار المسجّل في الحساب.",
       community: "نشاط المجتمع",
       communityCaption: "الأسئلة والإجابات المنشورة كل أسبوع.",
-      feedback: "الملاحظات حسب الفئة",
-      feedbackCaption: "الملاحظات المرسلة، حسب الفئة.",
     },
     greeting: {
       morning: "صباح الخير، {name}",

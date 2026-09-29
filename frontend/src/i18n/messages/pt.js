@@ -1028,8 +1028,6 @@ const pt = {
       interestCaption: "Manifestações de interesse, pela área indicada na conta.",
       community: "Atividade da comunidade",
       communityCaption: "Perguntas e respostas publicadas por semana.",
-      feedback: "Comentários por categoria",
-      feedbackCaption: "Comentários enviados, por categoria.",
     },
     greeting: {
       morning: "Bom dia, {name}",

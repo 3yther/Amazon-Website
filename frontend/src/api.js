@@ -287,11 +287,6 @@ export function adminPortalLock() {
   return postJson("/api/accounts/admin-portal/lock/", {});
 }
 
-/** The Overview tab's numbers, already aggregated by the database. */
-export function adminOverview(options) {
-  return request("/api/accounts/admin-portal/overview/", options);
-}
-
 /**
  * The dashboard's KPI cards, each with the period before it and a sparkline.
  * filters: range (7d/30d/90d/12m/all/custom), from, to.

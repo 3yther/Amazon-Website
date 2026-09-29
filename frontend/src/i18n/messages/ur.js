@@ -1030,8 +1030,6 @@ const ur = {
       interestCaption: "دلچسپی کے اظہار، اکاؤنٹ پر درج راستے کے مطابق۔",
       community: "کمیونٹی سرگرمی",
       communityCaption: "ہر ہفتے پوسٹ ہونے والے سوالات اور جوابات۔",
-      feedback: "زمرے کے مطابق فیڈبیک",
-      feedbackCaption: "بھیجا گیا فیڈبیک، زمرے کے مطابق۔",
     },
     greeting: {
       morning: "صبح بخیر، {name}",

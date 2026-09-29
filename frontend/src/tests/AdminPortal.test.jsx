@@ -244,6 +244,28 @@ describe("Admin Portal: who gets in", () => {
   // Signed out is not the same as signed in and not staff. A student needs no
   // explanation, but somebody with no session at all may just be a staff
   // member who has not signed in yet, so they get told rather than bounced.
+  it("greets staff by their first name, like the header does", async () => {
+    auth = { user: { ...STAFF, first_name: "Ada" }, checked: true, refresh: vi.fn() };
+    fakeServer();
+
+    renderPortal();
+
+    expect(
+      await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), Ada/, level: 1 }),
+    ).toBeInTheDocument();
+  });
+
+  it("falls back to the username when the account has no first name", async () => {
+    auth = { user: { ...STAFF, first_name: "" }, checked: true, refresh: vi.fn() };
+    fakeServer();
+
+    renderPortal();
+
+    expect(
+      await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), staffer/, level: 1 }),
+    ).toBeInTheDocument();
+  });
+
   it("asks a signed-out visitor to sign in instead of bouncing them home", async () => {
     auth = { user: null, checked: true, refresh: vi.fn() };
     fakeServer();

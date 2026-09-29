@@ -1031,8 +1031,6 @@ const pa = {
       interestCaption: "ਦਿਲਚਸਪੀ ਦੇ ਪ੍ਰਗਟਾਵੇ, ਖਾਤੇ ਉੱਤੇ ਦਰਜ ਰਾਹ ਅਨੁਸਾਰ।",
       community: "ਕਮਿਊਨਿਟੀ ਸਰਗਰਮੀ",
       communityCaption: "ਹਰ ਹਫ਼ਤੇ ਪੋਸਟ ਕੀਤੇ ਸਵਾਲ ਅਤੇ ਜਵਾਬ।",
-      feedback: "ਸ਼੍ਰੇਣੀ ਅਨੁਸਾਰ ਫੀਡਬੈਕ",
-      feedbackCaption: "ਭੇਜਿਆ ਗਿਆ ਫੀਡਬੈਕ, ਸ਼੍ਰੇਣੀ ਅਨੁਸਾਰ।",
     },
     greeting: {
       morning: "ਸ਼ੁਭ ਸਵੇਰ, {name}",

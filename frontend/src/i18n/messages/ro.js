@@ -1027,8 +1027,6 @@ const ro = {
       interestCaption: "Exprimări de interes, după traseul de pe cont.",
       community: "Activitate în comunitate",
       communityCaption: "Întrebări și răspunsuri postate pe săptămână.",
-      feedback: "Feedback după categorie",
-      feedbackCaption: "Feedback trimis, după categorie.",
     },
     greeting: {
       morning: "Bună dimineața, {name}",

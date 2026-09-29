@@ -1003,8 +1003,6 @@ const en = {
       interestCaption: "Expressions of interest, by the pathway on the account.",
       community: "Community activity",
       communityCaption: "Questions and answers posted per week.",
-      feedback: "Feedback by category",
-      feedbackCaption: "Feedback submitted, by category.",
     },
     greeting: {
       morning: "Good morning, {name}",

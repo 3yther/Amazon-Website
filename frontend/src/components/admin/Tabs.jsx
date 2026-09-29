@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   adminDeletePost,
   adminFeedback,
-  adminOverview,
   adminPeople,
   adminPosts,
   adminRemoveAccount,
@@ -15,98 +14,15 @@ import { useAuth } from "../../auth.jsx";
 import { FormError } from "../FormFields.jsx";
 import { formatDate, formatNumber } from "../../formats.js";
 import { useT } from "../../i18n/I18nProvider.jsx";
-import { Donut, GroupedBars } from "./Charts.jsx";
 import ConfirmDialog from "./ConfirmDialog.jsx";
 import { Folded, Nothing, StaffList, known, useStaffList } from "./StaffList.jsx";
 
-// The Admin Portal's six tabs. Everything they call needs Amazon staff and
+// The Admin Portal's data tabs. Everything they call needs Amazon staff and
 // the PIN; the server checks both, and the page only ever gets here once the
-// PIN is in (see AdminPortal.jsx).
+// PIN is in (see AdminPortal.jsx). The Overview lives in Overview.jsx.
 
-/* ---------- Overview ---------- */
-
+/** The three types somebody can sign themselves up as. Staff is not one. */
 const USER_TYPES = ["student", "parent", "teacher"];
-
-export function OverviewTab() {
-  const t = useT();
-  const [data, setData] = useState(null);
-  const [status, setStatus] = useState("loading");
-
-  useEffect(() => {
-    let cancelled = false;
-    adminOverview()
-      .then((result) => {
-        if (cancelled) return;
-        setData(result);
-        setStatus("ready");
-      })
-      .catch(() => {
-        if (!cancelled) setStatus("error");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (status === "error") return <FormError message={t("staff.loadError")} />;
-  if (!data) return <p className="results-status">{t("staff.loading")}</p>;
-
-  const { totals } = data;
-
-  return (
-    <div className="admin-overview">
-      <ul className="admin-totals">
-        {[
-          ["people", totals.people],
-          ["interest", totals.interest],
-          ["questions", totals.questions],
-          ["answers", totals.answers],
-          ["feedback", totals.feedback],
-          ["openReports", totals.open_reports],
-        ].map(([key, value]) => (
-          <li key={key} className="admin-total">
-            <span className="admin-total__value">{formatNumber(value)}</span>
-            <span className="label">{t(`admin.totals.${key}`)}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="admin-charts">
-        <GroupedBars
-          title={t("admin.charts.signups")}
-          caption={t("admin.charts.signupsCaption")}
-          rows={data.signups}
-          series={USER_TYPES.map((type) => ({ key: type, label: t(`account.roles.${type}`) }))}
-        />
-
-        <Donut
-          title={t("admin.charts.interest")}
-          caption={t("admin.charts.interestCaption")}
-          segments={data.interest_by_pathway}
-        />
-
-        <GroupedBars
-          title={t("admin.charts.community")}
-          caption={t("admin.charts.communityCaption")}
-          rows={data.community_activity}
-          series={[
-            { key: "questions", label: t("admin.totals.questions") },
-            { key: "answers", label: t("admin.totals.answers") },
-          ]}
-        />
-
-        <Donut
-          title={t("admin.charts.feedback")}
-          caption={t("admin.charts.feedbackCaption")}
-          segments={data.feedback_by_category.map((row) => ({
-            ...row,
-            label: known(t, `feedbackPage.categories.${row.label}`, row.label),
-          }))}
-        />
-      </div>
-    </div>
-  );
-}
 
 /* ---------- Interest ---------- */
 
