@@ -4,6 +4,7 @@ from .admin_actions import (
     BadgeCountsView,
     ChangeRoleView,
     FeedbackHandleView,
+    PersonDetailView,
     SendPasswordResetView,
 )
 from .admin_dashboard import DashboardChartsView, DashboardView
@@ -118,6 +119,11 @@ urlpatterns = [
         "admin-portal/interest/export/",
         InterestCsvView.as_view(),
         name="admin-portal-interest-export",
+    ),
+    path(
+        "admin-portal/people/<int:pk>/",
+        PersonDetailView.as_view(),
+        name="admin-portal-person",
     ),
     path(
         "admin-portal/people/<int:pk>/role/",

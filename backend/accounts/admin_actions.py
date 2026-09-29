@@ -19,7 +19,9 @@ that property and an endpoint that leaks it would undo the reason.
 """
 from django.contrib.auth.models import User
 from django.utils import timezone
-from rest_framework import generics, status
+from django.db.models import Count, OuterRef, Subquery
+from django.db.models.functions import Coalesce
+from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -184,3 +186,69 @@ class SendPasswordResetView(AdminActionView):
 
         # Deliberately the same body either way.
         return Response({"id": person.id, "sent": True})
+
+
+class PersonDetailSerializer(serializers.ModelSerializer):
+    """
+    One account, as the drawer shows it.
+
+    STILL NO EMAIL. The People table deliberately has none (most people here
+    are 16 to 18, and CONTEXT.md's rule is to hold and show the minimum), and
+    opening a drawer is not a reason to widen that. Search may MATCH on an
+    address, because narrowing a list is not the same as publishing one, but
+    nothing here returns it.
+    """
+
+    user_type = serializers.CharField(source="profile.user_type", read_only=True, default="")
+    pathway = serializers.CharField(
+        source="profile.pathway_interest", read_only=True, default=""
+    )
+    questions = serializers.IntegerField(read_only=True)
+    answers = serializers.IntegerField(read_only=True)
+    reports_made = serializers.IntegerField(read_only=True)
+    feedback_sent = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "user_type",
+            "pathway",
+            "date_joined",
+            "last_login",
+            "is_active",
+            "is_superuser",
+            "questions",
+            "answers",
+            "reports_made",
+            "feedback_sent",
+        ]
+        read_only_fields = fields
+
+
+class PersonDetailView(generics.RetrieveAPIView):
+    """GET /api/accounts/admin-portal/people/<id>/
+
+    Everything the drawer shows, counted in one query rather than five
+    round trips as the drawer opens.
+    """
+
+    serializer_class = PersonDetailSerializer
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
+
+    def get_queryset(self):
+        return User.objects.select_related("profile").annotate(
+            questions=Count("community_questions", distinct=True),
+            answers=Count("community_answers", distinct=True),
+            reports_made=Coalesce(
+                Subquery(
+                    Report.objects.filter(reporter=OuterRef("pk"))
+                    .values("reporter")
+                    .annotate(total=Count("id"))
+                    .values("total")[:1]
+                ),
+                0,
+            ),
+            feedback_sent=Count("feedback_submissions", distinct=True),
+        )

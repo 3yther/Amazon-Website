@@ -344,6 +344,11 @@ export function adminHandleFeedback(id, { handled, adminNote }) {
   });
 }
 
+/** Everything the People drawer shows about one account. Never an email. */
+export function adminPerson(id, options) {
+  return request(`/api/accounts/admin-portal/people/${id}/`, options);
+}
+
 /** Move somebody between student, parent and teacher. Never to or from staff. */
 export function adminChangeRole(id, userType) {
   return postJson(`/api/accounts/admin-portal/people/${id}/role/`, { user_type: userType });

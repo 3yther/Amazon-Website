@@ -119,6 +119,21 @@ const DASHBOARD_CHARTS = {
   provider_coverage: [{ label: "North West", values: { placed: 12, unplaced: 2 } }],
 };
 
+const PERSON_DETAIL = {
+  id: 2,
+  username: "ada",
+  user_type: "student",
+  pathway: "Digital",
+  date_joined: "2026-03-01T10:00:00Z",
+  last_login: "2026-09-20T10:00:00Z",
+  is_active: true,
+  is_superuser: false,
+  questions: 4,
+  answers: 7,
+  reports_made: 1,
+  feedback_sent: 2,
+};
+
 const AUDIT_ROWS = [
   {
     id: 1,
@@ -224,6 +239,21 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
         return Response.json({ count: 1, next: null, previous: null, results: [POST] });
       }
       if (path.includes("/admin-portal/posts/")) return Response.json({ deleted: true });
+      if (path.includes("/admin-portal/people/") && path.endsWith("/role/")) {
+        const body = JSON.parse(options.body ?? "{}");
+        return Response.json({ id: 2, user_type: body.user_type });
+      }
+      if (path.includes("/admin-portal/people/") && path.endsWith("/password-reset/")) {
+        return Response.json({ id: 2, sent: true });
+      }
+      if (/\/admin-portal\/people\/\d+\/$/.test(path)) {
+        const id = Number(path.match(/\/people\/(\d+)\//)[1]);
+        return Response.json(
+          id === OTHER_ADMIN.id
+            ? { ...PERSON_DETAIL, id, username: "otheradmin", user_type: "amazon_staff" }
+            : PERSON_DETAIL,
+        );
+      }
       if (path.endsWith("/admin-portal/people/")) {
         return Response.json({ count: people.length, next: null, previous: null, results: people });
       }
@@ -1089,6 +1119,114 @@ describe("Admin Portal: the audit log and providers tabs", () => {
       await user.click(await screen.findByRole("button", { name: "Export CSV" }));
       await waitFor(() => expect(asked.at(-1)).toContain(endpoint));
     }
+  });
+});
+
+describe("Admin Portal: the person drawer", () => {
+  async function openDrawer(user) {
+    renderPortal();
+    await openSection(user, "People");
+    await user.click(await screen.findByRole("button", { name: "ada" }));
+    const drawer = await screen.findByRole("dialog");
+    // Its controls, not just the panel: a skeleton has nothing to trap.
+    await within(drawer).findByRole("button", { name: "Send a password reset email" });
+    return drawer;
+  }
+
+  it("shows what the account has done, and never an email", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+
+    const drawer = await openDrawer(user);
+
+    expect(within(drawer).getByText("Digital")).toBeInTheDocument();
+    expect(within(drawer).getByText("4")).toBeInTheDocument(); // questions
+    // The People table deliberately shows none, and a drawer is not a reason
+    // to widen what the site hands out about people aged 16 to 18.
+    expect(drawer.textContent).not.toMatch(/@/);
+  });
+
+  it("is a real dialog: focus goes in, Escape closes it, focus comes back", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "People");
+
+    const opener = await screen.findByRole("button", { name: "ada" });
+    await user.click(opener);
+
+    const drawer = await screen.findByRole("dialog");
+    await waitFor(() => expect(drawer).toHaveFocus());
+
+    await user.keyboard("{Escape}");
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    // Without this, focus falls to the top of the document and a keyboard
+    // user has to tab the whole page again.
+    expect(opener).toHaveFocus();
+  });
+
+  it("keeps Tab inside while it is open", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const drawer = await openDrawer(user);
+
+    // Round the loop more times than it has controls: focus must never leave.
+    for (let step = 0; step < 12; step += 1) {
+      await user.tab();
+      expect(drawer.contains(document.activeElement)).toBe(true);
+    }
+  });
+
+  it("changes the account type", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const drawer = await openDrawer(user);
+
+    await user.selectOptions(within(drawer).getByLabelText("Change account type"), "teacher");
+
+    expect(await within(drawer).findByText("Account type changed.")).toBeInTheDocument();
+  });
+
+  it("will not offer a type change for a staff account", async () => {
+    fakeServer({ people: [PERSON, OTHER_ADMIN] });
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "People");
+    await user.click(await screen.findByRole("button", { name: "otheradmin" }));
+
+    const drawer = await screen.findByRole("dialog");
+    expect(within(drawer).queryByLabelText("Change account type")).not.toBeInTheDocument();
+    expect(within(drawer).getByText(/Take their admin access away first/)).toBeInTheDocument();
+  });
+
+  it("sends a reset without saying whether an address exists", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const drawer = await openDrawer(user);
+
+    await user.click(within(drawer).getByRole("button", { name: "Send a password reset email" }));
+
+    // "If that account has an email address" and never "no email on file":
+    // the server does not tell us, on purpose, so neither does this.
+    expect(await within(drawer).findByText(/If that account has an email address/)).toBeInTheDocument();
+  });
+
+  it("has no WCAG 2.2 AA problems", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const { container } = render(
+      <MemoryRouter initialEntries={["/admin-portal?tab=people"]}>
+        <Routes>
+          <Route path="/admin-portal" element={<AdminPortal />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await user.click(await screen.findByRole("button", { name: "ada" }));
+    await screen.findByRole("dialog");
+
+    await expectNoAxeViolations(container);
   });
 });
 

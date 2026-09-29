@@ -18,6 +18,7 @@ import { FormError } from "../FormFields.jsx";
 import { formatDate, formatNumber } from "../../formats.js";
 import { useT } from "../../i18n/I18nProvider.jsx";
 import ConfirmDialog from "./ConfirmDialog.jsx";
+import PersonDrawer from "./PersonDrawer.jsx";
 import { Folded, Nothing, StaffList, known, useStaffList } from "./StaffList.jsx";
 
 // The Admin Portal's data tabs. Everything they call needs Amazon staff and
@@ -393,6 +394,8 @@ export function PostsTab() {
   const [confirming, setConfirming] = useState(null);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState("");
+  // Which account's drawer is open, by id.
+  const [looking, setLooking] = useState(null);
 
   const filters = useMemo(() => ({ kind, q: query }), [kind, query]);
   const list = useStaffList(adminPosts, filters);
@@ -529,6 +532,8 @@ export function PeopleTab() {
   const [confirming, setConfirming] = useState(null);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState("");
+  // Which account's drawer is open, by id.
+  const [looking, setLooking] = useState(null);
 
   const filters = useMemo(() => ({ user_type: userType, q: query }), [userType, query]);
   const list = useStaffList(adminPeople, filters);
@@ -613,7 +618,15 @@ export function PeopleTab() {
             const isAdmin = row.user_type === "amazon_staff";
             return (
               <tr key={row.id}>
-                <td>{row.username}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="admin-people__open"
+                    onClick={() => setLooking(row.id)}
+                  >
+                    {row.username}
+                  </button>
+                </td>
                 <td>{row.user_type ? known(t, `account.roles.${row.user_type}`, row.user_type) : <Nothing />}</td>
                 <td>{formatDate(row.date_joined)}</td>
                 <td>{formatNumber(row.questions + row.answers)}</td>
@@ -668,6 +681,16 @@ export function PeopleTab() {
           busy={busy}
           onConfirm={() => revoke(confirming.person)}
           onCancel={() => setConfirming(null)}
+        />
+      )}
+
+      {looking !== null && (
+        <PersonDrawer
+          personId={looking}
+          onClose={() => setLooking(null)}
+          /* A role change reorders nothing, but the row's own type is now
+             stale, so the list is asked again. */
+          onChanged={list.reload}
         />
       )}
     </>
