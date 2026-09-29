@@ -1,11 +1,12 @@
 from django.urls import path
 
 from .admin_portal import (
-    DeactivateView,
     FeedbackListView,
     LockView,
     OverviewView,
     PeopleView,
+    RemoveAccountView,
+    RevokeStaffView,
     StatusView,
     UnlockView,
 )
@@ -47,9 +48,14 @@ urlpatterns = [
     path("admin-portal/overview/", OverviewView.as_view(), name="admin-portal-overview"),
     path("admin-portal/people/", PeopleView.as_view(), name="admin-portal-people"),
     path(
-        "admin-portal/people/<int:pk>/deactivate/",
-        DeactivateView.as_view(),
-        name="admin-portal-deactivate",
+        "admin-portal/people/<int:pk>/remove/",
+        RemoveAccountView.as_view(),
+        name="admin-portal-remove",
+    ),
+    path(
+        "admin-portal/people/<int:pk>/revoke-staff/",
+        RevokeStaffView.as_view(),
+        name="admin-portal-revoke-staff",
     ),
     path("admin-portal/feedback/", FeedbackListView.as_view(), name="admin-portal-feedback"),
 ]

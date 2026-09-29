@@ -170,3 +170,84 @@ class ReportedCountsView(APIView):
             open=Count("id", filter=Q(resolved=False)),
         )
         return Response(counts)
+
+
+# ---------------------------------------------------------------------------
+# The Community tab: every question and answer, not just the reported ones.
+#
+# Reports are how staff hear about a post; they are not the only reason to
+# take one down. This lets staff delete any post from the portal.
+# ---------------------------------------------------------------------------
+
+POST_KINDS = {"question": Question, "answer": Answer}
+
+
+class PostSerializer(serializers.Serializer):
+    """A question or an answer, flattened the same way as a report is."""
+
+    kind = serializers.SerializerMethodField()
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.SerializerMethodField()
+    body = serializers.CharField(read_only=True)
+    author = serializers.CharField(source="author.username", read_only=True)
+    hidden = serializers.BooleanField(read_only=True)
+    answers = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(read_only=True)
+
+    def get_kind(self, post):
+        return "question" if isinstance(post, Question) else "answer"
+
+    def get_title(self, post):
+        # An answer has no title of its own, so it borrows its question's.
+        return post.title if isinstance(post, Question) else post.question.title
+
+    def get_answers(self, post):
+        return post.answers.count() if isinstance(post, Question) else None
+
+
+class PostListView(generics.ListAPIView):
+    """GET /api/community/admin-portal/posts/?kind=question&q=chips
+
+    kind is question (the default) or answer. q searches the text and the
+    author's username. Newest first, 20 to a page like every other staff list.
+    """
+
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
+
+    def get_queryset(self):
+        kind = self.request.query_params.get("kind", "question")
+        model = POST_KINDS.get(kind, Question)
+        posts = model.objects.select_related("author")
+        if model is Answer:
+            posts = posts.select_related("question")
+
+        search = (self.request.query_params.get("q") or "").strip()
+        if search:
+            match = Q(body__icontains=search) | Q(author__username__icontains=search)
+            if model is Question:
+                match |= Q(title__icontains=search)
+            posts = posts.filter(match)
+
+        return posts.order_by("-created_at")
+
+
+class PostDeleteView(APIView):
+    """POST /api/community/admin-portal/posts/<kind>/<id>/delete/
+
+    Deletes the post for good. A question takes its answers, reports and
+    helpful marks with it (CASCADE on the models), so the reply says how many
+    answers went. The page asks first; this does not.
+    """
+
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
+
+    def post(self, request, kind, pk):
+        model = POST_KINDS.get(kind)
+        if model is None:
+            return Response({"detail": "Unknown kind of post."}, status=status.HTTP_404_NOT_FOUND)
+
+        post = generics.get_object_or_404(model, pk=pk)
+        answers = post.answers.count() if isinstance(post, Question) else 0
+        post.delete()
+        return Response({"deleted": True, "answers_deleted": answers})
