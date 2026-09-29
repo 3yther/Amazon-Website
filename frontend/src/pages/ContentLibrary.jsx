@@ -6,7 +6,8 @@ import Pictogram from "../components/Pictogram.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 import "../about.css";
 
-const NO_FILTERS = { pathway: "", audience: "", access_level: "" };
+// No access filter: every resource is free to open, so it could only ever narrow to nothing.
+const NO_FILTERS = { pathway: "", audience: "" };
 
 // The picture shown beside each content type's label.
 const TYPE_PICTURES = {
@@ -133,17 +134,6 @@ export default function ContentLibrary() {
           </select>
         </div>
 
-        <div className="field">
-          <label className="label" htmlFor="filter-access">
-            {t("resources.access")}
-          </label>
-          <select id="filter-access" name="access_level" value={filters.access_level} onChange={updateFilter}>
-            <option value="">{t("resources.any")}</option>
-            <option value="free">{t("resources.accessLevels.free")}</option>
-            <option value="signup">{t("resources.accessLevels.signup")}</option>
-          </select>
-        </div>
-
         {filtered && (
           <button type="button" className="button filters__clear" onClick={clearFilters}>
             {t("resources.clear")}
@@ -173,7 +163,7 @@ export default function ContentLibrary() {
       )}
 
       {items.length > 0 && status !== "error" && (
-        <ul className="card-grid" aria-busy={status === "loading"}>
+        <ul className="card-grid card-grid--resources" aria-busy={status === "loading"}>
           {items.map((item) => (
             <ContentCard key={item.slug} item={item} />
           ))}
@@ -232,9 +222,14 @@ function ContentCard({ item }) {
   const PathwayIcon = item.pathway ? PATHWAY_ICONS[item.pathway.slug] : null;
   const href = item.locked ? null : item.link || item.file;
   const site = item.link ? siteName(item.link) ?? t("resources.anotherWebsite") : null;
+  // One quiet line instead of a table: only what narrows it down.
+  const about = [
+    item.pathway && t(`pathways.${item.pathway.slug}`),
+    item.audience !== "all" && t(`resources.audiences.${item.audience}`),
+  ].filter(Boolean);
 
   return (
-    <li className="card card--link">
+    <li className="card card--link card--resource">
       {item.content_type === "video" && <VideoThumbnail link={item.link} />}
 
       <div className="card__tags">
@@ -242,9 +237,8 @@ function ContentCard({ item }) {
           <Pictogram name={TYPE_PICTURES[item.content_type]} size="small" />
           {t(`resources.types.${item.content_type}`)}
         </span>
-        <span className={signupOnly ? "tag tag--signup" : "tag"}>
-          {t(`resources.accessLevels.${item.access_level}`)}
-        </span>
+        {/* Only shown when it needs an account; free is the normal case. */}
+        {signupOnly && <span className="tag tag--signup">{t("resources.accessLevels.signup")}</span>}
       </div>
 
       {/* h2 because the cards sit straight under the page's h1 */}
@@ -265,19 +259,12 @@ function ContentCard({ item }) {
       </h2>
       <p className="card__text">{item.description}</p>
 
-      <dl className="card__meta">
-        <div>
-          <dt className="label">{t("resources.pathway")}</dt>
-          <dd className="card__pathway">
-            {PathwayIcon && <PathwayIcon />}
-            {item.pathway ? t(`pathways.${item.pathway.slug}`) : t("resources.allPathways")}
-          </dd>
-        </div>
-        <div>
-          <dt className="label">{t("resources.for")}</dt>
-          <dd>{t(`resources.audiences.${item.audience}`)}</dd>
-        </div>
-      </dl>
+      {about.length > 0 && (
+        <p className="card__about">
+          {PathwayIcon && <PathwayIcon />}
+          {about.join(" · ")}
+        </p>
+      )}
 
       {/* What clicking the card does. Not a separate link, the whole card is. */}
       <span className="card__cue" aria-hidden="true">
