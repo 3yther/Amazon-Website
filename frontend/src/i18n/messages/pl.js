@@ -984,6 +984,8 @@ const pl = {
     typeToConfirm: "Wpisz {text}, aby potwierdzić",
     actionFailed: "Nie udało się. Spróbuj ponownie.",
     tabs: {
+      providers: "Placówki",
+      audit: "Dziennik działań",
       overview: "Przegląd",
       interest: "Zainteresowanie",
       reports: "Zgłoszone wpisy",
@@ -1034,6 +1036,7 @@ const pl = {
       evening: "Dobry wieczór, {name}",
     },
     nav: {
+      site: "Witryna",
       label: "Sekcje Panelu administratora",
       menu: "Sekcje",
       measure: "Pomiary",
@@ -1088,6 +1091,45 @@ const pl = {
     signedOut: {
       title: "Zaloguj się, aby otworzyć Panel administratora",
       lead: "Ta strona jest dla personelu Amazon. Zaloguj się na konto personelu, aby kontynuować.",
+    },
+    audit: {
+      actor: "Członek personelu",
+      action: "Działanie",
+      caption: "Wszystko, co personel zrobił w panelu",
+      empty: "Nic jeszcze nie zapisano.",
+      columns: {
+        when: "Kiedy",
+        who: "Kto",
+        what: "Co",
+        target: "Cel",
+      },
+      actions: {
+        account_removed: "Usunięto konto",
+        staff_revoked: "Odebrano dostęp administratora",
+        role_changed: "Zmieniono rolę konta",
+        password_reset_sent: "Wysłano e-mail resetujący hasło",
+        post_deleted: "Usunięto wpis",
+        report_resolved: "Rozwiązano zgłoszenie",
+        report_dismissed: "Odrzucono zgłoszenie",
+        feedback_handled: "Oznaczono opinię jako obsłużoną",
+        csv_exported: "Wyeksportowano CSV",
+      },
+    },
+    providers: {
+      filter: "Na mapie",
+      unplacedOnly: "Wymaga poprawy kodu pocztowego",
+      placedOnly: "Już na mapie",
+      caption: "Placówki, które może zwrócić wyszukiwanie w pobliżu",
+      empty: "Nie wczytano placówek.",
+      onMap: "Na mapie",
+      needsPostcode: "Kod pocztowy do poprawy",
+      columns: {
+        name: "Nazwa",
+        postcode: "Kod pocztowy",
+        region: "Region",
+        type: "Typ",
+        map: "Mapa",
+      },
     },
     pin: {
       title: "Wpisz PIN panelu",

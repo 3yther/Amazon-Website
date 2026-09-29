@@ -8,10 +8,12 @@ import Sidebar, { NAV_IDS } from "../components/admin/Sidebar.jsx";
 import useDashboardFilters from "../components/admin/useDashboardFilters.js";
 import { FormError } from "../components/FormFields.jsx";
 import {
+  AuditLogTab,
   FeedbackTab,
   InterestTab,
   PeopleTab,
   PostsTab,
+  ProvidersTab,
   ReportsTab,
 } from "../components/admin/Tabs.jsx";
 import { formErrors } from "../formErrors.js";
@@ -39,6 +41,10 @@ import { useT } from "../i18n/I18nProvider.jsx";
 const EXPORTS = {
   overview: "/api/accounts/admin-portal/dashboard/export/",
   people: "/api/accounts/admin-portal/people/export/",
+  interest: "/api/accounts/admin-portal/interest/export/",
+  feedback: "/api/accounts/admin-portal/feedback/export/",
+  providers: "/api/accounts/admin-portal/providers/export/",
+  audit: "/api/accounts/admin-portal/audit-log/export/",
 };
 
 /**
@@ -145,6 +151,8 @@ export default function AdminPortal() {
     posts: <PostsTab />,
     feedback: <FeedbackTab onCountsChanged={refreshBadges} />,
     people: <PeopleTab />,
+    providers: <ProvidersTab />,
+    audit: <AuditLogTab />,
   };
 
   return (

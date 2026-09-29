@@ -3125,3 +3125,7 @@ input.admin-pin__input {
 .admin-feedback__waiting {
   font-weight: 700;
 }
+
+.admin-audit__target {
+  display: block;
+}

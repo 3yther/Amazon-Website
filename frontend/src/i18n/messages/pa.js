@@ -988,6 +988,8 @@ const pa = {
     typeToConfirm: "ਪੁਸ਼ਟੀ ਲਈ {text} ਲਿਖੋ",
     actionFailed: "ਇਹ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
     tabs: {
+      providers: "ਪ੍ਰਦਾਤਾ",
+      audit: "ਆਡਿਟ ਲੌਗ",
       overview: "ਸੰਖੇਪ",
       interest: "ਦਿਲਚਸਪੀ",
       reports: "ਰਿਪੋਰਟ ਕੀਤੀਆਂ ਪੋਸਟਾਂ",
@@ -1038,6 +1040,7 @@ const pa = {
       evening: "ਸ਼ੁਭ ਸ਼ਾਮ, {name}",
     },
     nav: {
+      site: "ਸਾਈਟ",
       label: "ਐਡਮਿਨ ਪੋਰਟਲ ਦੇ ਭਾਗ",
       menu: "ਭਾਗ",
       measure: "ਮਾਪ",
@@ -1092,6 +1095,45 @@ const pa = {
     signedOut: {
       title: "ਐਡਮਿਨ ਪੋਰਟਲ ਖੋਲ੍ਹਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ",
       lead: "ਇਹ ਸਫ਼ਾ ਐਮਾਜ਼ਾਨ ਸਟਾਫ਼ ਲਈ ਹੈ। ਜਾਰੀ ਰੱਖਣ ਲਈ ਆਪਣੇ ਸਟਾਫ਼ ਖਾਤੇ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ।",
+    },
+    audit: {
+      actor: "ਸਟਾਫ਼ ਮੈਂਬਰ",
+      action: "ਕਾਰਵਾਈ",
+      caption: "ਪੋਰਟਲ ਵਿੱਚ ਸਟਾਫ਼ ਨੇ ਜੋ ਕੁਝ ਕੀਤਾ",
+      empty: "ਹਾਲੇ ਕੁਝ ਦਰਜ ਨਹੀਂ ਹੋਇਆ।",
+      columns: {
+        when: "ਕਦੋਂ",
+        who: "ਕੌਣ",
+        what: "ਕੀ",
+        target: "ਨਿਸ਼ਾਨਾ",
+      },
+      actions: {
+        account_removed: "ਖਾਤਾ ਹਟਾਇਆ",
+        staff_revoked: "ਐਡਮਿਨ ਪਹੁੰਚ ਹਟਾਈ",
+        role_changed: "ਖਾਤੇ ਦੀ ਭੂਮਿਕਾ ਬਦਲੀ",
+        password_reset_sent: "ਪਾਸਵਰਡ ਰੀਸੈੱਟ ਈਮੇਲ ਭੇਜੀ",
+        post_deleted: "ਪੋਸਟ ਮਿਟਾਈ",
+        report_resolved: "ਰਿਪੋਰਟ ਹੱਲ ਕੀਤੀ",
+        report_dismissed: "ਰਿਪੋਰਟ ਰੱਦ ਕੀਤੀ",
+        feedback_handled: "ਫੀਡਬੈਕ ਨਜਿੱਠਿਆ ਵਜੋਂ ਨਿਸ਼ਾਨ ਲਗਾਇਆ",
+        csv_exported: "CSV ਐਕਸਪੋਰਟ ਕੀਤਾ",
+      },
+    },
+    providers: {
+      filter: "ਨਕਸ਼ੇ ਉੱਤੇ",
+      unplacedOnly: "ਪੋਸਟਕੋਡ ਠੀਕ ਕਰਨ ਦੀ ਲੋੜ",
+      placedOnly: "ਪਹਿਲਾਂ ਹੀ ਨਕਸ਼ੇ ਉੱਤੇ",
+      caption: "ਨੇੜੇ ਦੀ ਖੋਜ ਜੋ ਪ੍ਰਦਾਤਾ ਵਾਪਸ ਕਰ ਸਕਦੀ ਹੈ",
+      empty: "ਕੋਈ ਪ੍ਰਦਾਤਾ ਲੋਡ ਨਹੀਂ ਹੋਇਆ।",
+      onMap: "ਨਕਸ਼ੇ ਉੱਤੇ",
+      needsPostcode: "ਪੋਸਟਕੋਡ ਠੀਕ ਕਰਨਾ ਹੈ",
+      columns: {
+        name: "ਨਾਮ",
+        postcode: "ਪੋਸਟਕੋਡ",
+        region: "ਖੇਤਰ",
+        type: "ਕਿਸਮ",
+        map: "ਨਕਸ਼ਾ",
+      },
     },
     pin: {
       title: "ਪੋਰਟਲ ਦਾ PIN ਦਰਜ ਕਰੋ",

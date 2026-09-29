@@ -988,6 +988,8 @@ const gu = {
     typeToConfirm: "પુષ્ટિ માટે {text} લખો",
     actionFailed: "આ થઈ શક્યું નહીં. ફરી પ્રયાસ કરો.",
     tabs: {
+      providers: "પ્રદાતા",
+      audit: "ઓડિટ લોગ",
       overview: "સારાંશ",
       interest: "રસ",
       reports: "રિપોર્ટ થયેલી પોસ્ટ",
@@ -1038,6 +1040,7 @@ const gu = {
       evening: "શુભ સાંજ, {name}",
     },
     nav: {
+      site: "સાઇટ",
       label: "એડમિન પોર્ટલના વિભાગો",
       menu: "વિભાગો",
       measure: "માપ",
@@ -1092,6 +1095,45 @@ const gu = {
     signedOut: {
       title: "એડમિન પોર્ટલ ખોલવા માટે સાઇન ઇન કરો",
       lead: "આ પાનું એમેઝોન સ્ટાફ માટે છે. ચાલુ રાખવા માટે તમારા સ્ટાફ ખાતાથી સાઇન ઇન કરો.",
+    },
+    audit: {
+      actor: "સ્ટાફ સભ્ય",
+      action: "ક્રિયા",
+      caption: "પોર્ટલમાં સ્ટાફે જે કર્યું",
+      empty: "હજી કંઈ નોંધાયું નથી.",
+      columns: {
+        when: "ક્યારે",
+        who: "કોણ",
+        what: "શું",
+        target: "લક્ષ્ય",
+      },
+      actions: {
+        account_removed: "ખાતું દૂર કર્યું",
+        staff_revoked: "એડમિન ઍક્સેસ દૂર કરી",
+        role_changed: "ખાતાની ભૂમિકા બદલી",
+        password_reset_sent: "પાસવર્ડ રીસેટ ઇમેઇલ મોકલ્યો",
+        post_deleted: "પોસ્ટ કાઢી નાખી",
+        report_resolved: "અહેવાલ ઉકેલ્યો",
+        report_dismissed: "અહેવાલ નકાર્યો",
+        feedback_handled: "પ્રતિસાદ સંભાળ્યો તરીકે ચિહ્નિત",
+        csv_exported: "CSV એક્સપોર્ટ કર્યું",
+      },
+    },
+    providers: {
+      filter: "નકશા પર",
+      unplacedOnly: "પોસ્ટકોડ સુધારવાની જરૂર",
+      placedOnly: "પહેલેથી નકશા પર",
+      caption: "નજીકની શોધ જે પ્રદાતા પરત કરી શકે",
+      empty: "કોઈ પ્રદાતા લોડ થયા નથી.",
+      onMap: "નકશા પર",
+      needsPostcode: "પોસ્ટકોડ સુધારવો પડશે",
+      columns: {
+        name: "નામ",
+        postcode: "પોસ્ટકોડ",
+        region: "પ્રદેશ",
+        type: "પ્રકાર",
+        map: "નકશો",
+      },
     },
     pin: {
       title: "પોર્ટલનો PIN દાખલ કરો",

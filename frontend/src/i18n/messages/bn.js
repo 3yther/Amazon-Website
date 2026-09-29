@@ -988,6 +988,8 @@ const bn = {
     typeToConfirm: "নিশ্চিত করতে {text} লিখুন",
     actionFailed: "এটি হয়নি। আবার চেষ্টা করুন।",
     tabs: {
+      providers: "প্রদানকারী",
+      audit: "অডিট লগ",
       overview: "সারসংক্ষেপ",
       interest: "আগ্রহ",
       reports: "রিপোর্ট করা পোস্ট",
@@ -1038,6 +1040,7 @@ const bn = {
       evening: "শুভ সন্ধ্যা, {name}",
     },
     nav: {
+      site: "সাইট",
       label: "অ্যাডমিন পোর্টালের বিভাগ",
       menu: "বিভাগ",
       measure: "পরিমাপ",
@@ -1092,6 +1095,45 @@ const bn = {
     signedOut: {
       title: "অ্যাডমিন পোর্টাল খুলতে সাইন ইন করুন",
       lead: "এই পাতাটি অ্যামাজন স্টাফদের জন্য। চালিয়ে যেতে আপনার স্টাফ অ্যাকাউন্ট দিয়ে সাইন ইন করুন।",
+    },
+    audit: {
+      actor: "স্টাফ সদস্য",
+      action: "ক্রিয়া",
+      caption: "পোর্টালে স্টাফরা যা করেছেন",
+      empty: "এখনও কিছু রেকর্ড হয়নি।",
+      columns: {
+        when: "কখন",
+        who: "কে",
+        what: "কী",
+        target: "লক্ষ্য",
+      },
+      actions: {
+        account_removed: "একটি অ্যাকাউন্ট সরানো",
+        staff_revoked: "অ্যাডমিন অ্যাক্সেস সরানো",
+        role_changed: "অ্যাকাউন্টের ভূমিকা বদলানো",
+        password_reset_sent: "পাসওয়ার্ড রিসেট ইমেল পাঠানো",
+        post_deleted: "একটি পোস্ট মুছে ফেলা",
+        report_resolved: "একটি রিপোর্ট নিষ্পত্তি",
+        report_dismissed: "একটি রিপোর্ট খারিজ",
+        feedback_handled: "মতামত সামলানো হয়েছে চিহ্নিত",
+        csv_exported: "CSV এক্সপোর্ট করা",
+      },
+    },
+    providers: {
+      filter: "মানচিত্রে",
+      unplacedOnly: "পোস্টকোড ঠিক করা দরকার",
+      placedOnly: "ইতিমধ্যে মানচিত্রে",
+      caption: "কাছাকাছি অনুসন্ধান যে প্রদানকারী ফেরত দিতে পারে",
+      empty: "কোনো প্রদানকারী লোড হয়নি।",
+      onMap: "মানচিত্রে",
+      needsPostcode: "পোস্টকোড ঠিক করা দরকার",
+      columns: {
+        name: "নাম",
+        postcode: "পোস্টকোড",
+        region: "অঞ্চল",
+        type: "ধরন",
+        map: "মানচিত্র",
+      },
     },
     pin: {
       title: "পোর্টালের PIN দিন",

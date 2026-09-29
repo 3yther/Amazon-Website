@@ -987,6 +987,8 @@ const ur = {
     typeToConfirm: "تصدیق کے لیے {text} لکھیں",
     actionFailed: "یہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
     tabs: {
+      providers: "فراہم کنندگان",
+      audit: "آڈٹ لاگ",
       overview: "جائزہ",
       interest: "دلچسپی",
       reports: "رپورٹ شدہ پوسٹس",
@@ -1037,6 +1039,7 @@ const ur = {
       evening: "شام بخیر، {name}",
     },
     nav: {
+      site: "سائٹ",
       label: "ایڈمن پورٹل کے حصے",
       menu: "حصے",
       measure: "پیمائش",
@@ -1091,6 +1094,45 @@ const ur = {
     signedOut: {
       title: "ایڈمن پورٹل کھولنے کے لیے سائن ان کریں",
       lead: "یہ صفحہ ایمازون کے عملے کے لیے ہے۔ جاری رکھنے کے لیے اپنے عملے کے اکاؤنٹ سے سائن ان کریں۔",
+    },
+    audit: {
+      actor: "عملے کا رکن",
+      action: "کارروائی",
+      caption: "پورٹل میں عملے نے جو کچھ کیا",
+      empty: "ابھی تک کچھ ریکارڈ نہیں ہوا۔",
+      columns: {
+        when: "کب",
+        who: "کون",
+        what: "کیا",
+        target: "ہدف",
+      },
+      actions: {
+        account_removed: "اکاؤنٹ ہٹایا",
+        staff_revoked: "ایڈمن رسائی واپس لی",
+        role_changed: "اکاؤنٹ کا کردار بدلا",
+        password_reset_sent: "پاس ورڈ ری سیٹ ای میل بھیجی",
+        post_deleted: "پوسٹ حذف کی",
+        report_resolved: "رپورٹ حل کی",
+        report_dismissed: "رپورٹ مسترد کی",
+        feedback_handled: "رائے کو نمٹا دیا نشان زد کیا",
+        csv_exported: "CSV ایکسپورٹ کیا",
+      },
+    },
+    providers: {
+      filter: "نقشے پر",
+      unplacedOnly: "پوسٹ کوڈ درست کرنے کی ضرورت",
+      placedOnly: "پہلے سے نقشے پر",
+      caption: "قریبی تلاش جو فراہم کنندگان واپس کر سکتی ہے",
+      empty: "کوئی فراہم کنندہ لوڈ نہیں ہوا۔",
+      onMap: "نقشے پر",
+      needsPostcode: "پوسٹ کوڈ درست کرنا ہے",
+      columns: {
+        name: "نام",
+        postcode: "پوسٹ کوڈ",
+        region: "علاقہ",
+        type: "قسم",
+        map: "نقشہ",
+      },
     },
     pin: {
       title: "پورٹل کا PIN درج کریں",

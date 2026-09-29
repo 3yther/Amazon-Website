@@ -119,6 +119,35 @@ const DASHBOARD_CHARTS = {
   provider_coverage: [{ label: "North West", values: { placed: 12, unplaced: 2 } }],
 };
 
+const AUDIT_ROWS = [
+  {
+    id: 1,
+    actor: "staffer",
+    action: "post_deleted",
+    action_label: "Deleted a post",
+    target_type: "Question",
+    target_label: "a rude post",
+    detail: { kind: "question" },
+    created_at: "2026-09-28T09:00:00Z",
+  },
+  {
+    id: 2,
+    // No actor account any more: the copied name is what makes this readable.
+    actor: "goneaway",
+    action: "role_changed",
+    action_label: "Changed an account's role",
+    target_type: "User",
+    target_label: "ada",
+    detail: { from: "student", to: "teacher" },
+    created_at: "2026-09-27T09:00:00Z",
+  },
+];
+
+const PROVIDER_ROWS = [
+  { id: 1, name: "Placed College", postcode: "M1 1AA", region: "North West", provider_type: "FE college", placed: true },
+  { id: 2, name: "Lost College", postcode: "XX1 1XX", region: "London", provider_type: "FE college", placed: false },
+];
+
 const FEEDBACK_ROWS = [
   {
     id: 9,
@@ -197,6 +226,18 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
       if (path.includes("/admin-portal/posts/")) return Response.json({ deleted: true });
       if (path.endsWith("/admin-portal/people/")) {
         return Response.json({ count: people.length, next: null, previous: null, results: people });
+      }
+      if (path.endsWith("/admin-portal/audit-log/")) {
+        const wanted = new URL(url, "http://localhost").searchParams.get("action");
+        const rows = AUDIT_ROWS.filter((row) => !wanted || row.action === wanted);
+        return Response.json({ count: rows.length, next: null, previous: null, results: rows });
+      }
+      if (path.endsWith("/admin-portal/providers/")) {
+        const wanted = new URL(url, "http://localhost").searchParams.get("placed");
+        const rows = PROVIDER_ROWS.filter(
+          (row) => !wanted || String(row.placed) === wanted,
+        );
+        return Response.json({ count: rows.length, next: null, previous: null, results: rows });
       }
       if (path.endsWith("/admin-portal/badges/")) {
         return Response.json({ unhandled_feedback: unhandledFeedback, open_reports: 2 });
@@ -963,6 +1004,91 @@ describe("Admin Portal: handling feedback", () => {
     await user.click(screen.getAllByRole("button", { name: "Mark dealt with" })[0]);
 
     await waitFor(() => expect(feedback).toHaveTextContent("2"));
+  });
+});
+
+describe("Admin Portal: the audit log and providers tabs", () => {
+  it("shows who did what, and still names somebody whose account has gone", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await openSection(user, "Audit log");
+
+    expect(await screen.findByText("a rude post")).toBeInTheDocument();
+    // The copied username is the whole reason it is stored apart from the
+    // foreign key, so this is the case worth naming.
+    expect(screen.getByText("goneaway")).toBeInTheDocument();
+  });
+
+  it("filters the audit log by action", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "Audit log");
+    await screen.findByText("a rude post");
+
+    await user.selectOptions(screen.getByLabelText("Action"), "role_changed");
+
+    await waitFor(() => expect(screen.queryByText("a rude post")).not.toBeInTheDocument());
+    expect(screen.getByText("ada")).toBeInTheDocument();
+  });
+
+  it("says in words which providers need a postcode fixing", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await openSection(user, "Providers");
+
+    // Words, not a tick or a colour: this column is why the tab exists.
+    expect(await screen.findByText("Postcode needs fixing")).toBeInTheDocument();
+    expect(screen.getAllByText("On the map").length).toBeGreaterThan(0);
+  });
+
+  it("filters providers to the ones that need fixing", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "Providers");
+    await screen.findByText("Placed College");
+
+    await user.selectOptions(screen.getByLabelText("On the map"), "false");
+
+    await waitFor(() => expect(screen.queryByText("Placed College")).not.toBeInTheDocument());
+    expect(screen.getByText("Lost College")).toBeInTheDocument();
+  });
+
+  it("offers an export on every data section", async () => {
+    fakeServer();
+    const asked = [];
+    const realFetch = window.fetch;
+    vi.stubGlobal("fetch", async (url, options) => {
+      if (String(url).includes("/export/")) {
+        asked.push(String(url));
+        return new Response("\ufeffA\n1\n", {
+          status: 200,
+          headers: { "Content-Disposition": 'attachment; filename="tsmile-x-2026-09-29.csv"' },
+        });
+      }
+      return realFetch(url, options);
+    });
+    URL.createObjectURL = vi.fn(() => "blob:test");
+    URL.revokeObjectURL = vi.fn();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    for (const [section, endpoint] of [
+      ["Interest", "/admin-portal/interest/export/"],
+      ["Feedback", "/admin-portal/feedback/export/"],
+      ["Providers", "/admin-portal/providers/export/"],
+      ["Audit log", "/admin-portal/audit-log/export/"],
+      ["People", "/admin-portal/people/export/"],
+    ]) {
+      await openSection(user, section);
+      await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+      await waitFor(() => expect(asked.at(-1)).toContain(endpoint));
+    }
   });
 });
 

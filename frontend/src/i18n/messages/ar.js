@@ -986,6 +986,8 @@ const ar = {
     typeToConfirm: "اكتب {text} للتأكيد",
     actionFailed: "لم ينجح ذلك. حاول مرة أخرى.",
     tabs: {
+      providers: "المزوّدون",
+      audit: "سجل الإجراءات",
       overview: "نظرة عامة",
       interest: "الاهتمام",
       reports: "المنشورات المبلّغ عنها",
@@ -1036,6 +1038,7 @@ const ar = {
       evening: "مساء الخير، {name}",
     },
     nav: {
+      site: "الموقع",
       label: "أقسام بوابة الإدارة",
       menu: "الأقسام",
       measure: "القياس",
@@ -1090,6 +1093,45 @@ const ar = {
     signedOut: {
       title: "سجّل الدخول لفتح بوابة الإدارة",
       lead: "هذه الصفحة لموظفي أمازون. سجّل الدخول بحساب الموظف لديك للمتابعة.",
+    },
+    audit: {
+      actor: "الموظف",
+      action: "الإجراء",
+      caption: "كل ما فعله الموظفون في البوابة",
+      empty: "لم يُسجَّل شيء بعد.",
+      columns: {
+        when: "متى",
+        who: "من",
+        what: "ماذا",
+        target: "الهدف",
+      },
+      actions: {
+        account_removed: "أزال حسابًا",
+        staff_revoked: "سحب صلاحية الإدارة",
+        role_changed: "غيّر دور حساب",
+        password_reset_sent: "أرسل بريد إعادة تعيين كلمة المرور",
+        post_deleted: "حذف منشورًا",
+        report_resolved: "عالج بلاغًا",
+        report_dismissed: "رفض بلاغًا",
+        feedback_handled: "وضع علامة معالجة على ملاحظة",
+        csv_exported: "صدّر ملف CSV",
+      },
+    },
+    providers: {
+      filter: "على الخريطة",
+      unplacedOnly: "يحتاج تصحيح الرمز البريدي",
+      placedOnly: "موجود على الخريطة",
+      caption: "المزوّدون الذين يمكن أن يعيدهم البحث القريب",
+      empty: "لم يُحمَّل أي مزوّد.",
+      onMap: "على الخريطة",
+      needsPostcode: "الرمز البريدي يحتاج تصحيحًا",
+      columns: {
+        name: "الاسم",
+        postcode: "الرمز البريدي",
+        region: "المنطقة",
+        type: "النوع",
+        map: "الخريطة",
+      },
     },
     pin: {
       title: "أدخل رمز البوابة",

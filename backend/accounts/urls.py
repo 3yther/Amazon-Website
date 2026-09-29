@@ -7,11 +7,20 @@ from .admin_actions import (
     SendPasswordResetView,
 )
 from .admin_dashboard import DashboardChartsView, DashboardView
-from .admin_exports import OverviewCsvView, PeopleCsvView
+from .admin_exports import (
+    AuditLogCsvView,
+    FeedbackCsvView,
+    InterestCsvView,
+    OverviewCsvView,
+    PeopleCsvView,
+    ProvidersCsvView,
+)
 from .admin_portal import (
+    AuditLogView,
     FeedbackListView,
     LockView,
     OverviewView,
+    ProvidersView,
     PeopleView,
     RemoveAccountView,
     RevokeStaffView,
@@ -88,6 +97,28 @@ urlpatterns = [
         name="admin-portal-feedback-handle",
     ),
     path("admin-portal/badges/", BadgeCountsView.as_view(), name="admin-portal-badges"),
+    path("admin-portal/audit-log/", AuditLogView.as_view(), name="admin-portal-audit-log"),
+    path(
+        "admin-portal/audit-log/export/",
+        AuditLogCsvView.as_view(),
+        name="admin-portal-audit-log-export",
+    ),
+    path("admin-portal/providers/", ProvidersView.as_view(), name="admin-portal-providers"),
+    path(
+        "admin-portal/providers/export/",
+        ProvidersCsvView.as_view(),
+        name="admin-portal-providers-export",
+    ),
+    path(
+        "admin-portal/feedback/export/",
+        FeedbackCsvView.as_view(),
+        name="admin-portal-feedback-export",
+    ),
+    path(
+        "admin-portal/interest/export/",
+        InterestCsvView.as_view(),
+        name="admin-portal-interest-export",
+    ),
     path(
         "admin-portal/people/<int:pk>/role/",
         ChangeRoleView.as_view(),

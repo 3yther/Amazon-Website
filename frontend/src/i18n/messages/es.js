@@ -984,6 +984,8 @@ const es = {
     typeToConfirm: "Escribe {text} para confirmar",
     actionFailed: "No ha funcionado. Inténtalo otra vez.",
     tabs: {
+      providers: "Centros",
+      audit: "Registro de acciones",
       overview: "Resumen",
       interest: "Interés",
       reports: "Publicaciones denunciadas",
@@ -1034,6 +1036,7 @@ const es = {
       evening: "Buenas noches, {name}",
     },
     nav: {
+      site: "El sitio",
       label: "Secciones del Portal de administración",
       menu: "Secciones",
       measure: "Medir",
@@ -1088,6 +1091,45 @@ const es = {
     signedOut: {
       title: "Inicia sesión para abrir el Portal de administración",
       lead: "Esta página es para el personal de Amazon. Inicia sesión con tu cuenta de personal para continuar.",
+    },
+    audit: {
+      actor: "Miembro del personal",
+      action: "Acción",
+      caption: "Todo lo que el personal ha hecho en el portal",
+      empty: "Aún no hay nada registrado.",
+      columns: {
+        when: "Cuándo",
+        who: "Quién",
+        what: "Qué",
+        target: "Objetivo",
+      },
+      actions: {
+        account_removed: "Eliminó una cuenta",
+        staff_revoked: "Retiró el acceso de administrador",
+        role_changed: "Cambió el rol de una cuenta",
+        password_reset_sent: "Envió un correo de restablecimiento",
+        post_deleted: "Eliminó una publicación",
+        report_resolved: "Resolvió una denuncia",
+        report_dismissed: "Descartó una denuncia",
+        feedback_handled: "Marcó un comentario como atendido",
+        csv_exported: "Exportó un CSV",
+      },
+    },
+    providers: {
+      filter: "En el mapa",
+      unplacedOnly: "Necesita corregir el código postal",
+      placedOnly: "Ya está en el mapa",
+      caption: "Centros que puede devolver la búsqueda cercana",
+      empty: "No hay centros cargados.",
+      onMap: "En el mapa",
+      needsPostcode: "Código postal por corregir",
+      columns: {
+        name: "Nombre",
+        postcode: "Código postal",
+        region: "Región",
+        type: "Tipo",
+        map: "Mapa",
+      },
     },
     pin: {
       title: "Introduce el PIN del portal",

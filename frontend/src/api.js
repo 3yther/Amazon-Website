@@ -321,6 +321,16 @@ export function adminRevokeStaff(id) {
   return postJson(`/api/accounts/admin-portal/people/${id}/revoke-staff/`, {});
 }
 
+/** One page of the audit log. filters: actor, action, range, page. */
+export function adminAuditLog(filters, options) {
+  return request("/api/accounts/admin-portal/audit-log/", { ...options, params: filters });
+}
+
+/** One page of providers. filters: region, placed, page. */
+export function adminProviders(filters, options) {
+  return request("/api/accounts/admin-portal/providers/", { ...options, params: filters });
+}
+
 /** The small counts beside the sidebar's sections: unhandled feedback, open reports. */
 export function adminBadges(options) {
   return request("/api/accounts/admin-portal/badges/", options);

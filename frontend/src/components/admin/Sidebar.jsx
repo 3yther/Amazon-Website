@@ -35,6 +35,13 @@ export const SECTIONS = [
       { id: "feedback", label: "admin.tabs.feedback", badge: "unhandledFeedback" },
     ],
   },
+  {
+    heading: "admin.nav.site",
+    items: [
+      { id: "providers", label: "admin.tabs.providers" },
+      { id: "audit", label: "admin.tabs.audit" },
+    ],
+  },
 ];
 
 export const NAV_IDS = SECTIONS.flatMap((section) => section.items.map((item) => item.id));

@@ -960,6 +960,8 @@ const en = {
     typeToConfirm: "Type {text} to confirm",
     actionFailed: "That did not work. Try again.",
     tabs: {
+      providers: "Providers",
+      audit: "Audit log",
       overview: "Overview",
       interest: "Interest",
       reports: "Reported posts",
@@ -1010,6 +1012,7 @@ const en = {
       evening: "Good evening, {name}",
     },
     nav: {
+      site: "The site",
       label: "Admin Portal sections",
       menu: "Sections",
       measure: "Measure",
@@ -1064,6 +1067,45 @@ const en = {
     signedOut: {
       title: "Sign in to open the Admin Portal",
       lead: "This page is for Amazon staff. Sign in with your staff account to continue.",
+    },
+    audit: {
+      actor: "Staff member",
+      action: "Action",
+      caption: "Everything staff have done in the portal",
+      empty: "Nothing recorded yet.",
+      columns: {
+        when: "When",
+        who: "Who",
+        what: "What",
+        target: "Target",
+      },
+      actions: {
+        account_removed: "Removed an account",
+        staff_revoked: "Took admin access away",
+        role_changed: "Changed an account's role",
+        password_reset_sent: "Sent a password reset email",
+        post_deleted: "Deleted a post",
+        report_resolved: "Resolved a report",
+        report_dismissed: "Dismissed a report",
+        feedback_handled: "Marked feedback dealt with",
+        csv_exported: "Exported a CSV",
+      },
+    },
+    providers: {
+      filter: "On the map",
+      unplacedOnly: "Needs a postcode fixing",
+      placedOnly: "Already on the map",
+      caption: "Providers the near-you search can return",
+      empty: "No providers loaded.",
+      onMap: "On the map",
+      needsPostcode: "Postcode needs fixing",
+      columns: {
+        name: "Name",
+        postcode: "Postcode",
+        region: "Region",
+        type: "Type",
+        map: "Map",
+      },
     },
     pin: {
       title: "Enter the portal PIN",

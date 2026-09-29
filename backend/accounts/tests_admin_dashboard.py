@@ -19,12 +19,13 @@ from rest_framework.test import APITestCase
 from rest_framework.throttling import ScopedRateThrottle
 
 from community.models import Answer, Question
+from interest.models import ExpressionOfInterest
 from providers.models import Provider
 
 from .admin_exports import OverviewCsvView, PeopleCsvView
 from .audit import record
 from .csv_export import csv_filename, escape_cell, stream_csv
-from .models import AdminAuditLog, Profile, UserPreference
+from .models import AdminAuditLog, Feedback, Profile, UserPreference
 
 PASSWORD = "harbour-lantern-47"
 
@@ -629,3 +630,229 @@ class CsvExportTests(APITestCase):
         self.assertIn("admin_export", ScopedRateThrottle.THROTTLE_RATES)
         self.assertEqual(PeopleCsvView.throttle_scope, "admin_export")
         self.assertEqual(OverviewCsvView.throttle_scope, "admin_export")
+
+
+AUDIT_URL = "/api/accounts/admin-portal/audit-log/"
+PROVIDERS_URL = "/api/accounts/admin-portal/providers/"
+EXPORTS = {
+    "people": "/api/accounts/admin-portal/people/export/",
+    "overview": "/api/accounts/admin-portal/dashboard/export/",
+    "audit-log": "/api/accounts/admin-portal/audit-log/export/",
+    "providers": "/api/accounts/admin-portal/providers/export/",
+    "feedback": "/api/accounts/admin-portal/feedback/export/",
+    "interest": "/api/accounts/admin-portal/interest/export/",
+}
+
+
+def a_provider(name, placed=True, region=None):
+    from providers.models import Provider as P
+
+    return Provider.objects.create(
+        name=name,
+        postcode="M1 1AA" if placed else "XX1 1XX",
+        region=region or P._meta.get_field("region").choices[0][0],
+        provider_type=P._meta.get_field("provider_type").choices[0][0],
+        latitude=53.4 if placed else 0,
+        longitude=-2.2 if placed else 0,
+    )
+
+
+@override_settings(ADMIN_PORTAL_PIN=PIN)
+class AuditLogTabTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+        self.staff = make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+        self.client.post("/api/accounts/admin-portal/unlock/", {"pin": PIN}, format="json")
+        AdminAuditLog.objects.create(
+            actor=self.staff,
+            actor_username="staffer",
+            action=AdminAuditLog.Action.POST_DELETED,
+            target_label="a rude post",
+        )
+        AdminAuditLog.objects.create(
+            actor_username="someoneelse",
+            action=AdminAuditLog.Action.ROLE_CHANGED,
+            target_label="ada",
+        )
+
+    def test_it_lists_who_did_what(self):
+        rows = self.client.get(AUDIT_URL).data["results"]
+
+        self.assertEqual({row["actor"] for row in rows}, {"staffer", "someoneelse"})
+        self.assertIn("Deleted a post", [row["action_label"] for row in rows])
+
+    def test_it_filters_by_staff_member(self):
+        rows = self.client.get(AUDIT_URL, {"actor": "someone"}).data["results"]
+
+        self.assertEqual([row["actor"] for row in rows], ["someoneelse"])
+
+    def test_it_filters_by_action(self):
+        rows = self.client.get(AUDIT_URL, {"action": "role_changed"}).data["results"]
+
+        self.assertEqual([row["target_label"] for row in rows], ["ada"])
+
+    def test_it_still_names_whoever_did_it_after_they_are_gone(self):
+        """The copied username is the whole reason it is stored separately."""
+        self.staff.delete()
+        make_user("staffer2", "amazon_staff")
+        self.client.login(username="staffer2", password=PASSWORD)
+        self.client.post("/api/accounts/admin-portal/unlock/", {"pin": PIN}, format="json")
+
+        rows = self.client.get(AUDIT_URL).data["results"]
+
+        self.assertIn("staffer", [row["actor"] for row in rows])
+
+    def test_the_four_ways_in(self):
+        self.client.logout()
+        self.assertIn(self.client.get(AUDIT_URL).status_code, (401, 403))
+
+        make_user("ada")
+        self.client.login(username="ada", password=PASSWORD)
+        self.assertEqual(self.client.get(AUDIT_URL).status_code, 403)
+
+        self.client.logout()
+        make_user("locked", "amazon_staff")
+        self.client.login(username="locked", password=PASSWORD)
+        self.assertEqual(self.client.get(AUDIT_URL).status_code, 403)
+
+
+@override_settings(ADMIN_PORTAL_PIN=PIN)
+class ProvidersTabTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+        make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+        self.client.post("/api/accounts/admin-portal/unlock/", {"pin": PIN}, format="json")
+        a_provider("Placed College", placed=True)
+        a_provider("Lost College", placed=False)
+
+    def test_it_says_which_ones_are_on_the_map(self):
+        rows = {row["name"]: row["placed"] for row in self.client.get(PROVIDERS_URL).data["results"]}
+
+        self.assertTrue(rows["Placed College"])
+        self.assertFalse(rows["Lost College"])
+
+    def test_it_filters_to_the_ones_that_need_a_postcode_fixing(self):
+        rows = self.client.get(PROVIDERS_URL, {"placed": "false"}).data["results"]
+
+        self.assertEqual([row["name"] for row in rows], ["Lost College"])
+
+    def test_a_student_gets_nothing(self):
+        self.client.logout()
+        make_user("ada")
+        self.client.login(username="ada", password=PASSWORD)
+
+        self.assertEqual(self.client.get(PROVIDERS_URL).status_code, 403)
+
+
+@override_settings(ADMIN_PORTAL_PIN=PIN)
+class EveryExportTests(APITestCase):
+    """The properties every export shares, checked on every one of them."""
+
+    def setUp(self):
+        cache.clear()
+        self.staff = make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+        self.client.post("/api/accounts/admin-portal/unlock/", {"pin": PIN}, format="json")
+
+    def body(self, url, params=None):
+        response = self.client.get(url, params or {})
+        self.assertEqual(response.status_code, 200)
+        return b"".join(response.streaming_content).decode("utf-8-sig")
+
+    def test_anonymous_gets_nothing_from_any_of_them(self):
+        self.client.logout()
+        for name, url in EXPORTS.items():
+            with self.subTest(export=name):
+                self.assertIn(self.client.get(url).status_code, (401, 403))
+
+    def test_a_student_gets_nothing_from_any_of_them(self):
+        self.client.logout()
+        make_user("ada")
+        self.client.login(username="ada", password=PASSWORD)
+
+        for name, url in EXPORTS.items():
+            with self.subTest(export=name):
+                self.assertEqual(self.client.get(url).status_code, 403)
+
+    def test_staff_without_the_pin_get_nothing_from_any_of_them(self):
+        self.client.logout()
+        make_user("locked", "amazon_staff")
+        self.client.login(username="locked", password=PASSWORD)
+
+        for name, url in EXPORTS.items():
+            with self.subTest(export=name):
+                self.assertEqual(self.client.get(url).status_code, 403)
+
+    def test_every_one_opens_with_a_bom_and_a_dated_name(self):
+        a_provider("Somewhere College")
+        Feedback.objects.create(category="bug", message="hello")
+
+        for name, url in EXPORTS.items():
+            with self.subTest(export=name):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(b"".join(response.streaming_content).startswith(b"\xef\xbb\xbf"))
+                self.assertIn(f"tsmile-{name}-", response["Content-Disposition"])
+
+    def test_every_one_is_written_to_the_audit_log(self):
+        for name, url in EXPORTS.items():
+            with self.subTest(export=name):
+                AdminAuditLog.objects.all().delete()
+                self.client.get(url)
+                entry = AdminAuditLog.objects.get(action=AdminAuditLog.Action.CSV_EXPORTED)
+                self.assertEqual(entry.detail["export"], name)
+
+    def test_no_export_lets_a_formula_through(self):
+        """
+        Every one of these carries text written by the public somewhere.
+        """
+        nasty = '=HYPERLINK("http://evil.example","x")'
+        Feedback.objects.create(category="bug", message=nasty)
+        a_provider(nasty)
+        ExpressionOfInterest.objects.create(
+            full_name=nasty, email="a@example.com", user_type="student", message=nasty
+        )
+        User.objects.create_user(nasty, password=PASSWORD)
+
+        for name in ["feedback", "providers", "interest", "people"]:
+            with self.subTest(export=name):
+                body = self.body(EXPORTS[name])
+                self.assertIn("'=HYPERLINK", body)
+                self.assertNotIn(",=HYPERLINK", body)
+
+    def test_the_feedback_export_honours_the_filters(self):
+        Feedback.objects.create(category="bug", message="a bug")
+        Feedback.objects.create(category="general", message="a thought")
+
+        body = self.body(EXPORTS["feedback"], {"category": "bug"})
+
+        self.assertIn("a bug", body)
+        self.assertNotIn("a thought", body)
+
+    def test_the_providers_export_honours_the_filters(self):
+        a_provider("Placed College", placed=True)
+        a_provider("Lost College", placed=False)
+
+        body = self.body(EXPORTS["providers"], {"placed": "false"})
+
+        self.assertIn("Lost College", body)
+        self.assertNotIn("Placed College", body)
+
+    def test_the_audit_export_honours_the_filters(self):
+        AdminAuditLog.objects.create(actor_username="one", action="post_deleted", target_label="x")
+        AdminAuditLog.objects.create(actor_username="two", action="role_changed", target_label="y")
+
+        body = self.body(EXPORTS["audit-log"], {"action": "role_changed"})
+
+        self.assertIn("Changed an account's role", body)
+        self.assertNotIn("Deleted a post", body)
+
+    def test_exports_send_every_row_not_one_page(self):
+        for index in range(25):  # the lists page at 20
+            Feedback.objects.create(category="bug", message=f"message {index}")
+
+        rows = self.body(EXPORTS["feedback"]).strip().splitlines()
+
+        self.assertEqual(len(rows) - 1, 25)

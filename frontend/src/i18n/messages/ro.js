@@ -984,6 +984,8 @@ const ro = {
     typeToConfirm: "Scrie {text} pentru a confirma",
     actionFailed: "Nu a mers. Încearcă din nou.",
     tabs: {
+      providers: "Furnizori",
+      audit: "Jurnal de acțiuni",
       overview: "Prezentare",
       interest: "Interes",
       reports: "Postări raportate",
@@ -1034,6 +1036,7 @@ const ro = {
       evening: "Bună seara, {name}",
     },
     nav: {
+      site: "Site-ul",
       label: "Secțiunile Panoului de administrare",
       menu: "Secțiuni",
       measure: "Măsurare",
@@ -1088,6 +1091,45 @@ const ro = {
     signedOut: {
       title: "Conectează-te pentru a deschide Panoul de administrare",
       lead: "Această pagină este pentru personalul Amazon. Conectează-te cu contul tău de personal pentru a continua.",
+    },
+    audit: {
+      actor: "Membru al personalului",
+      action: "Acțiune",
+      caption: "Tot ce a făcut personalul în panou",
+      empty: "Nu s-a înregistrat nimic încă.",
+      columns: {
+        when: "Când",
+        who: "Cine",
+        what: "Ce",
+        target: "Țintă",
+      },
+      actions: {
+        account_removed: "A șters un cont",
+        staff_revoked: "A retras accesul de administrator",
+        role_changed: "A schimbat rolul unui cont",
+        password_reset_sent: "A trimis un e-mail de resetare",
+        post_deleted: "A șters o postare",
+        report_resolved: "A rezolvat o raportare",
+        report_dismissed: "A respins o raportare",
+        feedback_handled: "A marcat feedbackul ca rezolvat",
+        csv_exported: "A exportat un CSV",
+      },
+    },
+    providers: {
+      filter: "Pe hartă",
+      unplacedOnly: "Necesită corectarea codului poștal",
+      placedOnly: "Deja pe hartă",
+      caption: "Furnizori pe care îi poate returna căutarea din apropiere",
+      empty: "Niciun furnizor încărcat.",
+      onMap: "Pe hartă",
+      needsPostcode: "Cod poștal de corectat",
+      columns: {
+        name: "Nume",
+        postcode: "Cod poștal",
+        region: "Regiune",
+        type: "Tip",
+        map: "Hartă",
+      },
     },
     pin: {
       title: "Introdu PIN-ul panoului",

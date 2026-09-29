@@ -26,7 +26,10 @@ from community.models import Answer, Question
 from content.models import Pathway
 from interest.models import ExpressionOfInterest
 
-from .models import Feedback, Profile
+from providers.models import Provider
+
+from . import date_range
+from .models import AdminAuditLog, Feedback, Profile
 from .permissions import IsAmazonStaff, IsAmazonStaffAndUnlocked
 from .portal_lock import is_unlocked, lock, pin_is_correct, unlock
 
@@ -399,3 +402,112 @@ class FeedbackListView(generics.ListAPIView):
             feedback = feedback.filter(handled=handled == "true")
 
         return feedback
+
+
+class AuditLogSerializer(serializers.ModelSerializer):
+    """One recorded staff action, as the Audit log tab reads it."""
+
+    # The stored name, not actor.username: actor goes NULL when that staff
+    # account is removed, and the whole point of the copy is that the record
+    # survives them.
+    actor = serializers.CharField(source="actor_username", read_only=True)
+    action_label = serializers.CharField(source="get_action_display", read_only=True)
+
+    class Meta:
+        model = AdminAuditLog
+        fields = [
+            "id",
+            "actor",
+            "action",
+            "action_label",
+            "target_type",
+            "target_label",
+            "detail",
+            "created_at",
+        ]
+        read_only_fields = fields
+
+
+class AuditLogView(generics.ListAPIView):
+    """GET /api/accounts/admin-portal/audit-log/?actor=ada&action=post_deleted
+
+    Read-only, and deliberately so: an audit log with an edit button on it is
+    not an audit log. Rows are only ever written by record().
+    """
+
+    serializer_class = AuditLogSerializer
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
+
+    def get_queryset(self):
+        return filtered_audit_log(self.request)
+
+
+def filtered_audit_log(request):
+    """The audit log narrowed by the query string. Shared with the CSV export."""
+    entries = AdminAuditLog.objects.all()
+
+    actor = (request.query_params.get("actor") or "").strip()
+    if actor:
+        entries = entries.filter(actor_username__icontains=actor)
+
+    action = request.query_params.get("action")
+    if action:
+        entries = entries.filter(action=action)
+
+    window = date_range.from_request(request)
+    if request.query_params.get("range"):
+        entries = entries.filter(**window.filter_for("created_at"))
+
+    return entries
+
+
+class ProviderSerializer(serializers.ModelSerializer):
+    """
+    A provider on the read-only Providers tab.
+
+    `placed` is the same test `manage.py check_providers` uses: a provider at
+    exactly 0,0 is one whose postcode nothing could be found for, not one in
+    the Atlantic.
+    """
+
+    placed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Provider
+        fields = ["id", "name", "postcode", "region", "provider_type", "placed"]
+        read_only_fields = fields
+
+    def get_placed(self, provider):
+        return not (provider.latitude == 0 and provider.longitude == 0)
+
+
+class ProvidersView(generics.ListAPIView):
+    """GET /api/accounts/admin-portal/providers/?placed=false&region=North West
+
+    Read-only. Editing providers stays in Django admin, which already has the
+    forms and the validation for it; this tab exists to find the ones whose
+    postcode needs fixing.
+    """
+
+    serializer_class = ProviderSerializer
+    permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
+
+    def get_queryset(self):
+        return filtered_providers(self.request)
+
+
+def filtered_providers(request):
+    """Providers narrowed by the query string. Shared with the CSV export."""
+    providers = Provider.objects.all().order_by("name")
+
+    region = (request.query_params.get("region") or "").strip()
+    if region:
+        providers = providers.filter(region=region)
+
+    placed = (request.query_params.get("placed") or "").lower()
+    if placed == "false":
+        providers = providers.filter(latitude=0, longitude=0)
+    elif placed == "true":
+        providers = providers.exclude(latitude=0, longitude=0)
+
+    return providers

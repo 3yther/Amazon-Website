@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   adminDeletePost,
+  adminAuditLog,
   adminFeedback,
   adminHandleFeedback,
   adminPeople,
   adminPosts,
+  adminProviders,
   adminRemoveAccount,
   adminReportAction,
   adminReports,
@@ -668,6 +670,173 @@ export function PeopleTab() {
           onCancel={() => setConfirming(null)}
         />
       )}
+    </>
+  );
+}
+
+/* ---------- Audit log ---------- */
+
+/** The actions the filter offers, in the order they appear on the model. */
+const AUDIT_ACTIONS = [
+  "account_removed",
+  "staff_revoked",
+  "role_changed",
+  "password_reset_sent",
+  "post_deleted",
+  "report_resolved",
+  "report_dismissed",
+  "feedback_handled",
+  "csv_exported",
+];
+
+/**
+ * Who did what, and when. Read-only, and deliberately so: an audit log with
+ * an edit button on it is not an audit log.
+ *
+ * The staff member's name comes from the stored copy rather than the linked
+ * account, so an entry still names whoever did it after their own account has
+ * gone. That is most of the point of having it.
+ */
+export function AuditLogTab() {
+  const t = useT();
+  const [actor, setActor] = useState("");
+  const [action, setAction] = useState("");
+  const filters = useMemo(() => ({ actor, action }), [actor, action]);
+  const list = useStaffList(adminAuditLog, filters);
+
+  return (
+    <>
+      <div className="admin-filters">
+        <div className="admin-filters__field">
+          <label className="label" htmlFor="audit-actor">
+            {t("admin.audit.actor")}
+          </label>
+          <input
+            id="audit-actor"
+            type="search"
+            value={actor}
+            onChange={(event) => setActor(event.target.value)}
+          />
+        </div>
+
+        <div className="admin-filters__field">
+          <label className="label" htmlFor="audit-action">
+            {t("admin.audit.action")}
+          </label>
+          <select
+            id="audit-action"
+            value={action}
+            onChange={(event) => setAction(event.target.value)}
+          >
+            <option value="">{t("admin.allOf")}</option>
+            {AUDIT_ACTIONS.map((value) => (
+              <option key={value} value={value}>
+                {t(`admin.audit.actions.${value}`)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <StaffList
+        label={t("admin.tabs.audit")}
+        caption={t("admin.audit.caption")}
+        empty={t("admin.audit.empty")}
+        {...list}
+      >
+        <thead>
+          <tr>
+            {["when", "who", "what", "target"].map((column) => (
+              <th key={column} scope="col">
+                {t(`admin.audit.columns.${column}`)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {(list.data?.results ?? []).map((row) => (
+            <tr key={row.id}>
+              <td>{formatDate(row.created_at)}</td>
+              <td>{row.actor || <Nothing />}</td>
+              <td>{t(`admin.audit.actions.${row.action}`)}</td>
+              <td>
+                {/* Its own element, so the name of the thing acted on is
+                    readable on its own rather than running into the detail
+                    beside it. */}
+                <span className="admin-audit__target">{row.target_label || <Nothing />}</span>
+                {row.detail && Object.keys(row.detail).length > 0 && (
+                  <Folded text={JSON.stringify(row.detail)} />
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </StaffList>
+    </>
+  );
+}
+
+/* ---------- Providers ---------- */
+
+/**
+ * The provider list, read-only. Editing stays in Django admin, which already
+ * has the forms and the validation; this exists to find the ones whose
+ * postcode needs fixing before they can go on the map.
+ */
+export function ProvidersTab() {
+  const t = useT();
+  const [placed, setPlaced] = useState("");
+  const filters = useMemo(() => ({ placed }), [placed]);
+  const list = useStaffList(adminProviders, filters);
+
+  return (
+    <>
+      <div className="admin-filters">
+        <div className="admin-filters__field">
+          <label className="label" htmlFor="providers-placed">
+            {t("admin.providers.filter")}
+          </label>
+          <select
+            id="providers-placed"
+            value={placed}
+            onChange={(event) => setPlaced(event.target.value)}
+          >
+            <option value="">{t("admin.allOf")}</option>
+            <option value="false">{t("admin.providers.unplacedOnly")}</option>
+            <option value="true">{t("admin.providers.placedOnly")}</option>
+          </select>
+        </div>
+      </div>
+
+      <StaffList
+        label={t("admin.tabs.providers")}
+        caption={t("admin.providers.caption")}
+        empty={t("admin.providers.empty")}
+        {...list}
+      >
+        <thead>
+          <tr>
+            {["name", "postcode", "region", "type", "map"].map((column) => (
+              <th key={column} scope="col">
+                {t(`admin.providers.columns.${column}`)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {(list.data?.results ?? []).map((row) => (
+            <tr key={row.id}>
+              <td>{row.name}</td>
+              <td>{row.postcode}</td>
+              <td>{row.region}</td>
+              <td>{row.provider_type}</td>
+              {/* Words, not a tick or a colour: this column is the reason the
+                  tab exists, and it has to be readable to everybody. */}
+              <td>{row.placed ? t("admin.providers.onMap") : t("admin.providers.needsPostcode")}</td>
+            </tr>
+          ))}
+        </tbody>
+      </StaffList>
     </>
   );
 }

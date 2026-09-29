@@ -22,6 +22,8 @@ WRITTEN DOWN. Every export is recorded in the audit log with the filters it
 used, because "who pulled a list of every account, and when" is exactly the
 kind of question the audit log exists to answer.
 """
+import json
+
 from django.contrib.auth.models import User
 from django.db.models import Count
 from rest_framework.permissions import IsAuthenticated
@@ -32,6 +34,8 @@ from . import date_range
 from .admin_dashboard import DashboardChartsView, DashboardView
 from .audit import record
 from .csv_export import stream_csv
+from interest.models import ExpressionOfInterest
+
 from .models import AdminAuditLog
 from .permissions import IsAmazonStaffAndUnlocked
 
@@ -177,3 +181,158 @@ class OverviewCsvView(BaseExportView):
                         yield [name, row["label"], "", row["value"], "", ""]
 
         return stream_csv("overview", ["Section", "Label", "Series", "Value", "A", "B"], rows())
+
+
+class AuditLogCsvView(BaseExportView):
+    """GET /api/accounts/admin-portal/audit-log/export/?actor=ada
+
+    The audit log itself. Exporting it is also an auditable action, so this
+    writes its own entry, which will appear in the next export. That is not a
+    bug: "who took a copy of the log" is exactly the sort of thing the log is
+    for.
+    """
+
+    export_name = "audit-log"
+
+    def get(self, request):
+        from .admin_portal import filtered_audit_log
+
+        entries = filtered_audit_log(request)
+        self.audit(request, rows=entries.count())
+
+        def rows():
+            for entry in entries.iterator():
+                yield [
+                    entry.created_at,
+                    entry.actor_username,
+                    entry.get_action_display(),
+                    entry.target_type,
+                    entry.target_label,
+                    # The detail is small structured data; JSON keeps it
+                    # readable in one cell rather than inventing columns that
+                    # differ per action.
+                    json.dumps(entry.detail, ensure_ascii=False) if entry.detail else "",
+                ]
+
+        return stream_csv(
+            "audit-log",
+            ["When", "Who", "What", "Target type", "Target", "Detail"],
+            rows(),
+        )
+
+
+class ProvidersCsvView(BaseExportView):
+    """GET /api/accounts/admin-portal/providers/export/?placed=false"""
+
+    export_name = "providers"
+
+    def get(self, request):
+        from .admin_portal import filtered_providers
+
+        providers = filtered_providers(request)
+        self.audit(request, rows=providers.count())
+
+        def rows():
+            for provider in providers.iterator():
+                placed = not (provider.latitude == 0 and provider.longitude == 0)
+                yield [
+                    provider.name,
+                    provider.postcode,
+                    provider.get_region_display(),
+                    provider.get_provider_type_display(),
+                    placed,
+                ]
+
+        return stream_csv(
+            "providers",
+            ["Name", "Postcode", "Region", "Type", "On the map"],
+            rows(),
+        )
+
+
+class FeedbackCsvView(BaseExportView):
+    """GET /api/accounts/admin-portal/feedback/export/?category=bug&handled=false
+
+    The Feedback tab's columns, including the email, because that tab shows it:
+    whoever sent the feedback left the address for a reply, which is the
+    opposite of the People tab's situation.
+    """
+
+    export_name = "feedback"
+
+    def get(self, request):
+        from .admin_portal import FeedbackListView
+
+        view = FeedbackListView()
+        view.request = request
+        feedback = view.get_queryset()
+
+        self.audit(request, rows=feedback.count())
+
+        def rows():
+            for item in feedback.iterator():
+                yield [
+                    item.created_at,
+                    item.get_category_display(),
+                    item.message,
+                    item.email,
+                    item.user.username if item.user else "",
+                    item.handled,
+                    item.handled_by.username if item.handled_by else "",
+                    item.handled_at,
+                    item.admin_note,
+                ]
+
+        return stream_csv(
+            "feedback",
+            [
+                "Sent",
+                "Category",
+                "Message",
+                "Email",
+                "Username",
+                "Dealt with",
+                "Dealt with by",
+                "Dealt with at",
+                "Staff note",
+            ],
+            rows(),
+        )
+
+
+class InterestCsvView(BaseExportView):
+    """GET /api/accounts/admin-portal/interest/export/
+
+    The expressions of interest. This one DOES carry names and emails, because
+    that is the whole point of the form: everybody in it asked to be contacted.
+    """
+
+    export_name = "interest"
+
+    def get(self, request):
+        submissions = ExpressionOfInterest.objects.select_related(
+            "user", "pathway"
+        ).order_by("-submitted_at")
+
+        window = date_range.from_request(request)
+        if request.query_params.get("range"):
+            submissions = submissions.filter(**window.filter_for("submitted_at"))
+
+        self.audit(request, rows=submissions.count())
+
+        def rows():
+            for row in submissions.iterator():
+                yield [
+                    row.submitted_at,
+                    row.full_name,
+                    row.email,
+                    row.user_type,
+                    row.pathway.name if row.pathway else "",
+                    row.message,
+                ]
+
+        return stream_csv(
+            "interest",
+            ["Sent", "Name", "Email", "They are a", "Pathway", "Message"],
+            rows(),
+        )

@@ -985,6 +985,8 @@ const pt = {
     typeToConfirm: "Escreve {text} para confirmar",
     actionFailed: "Não resultou. Tenta outra vez.",
     tabs: {
+      providers: "Centros",
+      audit: "Registo de ações",
       overview: "Resumo",
       interest: "Interesse",
       reports: "Publicações denunciadas",
@@ -1035,6 +1037,7 @@ const pt = {
       evening: "Boa noite, {name}",
     },
     nav: {
+      site: "O site",
       label: "Secções do Portal de administração",
       menu: "Secções",
       measure: "Medir",
@@ -1089,6 +1092,45 @@ const pt = {
     signedOut: {
       title: "Inicia sessão para abrir o Portal de administração",
       lead: "Esta página é para o pessoal da Amazon. Inicia sessão com a tua conta de pessoal para continuar.",
+    },
+    audit: {
+      actor: "Membro do pessoal",
+      action: "Ação",
+      caption: "Tudo o que o pessoal fez no portal",
+      empty: "Ainda nada registado.",
+      columns: {
+        when: "Quando",
+        who: "Quem",
+        what: "O quê",
+        target: "Alvo",
+      },
+      actions: {
+        account_removed: "Removeu uma conta",
+        staff_revoked: "Retirou o acesso de administrador",
+        role_changed: "Alterou o papel de uma conta",
+        password_reset_sent: "Enviou um e-mail de reposição",
+        post_deleted: "Eliminou uma publicação",
+        report_resolved: "Resolveu uma denúncia",
+        report_dismissed: "Rejeitou uma denúncia",
+        feedback_handled: "Marcou um comentário como tratado",
+        csv_exported: "Exportou um CSV",
+      },
+    },
+    providers: {
+      filter: "No mapa",
+      unplacedOnly: "Precisa de corrigir o código postal",
+      placedOnly: "Já está no mapa",
+      caption: "Centros que a pesquisa por perto pode devolver",
+      empty: "Nenhum centro carregado.",
+      onMap: "No mapa",
+      needsPostcode: "Código postal por corrigir",
+      columns: {
+        name: "Nome",
+        postcode: "Código postal",
+        region: "Região",
+        type: "Tipo",
+        map: "Mapa",
+      },
     },
     pin: {
       title: "Introduz o PIN do portal",
