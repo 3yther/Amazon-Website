@@ -969,6 +969,16 @@ a.menu-hello__text:hover {
   line-height: 1;
 }
 
+/* A halo in the page colour, so the floating subject names fade out behind
+   the hero text instead of running through it. */
+.hero__title,
+.hero__subhead {
+  text-shadow:
+    0 0 0.25em var(--paper),
+    0 0 0.5em var(--paper),
+    0 0 1em var(--paper);
+}
+
 .hero__subhead {
   max-width: 34rem;
   font-size: clamp(1.125rem, 2.2vw, 1.375rem);
