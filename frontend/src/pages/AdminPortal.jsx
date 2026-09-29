@@ -35,6 +35,12 @@ import { useT } from "../i18n/I18nProvider.jsx";
 // thing keeping anybody out: a correct PIN on a student account still gets
 // 403 from every endpoint behind it.
 
+/** Which sections can be exported, and from where. */
+const EXPORTS = {
+  overview: "/api/accounts/admin-portal/dashboard/export/",
+  people: "/api/accounts/admin-portal/people/export/",
+};
+
 /**
  * Which part of the greeting to use. Split at 12 and 18, the same boundaries
  * the words themselves imply; a dashboard opened at 02:00 says evening rather
@@ -63,7 +69,7 @@ export default function AdminPortal() {
   const t = useT();
   const { user, checked } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { filters, range, setFilter, clearAll, anySet } = useDashboardFilters();
+  const { filters, range, setFilter, clearAll, anySet, asQueryString } = useDashboardFilters();
 
   const [lock, setLock] = useState(null); // { unlocked, configured, minutes }
   const [asking, setAsking] = useState(true);
@@ -141,6 +147,8 @@ export default function AdminPortal() {
           setFilter={setFilter}
           clearAll={clearAll}
           anySet={anySet}
+          exportUrl={EXPORTS[activeId]}
+          exportQuery={asQueryString}
         />
 
         <main className="admin-panel" aria-labelledby="page-title">

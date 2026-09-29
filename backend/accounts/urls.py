@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .admin_dashboard import DashboardChartsView, DashboardView
+from .admin_exports import OverviewCsvView, PeopleCsvView
 from .admin_portal import (
     FeedbackListView,
     LockView,
@@ -54,6 +55,16 @@ urlpatterns = [
         name="admin-portal-dashboard-charts",
     ),
     path("admin-portal/people/", PeopleView.as_view(), name="admin-portal-people"),
+    path(
+        "admin-portal/people/export/",
+        PeopleCsvView.as_view(),
+        name="admin-portal-people-export",
+    ),
+    path(
+        "admin-portal/dashboard/export/",
+        OverviewCsvView.as_view(),
+        name="admin-portal-dashboard-export",
+    ),
     path(
         "admin-portal/people/<int:pk>/remove/",
         RemoveAccountView.as_view(),

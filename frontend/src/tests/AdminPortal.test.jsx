@@ -715,3 +715,89 @@ describe("Admin Portal: accessibility", () => {
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
   });
 });
+
+describe("Admin Portal: exporting a CSV", () => {
+  /** The export fetches directly, so it is watched separately from the API. */
+  function watchDownloads() {
+    const asked = [];
+    const realFetch = window.fetch;
+    vi.stubGlobal("fetch", async (url, options) => {
+      if (String(url).includes("/export/")) {
+        asked.push(String(url));
+        return new Response("\ufeffID,Username\n1,ada\n", {
+          status: 200,
+          headers: {
+            "Content-Type": "text/csv; charset=utf-8",
+            "Content-Disposition": 'attachment; filename="tsmile-people-2026-09-29.csv"',
+          },
+        });
+      }
+      return realFetch(url, options);
+    });
+    // jsdom has neither of these, and the button uses both.
+    URL.createObjectURL = vi.fn(() => "blob:test");
+    URL.revokeObjectURL = vi.fn();
+    return asked;
+  }
+
+  it("asks for the export with the filters that are on screen", async () => {
+    fakeServer();
+    const asked = watchDownloads();
+    const user = userEvent.setup({ delay: null });
+    renderPortal("/admin-portal?range=90d");
+
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    await waitFor(() => expect(asked).toHaveLength(1));
+    expect(asked[0]).toContain("/admin-portal/dashboard/export/");
+    expect(asked[0]).toContain("range=90d");
+  });
+
+  it("exports the section you are looking at", async () => {
+    fakeServer();
+    const asked = watchDownloads();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await openSection(user, "People");
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    await waitFor(() => expect(asked).toHaveLength(1));
+    expect(asked[0]).toContain("/admin-portal/people/export/");
+  });
+
+  it("uses the filename the server chose", async () => {
+    fakeServer();
+    watchDownloads();
+    const user = userEvent.setup({ delay: null });
+    const clicked = [];
+    // Catch the temporary <a> the button makes rather than the download.
+    const realClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function stub() {
+      clicked.push(this.download);
+    };
+    renderPortal();
+
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    await waitFor(() => expect(clicked).toContain("tsmile-people-2026-09-29.csv"));
+    HTMLAnchorElement.prototype.click = realClick;
+  });
+
+  it("says so when the download fails, rather than failing silently", async () => {
+    fakeServer();
+    const realFetch = window.fetch;
+    vi.stubGlobal("fetch", async (url, options) =>
+      String(url).includes("/export/")
+        ? new Response("no", { status: 403 })
+        : realFetch(url, options),
+    );
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/did not work/);
+  });
+});
+

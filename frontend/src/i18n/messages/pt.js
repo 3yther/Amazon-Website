@@ -1082,6 +1082,12 @@ const pt = {
       failed: "Esses números não carregaram.",
       retry: "Tentar de novo",
     },
+    export: {
+      button: "Exportar CSV",
+      working: "A preparar",
+      done: "O ficheiro foi transferido.",
+      failed: "Essa transferência não funcionou. Tenta de novo.",
+    },
     signedOut: {
       title: "Inicia sessão para abrir o Portal de administração",
       lead: "Esta página é para o pessoal da Amazon. Inicia sessão com a tua conta de pessoal para continuar.",

@@ -1057,6 +1057,12 @@ const en = {
       failed: "Those numbers did not load.",
       retry: "Try again",
     },
+    export: {
+      button: "Export CSV",
+      working: "Preparing",
+      done: "The file has downloaded.",
+      failed: "That download did not work. Try again.",
+    },
     signedOut: {
       title: "Sign in to open the Admin Portal",
       lead: "This page is for Amazon staff. Sign in with your staff account to continue.",

@@ -1081,6 +1081,12 @@ const es = {
       failed: "Esas cifras no se cargaron.",
       retry: "Inténtalo de nuevo",
     },
+    export: {
+      button: "Exportar CSV",
+      working: "Preparando",
+      done: "El archivo se ha descargado.",
+      failed: "Esa descarga no funcionó. Inténtalo de nuevo.",
+    },
     signedOut: {
       title: "Inicia sesión para abrir el Portal de administración",
       lead: "Esta página es para el personal de Amazon. Inicia sesión con tu cuenta de personal para continuar.",

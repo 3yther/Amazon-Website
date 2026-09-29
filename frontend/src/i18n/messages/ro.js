@@ -1081,6 +1081,12 @@ const ro = {
       failed: "Cifrele nu s-au încărcat.",
       retry: "Încearcă din nou",
     },
+    export: {
+      button: "Exportă CSV",
+      working: "Se pregătește",
+      done: "Fișierul a fost descărcat.",
+      failed: "Descărcarea nu a reușit. Încearcă din nou.",
+    },
     signedOut: {
       title: "Conectează-te pentru a deschide Panoul de administrare",
       lead: "Această pagină este pentru personalul Amazon. Conectează-te cu contul tău de personal pentru a continua.",

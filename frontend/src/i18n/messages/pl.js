@@ -1081,6 +1081,12 @@ const pl = {
       failed: "Tych liczb nie udało się wczytać.",
       retry: "Spróbuj ponownie",
     },
+    export: {
+      button: "Eksportuj CSV",
+      working: "Przygotowywanie",
+      done: "Plik został pobrany.",
+      failed: "Pobieranie się nie udało. Spróbuj ponownie.",
+    },
     signedOut: {
       title: "Zaloguj się, aby otworzyć Panel administratora",
       lead: "Ta strona jest dla personelu Amazon. Zaloguj się na konto personelu, aby kontynuować.",

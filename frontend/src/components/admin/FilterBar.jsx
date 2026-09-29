@@ -1,4 +1,5 @@
 import { useT } from "../../i18n/I18nProvider.jsx";
+import ExportButton from "./ExportButton.jsx";
 import { RANGES } from "./useDashboardFilters.js";
 
 /**
@@ -23,6 +24,8 @@ export default function FilterBar({
   showPathway = false,
   pathways = [],
   busy = false,
+  exportUrl,
+  exportQuery,
 }) {
   const t = useT();
 
@@ -118,6 +121,13 @@ export default function FilterBar({
         <button type="button" className="button admin-filters__clear" onClick={clearAll}>
           {t("admin.filters.clear")}
         </button>
+      )}
+
+      {/* The export sits with the filters because that is what it exports. */}
+      {exportUrl && (
+        <div className="admin-filters__export">
+          <ExportButton url={exportUrl} query={exportQuery} />
+        </div>
       )}
 
       {/* Announced, not just spun: somebody using a screen reader needs to

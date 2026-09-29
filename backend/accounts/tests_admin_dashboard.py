@@ -10,14 +10,18 @@ import datetime
 from datetime import timedelta
 
 from django.contrib.auth.models import User
+from unittest.mock import patch
+
 from django.core.cache import cache
 from django.test import RequestFactory, TestCase, override_settings
 from django.utils import timezone
 from rest_framework.test import APITestCase
+from rest_framework.throttling import ScopedRateThrottle
 
 from community.models import Answer, Question
 from providers.models import Provider
 
+from .admin_exports import OverviewCsvView, PeopleCsvView
 from .audit import record
 from .csv_export import csv_filename, escape_cell, stream_csv
 from .models import AdminAuditLog, Profile, UserPreference
@@ -483,3 +487,145 @@ class DashboardChartsTests(APITestCase):
         rows = {row["label"]: row["value"] for row in self.client.get(CHARTS_URL).data["languages"]}
 
         self.assertEqual(rows.get("pl"), 1)
+
+
+PEOPLE_EXPORT_URL = "/api/accounts/admin-portal/people/export/"
+OVERVIEW_EXPORT_URL = "/api/accounts/admin-portal/dashboard/export/"
+
+
+@override_settings(ADMIN_PORTAL_PIN=PIN)
+class CsvExportTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+        self.staff = make_user("staffer", "amazon_staff")
+        self.client.login(username="staffer", password=PASSWORD)
+        self.client.post("/api/accounts/admin-portal/unlock/", {"pin": PIN}, format="json")
+
+    def body(self, url, params=None):
+        response = self.client.get(url, params or {})
+        self.assertEqual(response.status_code, 200)
+        return b"".join(response.streaming_content).decode("utf-8-sig")
+
+    def test_anonymous_and_students_get_nothing(self):
+        for url in (PEOPLE_EXPORT_URL, OVERVIEW_EXPORT_URL):
+            with self.subTest(url=url, who="anonymous"):
+                self.client.logout()
+                self.assertIn(self.client.get(url).status_code, (401, 403))
+
+        make_user("ada")
+        self.client.login(username="ada", password=PASSWORD)
+        for url in (PEOPLE_EXPORT_URL, OVERVIEW_EXPORT_URL):
+            with self.subTest(url=url, who="student"):
+                self.assertEqual(self.client.get(url).status_code, 403)
+
+    def test_staff_who_have_not_entered_the_pin_get_nothing(self):
+        """An export is a read of the same data, not a way round the gate."""
+        make_user("locked", "amazon_staff")
+        self.client.logout()
+        self.client.login(username="locked", password=PASSWORD)
+
+        for url in (PEOPLE_EXPORT_URL, OVERVIEW_EXPORT_URL):
+            with self.subTest(url=url):
+                self.assertEqual(self.client.get(url).status_code, 403)
+
+    def test_people_export_has_the_table_columns(self):
+        body = self.body(PEOPLE_EXPORT_URL)
+
+        self.assertEqual(
+            body.splitlines()[0],
+            "ID,Username,Account type,Joined,Last signed in,Active,Questions,Answers",
+        )
+
+    def test_the_people_export_never_carries_an_email(self):
+        """
+        The People tab deliberately shows none, and an export is not the place
+        to quietly widen what the site hands out about people aged 16 to 18.
+        """
+        User.objects.filter(pk=self.staff.pk).update(email="someone@example.com")
+
+        body = self.body(PEOPLE_EXPORT_URL)
+
+        self.assertNotIn("someone@example.com", body)
+        self.assertNotIn("Email", body.splitlines()[0])
+
+    def test_it_exports_every_row_not_just_a_page(self):
+        for index in range(25):  # the list pages at 20
+            make_user(f"person{index}")
+
+        rows = self.body(PEOPLE_EXPORT_URL).strip().splitlines()
+
+        self.assertEqual(len(rows) - 1, 26)  # 25 plus staffer
+
+    def test_it_honours_the_filters_on_screen(self):
+        make_user("teacherone", "teacher")
+        make_user("studentone", "student")
+
+        body = self.body(PEOPLE_EXPORT_URL, {"user_type": "teacher"})
+
+        self.assertIn("teacherone", body)
+        self.assertNotIn("studentone", body)
+
+    def test_a_username_cannot_run_as_a_formula(self):
+        """
+        The attack this guards: a username is written by the public, and a
+        spreadsheet runs a cell starting with = as code.
+        """
+        nasty = User.objects.create_user('=HYPERLINK("http://evil.example")', password=PASSWORD)
+        Profile.objects.create(user=nasty, user_type="student")
+
+        body = self.body(PEOPLE_EXPORT_URL)
+
+        self.assertIn("'=HYPERLINK", body)
+        # And never the bare formula at the start of a cell.
+        self.assertNotIn(',=HYPERLINK', body)
+
+    def test_it_opens_with_a_bom_so_excel_reads_utf8(self):
+        response = self.client.get(PEOPLE_EXPORT_URL)
+
+        self.assertTrue(b"".join(response.streaming_content).startswith(b"\xef\xbb\xbf"))
+
+    def test_it_offers_a_dated_filename(self):
+        response = self.client.get(PEOPLE_EXPORT_URL)
+
+        self.assertIn("tsmile-people-", response["Content-Disposition"])
+        self.assertIn(".csv", response["Content-Disposition"])
+
+    def test_the_overview_export_holds_the_kpis_and_the_series(self):
+        body = self.body(OVERVIEW_EXPORT_URL, {"range": "30d"})
+
+        self.assertIn("accounts", body)
+        self.assertIn("time_to_first_answer", body)
+        self.assertIn("users_by_type", body)
+
+    def test_every_export_is_written_to_the_audit_log(self):
+        """
+        "Who pulled a list of every account, and when" is exactly what the
+        audit log is for.
+        """
+        self.client.get(PEOPLE_EXPORT_URL, {"user_type": "student"})
+
+        entry = AdminAuditLog.objects.get(action=AdminAuditLog.Action.CSV_EXPORTED)
+        self.assertEqual(entry.actor_username, "staffer")
+        self.assertEqual(entry.detail["export"], "people")
+        self.assertEqual(entry.detail["filters"], {"user_type": "student"})
+
+    def test_exports_are_rate_limited(self):
+        """
+        Tight enough that the whole accounts table cannot be pulled in a loop.
+
+        The rate is patched on the throttle class rather than through
+        override_settings: DRF binds THROTTLE_RATES when the class is defined,
+        so overriding the setting alone changes nothing and the test would
+        pass whether or not the throttle was wired up at all.
+        """
+        with patch.dict(ScopedRateThrottle.THROTTLE_RATES, {"admin_export": "2/hour"}):
+            cache.clear()
+            self.assertEqual(self.client.get(PEOPLE_EXPORT_URL).status_code, 200)
+            self.assertEqual(self.client.get(PEOPLE_EXPORT_URL).status_code, 200)
+            self.assertEqual(self.client.get(PEOPLE_EXPORT_URL).status_code, 429)
+
+    def test_the_configured_rate_is_actually_wired_up(self):
+        """The patch above would hide a missing throttle_scope, so check it."""
+        self.assertIn("admin_export", ScopedRateThrottle.THROTTLE_RATES)
+        self.assertEqual(PeopleCsvView.throttle_scope, "admin_export")
+        self.assertEqual(OverviewCsvView.throttle_scope, "admin_export")
