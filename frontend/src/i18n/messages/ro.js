@@ -71,7 +71,7 @@ const ro = {
       step: "Pasul",
       browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
       register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
-      hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },
+      hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email.", link: "Contact" },
       getInvolved: { title: "Implică-te", text: "Creează un cont ca să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.", link: "Creează cont" },
     },
   },

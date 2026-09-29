@@ -1,6 +1,7 @@
 import { lazy, Suspense, useLayoutEffect } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import amazonLogo from "./assets/amazon-wordmark.png";
+// White text version, because the header is dark navy in both themes.
+import amazonLogo from "./assets/amazon-wordmark-white.png";
 import ChatWidget from "./assistant/ChatWidget.jsx";
 import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
@@ -79,7 +80,7 @@ export default function App() {
             >
               {/* Approved logo file, used unaltered: transparent, sitting
                   straight on the dark header. */}
-              <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
+              <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="126" height="70" />
             </Link>
             <Link className="wordmark" to="/" onClick={countWordmarkClick}>
               T-<span className="wordmark__accent">SMILE</span>

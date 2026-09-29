@@ -71,7 +71,7 @@ const es = {
       step: "Paso",
       browse: { title: "Ver recursos", text: "Guías, materiales y vídeos para los cinco itinerarios.", link: "Ver recursos" },
       register: { title: "Registra tu interés", text: "Dinos qué itinerario quieres explorar.", link: "Registrar interés" },
-      hearBack: { title: "Recibe respuesta", text: "Revisamos cada solicitud y respondemos por correo electrónico." },
+      hearBack: { title: "Recibe respuesta", text: "Revisamos cada solicitud y respondemos por correo electrónico.", link: "Contacto" },
       getInvolved: { title: "Participa", text: "Regístrate para preguntar y responder en la Comunidad y tener tus ajustes en cualquier dispositivo.", link: "Registrarse" },
     },
   },

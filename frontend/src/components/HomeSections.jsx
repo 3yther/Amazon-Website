@@ -133,11 +133,11 @@ export function PathwayTiles() {
 
 /* ---------- How it works ---------- */
 
-// The four steps. "Hear back" has no link because there's nowhere to go.
+// The four steps. Each one links to the page it talks about.
 const STEPS = [
   { key: "browse", link: "/resources" },
   { key: "register", link: "/register-interest" },
-  { key: "hearBack" },
+  { key: "hearBack", link: "/contact" },
   { key: "getInvolved", link: "/register" },
 ];
 

@@ -345,10 +345,10 @@ main:focus {
   border-radius: var(--radius);
 }
 
-/* Shown at half the file's 190px width so it stays sharp on high-density screens. */
+/* 126px of the file's 190px, so it stays sharp on high-density screens. */
 .site-header__logo {
   display: block;
-  width: 95px;
+  width: 126px;
   height: auto;
   border-radius: var(--radius);
 }
@@ -395,7 +395,7 @@ main:focus {
   height: 24px;
 }
 
-/* Nudges the wordmark up 3px so it lines up with the "amazon" text in the logo
+/* Nudges the wordmark up 4px so it lines up with the "amazon" text in the logo
    (the logo image has the smile under it). */
 .wordmark {
   display: inline-block;
@@ -404,7 +404,7 @@ main:focus {
   font-weight: 800;
   letter-spacing: 0.02em;
   text-decoration: none;
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
 .wordmark__accent {
@@ -1639,8 +1639,12 @@ main:has(.auth-layout) {
   color: var(--ink-on-orange);
 }
 
+/* Smaller than the page headings, so it gets more room between lines and letters. */
 .card__title {
   font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
 }
 
 .card__text {

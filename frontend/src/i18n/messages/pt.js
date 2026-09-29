@@ -72,7 +72,7 @@ const pt = {
       step: "Passo",
       browse: { title: "Ver recursos", text: "Guias, materiais e vídeos para os cinco percursos.", link: "Ver recursos" },
       register: { title: "Regista o teu interesse", text: "Diz-nos que percurso queres explorar.", link: "Registar interesse" },
-      hearBack: { title: "Recebe resposta", text: "Analisamos cada pedido e respondemos por email." },
+      hearBack: { title: "Recebe resposta", text: "Analisamos cada pedido e respondemos por email.", link: "Contacto" },
       getInvolved: { title: "Participa", text: "Cria conta para perguntar e responder na Comunidade e manter as tuas definições em qualquer dispositivo.", link: "Criar conta" },
     },
   },

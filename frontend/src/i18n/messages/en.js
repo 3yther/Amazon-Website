@@ -77,7 +77,7 @@ const en = {
       step: "Step",
       browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways.", link: "Browse resources" },
       register: { title: "Register interest", text: "Tell us which pathway you want to explore.", link: "Register interest" },
-      hearBack: { title: "Hear back", text: "We review each submission and reply by email." },
+      hearBack: { title: "Hear back", text: "We review each submission and reply by email.", link: "Contact us" },
       getInvolved: { title: "Get involved", text: "Sign up to ask and answer in the Community, and keep your settings on any device.", link: "Sign up" },
     },
   },
