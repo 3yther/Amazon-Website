@@ -1,5 +1,11 @@
 from django.urls import path
 
+from .admin_actions import (
+    BadgeCountsView,
+    ChangeRoleView,
+    FeedbackHandleView,
+    SendPasswordResetView,
+)
 from .admin_dashboard import DashboardChartsView, DashboardView
 from .admin_exports import OverviewCsvView, PeopleCsvView
 from .admin_portal import (
@@ -76,4 +82,20 @@ urlpatterns = [
         name="admin-portal-revoke-staff",
     ),
     path("admin-portal/feedback/", FeedbackListView.as_view(), name="admin-portal-feedback"),
+    path(
+        "admin-portal/feedback/<int:pk>/handle/",
+        FeedbackHandleView.as_view(),
+        name="admin-portal-feedback-handle",
+    ),
+    path("admin-portal/badges/", BadgeCountsView.as_view(), name="admin-portal-badges"),
+    path(
+        "admin-portal/people/<int:pk>/role/",
+        ChangeRoleView.as_view(),
+        name="admin-portal-role",
+    ),
+    path(
+        "admin-portal/people/<int:pk>/password-reset/",
+        SendPasswordResetView.as_view(),
+        name="admin-portal-password-reset",
+    ),
 ]

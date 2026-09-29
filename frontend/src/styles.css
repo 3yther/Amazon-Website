@@ -3080,3 +3080,48 @@ input.admin-pin__input {
   align-items: center;
   gap: 4px;
 }
+
+/* ---------- Feedback handling ---------- */
+
+.admin-feedback__actions {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.admin-feedback__note summary {
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+
+.admin-feedback__note textarea {
+  display: block;
+  width: 100%;
+  min-width: 14rem;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+}
+
+/* The note under a message, so staff can see it without opening anything. */
+.admin-feedback__saved-note {
+  margin: 8px 0 0;
+  padding-inline-start: 8px;
+  border-inline-start: 2px solid var(--orange);
+  font-size: 0.9375rem;
+}
+
+/* Words, not a colour: "dealt with" and "still waiting" have to survive
+   greyscale and a screen reader, like everything else here. */
+.admin-feedback__handled,
+.admin-feedback__waiting {
+  font-size: 0.9375rem;
+}
+
+.admin-feedback__waiting {
+  font-weight: 700;
+}

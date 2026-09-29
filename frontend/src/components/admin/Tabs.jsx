@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   adminDeletePost,
   adminFeedback,
+  adminHandleFeedback,
   adminPeople,
   adminPosts,
   adminRemoveAccount,
@@ -201,30 +202,122 @@ export function ReportsTab() {
 
 const FEEDBACK_CATEGORIES = ["bug", "feature", "general", "accessibility"];
 
-export function FeedbackTab() {
+/**
+ * One row's handled state, its note, and the two controls that change them.
+ *
+ * The note is a <details>, closed by default: most rows never get one, and a
+ * textarea on every row would bury the messages the tab exists to show.
+ */
+function FeedbackRowActions({ row, onChanged }) {
+  const t = useT();
+  const [note, setNote] = useState(row.admin_note ?? "");
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  async function save(handled, withNote = note) {
+    setBusy(true);
+    setFailed(false);
+    try {
+      const updated = await adminHandleFeedback(row.id, { handled, adminNote: withNote });
+      onChanged(updated);
+    } catch {
+      setFailed(true);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="admin-feedback__actions">
+      <button
+        type="button"
+        className="button"
+        disabled={busy}
+        onClick={() => save(!row.handled)}
+      >
+        {row.handled ? t("admin.feedback.markUnhandled") : t("admin.feedback.markHandled")}
+      </button>
+
+      <details className="admin-feedback__note">
+        <summary>{t("admin.feedback.note")}</summary>
+        <label className="sr-only" htmlFor={`note-${row.id}`}>
+          {t("admin.feedback.note")}
+        </label>
+        <textarea
+          id={`note-${row.id}`}
+          rows={2}
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
+        />
+        <button type="button" className="button" disabled={busy} onClick={() => save(row.handled)}>
+          {t("admin.feedback.saveNote")}
+        </button>
+      </details>
+
+      {failed && (
+        <p className="field__error" role="alert">
+          {t("admin.actionFailed")}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function FeedbackTab({ onCountsChanged }) {
   const t = useT();
   const [category, setCategory] = useState("");
-  const filters = useMemo(() => ({ category }), [category]);
+  const [handled, setHandled] = useState("");
+  const filters = useMemo(() => ({ category, handled }), [category, handled]);
   const list = useStaffList(adminFeedback, filters);
+
+  // The row is patched in place rather than the whole page being refetched:
+  // marking six things handled should not reshuffle the list under the cursor
+  // six times.
+  const [changed, setChanged] = useState({});
+  const rowsWithChanges = (list.data?.results ?? []).map((row) =>
+    changed[row.id] ? { ...row, ...changed[row.id] } : row,
+  );
+
+  function applyChange(updated) {
+    setChanged((current) => ({ ...current, [updated.id]: updated }));
+    onCountsChanged?.();
+  }
 
   return (
     <>
       <div className="admin-filters">
-        <label className="label" htmlFor="admin-feedback-category">
-          {t("admin.feedback.filter")}
-        </label>
-        <select
-          id="admin-feedback-category"
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-        >
-          <option value="">{t("admin.allOf")}</option>
-          {FEEDBACK_CATEGORIES.map((value) => (
-            <option key={value} value={value}>
-              {known(t, `feedbackPage.categories.${value}`, value)}
-            </option>
-          ))}
-        </select>
+        <div className="admin-filters__field">
+          <label className="label" htmlFor="admin-feedback-category">
+            {t("admin.feedback.filter")}
+          </label>
+          <select
+            id="admin-feedback-category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option value="">{t("admin.allOf")}</option>
+            {FEEDBACK_CATEGORIES.map((value) => (
+              <option key={value} value={value}>
+                {known(t, `feedbackPage.categories.${value}`, value)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="admin-filters__field">
+          <label className="label" htmlFor="admin-feedback-handled">
+            {t("admin.feedback.status")}
+          </label>
+          <select
+            id="admin-feedback-handled"
+            value={handled}
+            onChange={(event) => setHandled(event.target.value)}
+          >
+            <option value="">{t("admin.allOf")}</option>
+            <option value="false">{t("admin.feedback.unhandled")}</option>
+            <option value="true">{t("admin.feedback.handled")}</option>
+          </select>
+        </div>
       </div>
 
       <StaffList
@@ -235,7 +328,7 @@ export function FeedbackTab() {
       >
         <thead>
           <tr>
-            {["category", "message", "from", "submitted"].map((column) => (
+            {["category", "message", "from", "submitted", "status", "actions"].map((column) => (
               <th key={column} scope="col">
                 {t(`admin.feedback.columns.${column}`)}
               </th>
@@ -243,20 +336,43 @@ export function FeedbackTab() {
           </tr>
         </thead>
         <tbody>
-          {(list.data?.results ?? []).map((row) => (
+          {rowsWithChanges.map((row) => (
             <tr key={row.id}>
               <td>{known(t, `feedbackPage.categories.${row.category}`, row.category)}</td>
               <td>
                 <Folded text={row.message} />
+                {row.admin_note && (
+                  <p className="admin-feedback__saved-note">
+                    <span className="label">{t("admin.feedback.note")}</span> {row.admin_note}
+                  </p>
+                )}
               </td>
               <td>
                 {row.email ? <a href={`mailto:${row.email}`}>{row.email}</a> : row.username || <Nothing />}
               </td>
               <td>{formatDate(row.created_at)}</td>
+              <td>
+                {row.handled ? (
+                  /* Who and when, not just a tick: "handled" with nobody's
+                     name against it is the same as not knowing. */
+                  <span className="admin-feedback__handled">
+                    {t("admin.feedback.handledBy", {
+                      name: row.handled_by || t("admin.feedback.someone"),
+                      date: row.handled_at ? formatDate(row.handled_at) : "",
+                    })}
+                  </span>
+                ) : (
+                  <span className="admin-feedback__waiting">{t("admin.feedback.unhandled")}</span>
+                )}
+              </td>
+              <td>
+                <FeedbackRowActions row={row} onChanged={applyChange} />
+              </td>
             </tr>
           ))}
         </tbody>
       </StaffList>
+
     </>
   );
 }

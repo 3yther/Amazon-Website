@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useSearchParams } from "react-router-dom";
-import { adminPortalLock, adminPortalStatus, adminPortalUnlock } from "../api.js";
+import { adminBadges, adminPortalLock, adminPortalStatus, adminPortalUnlock } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import FilterBar from "../components/admin/FilterBar.jsx";
 import Overview from "../components/admin/Overview.jsx";
@@ -72,6 +72,12 @@ export default function AdminPortal() {
 
   const [lock, setLock] = useState(null); // { unlocked, configured, minutes }
   const [asking, setAsking] = useState(true);
+  // The small numbers beside the sidebar's sections. Refreshed after any
+  // action that could change them, which is why it is a counter rather
+  // than a one-off fetch.
+  const [badges, setBadges] = useState(null);
+  const [badgeAttempt, setBadgeAttempt] = useState(0);
+  const refreshBadges = useCallback(() => setBadgeAttempt((count) => count + 1), []);
 
   const isStaff = user?.user_type === "amazon_staff";
 
@@ -88,6 +94,22 @@ export default function AdminPortal() {
       cancelled = true;
     };
   }, [isStaff]);
+
+  // Only once the PIN is in: before that every portal endpoint answers 403,
+  // and asking anyway would just log a failure per page load.
+  const unlocked = Boolean(lock?.unlocked);
+  useEffect(() => {
+    if (!isStaff || !unlocked) return undefined;
+
+    let cancelled = false;
+    adminBadges()
+      .then((result) => !cancelled && setBadges(result))
+      .catch(() => !cancelled && setBadges(null));
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isStaff, unlocked, badgeAttempt]);
 
   const relock = useCallback(async () => {
     await adminPortalLock().catch(() => {});
@@ -121,13 +143,18 @@ export default function AdminPortal() {
     interest: <InterestTab />,
     reports: <ReportsTab />,
     posts: <PostsTab />,
-    feedback: <FeedbackTab />,
+    feedback: <FeedbackTab onCountsChanged={refreshBadges} />,
     people: <PeopleTab />,
   };
 
   return (
     <div className="admin-shell">
-      <Sidebar activeId={activeId} onChange={setActiveId} onLock={relock} />
+      <Sidebar
+        activeId={activeId}
+        onChange={setActiveId}
+        onLock={relock}
+        badges={{ unhandledFeedback: badges?.unhandled_feedback ?? 0 }}
+      />
 
       <div className="admin-main">
         <header className="admin-head">

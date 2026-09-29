@@ -321,7 +321,35 @@ export function adminRevokeStaff(id) {
   return postJson(`/api/accounts/admin-portal/people/${id}/revoke-staff/`, {});
 }
 
-/** One page of site feedback. filters: category, page. */
+/** The small counts beside the sidebar's sections: unhandled feedback, open reports. */
+export function adminBadges(options) {
+  return request("/api/accounts/admin-portal/badges/", options);
+}
+
+/** Mark one piece of feedback dealt with, or put it back. Note is staff-only. */
+export function adminHandleFeedback(id, { handled, adminNote }) {
+  return postJson(`/api/accounts/admin-portal/feedback/${id}/handle/`, {
+    handled,
+    ...(adminNote === undefined ? {} : { admin_note: adminNote }),
+  });
+}
+
+/** Move somebody between student, parent and teacher. Never to or from staff. */
+export function adminChangeRole(id, userType) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/role/`, { user_type: userType });
+}
+
+/**
+ * Send the ordinary password reset email.
+ *
+ * The answer is the same whether the account has an address or not, on
+ * purpose, so this can never be used to find out which addresses exist.
+ */
+export function adminSendPasswordReset(id) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/password-reset/`, {});
+}
+
+/** One page of site feedback. filters: category, handled, page. */
 export function adminFeedback(filters, options) {
   return request("/api/accounts/admin-portal/feedback/", { ...options, params: filters });
 }

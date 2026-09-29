@@ -349,23 +349,53 @@ def _is_staff_account(user):
 
 class AdminFeedbackSerializer(serializers.ModelSerializer):
     """Feedback as staff read it. The email is here because the sender chose
-    to leave it for a reply; unlike the People tab, that is the point of it."""
+    to leave it for a reply; unlike the People tab, that is the point of it.
+
+    handled_by is the NAME, not the id: the only thing anybody does with it is
+    read who dealt with this, and the id would be one more thing to look up.
+    """
 
     username = serializers.CharField(source="user.username", read_only=True, default="")
+    handled_by = serializers.CharField(source="handled_by.username", read_only=True, default="")
 
     class Meta:
         model = Feedback
-        fields = ["id", "category", "message", "email", "username", "created_at"]
+        fields = [
+            "id",
+            "category",
+            "message",
+            "email",
+            "username",
+            "created_at",
+            "handled",
+            "handled_by",
+            "handled_at",
+            "admin_note",
+        ]
         read_only_fields = fields
 
 
 class FeedbackListView(generics.ListAPIView):
-    """GET /api/accounts/admin-portal/feedback/?category=bug — newest first."""
+    """GET /api/accounts/admin-portal/feedback/?category=bug&handled=false
+
+    Newest first. `handled` takes true/false; anything else is ignored, so a
+    stray value in a shared URL shows everything rather than nothing.
+    """
 
     serializer_class = AdminFeedbackSerializer
     permission_classes = [IsAuthenticated, IsAmazonStaffAndUnlocked]
 
     def get_queryset(self):
-        feedback = Feedback.objects.select_related("user").order_by("-created_at")
+        feedback = (
+            Feedback.objects.select_related("user", "handled_by").order_by("-created_at")
+        )
+
         category = self.request.query_params.get("category")
-        return feedback.filter(category=category) if category else feedback
+        if category:
+            feedback = feedback.filter(category=category)
+
+        handled = (self.request.query_params.get("handled") or "").lower()
+        if handled in {"true", "false"}:
+            feedback = feedback.filter(handled=handled == "true")
+
+        return feedback

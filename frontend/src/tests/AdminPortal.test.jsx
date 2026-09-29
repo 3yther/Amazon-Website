@@ -119,6 +119,33 @@ const DASHBOARD_CHARTS = {
   provider_coverage: [{ label: "North West", values: { placed: 12, unplaced: 2 } }],
 };
 
+const FEEDBACK_ROWS = [
+  {
+    id: 9,
+    category: "bug",
+    message: "The map does not load",
+    email: "",
+    username: "ada",
+    created_at: "2026-09-20T10:00:00Z",
+    handled: false,
+    handled_by: "",
+    handled_at: null,
+    admin_note: "",
+  },
+  {
+    id: 10,
+    category: "general",
+    message: "Lovely site",
+    email: "",
+    username: "tom",
+    created_at: "2026-09-19T10:00:00Z",
+    handled: true,
+    handled_by: "otherstaff",
+    handled_at: "2026-09-21T10:00:00Z",
+    admin_note: "said thanks",
+  },
+];
+
 const POST = {
   kind: "question",
   id: 5,
@@ -136,6 +163,7 @@ const OTHER_ADMIN = { ...PERSON, id: 3, username: "otheradmin", user_type: "amaz
 function fakeServer({ unlocked = true, configured = true, wrongPin = false, people = [PERSON] } = {}) {
   const calls = [];
   let open = unlocked;
+  let unhandledFeedback = 3;
 
   vi.stubGlobal(
     "fetch",
@@ -170,8 +198,26 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
       if (path.endsWith("/admin-portal/people/")) {
         return Response.json({ count: people.length, next: null, previous: null, results: people });
       }
+      if (path.endsWith("/admin-portal/badges/")) {
+        return Response.json({ unhandled_feedback: unhandledFeedback, open_reports: 2 });
+      }
+      if (path.includes("/admin-portal/feedback/") && path.endsWith("/handle/")) {
+        const body = JSON.parse(options.body ?? "{}");
+        unhandledFeedback += body.handled ? -1 : 1;
+        return Response.json({
+          id: 9,
+          handled: body.handled,
+          handled_by: body.handled ? "staffer" : "",
+          handled_at: body.handled ? "2026-09-29T10:00:00Z" : null,
+          admin_note: body.admin_note ?? "",
+        });
+      }
       if (path.endsWith("/admin-portal/feedback/")) {
-        return Response.json({ count: 0, next: null, previous: null, results: [] });
+        const wanted = new URL(url, "http://localhost").searchParams.get("handled");
+        const rows = FEEDBACK_ROWS.filter(
+          (row) => wanted === null || wanted === "" || String(row.handled) === wanted,
+        );
+        return Response.json({ count: rows.length, next: null, previous: null, results: rows });
       }
       if (path.endsWith("/api/interest/submissions/")) {
         return Response.json({ count: 0, next: null, previous: null, results: [] });
@@ -201,9 +247,15 @@ async function sidebar() {
   return navs[0];
 }
 
-/** Move to a section the way a staff member would. */
+/**
+ * Move to a section the way a staff member would.
+ *
+ * Matched loosely, because a section with a badge has the count and its
+ * hidden words in its accessible name ("Feedback 3 not dealt with yet").
+ */
 async function openSection(user, name) {
-  await user.click(await within(await sidebar()).findByRole("button", { name }));
+  const nav = await sidebar();
+  await user.click(await within(nav).findByRole("button", { name: new RegExp(`^${name}`) }));
 }
 
 /** Prints the router's current query string, so a test can assert on it. */
@@ -399,7 +451,7 @@ describe("Admin Portal: the sidebar", () => {
 
     const nav = await sidebar();
     for (const name of ["Overview", "Interest", "Reported posts", "Feedback", "People"]) {
-      expect(within(nav).getByRole("button", { name })).toBeInTheDocument();
+      expect(within(nav).getByRole("button", { name: new RegExp(`^${name}`) })).toBeInTheDocument();
     }
   });
 
@@ -820,6 +872,97 @@ describe("Admin Portal: exporting a CSV", () => {
     await user.click(await screen.findByRole("button", { name: "Export CSV" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(/did not work/);
+  });
+});
+
+describe("Admin Portal: handling feedback", () => {
+  async function openFeedback(user) {
+    renderPortal();
+    await openSection(user, "Feedback");
+    return screen.findByText("The map does not load");
+  }
+
+  it("says who dealt with a piece of feedback, and when", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+
+    await openFeedback(user);
+
+    // Not just a tick: "handled" with nobody's name against it is the same
+    // as not knowing.
+    expect(screen.getByText(/otherstaff on/)).toBeInTheDocument();
+  });
+
+  it("marks one dealt with and keeps the rest of the list still", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    await user.click(screen.getAllByRole("button", { name: "Mark dealt with" })[0]);
+
+    await waitFor(() => expect(screen.getAllByText(/staffer on/).length).toBeGreaterThan(0));
+    // The other row is untouched, because the row is patched rather than the
+    // whole page refetched.
+    expect(screen.getByText("Lovely site")).toBeInTheDocument();
+  });
+
+  it("saves a staff-only note", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    // Scoped to the row: <details> elements elsewhere on the page (the phone
+    // nav drawer, the chart tables) are groups too.
+    const row = screen.getByText("The map does not load").closest("tr");
+    // The summary and the textarea's own hidden label share their words,
+    // so this asks for the summary itself rather than the text.
+    await user.click(row.querySelector("summary"));
+    await user.type(within(row).getByLabelText("Staff note"), "replied by email");
+    await user.click(within(row).getByRole("button", { name: "Save note" }));
+
+    // The saved note under the message, not the textarea still holding it.
+    await waitFor(() =>
+      expect(
+        screen.getByText("The map does not load").closest("tr").querySelector(".admin-feedback__saved-note"),
+      ).toHaveTextContent("replied by email"),
+    );
+  });
+
+  it("filters to the ones still waiting", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    await user.selectOptions(screen.getByLabelText("Status"), "false");
+
+    await waitFor(() => expect(screen.queryByText("Lovely site")).not.toBeInTheDocument());
+    expect(screen.getByText("The map does not load")).toBeInTheDocument();
+  });
+
+  it("shows the unhandled count in the sidebar, with words for a screen reader", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    const nav = await sidebar();
+    const feedback = await within(nav).findByRole("button", { name: /Feedback/ });
+    await waitFor(() => expect(feedback).toHaveTextContent("3"));
+    // A bare number beside a word is meaningless read aloud.
+    expect(feedback).toHaveTextContent("not dealt with yet");
+  });
+
+  it("refreshes the count after something is dealt with", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    const nav = await sidebar();
+    const feedback = within(nav).getByRole("button", { name: /Feedback/ });
+    await waitFor(() => expect(feedback).toHaveTextContent("3"));
+
+    await user.click(screen.getAllByRole("button", { name: "Mark dealt with" })[0]);
+
+    await waitFor(() => expect(feedback).toHaveTextContent("2"));
   });
 });
 
