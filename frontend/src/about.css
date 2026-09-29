@@ -788,7 +788,9 @@
   }
 
   .info-card:has(.pictogram) {
-    grid-template-columns: auto 1fr;
+    /* minmax(0, 1fr) so the text column can shrink below its longest word
+       at large text sizes, instead of pushing the card past the screen. */
+    grid-template-columns: auto minmax(0, 1fr);
     column-gap: 16px;
   }
 
