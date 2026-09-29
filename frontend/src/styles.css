@@ -2247,7 +2247,11 @@ input[type="range"] {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 30; /* above the sticky header, so the dim covers it too */
+  /* Above the sticky header so the dim covers it too, AND above Smiley
+     (.assistant is 50). A confirmation for something irreversible must
+     not end up behind the chat helper, which is where it was until the
+     Admin Portal put a typed confirmation on deleting twelve posts. */
+  z-index: 60;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3135,7 +3139,9 @@ input.admin-pin__input {
 .admin-drawer__backdrop {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  /* Above Smiley (.assistant is 50), like .modal-overlay: this is modal, and
+     a panel you cannot see past is worse than no panel. */
+  z-index: 60;
   display: flex;
   justify-content: flex-end;
   background: var(--backdrop);

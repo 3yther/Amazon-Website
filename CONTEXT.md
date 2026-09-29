@@ -100,6 +100,29 @@ Things to know:
 - Only staff can see interest submissions, at `GET /api/interest/submissions/`. The check is `IsAmazonStaff` in `backend/accounts/permissions.py`.
 - The `/staff` page is only linked for staff, but the API permission is what actually protects the data.
 
+### Admin Portal rules
+
+- Every portal endpoint is `IsAmazonStaffAndUnlocked`: staff sign-in AND the
+  PIN. The PIN is a screen-lock, never the access control.
+- **Nothing in the portal hands out an email address for an account.** The
+  People table, its drawer and its CSV export all leave it out; most people
+  here are 16 to 18 and the rule is to hold and show the minimum. Search may
+  MATCH on an address, because narrowing a list is not publishing one.
+  Feedback and Interest DO show emails, because in both cases the person left
+  the address to be replied to.
+- Staff are never made or unmade by an ordinary action. The role control moves
+  people between student, parent and teacher only; taking admin access away is
+  its own deliberate step, and granting it stays in Django admin. An endpoint
+  inside the portal that could grant staff would make the portal's gate
+  pointless.
+- Everything staff do is written to `AdminAuditLog` by `record()`, one entry
+  per item even in a bulk action, because a batch entry with a list of ids in
+  it is invisible when somebody later filters by the account they are after.
+- Destructive actions need the thing typed back: a username for one account,
+  the count for a batch ("DELETE 12 POSTS"). Reversible ones do not.
+- Exports honour the current filters, send every row, stream, open with a BOM
+  and escape cells starting with = + - @ so a username cannot run as a formula.
+
 ## Who did what
 
 - Amir: framework for the whole site (routing, layout, accounts, models, settings) and the Railway preview
