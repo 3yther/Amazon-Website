@@ -1722,6 +1722,83 @@ main:has(.auth-layout) {
   color: var(--ink-on-orange);
 }
 
+/* A card that is one link: the title's link covers the whole card, so a
+   click anywhere opens it. Keyboard focus shows around the whole card. */
+.card--link {
+  position: relative;
+}
+
+.card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+
+.card--link:hover .card__link {
+  text-decoration: underline;
+}
+
+.card--link:has(.card__link:focus-visible) {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+body[data-outline-style="thick"] .card--link:has(.card__link:focus-visible) {
+  outline-width: 5px;
+}
+
+body[data-outline-style="dashed"] .card--link:has(.card__link:focus-visible) {
+  outline-style: dashed;
+}
+
+.card__link:focus-visible {
+  outline: none;
+}
+
+/* "Open on gov.uk", the hint at the bottom of a card. */
+.card__cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.card__cue .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* The picture at the top of a video card. */
+.card__thumb {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  margin: -24px -24px 0;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--surface-inverse);
+  color: var(--orange);
+}
+
+.card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__thumb .icon {
+  width: 56px;
+  height: 56px;
+}
+
 /* Smaller than the page headings, so it gets more room between lines and letters. */
 .card__title {
   font-size: 1.25rem;
