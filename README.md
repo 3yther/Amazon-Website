@@ -27,8 +27,10 @@ Read [`CONTEXT.md`](CONTEXT.md) (rules and conventions) and [`MODELS.md`](MODELS
 ## Screenshots
 
 ![T-SMILE homepage](docs/screenshots/home-hero.png)
-![Homepage audience cards](docs/screenshots/home-audiences.png)
+![Resources page](docs/screenshots/resources.png)
 ![The five pathways](docs/screenshots/pathways.png)
+![Find T-Levels Near You](docs/screenshots/near-you.png)
+![Register your interest](docs/screenshots/register-interest.png)
 ![Help page](docs/screenshots/help.png)
 ![Sign up page](docs/screenshots/signup.png)
 

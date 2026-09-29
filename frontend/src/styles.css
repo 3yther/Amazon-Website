@@ -970,13 +970,12 @@ a.menu-hello__text:hover {
 }
 
 /* A halo in the page colour, so the floating subject names fade out behind
-   the hero text instead of running through it. */
+   the hero text instead of running through it. A filter, not text-shadow:
+   text-shadow is drawn line by line, so the second line's halo covered the
+   bottom of the first line's letters. */
 .hero__title,
 .hero__subhead {
-  text-shadow:
-    0 0 0.25em var(--paper),
-    0 0 0.5em var(--paper),
-    0 0 1em var(--paper);
+  filter: drop-shadow(0 0 0.15em var(--paper)) drop-shadow(0 0 0.35em var(--paper));
 }
 
 .hero__subhead {
