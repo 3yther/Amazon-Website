@@ -970,14 +970,7 @@ a.menu-hello__text:hover {
   line-height: 1;
 }
 
-/* A halo in the page colour, so the floating subject names fade out behind
-   the hero text instead of running through it. A filter, not text-shadow:
-   text-shadow is drawn line by line, so the second line's halo covered the
-   bottom of the first line's letters. */
-.hero__title,
-.hero__subhead {
-  filter: drop-shadow(0 0 0.15em var(--paper)) drop-shadow(0 0 0.35em var(--paper));
-}
+
 
 .hero__subhead {
   max-width: 34rem;
@@ -2005,7 +1998,12 @@ html[data-motion="full"] .rising-subjects {
 }
 
 /* On the homepage the names stay inside the hero. */
+/* The floating names fade out over the left of the hero, where the title
+   and text are, so they never run through the words. (A mask only uses the
+   colour's opacity, so any solid colour works here.) */
 .hero .rising-subjects {
+  -webkit-mask-image: linear-gradient(to right, transparent 40%, var(--blue) 70%);
+  mask-image: linear-gradient(to right, transparent 40%, var(--blue) 70%);
   position: absolute;
   top: calc(-1 * clamp(40px, 7vw, 80px)); /* matches main's top padding */
   z-index: 0;
