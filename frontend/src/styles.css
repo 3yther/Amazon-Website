@@ -36,8 +36,6 @@
   --surface-inverse: #232f3e;
   --ink-inverse: #fafaf7;
 
-  /* The tile behind the Amazon logo in the header, the same in every theme. */
-  --logo-tile: #ffffff;
 
   /* Text on orange is always dark navy. */
   --ink-on-orange: #232f3e;
@@ -365,15 +363,13 @@ main:focus {
 }
 
 /* Shown at half the file's 190px width so it stays sharp on high-density screens.
-   The logo's lettering is black, only 1.55:1 against the dark header in either
-   theme, and the brief says it can't be recoloured. So the file stays as it
-   is and sits on a white tile instead: black on white is 21:1. */
+   The header is dark in every theme, so the logo has white lettering (13.8:1)
+   instead of the black it has on light backgrounds (1.55:1 here). */
 .site-header__logo {
   display: block;
   width: 95px;
   height: auto;
   border-radius: var(--radius);
-  background: var(--logo-tile);
 }
 
 .site-header :focus-visible {
@@ -570,8 +566,10 @@ main {
   white-space: nowrap;
 }
 
-/* Settings gear, beside the account button. Filled in on hover and while you
-   are on the settings page, like the menu button when it is open. */
+/* Settings gear, beside the account button. The icon changes colour rather
+   than the background: light on the dark header, orange on hover and on the
+   settings page (6.34:1). On the settings page it also gets a bar underneath,
+   so "you are here" isn't shown by colour alone. */
 .settings-link {
   display: inline-flex;
   align-items: center;
@@ -590,8 +588,11 @@ main {
 
 .settings-link:hover,
 .settings-link[aria-current="page"] {
-  background: var(--ink-inverse);
-  color: var(--surface-inverse);
+  color: var(--orange);
+}
+
+.settings-link[aria-current="page"] {
+  box-shadow: inset 0 -3px 0 var(--orange);
 }
 
 /* On narrow screens hide the greeting so the brand stays centred. */
