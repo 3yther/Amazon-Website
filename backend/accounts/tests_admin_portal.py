@@ -36,6 +36,7 @@ GATED_URLS = [
     PEOPLE_URL,
     FEEDBACK_URL,
     "/api/community/admin-portal/reports/",
+    "/api/community/admin-portal/posts/",
     # The Interest list moved behind the PIN when it became a portal tab.
     "/api/interest/submissions/",
 ]
@@ -316,48 +317,143 @@ class PeopleTabTests(APITestCase):
         for key in ("count", "next", "previous", "results"):
             self.assertIn(key, response.data)
 
-    def test_staff_can_deactivate_an_account(self):
-        response = self.client.post(f"{PEOPLE_URL}{self.ada.id}/deactivate/")
+    def remove(self, person, confirm=None):
+        body = {"confirm_username": person.username if confirm is None else confirm}
+        return self.client.post(f"{PEOPLE_URL}{person.id}/remove/", body, format="json")
+
+    def test_staff_can_remove_an_account_from_the_database(self):
+        response = self.remove(self.ada)
 
         self.assertEqual(response.status_code, 200)
-        self.ada.refresh_from_db()
-        self.assertFalse(self.ada.is_active)
-        self.assertTrue(self.ada.profile.is_deactivated)
+        self.assertFalse(User.objects.filter(pk=self.ada.pk).exists())
+        self.assertFalse(Profile.objects.filter(user_id=self.ada.pk).exists())
 
-    def test_a_deactivated_account_cannot_sign_in(self):
-        self.client.post(f"{PEOPLE_URL}{self.ada.id}/deactivate/")
+    def test_a_removed_account_cannot_sign_in(self):
+        self.remove(self.ada)
         self.client.logout()
 
-        signed_in = self.client.login(username="ada", password=PASSWORD)
+        self.assertFalse(self.client.login(username="ada", password=PASSWORD))
 
-        self.assertFalse(signed_in)
+    def test_removing_an_account_takes_what_it_wrote_with_it(self):
+        question = Question.objects.create(author=self.ada, title="Hello", body="Hi", topic="amazon")
 
-    def test_you_cannot_deactivate_yourself_from_in_here(self):
-        """Locking yourself out of the portal you are standing in is never meant."""
-        response = self.client.post(f"{PEOPLE_URL}{self.staff.id}/deactivate/")
+        self.remove(self.ada)
+
+        self.assertFalse(Question.objects.filter(pk=question.pk).exists())
+
+    def test_feedback_they_sent_stays_with_the_sender_blanked(self):
+        note = Feedback.objects.create(category="bug", message="Broken", user=self.ada)
+
+        self.remove(self.ada)
+
+        note.refresh_from_db()
+        self.assertIsNone(note.user)
+
+    def test_the_username_has_to_be_typed_back(self):
+        for wrong in ("", "Ada", "ada ", "someone-else"):
+            response = self.remove(self.ada, confirm=wrong)
+            self.assertEqual(response.status_code, 400, wrong)
+            self.assertIn("confirm_username", response.data)
+
+        self.assertTrue(User.objects.filter(pk=self.ada.pk).exists())
+
+    def test_leaving_the_confirmation_out_is_refused_too(self):
+        response = self.client.post(f"{PEOPLE_URL}{self.ada.id}/remove/", {}, format="json")
 
         self.assertEqual(response.status_code, 400)
-        self.staff.refresh_from_db()
-        self.assertTrue(self.staff.is_active)
+        self.assertTrue(User.objects.filter(pk=self.ada.pk).exists())
 
-    def test_a_student_cannot_deactivate_anybody(self):
+    def test_you_cannot_remove_yourself_from_in_here(self):
+        response = self.remove(self.staff)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(User.objects.filter(pk=self.staff.pk).exists())
+
+    def test_you_cannot_remove_another_admin_until_their_access_is_taken_away(self):
+        other = make_user("otherstaff", "amazon_staff")
+
+        response = self.remove(other)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(User.objects.filter(pk=other.pk).exists())
+
+        self.client.post(f"{PEOPLE_URL}{other.id}/revoke-staff/")
+        self.assertEqual(self.remove(other).status_code, 200)
+
+    def test_a_superuser_cannot_be_removed_from_the_portal(self):
+        boss = make_user("boss", "student", is_superuser=True)
+
+        self.assertEqual(self.remove(boss).status_code, 400)
+        self.assertTrue(User.objects.filter(pk=boss.pk).exists())
+
+    def test_a_student_cannot_remove_anybody(self):
         self.client.logout()
         self.client.login(username="ada", password=PASSWORD)
 
-        response = self.client.post(f"{PEOPLE_URL}{self.parent.id}/deactivate/")
+        response = self.remove(self.parent)
 
         self.assertEqual(response.status_code, 403)
-        self.parent.refresh_from_db()
-        self.assertTrue(self.parent.is_active)
+        self.assertTrue(User.objects.filter(pk=self.parent.pk).exists())
 
-    def test_staff_without_the_pin_cannot_deactivate_anybody(self):
+    def test_staff_without_the_pin_cannot_remove_anybody(self):
         self.client.post(LOCK_URL)
 
-        response = self.client.post(f"{PEOPLE_URL}{self.ada.id}/deactivate/")
+        response = self.remove(self.ada)
 
         self.assertEqual(response.status_code, 403)
-        self.ada.refresh_from_db()
-        self.assertTrue(self.ada.is_active)
+        self.assertTrue(User.objects.filter(pk=self.ada.pk).exists())
+
+    # --- taking admin access away --------------------------------------------
+
+    def test_staff_can_take_admin_access_away(self):
+        other = make_user("otherstaff", "amazon_staff")
+
+        response = self.client.post(f"{PEOPLE_URL}{other.id}/revoke-staff/")
+
+        self.assertEqual(response.status_code, 200)
+        other.profile.refresh_from_db()
+        self.assertEqual(other.profile.user_type, "student")
+        self.assertTrue(User.objects.filter(pk=other.pk).exists())
+
+    def test_a_person_who_lost_admin_access_is_refused_by_the_portal(self):
+        other = make_user("otherstaff", "amazon_staff")
+        self.client.post(f"{PEOPLE_URL}{other.id}/revoke-staff/")
+        self.client.logout()
+        self.client.login(username="otherstaff", password=PASSWORD)
+
+        self.assertEqual(self.client.get(STATUS_URL).status_code, 403)
+
+    def test_you_cannot_take_your_own_admin_access_away(self):
+        response = self.client.post(f"{PEOPLE_URL}{self.staff.id}/revoke-staff/")
+
+        self.assertEqual(response.status_code, 400)
+        self.staff.profile.refresh_from_db()
+        self.assertEqual(self.staff.profile.user_type, "amazon_staff")
+
+    def test_only_an_admin_can_have_admin_access_taken_away(self):
+        response = self.client.post(f"{PEOPLE_URL}{self.ada.id}/revoke-staff/")
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_a_student_cannot_take_admin_access_away(self):
+        self.client.logout()
+        self.client.login(username="ada", password=PASSWORD)
+
+        response = self.client.post(f"{PEOPLE_URL}{self.staff.id}/revoke-staff/")
+
+        self.assertEqual(response.status_code, 403)
+        self.staff.profile.refresh_from_db()
+        self.assertEqual(self.staff.profile.user_type, "amazon_staff")
+
+    def test_without_the_pin_admin_access_cannot_be_taken_away(self):
+        other = make_user("otherstaff", "amazon_staff")
+        self.client.post(LOCK_URL)
+
+        response = self.client.post(f"{PEOPLE_URL}{other.id}/revoke-staff/")
+
+        self.assertEqual(response.status_code, 403)
+        other.profile.refresh_from_db()
+        self.assertEqual(other.profile.user_type, "amazon_staff")
 
 
 @override_settings(ADMIN_PORTAL_PIN=PIN)

@@ -297,9 +297,20 @@ export function adminPeople(filters, options) {
   return request("/api/accounts/admin-portal/people/", { ...options, params: filters });
 }
 
-/** Turn an account off. Not reversible by the person themselves. */
-export function adminDeactivate(id) {
-  return postJson(`/api/accounts/admin-portal/people/${id}/deactivate/`, {});
+/**
+ * Delete an account from the database, for good. The username has to be typed
+ * back: the server checks it as well as the page. Throws ApiError(400) with
+ * { confirm_username: [...] } when it does not match.
+ */
+export function adminRemoveAccount(id, confirmUsername) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/remove/`, {
+    confirm_username: confirmUsername,
+  });
+}
+
+/** Take admin access away: the account goes back to a student. */
+export function adminRevokeStaff(id) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/revoke-staff/`, {});
 }
 
 /** One page of site feedback. filters: category, page. */
@@ -315,4 +326,14 @@ export function adminReports(filters, options) {
 /** Act on a reported post. action: "hide" | "restore" | "resolve" | "delete". */
 export function adminReportAction(reportId, action) {
   return postJson(`/api/community/admin-portal/reports/${reportId}/${action}/`, {});
+}
+
+/** One page of Community posts, reported or not. filters: kind ("question" | "answer"), q, page. */
+export function adminPosts(filters, options) {
+  return request("/api/community/admin-portal/posts/", { ...options, params: filters });
+}
+
+/** Delete a post for good. kind: "question" | "answer". A question takes its answers. */
+export function adminDeletePost(kind, id) {
+  return postJson(`/api/community/admin-portal/posts/${kind}/${id}/delete/`, {});
 }

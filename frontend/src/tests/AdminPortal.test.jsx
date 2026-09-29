@@ -58,8 +58,21 @@ const PERSON = {
   answers: 2,
 };
 
+const POST = {
+  kind: "question",
+  id: 5,
+  title: "Which pathway should I pick?",
+  body: "Torn between two.",
+  author: "ada",
+  hidden: false,
+  answers: 2,
+  created_at: "2026-09-20T10:00:00Z",
+};
+
+const OTHER_ADMIN = { ...PERSON, id: 3, username: "otheradmin", user_type: "amazon_staff" };
+
 /** A fake server. `unlocked` decides whether the portal opens. */
-function fakeServer({ unlocked = true, configured = true, wrongPin = false } = {}) {
+function fakeServer({ unlocked = true, configured = true, wrongPin = false, people = [PERSON] } = {}) {
   const calls = [];
   let open = unlocked;
 
@@ -85,9 +98,14 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false } = {
         return Response.json({ count: 1, next: null, previous: null, results: [REPORT] });
       }
       if (path.includes("/admin-portal/reports/")) return Response.json({ ok: true });
-      if (path.includes("/deactivate/")) return Response.json({ id: 2, is_active: false });
+      if (path.includes("/remove/")) return Response.json({ id: 2, deleted: true });
+      if (path.includes("/revoke-staff/")) return Response.json({ id: 3, user_type: "student" });
+      if (path.endsWith("/api/community/admin-portal/posts/")) {
+        return Response.json({ count: 1, next: null, previous: null, results: [POST] });
+      }
+      if (path.includes("/admin-portal/posts/")) return Response.json({ deleted: true });
       if (path.endsWith("/admin-portal/people/")) {
-        return Response.json({ count: 1, next: null, previous: null, results: [PERSON] });
+        return Response.json({ count: people.length, next: null, previous: null, results: people });
       }
       if (path.endsWith("/admin-portal/feedback/")) {
         return Response.json({ count: 0, next: null, previous: null, results: [] });
@@ -368,34 +386,142 @@ describe("Admin Portal: deleting a reported post", () => {
   });
 });
 
-describe("Admin Portal: deactivating an account", () => {
-  async function openPeople(user) {
+describe("Admin Portal: removing an account", () => {
+  async function openPeople() {
     renderPortal("/admin-portal?tab=people");
     return screen.findByText("ada");
   }
 
-  it("asks before it deactivates", async () => {
+  it("asks before it removes anything", async () => {
     const calls = fakeServer();
     const user = userEvent.setup({ delay: null });
-    await openPeople(user);
+    await openPeople();
 
-    await user.click(screen.getByRole("button", { name: "Deactivate" }));
+    await user.click(screen.getByRole("button", { name: "Remove account" }));
 
     expect(await screen.findByRole("dialog")).toHaveTextContent("ada");
-    expect(calls.some((call) => call.path.includes("/deactivate/"))).toBe(false);
+    expect(calls.some((call) => call.path.includes("/remove/"))).toBe(false);
   });
 
-  it("deactivates once it is confirmed", async () => {
+  it("will not remove until the username has been typed", async () => {
     const calls = fakeServer();
     const user = userEvent.setup({ delay: null });
-    await openPeople(user);
+    await openPeople();
 
-    await user.click(screen.getByRole("button", { name: "Deactivate" }));
+    await user.click(screen.getByRole("button", { name: "Remove account" }));
     const dialog = await screen.findByRole("dialog");
-    await user.click(within(dialog).getByRole("button", { name: "Deactivate" }));
+    const confirm = within(dialog).getByRole("button", { name: "Remove account" });
+
+    // Clicking yes is not enough: nothing to click until it matches.
+    expect(confirm).toBeDisabled();
+
+    await user.type(within(dialog).getByLabelText("Type ada to confirm"), "ad");
+    expect(confirm).toBeDisabled();
+    await user.type(within(dialog).getByLabelText("Type ada to confirm"), "x");
+    expect(confirm).toBeDisabled();
+
+    expect(calls.some((call) => call.path.includes("/remove/"))).toBe(false);
+  });
+
+  it("removes once the username is typed, and sends it to the server", async () => {
+    const calls = fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openPeople();
+
+    await user.click(screen.getByRole("button", { name: "Remove account" }));
+    const dialog = await screen.findByRole("dialog");
+    await user.type(within(dialog).getByLabelText("Type ada to confirm"), "ada");
+    await user.click(within(dialog).getByRole("button", { name: "Remove account" }));
+
+    await waitFor(() => expect(calls.some((call) => call.path.includes("/remove/"))).toBe(true));
+  });
+
+  it("offers no button at all on your own row", async () => {
+    fakeServer({ people: [{ ...PERSON, id: 1, username: "staffer", user_type: "amazon_staff" }] });
+    renderPortal("/admin-portal?tab=people");
+
+    await screen.findByText("staffer");
+
+    expect(screen.queryByRole("button", { name: "Remove account" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Remove admin access" })).not.toBeInTheDocument();
+  });
+});
+
+describe("Admin Portal: taking admin access away", () => {
+  async function openPeople() {
+    renderPortal("/admin-portal?tab=people");
+    return screen.findByText("otheradmin");
+  }
+
+  it("offers to remove an admin's access, not their account", async () => {
+    fakeServer({ people: [OTHER_ADMIN] });
+    await openPeople();
+
+    expect(screen.getByRole("button", { name: "Remove admin access" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Remove account" })).not.toBeInTheDocument();
+  });
+
+  it("asks first", async () => {
+    const calls = fakeServer({ people: [OTHER_ADMIN] });
+    const user = userEvent.setup({ delay: null });
+    await openPeople();
+
+    await user.click(screen.getByRole("button", { name: "Remove admin access" }));
+
+    expect(await screen.findByRole("dialog")).toHaveTextContent("otheradmin");
+    expect(calls.some((call) => call.path.includes("/revoke-staff/"))).toBe(false);
+  });
+
+  it("takes the access away once it is confirmed", async () => {
+    const calls = fakeServer({ people: [OTHER_ADMIN] });
+    const user = userEvent.setup({ delay: null });
+    await openPeople();
+
+    await user.click(screen.getByRole("button", { name: "Remove admin access" }));
+    const dialog = await screen.findByRole("dialog");
+    await user.click(within(dialog).getByRole("button", { name: "Remove admin access" }));
 
     await waitFor(() =>
-      expect(calls.some((call) => call.path.includes("/deactivate/"))).toBe(true),
+      expect(calls.some((call) => call.path.includes("/revoke-staff/"))).toBe(true),
+    );
+  });
+});
+
+describe("Admin Portal: Community posts", () => {
+  async function openPosts() {
+    renderPortal("/admin-portal?tab=posts");
+    return screen.findByText("Which pathway should I pick?");
+  }
+
+  it("lists posts whether or not anybody reported them", async () => {
+    fakeServer();
+    await openPosts();
+
+    expect(screen.getByText("2 answers")).toBeInTheDocument();
+  });
+
+  it("asks before deleting, and says how many answers go with a question", async () => {
+    const calls = fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openPosts();
+
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+
+    expect(await screen.findByRole("dialog")).toHaveTextContent("2 answers");
+    expect(calls.some((call) => call.path.includes("/posts/question/5/delete/"))).toBe(false);
+  });
+
+  it("deletes once it is confirmed", async () => {
+    const calls = fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openPosts();
+
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+    const dialog = await screen.findByRole("dialog");
+    await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+
+    await waitFor(() =>
+      expect(calls.some((call) => call.path.includes("/posts/question/5/delete/"))).toBe(true),
     );
   });
 });

@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import Footer from "../components/Footer.jsx";
 import { expectNoAxeViolations } from "./axe.js";
+
+let auth = { user: null, checked: true };
+vi.mock("../auth.jsx", () => ({ useAuth: () => auth }));
 
 // The footer is on every page, so a broken or misleading link there is
 // broken everywhere.
@@ -46,12 +50,27 @@ describe("Footer", () => {
     expect(current).toHaveLength(1);
   });
 
-  // The Admin Portal link used to be shown to staff only. It is a plain link
-  // now, covered by the rules above, but worth naming so nobody puts the
-  // condition back by accident.
-  it("shows the Admin Portal link to every visitor, signed in or not", () => {
-    const link = footerLinks().find((item) => item.textContent === "Admin Portal");
-    expect(link).toHaveAttribute("href", "/admin-portal");
+  // The Admin Portal link is for signed-in staff only. It was shown to
+  // everybody for a while; a student has no use for a page that sends them
+  // straight home, so it is hidden again. The server is what really keeps
+  // them out, but there is no reason to offer them the door.
+  describe("the Admin Portal link", () => {
+    const adminLink = () => footerLinks().find((item) => item.textContent === "Admin Portal");
+
+    it("is shown to Amazon staff", () => {
+      auth = { user: { username: "staffer", user_type: "amazon_staff" }, checked: true };
+      expect(adminLink()).toHaveAttribute("href", "/admin-portal");
+    });
+
+    it.each(["student", "parent", "teacher"])("is hidden from a signed-in %s", (user_type) => {
+      auth = { user: { username: "someone", user_type }, checked: true };
+      expect(adminLink()).toBeUndefined();
+    });
+
+    it("is hidden from somebody who is signed out", () => {
+      auth = { user: null, checked: true };
+      expect(adminLink()).toBeUndefined();
+    });
   });
 
   it("has no WCAG 2.2 AA problems axe can find", async () => {
