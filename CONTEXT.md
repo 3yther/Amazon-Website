@@ -10,7 +10,7 @@ Who it's for: students (16 to 18), parents and guardians, teachers and schools, 
 
 ## Tech stack (don't change without asking the team)
 
-- Backend: Python 3.11, Django 5.2, Django REST Framework (API under `/api/`)
+- Backend: Python 3.14, Django 6.1, Django REST Framework (API under `/api/`)
 - Frontend: React 19, React Router, Vite
 - AI: Anthropic API, only called from the backend (`backend/chatbot/`)
 - Database: SQLite locally, PostgreSQL on Railway and in production

@@ -252,7 +252,7 @@ if DEBUG:
 # ---------------------------------------------------------------------------
 
 # No email account for the prototype, so emails are printed to the console
-# (including the reset link). PRODUCTION: point EMAIL_BACKEND at Amazon SES.
+# (including the reset link). PRODUCTION: set EMAIL_BACKEND to Amazon SES.
 # The Admin Portal's PIN. A SECOND factor on top of being signed in as Amazon
 # staff, not a replacement for it: every endpoint behind it still checks
 # IsAmazonStaff. Think screen-lock on a shared staff laptop, not access
@@ -264,9 +264,11 @@ ADMIN_PORTAL_PIN = os.environ.get("ADMIN_PORTAL_PIN", "")
 # the point is re-locking a device somebody walked away from.
 ADMIN_PORTAL_UNLOCK_MINUTES = int(os.environ.get("ADMIN_PORTAL_UNLOCK_MINUTES", "30"))
 
-EMAIL_BACKEND = os.environ.get(
-    "EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
-)
+MAILERS = {
+    "default": {
+        "BACKEND": os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"),
+    },
+}
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@t-smile.example")
 
 # The front end address, used for the link in the password reset email.

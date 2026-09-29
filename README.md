@@ -3,7 +3,7 @@
 Our website for the **Amazon Emerging Talent Digital T-Level project**. It explains T-Levels (in general and at Amazon), has a library of free resources, and lets people register interest in an Amazon placement.
 
 [![CI](https://github.com/3yther/Amazon-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/3yther/Amazon-Website/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.11-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/python-3.14-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-REST_Framework-092E20?logo=django&logoColor=white)
 ![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)
 ![Node](https://img.shields.io/badge/node-22%2B-339933?logo=node.js&logoColor=white)
@@ -54,13 +54,13 @@ frontend/src/
 
 ## Running it locally
 
-You need **Python 3.11** and **Node 22 or newer**.
+You need **Python 3.14** and **Node 22 or newer**.
 
 Backend (first terminal):
 
 ```bash
 cd backend
-python3.11 -m venv venv
+python3.14 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
@@ -166,7 +166,7 @@ Staff use `/admin/` to read interest submissions, manage resources, and hide or 
 
 ## Problems we hit
 
-- **Wrong Python or Node version:** check with `python3.11 --version` and `node --version`
+- **Wrong Python or Node version:** check with `python3.14 --version` and `node --version`
 - **Resources filter is empty:** run `python manage.py loaddata pathways resources`
 - **`/api` fails in the browser:** Django isn't running on port 8000
 - **Django won't start:** `DJANGO_SECRET_KEY` is missing from `.env`

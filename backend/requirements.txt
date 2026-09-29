@@ -1,6 +1,5 @@
-# Python 3.11. Django 5.2 is the LTS release (supported to April 2028) and the
-# newest line that runs on 3.11; Django 6 needs Python 3.12+.
-Django==5.2.17
+# Python 3.14 and Django 6.1, the newest versions (September 2026).
+Django==6.1.1
 djangorestframework==3.18.1
 django-cors-headers==4.9.0
 python-dotenv==1.2.3
@@ -31,7 +30,7 @@ sqlparse==0.6.0
 whitenoise==6.12.0               # serves the admin's CSS and JS when DEBUG is off
 gunicorn==26.2.0                 # production app server; runserver is for development only
 psycopg[binary]==3.3.6           # PostgreSQL driver, used when DATABASE_URL is set
-typing-extensions==4.16.0        # pulled in by psycopg on Python 3.11, pinned like the above
+typing-extensions==4.16.0        # pulled in by anthropic, pinned like the above
 
 # Production additions still to come (AWS):
 # django-storages[s3]  store ContentItem files in S3
