@@ -46,6 +46,14 @@ describe("Footer", () => {
     expect(current).toHaveLength(1);
   });
 
+  // The Admin Portal link used to be shown to staff only. It is a plain link
+  // now, covered by the rules above, but worth naming so nobody puts the
+  // condition back by accident.
+  it("shows the Admin Portal link to every visitor, signed in or not", () => {
+    const link = footerLinks().find((item) => item.textContent === "Admin Portal");
+    expect(link).toHaveAttribute("href", "/admin-portal");
+  });
+
   it("has no WCAG 2.2 AA problems axe can find", async () => {
     const { container } = render(
       <MemoryRouter>

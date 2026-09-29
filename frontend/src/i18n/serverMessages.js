@@ -31,6 +31,7 @@ const EXACT = {
   "This question is waiting for a staff review.": "awaitingReview",
   "Only the person who asked can mark the answer that helped.": "onlyAsker",
   "Type a question first.": "typeQuestion",
+  "This contains language that isn't appropriate for the site.": "inappropriate",
   "Enter a postcode.": "enterPostcode",
   "The postcode lookup service is unavailable right now. Please try again shortly.": "postcodeServiceDown",
 };

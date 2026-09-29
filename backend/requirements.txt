@@ -7,6 +7,20 @@ python-dotenv==1.2.3
 # imports it, so the rest of the site runs without it installed.
 anthropic==1.8.0
 
+# Checking what people write (backend/moderation/). Two passes: a wordlist that
+# catches substituted spellings like "b1tch", and a trained classifier that
+# catches a sentence that is unpleasant without containing a listed word.
+#
+# better-profanity is pinned to 0.6.1 on purpose. Its own README warns off
+# 0.7.0, and measured here 0.7.0 took 471ms to check a 2000-character post
+# against 1.1ms for 0.6.1, which is the difference between a form that submits
+# and one that hangs.
+better-profanity==0.6.1
+# Brings scikit-learn, scipy and numpy with it, about 34MB of wheels and 1.5s
+# to import, so backend/moderation/ imports it lazily: only a request that
+# actually moderates something pays, and only once per process.
+alt-profanity-check==1.9.1
+
 # Pulled in by Django, pinned so every machine installs the same thing.
 asgiref==3.12.1
 sqlparse==0.6.0

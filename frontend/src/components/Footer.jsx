@@ -16,6 +16,10 @@ const LINK_COLUMNS = [
       { to: "/resources", label: "footer.links.resources" },
       { to: "/faqs", label: "footer.links.faqs" },
       { to: "/community", label: "footer.links.community" },
+      // Shown to everybody. Hiding it was never the protection:
+      // /admin-portal sends anyone who is not signed-in staff back to the
+      // homepage, and every endpoint behind it refuses them, PIN or no PIN.
+      { to: "/admin-portal", label: "admin.title" },
     ],
   },
   {

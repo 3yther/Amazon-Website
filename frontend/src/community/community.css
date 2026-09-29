@@ -26,11 +26,14 @@
 
 .community-search__row {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
+/* The button drops under the box when both won't fit on one line
+   (a narrow phone with large text). */
 .community-search__row input {
-  flex: 1;
+  flex: 1 1 10rem;
   min-width: 0;
   min-height: var(--control-h);
 }

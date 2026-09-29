@@ -265,3 +265,54 @@ export function acceptAnswer(id) {
 export function reportPost(kind, id, reason, note = "") {
   return postJson(`/api/community/${kind}/${id}/report/`, { reason, note });
 }
+
+// ---------------------------------------------------------------------------
+// The Admin Portal. Every one of these needs Amazon staff AND the portal's PIN
+// entered this session; the server checks both and answers 403 otherwise (see
+// accounts/permissions.py, IsAmazonStaffAndUnlocked).
+// ---------------------------------------------------------------------------
+
+/** Whether this session has entered the PIN: { unlocked, configured, minutes }. */
+export function adminPortalStatus(options) {
+  return request("/api/accounts/admin-portal/status/", options);
+}
+
+/** Try a PIN. Throws ApiError(400) with { pin: [...] } when it is wrong. */
+export function adminPortalUnlock(pin) {
+  return postJson("/api/accounts/admin-portal/unlock/", { pin });
+}
+
+/** Leave the portal, so the PIN is asked for again. */
+export function adminPortalLock() {
+  return postJson("/api/accounts/admin-portal/lock/", {});
+}
+
+/** The Overview tab's numbers, already aggregated by the database. */
+export function adminOverview(options) {
+  return request("/api/accounts/admin-portal/overview/", options);
+}
+
+/** One page of accounts. filters: user_type, q, page. */
+export function adminPeople(filters, options) {
+  return request("/api/accounts/admin-portal/people/", { ...options, params: filters });
+}
+
+/** Turn an account off. Not reversible by the person themselves. */
+export function adminDeactivate(id) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/deactivate/`, {});
+}
+
+/** One page of site feedback. filters: category, page. */
+export function adminFeedback(filters, options) {
+  return request("/api/accounts/admin-portal/feedback/", { ...options, params: filters });
+}
+
+/** One page of reported posts. filters: resolved ("true" | "false"), page. */
+export function adminReports(filters, options) {
+  return request("/api/community/admin-portal/reports/", { ...options, params: filters });
+}
+
+/** Act on a reported post. action: "hide" | "restore" | "resolve" | "delete". */
+export function adminReportAction(reportId, action) {
+  return postJson(`/api/community/admin-portal/reports/${reportId}/${action}/`, {});
+}

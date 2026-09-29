@@ -54,6 +54,15 @@ export function CloseIcon() {
   );
 }
 
+export function GearIcon() {
+  return (
+    <Icon>
+      <path d="M10.1 4.9L10.4 2.1L13.6 2.1L13.9 4.9L15.7 5.6L17.9 3.9L20.1 6.1L18.4 8.3L19.1 10.1L21.9 10.4L21.9 13.6L19.1 13.9L18.4 15.7L20.1 17.9L17.9 20.1L15.7 18.4L13.9 19.1L13.6 21.9L10.4 21.9L10.1 19.1L8.3 18.4L6.1 20.1L3.9 17.9L5.6 15.7L4.9 13.9L2.1 13.6L2.1 10.4L4.9 10.1L5.6 8.3L3.9 6.1L6.1 3.9L8.3 5.6Z" />
+      <circle cx="12" cy="12" r="3" />
+    </Icon>
+  );
+}
+
 export function ChevronDownIcon() {
   return (
     <Icon>

@@ -58,6 +58,7 @@ We keep `railway.toml` matching this so the command can be reviewed in a pull re
 | `CSRF_TRUSTED_ORIGINS` | `https://${{ frontend.RAILWAY_PUBLIC_DOMAIN }}` |
 | `DJANGO_BEHIND_HTTPS_PROXY` | `true` |
 | `ANTHROPIC_API_KEY` | Key from console.anthropic.com (optional, never commit it) |
+| `ADMIN_PORTAL_PIN` | A 4-digit PIN of its own, not the one used locally. Without it the Admin Portal cannot be unlocked here at all |
 
 Leave `DJANGO_DEBUG`, `DJANGO_SECURE_SSL_REDIRECT`, `CORS_ALLOWED_ORIGINS` and `PORT` unset.
 

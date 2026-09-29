@@ -80,6 +80,7 @@ export default function MessageForm({ idPrefix, categories, messageLabel, submit
         id={`${idPrefix}-message`}
         label={messageLabel}
         name="message"
+        hint={t("forms.contentChecked")}
         value={fields.message}
         onChange={updateField}
         required

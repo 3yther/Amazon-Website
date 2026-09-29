@@ -53,7 +53,11 @@ describe("Sign up: the username field", () => {
     fakeServer();
     renderPage();
 
-    expect(screen.getByText("Letters, numbers and @ . + - _ only.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Letters, numbers and @ . + - _ only. Keep it appropriate: it is shown on every post you write.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("refuses an empty username without asking the server", async () => {
@@ -124,3 +128,36 @@ describe("Sign up: the password hint", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("Sign up: content the server refuses", () => {
+  it("shows the refusal on the username box, not as a general failure", async () => {
+    // The whole path: the backend's one English message, matched in
+    // i18n/serverMessages.js, translated, and landed on the field by
+    // formErrors. If any link breaks this shows "Something went wrong".
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url) => {
+        if (String(url).endsWith("/api/accounts/csrf/")) {
+          return Response.json({ csrf_token: "test-token" });
+        }
+        return Response.json(
+          { username: ["This contains language that isn't appropriate for the site."] },
+          { status: 400 },
+        );
+      }),
+    );
+    const user = userEvent.setup({ delay: null });
+    renderPage();
+
+    await user.type(screen.getByLabelText("Username"), "notaniceword");
+    await fillInExceptUsername(user);
+    await user.click(screen.getByRole("button", { name: "Sign up" }));
+
+    expect(
+      await screen.findByText("This contains language that isn't appropriate for the site."),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Username")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.queryByText("Something went wrong. Try again.")).not.toBeInTheDocument();
+  });
+});
+

@@ -49,7 +49,7 @@
   border-top: 1px solid var(--line);
 }
 
-/* The header's third column: the account menu. */
+/* The header's third column: the settings gear and the account menu. */
 .site-header__end {
   display: flex;
   align-items: center;

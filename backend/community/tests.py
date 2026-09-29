@@ -40,8 +40,13 @@ class ModerationTests(APITestCase):
         self.assertIsNone(check_post("UCAS points are on ucas.com"))
         self.assertEqual(check_post("Look at www.dodgy-site.com"), "link")
 
-    def test_strong_language_is_stopped(self):
-        self.assertEqual(check_post("this is fucking hard"), "strong_language")
+    def test_swearing_is_somebody_else_s_job_now(self):
+        """
+        check_post stopped doing this. Language is backend/moderation/, which
+        every field shares; this function is only about what a post reveals
+        and where it points. The post is still refused, by the serializer.
+        """
+        self.assertIsNone(check_post("this is fucking hard"))
 
     def test_someone_at_risk_is_not_published(self):
         self.assertEqual(check_post("I want to kill myself"), "wellbeing")
@@ -202,3 +207,91 @@ class CommunityApiTests(APITestCase):
         self.sam.delete()
         self.assertFalse(Question.objects.exists())
         self.assertFalse(Answer.objects.exists())
+
+
+class AppropriatenessTests(APITestCase):
+    """
+    The shared content check (backend/moderation/) on the two public fields.
+
+    Its own behaviour is tested in moderation/tests.py; what matters here is
+    that the refusal reaches the RIGHT FIELD, so the page can highlight the box
+    to rewrite rather than showing one vague failure over the whole form.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        Pathway.objects.create(name="Digital", slug="digital", summary="s", description="d")
+        cls.sam = make_user("sam")
+
+    def ask(self, **fields):
+        self.client.force_login(self.sam)
+        payload = {"title": "How long is the Amazon placement?", "body": "", "topic": "amazon", **fields}
+        return self.client.post(QUESTIONS, payload, format="json")
+
+    def test_an_inappropriate_title_is_refused_against_the_title(self):
+        response = self.ask(title="why is this fucking website so slow")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("title", response.data)
+        self.assertNotIn("body", response.data)
+        self.assertEqual(Question.objects.count(), 0)
+
+    def test_an_inappropriate_body_is_refused_against_the_body(self):
+        response = self.ask(body="the staff here are all fucking useless")
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("body", response.data)
+        self.assertNotIn("title", response.data)
+        self.assertEqual(Question.objects.count(), 0)
+
+    def test_an_ordinary_question_still_goes_up(self):
+        response = self.ask(
+            title="How long is the industry placement?",
+            body="I am starting the Digital pathway in September and wondered how long it runs.",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Question.objects.count(), 1)
+
+    def test_an_inappropriate_answer_is_refused_against_the_body(self):
+        question = Question.objects.create(
+            title="How long is the placement?", body="", topic="amazon", author=self.sam
+        )
+        self.client.force_login(self.sam)
+
+        response = self.client.post(
+            f"{QUESTIONS}{question.id}/answers/",
+            {"body": "shut up you absolute moron nobody cares what you think"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("body", response.data)
+        self.assertEqual(Answer.objects.count(), 0)
+
+    def test_an_ordinary_answer_still_goes_up(self):
+        question = Question.objects.create(
+            title="How long is the placement?", body="", topic="amazon", author=self.sam
+        )
+        self.client.force_login(self.sam)
+
+        response = self.client.post(
+            f"{QUESTIONS}{question.id}/answers/",
+            {"body": "It is at least 315 hours, which works out at about 45 days."},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Answer.objects.count(), 1)
+
+    def test_criticism_is_not_treated_as_swearing(self):
+        """
+        The site is for teenagers talking about a course they might dislike.
+        Saying so has to keep working, or the filter costs more than it saves.
+        """
+        response = self.ask(
+            title="Why is the maths unit taught so badly?",
+            body="Honestly it was awful and I learned nothing useful all term.",
+        )
+
+        self.assertEqual(response.status_code, 201)

@@ -33,6 +33,10 @@ export default function CommunityQuestion() {
   const [draft, setDraft] = useState("");
   const [posting, setPosting] = useState(false);
   const [answerError, setAnswerError] = useState(null);
+  // Split out from answerError: a message the server attached to the body
+  // belongs under the box, like every other form on the site, rather than in
+  // a notice above it. The notice is for what is not about the field.
+  const [answerFieldError, setAnswerFieldError] = useState(null);
   const [announcement, setAnnouncement] = useState("");
   const errorRef = useRef(null);
 
@@ -67,14 +71,26 @@ export default function CommunityQuestion() {
     if (!draft.trim()) return;
     setPosting(true);
     setAnswerError(null);
+    setAnswerFieldError(null);
     try {
       await answerQuestion(id, draft);
       setDraft("");
       setAnnouncement(t("community.answerPosted"));
       setAttempt((n) => n + 1); // reload, so the new answer shows in its place
     } catch (error) {
-      setAnswerError(moderationMessage(t, error) ?? translateServerMessage(error.body?.body?.[0], t) ?? t("community.somethingWrong"));
-      requestAnimationFrame(() => errorRef.current?.focus());
+      // A message the server put on "body" (the content check, or a body that
+      // is too short) goes under the box and marks it invalid. Anything else
+      // is about the post as a whole, so it stays in the notice.
+      const onTheField = error.body?.body?.[0]
+        ? translateServerMessage(error.body.body[0], t)
+        : null;
+      if (onTheField) {
+        setAnswerFieldError(onTheField);
+        requestAnimationFrame(() => document.getElementById("answer-body")?.focus());
+      } else {
+        setAnswerError(moderationMessage(t, error) ?? t("community.somethingWrong"));
+        requestAnimationFrame(() => errorRef.current?.focus());
+      }
     } finally {
       setPosting(false);
     }
@@ -257,6 +273,7 @@ export default function CommunityQuestion() {
               hint={t("community.answerHint")}
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
+              error={answerFieldError}
               maxLength={ANSWER_LIMIT}
               rows={4}
             />

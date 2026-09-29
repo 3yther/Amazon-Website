@@ -248,7 +248,7 @@ const en = {
     Accessibility: "Accessibility",
     "Contact us": "Contact us",
     Feedback: "Feedback",
-    Submissions: "Submissions",
+    "Admin Portal": "Admin Portal",
     "Page not found": "Page not found",
   },
 
@@ -336,6 +336,7 @@ const en = {
 
   // Shared by the account forms.
   forms: {
+    contentChecked: "Keep it appropriate. Inappropriate language is refused.",
     charactersLeft: "{count} left",
     charactersLeftLong: "{count} characters left",
     hidePassword: "Hide password",
@@ -348,6 +349,7 @@ const en = {
   // Messages the API sends in English, shown in the visitor's language
   // (i18n/serverMessages.js matches them to these keys).
   serverErrors: {
+    inappropriate: "This contains language that isn't appropriate for the site.",
     requiredField: "This field is required.",
     blankField: "This field may not be blank.",
     passwordCommon: "This password is too common.",
@@ -382,7 +384,7 @@ const en = {
   register: {
     title: "Create your account",
     lead: "It takes a minute, and it is free.",
-    usernameHint: "Letters, numbers and @ . + - _ only.",
+    usernameHint: "Letters, numbers and @ . + - _ only. Keep it appropriate: it is shown on every post you write.",
     passwordHint: "At least 8 characters. Not all numbers, not a common password, and not too like your username.",
     confirmPassword: "Confirm password",
     accountType: "Account type",
@@ -472,7 +474,7 @@ const en = {
   // The Community: questions asked and answered by students, parents,
   // teachers and Amazon staff.
   community: {
-    moderationNote: "Keep it on topic and appropriate. A moderator can remove anything that isn't.",
+    moderationNote: "Keep it on topic and appropriate. Inappropriate language is refused, and a moderator can remove anything else.",
     label: "Ask and answer",
     title: "Community",
     lead: "Questions about T-Levels and Amazon placements, answered by students, parents, teachers and Amazon staff.",
@@ -925,6 +927,118 @@ const en = {
     problemTitle: "Something not working for you?",
     problemLead: "Tell us which page and what got in the way, and we will fix it.",
     report: "Report an accessibility issue",
+  },
+
+  // The Admin Portal (/admin-portal). Staff only, behind a PIN.
+  admin: {
+    title: "Admin Portal",
+    lead: "Sign-ups, submissions, reported posts and accounts. Content and providers stay in Django admin.",
+    lockAgain: "Lock the portal",
+    working: "Working",
+    cancel: "Cancel",
+    showNumbers: "Show the numbers",
+    noData: "Nothing to show yet.",
+    week: "Week",
+    name: "Name",
+    count: "Count",
+    share: "Share",
+    allOf: "All",
+    actionFailed: "That did not work. Try again.",
+    tabs: {
+      overview: "Overview",
+      interest: "Interest",
+      reports: "Reported posts",
+      feedback: "Feedback",
+      people: "People",
+    },
+    totals: {
+      people: "Accounts",
+      interest: "Interest",
+      questions: "Questions",
+      answers: "Answers",
+      feedback: "Feedback",
+      openReports: "Open reports",
+    },
+    charts: {
+      signups: "Sign-ups by week",
+      signupsCaption: "New accounts per week, by account type.",
+      interest: "Interest by pathway",
+      interestCaption: "Expressions of interest, by the pathway on the account.",
+      community: "Community activity",
+      communityCaption: "Questions and answers posted per week.",
+      feedback: "Feedback by category",
+      feedbackCaption: "Feedback submitted, by category.",
+    },
+    signedOut: {
+      title: "Sign in to open the Admin Portal",
+      lead: "This page is for Amazon staff. Sign in with your staff account to continue.",
+    },
+    pin: {
+      title: "Enter the portal PIN",
+      lead: "One more step. This locks the portal on a shared computer, on top of your staff sign-in.",
+      label: "PIN",
+      hint: "Four digits.",
+      submit: "Unlock",
+      checking: "Checking",
+      wrong: "That PIN is not right.",
+      notSetUp: "No PIN has been set for this site, so the portal cannot be opened. Ask whoever set the site up to add one.",
+    },
+    reports: {
+      onlyOpen: "Only show reports nobody has dealt with",
+      caption: "Reported Community posts",
+      empty: "No reports. Nothing to look at.",
+      hidden: "Hidden",
+      live: "Live",
+      resolved: "Dealt with",
+      hide: "Hide",
+      restore: "Restore",
+      delete: "Delete",
+      deleteTitle: "Delete this for good?",
+      deleteQuestionBody: "This removes the question and every answer to it. Hiding it instead can be undone; this cannot.",
+      deleteAnswerBody: "This removes the answer for good. Hiding it instead can be undone; this cannot.",
+      columns: {
+        post: "Post",
+        author: "Written by",
+        reason: "Reported for",
+        reportedBy: "Reported by",
+        state: "State",
+        actions: "Actions",
+      },
+      kind: {
+        question: "Question",
+        answer: "Answer",
+      },
+    },
+    feedback: {
+      filter: "Category",
+      caption: "Feedback sent through the site",
+      empty: "No feedback yet.",
+      columns: {
+        category: "Category",
+        message: "Message",
+        from: "From",
+        submitted: "Sent",
+      },
+    },
+    people: {
+      search: "Search usernames",
+      filter: "Account type",
+      caption: "Accounts on the site",
+      empty: "No accounts match that.",
+      active: "Active",
+      deactivated: "Deactivated",
+      deactivate: "Deactivate",
+      deactivateTitle: "Deactivate this account?",
+      deactivateBody: "{username} will not be able to sign in. They cannot undo this themselves, only staff can.",
+      columns: {
+        username: "Username",
+        type: "Type",
+        joined: "Joined",
+        posts: "Posts",
+        state: "State",
+        actions: "Actions",
+      },
+    },
   },
 
   settings: {
