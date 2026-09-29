@@ -358,10 +358,14 @@ main:focus {
 }
 
 /* Here the 3px nudge (see .wordmark) comes from padding, so the text moves
-   up but the clickable box stays the full height. */
+   up but the clickable box stays the full height. A thin line between the
+   logo and the name makes them read as one lockup ("amazon | T-SMILE"). */
 .site-header__brand > .wordmark {
   padding-block-end: 6px;
   transform: none;
+  border-inline-start: 2px solid var(--orange);
+  border-radius: 0;
+  margin-block: 10px;
 }
 
 /* Shown at half the file's 190px width so it stays sharp on high-density screens.
@@ -370,7 +374,8 @@ main:focus {
    is and sits on a white tile instead: black on white is 21:1. */
 .site-header__logo {
   display: block;
-  width: 126px;
+  /* rem, so it grows with the font size setting like the wordmark beside it */
+  width: 7.5rem;
   height: auto;
   border-radius: var(--radius);
   background: var(--logo-tile);
@@ -396,6 +401,14 @@ main:focus {
   background: var(--ink-inverse);
   border-color: var(--ink-inverse);
   color: var(--surface-inverse);
+}
+
+/* The header's first column: the menu button and the language button. */
+.site-header__start {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
 }
 
 /* Menu button: shown at every width. It opens the full-screen menu overlay,
@@ -427,7 +440,7 @@ main:focus {
   direction: ltr;
   unicode-bidi: isolate;
   color: var(--ink-inverse);
-  font-size: 1.375rem;
+  font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   text-decoration: none;
@@ -855,10 +868,6 @@ a.menu-hello__text:hover {
   flex-shrink: 0;
   margin-inline-start: auto;
   padding: 0;
-}
-
-.menu-overlay__language {
-  padding-block: 0 32px;
 }
 
 .menu-overlay__close .icon {

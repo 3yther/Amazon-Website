@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
-import LanguagePicker from "../i18n/LanguagePicker.jsx";
 import { AccountAvatar, greetingName } from "./AccountDropdown.jsx";
 import { CloseIcon, MenuIcon } from "./Icons.jsx";
 
@@ -139,9 +138,6 @@ export default function SiteNav() {
             <NavList onNavigate={closeMenu} />
           </nav>
 
-          <div className="container menu-overlay__language">
-            <LanguagePicker />
-          </div>
         </dialog>,
         document.body,
       )}

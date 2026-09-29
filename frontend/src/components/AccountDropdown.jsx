@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
-import LanguagePicker from "../i18n/LanguagePicker.jsx";
 import { PersonIcon } from "./Icons.jsx";
 
 // Role names (words are under account.roles). Includes staff, which is only set in Django admin.
@@ -155,10 +154,6 @@ export default function AccountDropdown() {
             )}
           </ul>
 
-          {/* The language picker. It sits outside the list because a select isn't a menu item. */}
-          <div className="dropdown-language">
-            <LanguagePicker variant="menu" />
-          </div>
         </div>
       )}
     </div>
