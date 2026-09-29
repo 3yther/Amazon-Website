@@ -71,7 +71,7 @@ const pl = {
       step: "Krok",
       browse: { title: "Przeglądaj materiały", text: "Poradniki, materiały i filmy dla wszystkich pięciu ścieżek.", link: "Przeglądaj materiały" },
       register: { title: "Zgłoś zainteresowanie", text: "Napisz nam, którą ścieżkę chcesz poznać.", link: "Zgłoś zainteresowanie" },
-      hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem." },
+      hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem.", link: "Kontakt" },
       getInvolved: { title: "Dołącz", text: "Zarejestruj się, aby zadawać pytania i odpowiadać w Społeczności oraz mieć swoje ustawienia na każdym urządzeniu.", link: "Zarejestruj się" },
     },
   },

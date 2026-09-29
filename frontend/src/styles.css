@@ -370,7 +370,7 @@ main:focus {
    is and sits on a white tile instead: black on white is 21:1. */
 .site-header__logo {
   display: block;
-  width: 95px;
+  width: 126px;
   height: auto;
   border-radius: var(--radius);
   background: var(--logo-tile);
@@ -1713,8 +1713,12 @@ main:has(.auth-layout) {
   color: var(--ink-on-orange);
 }
 
+/* Smaller than the page headings, so it gets more room between lines and letters. */
 .card__title {
   font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: normal;
 }
 
 .card__text {
