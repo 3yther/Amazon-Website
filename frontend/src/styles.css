@@ -1120,8 +1120,7 @@ a.menu-hello__text:hover {
   }
 }
 
-/* Pathway tiles: a round photo of the work behind each pathway, over a flat
-   dark tile. The words sit on the tile, never on the photo. */
+/* Pathway tiles: the pathway's icon over a flat dark tile. */
 .pathway-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
@@ -1138,8 +1137,6 @@ a.menu-hello__text:hover {
   gap: 8px;
   height: 100%;
   padding: 20px;
-  /* Shows while the photo is still loading, and is what the text is
-     measured against, so the tile is never light-on-light. */
   background: var(--surface-inverse);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1148,21 +1145,20 @@ a.menu-hello__text:hover {
   overflow: hidden;
 }
 
-/* Round, and at the head of the tile rather than filling it. Asked for in
-   review: "like a pill", meaning fully round rather than a stadium shape.
-   object-fit: cover with a square box keeps the subject centred and stops
-   any photo being squashed into the circle.
+/* The pathway's icon on an orange tile, the same icons the Resources page uses. */
+.pathway-tile__icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius);
+  background: var(--orange);
+  color: var(--ink-on-orange);
+}
 
-   Moving the photo out from behind the words took the contrast problem with
-   it: the text is now measured against the tile's own flat dark background,
-   so the scrim that used to sit over the photo has gone rather than being
-   left doing nothing. */
-.pathway-tile__photo {
-  align-self: center;
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
+.pathway-tile__icon .icon {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 /* The arrow sits at the foot of every tile, so they line up across the row. */
