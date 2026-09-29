@@ -116,8 +116,80 @@ class Feedback(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Whether staff have dealt with this one. Feedback arrives faster than it
+    # gets acted on, so without this the list is the same wall of messages
+    # every week and the new ones are the hardest to find.
+    handled = models.BooleanField(default=False)
+    handled_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="feedback_handled",
+    )
+    handled_at = models.DateTimeField(null=True, blank=True)
+    # Staff-only. Never shown to whoever sent the feedback, and never returned
+    # by any public endpoint.
+    admin_note = models.TextField(blank=True)
+
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.get_category_display()} ({self.created_at:%Y-%m-%d})"
+
+
+class AdminAuditLog(models.Model):
+    """One staff action. Append-only by convention; nothing here updates a row."""
+
+    class Action(models.TextChoices):
+        # People
+        ACCOUNT_REMOVED = "account_removed", "Removed an account"
+        STAFF_REVOKED = "staff_revoked", "Took admin access away"
+        ROLE_CHANGED = "role_changed", "Changed an account's role"
+        PASSWORD_RESET_SENT = "password_reset_sent", "Sent a password reset email"
+        # Community
+        POST_DELETED = "post_deleted", "Deleted a post"
+        REPORT_RESOLVED = "report_resolved", "Resolved a report"
+        REPORT_DISMISSED = "report_dismissed", "Dismissed a report"
+        # Feedback
+        FEEDBACK_HANDLED = "feedback_handled", "Marked feedback handled"
+        # Everything else
+        CSV_EXPORTED = "csv_exported", "Exported a CSV"
+
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="admin_actions",
+        help_text="The staff member who did it. Kept as NULL if their own account goes later.",
+    )
+    # The username is copied in as well, because actor goes NULL when that
+    # account is removed and "somebody deleted this" is a worse record than
+    # "amirsalah deleted this".
+    actor_username = models.CharField(max_length=150, blank=True)
+
+    action = models.CharField(max_length=40, choices=Action.choices)
+
+    # What it was done to. Kept as loose text rather than a foreign key: the
+    # row usually no longer exists (that was the point of the action), so a
+    # foreign key would either block the delete or blank the only useful part.
+    target_type = models.CharField(max_length=40, blank=True)
+    target_id = models.CharField(max_length=40, blank=True)
+    target_label = models.CharField(max_length=200, blank=True)
+
+    # Anything worth keeping that does not fit above, e.g. the old and new role
+    # on a role change, or the filters a CSV was exported with. Never anything
+    # secret: this is read by every member of staff.
+    detail = models.JSONField(default=dict, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "admin audit log entry"
+        verbose_name_plural = "admin audit log"
+
+    def __str__(self):
+        return f"{self.actor_username or 'somebody'} {self.action} {self.target_label}".strip()
