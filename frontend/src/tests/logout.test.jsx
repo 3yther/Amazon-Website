@@ -107,7 +107,7 @@ describe("Logging out from the Account tab", () => {
     expect(await screen.findByRole("heading", { name: "Login" })).toBeInTheDocument();
   });
 
-  it("keeps logging out apart from deactivating", async () => {
+  it("keeps logging out apart from deleting the account", async () => {
     fakeServer();
     renderTab();
 
@@ -118,13 +118,13 @@ describe("Logging out from the Account tab", () => {
     expect(logout.closest(".danger-zone")).toBeNull();
     expect(logout.closest(".settings-block")).not.toBeNull();
 
-    // Deactivating still asks for a password first; logging out does not.
-    expect(screen.getByRole("button", { name: "Deactivate account" })).toBeInTheDocument();
+    // Deleting the account asks first; logging out does not.
+    expect(screen.getByRole("button", { name: "Delete account" })).toBeInTheDocument();
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 });
 
-describe("Deactivating", () => {
+describe("Deleting the account", () => {
   function renderTab() {
     return render(
       <MemoryRouter initialEntries={["/accessibility"]}>
@@ -142,8 +142,8 @@ describe("Deactivating", () => {
     const user = userEvent.setup({ delay: null });
     renderTab();
 
-    await user.click(await screen.findByRole("button", { name: "Deactivate account" }));
-    const dialog = screen.getByRole("dialog", { name: "Deactivate your account?" });
+    await user.click(await screen.findByRole("button", { name: "Delete account" }));
+    const dialog = screen.getByRole("dialog", { name: "Delete your account?" });
     expect(dialog).toHaveTextContent("You're signed out straight away.");
     expect(within(dialog).getByRole("button", { name: "Cancel" })).toHaveFocus();
     expect(screen.queryByLabelText("Password")).toBeNull();
@@ -157,7 +157,7 @@ describe("Deactivating", () => {
     const user = userEvent.setup({ delay: null });
     renderTab();
 
-    await user.click(await screen.findByRole("button", { name: "Deactivate account" }));
+    await user.click(await screen.findByRole("button", { name: "Delete account" }));
     await user.keyboard("{Escape}");
 
     expect(screen.queryByRole("dialog")).toBeNull();
