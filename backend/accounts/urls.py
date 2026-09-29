@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .admin_dashboard import DashboardChartsView, DashboardView
 from .admin_portal import (
     FeedbackListView,
     LockView,
@@ -46,6 +47,12 @@ urlpatterns = [
     path("admin-portal/lock/", LockView.as_view(), name="admin-portal-lock"),
     path("admin-portal/status/", StatusView.as_view(), name="admin-portal-status"),
     path("admin-portal/overview/", OverviewView.as_view(), name="admin-portal-overview"),
+    path("admin-portal/dashboard/", DashboardView.as_view(), name="admin-portal-dashboard"),
+    path(
+        "admin-portal/dashboard/charts/",
+        DashboardChartsView.as_view(),
+        name="admin-portal-dashboard-charts",
+    ),
     path("admin-portal/people/", PeopleView.as_view(), name="admin-portal-people"),
     path(
         "admin-portal/people/<int:pk>/remove/",
