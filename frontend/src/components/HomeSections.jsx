@@ -117,7 +117,7 @@ const STEPS = [
   { key: "getInvolved", link: "/register" },
 ];
 
-// Four numbered step cards that step down like stairs on desktop and stack on mobile.
+// Four numbered step cards that climb like stairs on desktop (Step 01 lowest) and stack on mobile.
 export function HowItWorks() {
   const t = useT();
   return (
@@ -129,7 +129,7 @@ export function HowItWorks() {
 
       <ol className="steps">
         {STEPS.map((step, index) => (
-          // --drop: how many steps below the top card this one starts.
+          // --drop: this card's position from the first (0 to 3); the CSS turns it into how high the card sits.
           <li key={step.key} className="step" style={{ "--drop": index }}>
             <p className="label">
               {t("home.steps.step")} <span className="step__number">{String(index + 1).padStart(2, "0")}</span>

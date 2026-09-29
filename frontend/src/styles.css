@@ -1196,6 +1196,8 @@ a.menu-hello__text:hover {
 /* How it works: the numbered step cards. Stairs on desktop, a stack on mobile. */
 .steps {
   --rise: 28px;
+  /* How many steps there are above the first: one fewer than the cards. */
+  --climb: 3;
   --gap: 24px;
   display: grid;
   gap: var(--gap);
@@ -1257,17 +1259,19 @@ a.menu-hello__text:hover {
 }
 
 @media (min-width: 960px) {
-  /* Each card starts one step lower (--drop is set in HomeSections.jsx). */
+  /* The staircase climbs: Step 01 sits lowest and each card after it starts
+     one step higher, so Step 04 is at the top (--drop is set in
+     HomeSections.jsx and counts up from 0). */
   .steps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .step {
-    margin-top: calc(var(--drop) * var(--rise));
+    margin-top: calc((var(--climb) - var(--drop)) * var(--rise));
   }
 
   /* The staircase line: from each card's top right corner across half the
-     gap, down one step, then on to the next card's top left corner. */
+     gap, up one step, then on to the next card's top left corner. */
   .step:not(:last-child)::after {
     content: "";
     position: absolute;
@@ -1277,14 +1281,17 @@ a.menu-hello__text:hover {
     border-top: 1px solid var(--line);
   }
 
+  /* The next card is higher, so its half of the line runs from its own top
+     left corner back across half the gap and down to where the last card's
+     line ends. */
   .step + .step::before {
-    top: calc(-1 * var(--rise) - 1px);
+    top: -1px;
     bottom: auto;
     left: auto;
     right: 100%;
     width: calc(var(--gap) / 2 + 1px);
     height: calc(var(--rise) + 1px);
-    border-bottom: 1px solid var(--line);
+    border-top: 1px solid var(--line);
   }
 }
 
