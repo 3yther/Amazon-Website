@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import AccountSettings from "../components/accessibility/AccountSettings.jsx";
@@ -121,5 +121,46 @@ describe("Logging out from the Account tab", () => {
     // Deactivating still asks for a password first; logging out does not.
     expect(screen.getByRole("button", { name: "Deactivate account" })).toBeInTheDocument();
     expect(screen.queryByRole("dialog")).toBeNull();
+  });
+});
+
+describe("Deactivating", () => {
+  function renderTab() {
+    return render(
+      <MemoryRouter initialEntries={["/accessibility"]}>
+        <AuthProvider>
+          <Routes>
+            <Route path="/accessibility" element={<AccountSettings />} />
+          </Routes>
+        </AuthProvider>
+      </MemoryRouter>,
+    );
+  }
+
+  it("says what happens first, with Cancel focused, before asking for the password", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderTab();
+
+    await user.click(await screen.findByRole("button", { name: "Deactivate account" }));
+    const dialog = screen.getByRole("dialog", { name: "Deactivate your account?" });
+    expect(dialog).toHaveTextContent("You're signed out straight away.");
+    expect(within(dialog).getByRole("button", { name: "Cancel" })).toHaveFocus();
+    expect(screen.queryByLabelText("Password")).toBeNull();
+
+    await user.click(within(dialog).getByRole("button", { name: "Continue" }));
+    expect(screen.getByLabelText(/Password/)).toBeInTheDocument();
+  });
+
+  it("closes on Escape without doing anything", async () => {
+    const calls = fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderTab();
+
+    await user.click(await screen.findByRole("button", { name: "Deactivate account" }));
+    await user.keyboard("{Escape}");
+
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(calls.some((call) => call.path.includes("deactivate"))).toBe(false);
   });
 });

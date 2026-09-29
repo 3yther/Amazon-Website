@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSiteContent } from "../i18n/content.js";
 import { useT } from "../i18n/I18nProvider.jsx";
 
@@ -34,12 +34,17 @@ export default function AboutFaq() {
   // id (rather than a list) is what makes opening one close the others.
   const [openId, setOpenId] = useState(null);
 
+  // A link to /about#faq (from the Help page) lands here.
+  useEffect(() => {
+    if (window.location.hash === "#faq") document.getElementById("faq")?.scrollIntoView();
+  }, []);
+
   function toggle(id) {
     setOpenId((current) => (current === id ? null : id));
   }
 
   return (
-    <section className="about-section" aria-labelledby="faq-title">
+    <section id="faq" className="about-section" aria-labelledby="faq-title">
       <div className="section-intro">
         <p className="label">{t("about.faq.label")}</p>
         <h2 id="faq-title">{t("about.faq.title")}</h2>

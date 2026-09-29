@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deactivateAccount, logout, updateProfile } from "../../api.js";
 import { useAuth } from "../../auth.jsx";
@@ -26,6 +26,9 @@ export default function AccountSettings() {
 
   const [loggingOut, setLoggingOut] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  // Step 1 says what happens, step 2 asks for the password.
+  const [confirmStep, setConfirmStep] = useState(1);
+  const cancelRef = useRef(null);
   const [password, setPassword] = useState("");
   const [deactivateError, setDeactivateError] = useState("");
   const [deactivating, setDeactivating] = useState(false);
@@ -63,9 +66,22 @@ export default function AccountSettings() {
 
   function closeConfirm() {
     setConfirmOpen(false);
+    setConfirmStep(1);
     setPassword("");
     setDeactivateError("");
   }
+
+  // Cancel is focused when the dialog opens, so pressing Enter by accident
+  // never goes ahead. Escape closes it.
+  useEffect(() => {
+    if (!confirmOpen) return undefined;
+    if (confirmStep === 1) cancelRef.current?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") closeConfirm();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [confirmOpen, confirmStep]);
 
   async function handleDeactivate(event) {
     event.preventDefault();
@@ -86,6 +102,7 @@ export default function AccountSettings() {
       <p className="label">{t("settings.tabs.account")}</p>
 
       <form className="account-form" onSubmit={handleSave} noValidate>
+        <p className="field__hint">{t("settings.account.editNote")}</p>
         {errors.form && <FormError message={errors.form} />}
         {status === "saved" && (
           <div className="notice notice--success" role="status">
@@ -175,10 +192,28 @@ export default function AccountSettings() {
             aria-labelledby="deactivate-title"
             onClick={(event) => event.stopPropagation()}
           >
-            <h2 id="deactivate-title">{t("settings.account.deactivate")}</h2>
-            <p>{t("settings.account.confirmText")}</p>
+            <h2 id="deactivate-title">{t("settings.account.confirmTitle")}</h2>
 
+            {confirmStep === 1 ? (
+              <>
+                <p>{t("settings.account.confirmIntro")}</p>
+                <ul className="modal__list">
+                  <li>{t("settings.account.whatSignOut")}</li>
+                  <li>{t("settings.account.whatDeleted")}</li>
+                  <li>{t("settings.account.whatPosts")}</li>
+                </ul>
+                <div className="account-card__actions">
+                  <button ref={cancelRef} type="button" className="button" onClick={closeConfirm}>
+                    {t("settings.account.cancel")}
+                  </button>
+                  <button type="button" className="button button--danger" onClick={() => setConfirmStep(2)}>
+                    {t("settings.account.continue")}
+                  </button>
+                </div>
+              </>
+            ) : (
             <form onSubmit={handleDeactivate} noValidate>
+              <p>{t("settings.account.confirmText")}</p>
               {deactivateError && <FormError message={deactivateError} />}
               <TextField
                 id="pref-deactivate-password"
@@ -198,6 +233,7 @@ export default function AccountSettings() {
                 </button>
               </div>
             </form>
+            )}
           </div>
         </div>
       )}

@@ -9,6 +9,13 @@ const ro = {
     settingHint: "Nouă limbi pe lângă engleză, traduse automat. Versiunea în engleză este cea care contează.",
   },
 
+  cookieNotice: {
+    label: "Cookie-uri",
+    text: "Folosim doar cookie-urile de care site-ul are nevoie ca să funcționeze. Fără urmărire sau reclame.",
+    link: "Politica privind cookie-urile",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Această pagină a fost tradusă automat ({language}), așa că unele formulări pot fi inexacte. " +
@@ -71,7 +78,7 @@ const ro = {
       step: "Pasul",
       browse: { title: "Vezi resursele", text: "Ghiduri, pachete și videoclipuri pentru toate cele cinci parcursuri.", link: "Vezi resursele" },
       register: { title: "Înregistrează-ți interesul", text: "Spune-ne ce parcurs vrei să explorezi.", link: "Înregistrează interesul" },
-      hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email." },
+      hearBack: { title: "Primești răspuns", text: "Analizăm fiecare trimitere și răspundem pe email.", link: "Contact" },
       getInvolved: { title: "Implică-te", text: "Creează un cont ca să pui întrebări și să răspunzi în Comunitate și să îți păstrezi setările pe orice dispozitiv.", link: "Creează cont" },
     },
   },
@@ -165,6 +172,12 @@ const ro = {
       title: "Întreabă o persoană",
       text: "Vorbește cu profesorul sau cu consilierul de carieră. Sau sună gratuit la National Careers Service la",
     },
+    faq: {
+      label: "Întrebări",
+      title: "Mai ai întrebări?",
+      text: "Pagina Despre T-Levels răspunde la cele mai comune, de exemplu despre stagii, note și costuri.",
+      link: "Citește întrebările frecvente",
+    },
   },
 
   quiz: {
@@ -236,6 +249,7 @@ const ro = {
     Feedback: "Păreri",
     "Admin Portal": "Panou de administrare",
     "Page not found": "Pagina nu a fost găsită",
+    Settings: "Setări",
   },
 
   footer: {
@@ -1088,11 +1102,11 @@ const ro = {
 
   settings: {
     label: "Setări",
-    title: "Accesibilitate",
+    title: "Setări",
     lead: "Schimbă cum arată și cum se comportă T-SMILE pentru tine. Când ești autentificat, setările te urmează pe orice dispozitiv; altfel, rămân în acest browser.",
     signInPrompt: "Autentifică-te ca să gestionezi asta.",
     tabs: {
-      sightLoss: "Vedere",
+      sightLoss: "Accesibilitate",
       display: "Afișare",
       language: "Limbă",
       security: "Securitate",
@@ -1160,6 +1174,7 @@ const ro = {
       confirm: "Confirmă parola nouă",
       saving: "Se salvează",
       submit: "Schimbă parola",
+      note: "Dacă îți schimbi parola, ești deconectat pe celelalte dispozitive.",
     },
     account: {
       saved: "Profil salvat.",
@@ -1181,7 +1196,15 @@ const ro = {
       password: "Parolă",
       deactivating: "Se dezactivează",
       wrongPassword: "Parolă greșită.",
+      editNote: "Dacă îți schimbi adresa de email, se schimbă și unde primești emailurile de resetare a parolei.",
+      confirmTitle: "Îți dezactivezi contul?",
+      confirmIntro: "Iată ce se întâmplă:",
+      whatSignOut: "Ești deconectat imediat.",
+      whatDeleted: "Contul tău este șters definitiv și asta nu se poate anula.",
+      whatPosts: "Postările tale din Comunitate, setările și istoricul chatului sunt șterse și ele.",
+      continue: "Continuă",
     },
+    eyebrow: "Accesibilitate și cont",
   },
 
   resources: {

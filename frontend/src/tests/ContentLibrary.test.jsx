@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import ContentLibrary, { siteName } from "../pages/ContentLibrary.jsx";
+import ContentLibrary, { siteName, youtubeId } from "../pages/ContentLibrary.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
 const PATHWAYS = [
@@ -88,7 +88,28 @@ describe("siteName", () => {
   });
 });
 
+describe("youtubeId", () => {
+  it("reads the id from youtube.com and youtu.be links", () => {
+    expect(youtubeId("https://www.youtube.com/watch?v=abc123")).toBe("abc123");
+    expect(youtubeId("https://youtu.be/abc123")).toBe("abc123");
+  });
+
+  it("is null for anything else", () => {
+    expect(youtubeId("https://www.gov.uk/some-video")).toBeNull();
+    expect(youtubeId("not a link")).toBeNull();
+  });
+});
+
 describe("Resources page", () => {
+  it("makes each card one link", async () => {
+    fakeServer();
+    renderPage();
+
+    await screen.findByText("2 items");
+    const cards = document.querySelectorAll(".card");
+    for (const card of cards) expect(card.querySelectorAll("a")).toHaveLength(1);
+  });
+
   it("links a free item to its site", async () => {
     fakeServer();
     renderPage();
@@ -102,9 +123,9 @@ describe("Resources page", () => {
     fakeServer();
     renderPage();
 
-    const signUp = await screen.findByRole("link", { name: "Sign up to access" });
+    const signUp = await screen.findByRole("link", { name: /Sign up to access/ });
     expect(signUp).toHaveAttribute("href", "/register");
-    expect(screen.getAllByRole("link", { name: /^Open/ })).toHaveLength(1);
+    expect(screen.getAllByRole("link", { name: /Open on/ })).toHaveLength(1);
   });
 
   it("sends the chosen pathway to the server", async () => {

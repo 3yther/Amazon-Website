@@ -9,6 +9,13 @@ const pl = {
     settingHint: "Dziewięć języków oprócz angielskiego, tłumaczonych maszynowo. Wiążąca jest wersja angielska.",
   },
 
+  cookieNotice: {
+    label: "Pliki cookie",
+    text: "Używamy tylko plików cookie potrzebnych do działania strony. Bez śledzenia i reklam.",
+    link: "Polityka plików cookie",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "Ta strona została przetłumaczona maszynowo ({language}), więc niektóre sformułowania mogą być nieprecyzyjne. " +
@@ -71,7 +78,7 @@ const pl = {
       step: "Krok",
       browse: { title: "Przeglądaj materiały", text: "Poradniki, materiały i filmy dla wszystkich pięciu ścieżek.", link: "Przeglądaj materiały" },
       register: { title: "Zgłoś zainteresowanie", text: "Napisz nam, którą ścieżkę chcesz poznać.", link: "Zgłoś zainteresowanie" },
-      hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem." },
+      hearBack: { title: "Otrzymaj odpowiedź", text: "Sprawdzamy każde zgłoszenie i odpowiadamy e-mailem.", link: "Kontakt" },
       getInvolved: { title: "Dołącz", text: "Zarejestruj się, aby zadawać pytania i odpowiadać w Społeczności oraz mieć swoje ustawienia na każdym urządzeniu.", link: "Zarejestruj się" },
     },
   },
@@ -165,6 +172,12 @@ const pl = {
       title: "Zapytaj człowieka",
       text: "Porozmawiaj z nauczycielem lub doradcą zawodowym. Możesz też bezpłatnie zadzwonić do National Careers Service pod numer",
     },
+    faq: {
+      label: "Pytania",
+      title: "Masz więcej pytań?",
+      text: "Strona O T-Levels odpowiada na najczęstsze, na przykład o praktykach, ocenach i kosztach.",
+      link: "Przeczytaj najczęstsze pytania",
+    },
   },
 
   quiz: {
@@ -236,6 +249,7 @@ const pl = {
     Feedback: "Opinie",
     "Admin Portal": "Panel administratora",
     "Page not found": "Nie znaleziono strony",
+    Settings: "Ustawienia",
   },
 
   footer: {
@@ -1088,11 +1102,11 @@ const pl = {
 
   settings: {
     label: "Ustawienia",
-    title: "Dostępność",
+    title: "Ustawienia",
     lead: "Zmień, jak T-SMILE wygląda i działa dla Ciebie. Po zalogowaniu te ustawienia działają na każdym urządzeniu; bez logowania zostają w tej przeglądarce.",
     signInPrompt: "Zaloguj się, aby tym zarządzać.",
     tabs: {
-      sightLoss: "Wzrok",
+      sightLoss: "Dostępność",
       display: "Wygląd",
       language: "Język",
       security: "Bezpieczeństwo",
@@ -1160,6 +1174,7 @@ const pl = {
       confirm: "Potwierdź nowe hasło",
       saving: "Zapisywanie",
       submit: "Zmień hasło",
+      note: "Zmiana hasła wyloguje Cię na Twoich innych urządzeniach.",
     },
     account: {
       saved: "Profil zapisany.",
@@ -1181,7 +1196,15 @@ const pl = {
       password: "Hasło",
       deactivating: "Dezaktywowanie",
       wrongPassword: "Nieprawidłowe hasło.",
+      editNote: "Zmiana adresu e-mail zmienia to, dokąd trafiają e-maile do resetu hasła.",
+      confirmTitle: "Dezaktywować konto?",
+      confirmIntro: "Oto co się stanie:",
+      whatSignOut: "Od razu zostaniesz wylogowany.",
+      whatDeleted: "Twoje konto zostanie usunięte na zawsze i nie da się tego cofnąć.",
+      whatPosts: "Twoje posty w Społeczności, ustawienia i historia czatu też zostaną usunięte.",
+      continue: "Dalej",
     },
+    eyebrow: "Dostępność i konto",
   },
 
   resources: {

@@ -4,11 +4,13 @@ import amazonLogo from "./assets/amazon-wordmark.png";
 import ChatWidget from "./assistant/ChatWidget.jsx";
 import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
+import CookieNotice from "./components/CookieNotice.jsx";
 import Footer from "./components/Footer.jsx";
 import { GearIcon } from "./components/Icons.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
 import { useT } from "./i18n/I18nProvider.jsx";
+import LanguageMenu from "./i18n/LanguageMenu.jsx";
 import TranslationNotice from "./i18n/TranslationNotice.jsx";
 import Home from "./pages/Home.jsx";
 
@@ -64,7 +66,10 @@ export default function App() {
         <div className="container site-header__inner">
           {/* Menu button first, so it sits in the left corner and comes first
               in the keyboard order too. */}
-          <SiteNav />
+          <div className="site-header__start">
+            <SiteNav />
+            <LanguageMenu />
+          </div>
 
           <div className="site-header__brand">
             {/* Both halves of the lockup go home, because people click the
@@ -80,7 +85,7 @@ export default function App() {
             >
               {/* Approved logo file, used unaltered, on a white tile so the
                   black lettering shows on the dark header (see styles.css). */}
-              <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="95" height="53" />
+              <img className="site-header__logo" src={amazonLogo} alt="Amazon" width="120" height="67" />
             </Link>
             <Link className="wordmark" to="/" onClick={countWordmarkClick}>
               T-<span className="wordmark__accent">SMILE</span>
@@ -132,7 +137,7 @@ export default function App() {
             <Route path="/data-rights" element={<PageTitle title="GDPR and data rights"><DataRights /></PageTitle>} />
             <Route path="/accessibility-help" element={<PageTitle title="Accessibility help"><AccessibilityHelp /></PageTitle>} />
             <Route path="/report-issue" element={<PageTitle title="Report an issue"><ReportIssue /></PageTitle>} />
-            <Route path="/accessibility" element={<PageTitle title="Accessibility"><Accessibility /></PageTitle>} />
+            <Route path="/accessibility" element={<PageTitle title="Settings"><Accessibility /></PageTitle>} />
             <Route path="/contact" element={<PageTitle title="Contact us"><Contact /></PageTitle>} />
             <Route path="/feedback" element={<PageTitle title="Feedback"><Feedback /></PageTitle>} />
             {/* Amazon staff only, and then a PIN on top of that. The page
@@ -150,6 +155,8 @@ export default function App() {
       </main>
 
       <Footer />
+
+      <CookieNotice />
 
       {/* On every page, outside <main> so it is not part of the page
           content and comes last in the keyboard order. */}

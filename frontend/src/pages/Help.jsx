@@ -57,6 +57,17 @@ export default function Help() {
         </IconCards>
       </section>
 
+      <section className="about-section" aria-labelledby="faq-title">
+        <div className="section-intro">
+          <p className="label">{t("help.faq.label")}</p>
+          <h2 id="faq-title">{t("help.faq.title")}</h2>
+          <p className="section-intro__lead">{t("help.faq.text")}</p>
+        </div>
+        <Link className="button button--primary" to="/about#faq">
+          {t("help.faq.link")}
+        </Link>
+      </section>
+
       <section className="about-section" aria-labelledby="questions-title">
         <div className="section-intro">
           <p className="label">{t("help.questions.label")}</p>

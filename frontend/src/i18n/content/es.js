@@ -483,7 +483,8 @@ export default {
           ],
           points: [
             "Tus ajustes de accesibilidad y el idioma que elegiste, para que se mantengan cuando vuelvas.",
-            "Si Smiley ya te ha saludado, hasta que cierres la pestaña.",
+            "Si Smiley ya te ha saludado y quién le dijiste que eres, hasta que cierres la pestaña.",
+            "Si has cerrado el aviso de cookies.",
           ],
         },
         {

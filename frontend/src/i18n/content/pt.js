@@ -483,7 +483,8 @@ export default {
           ],
           points: [
             "As tuas definições de acessibilidade e o idioma que escolheste, para se manterem quando voltares.",
-            "Se o Smiley já disse olá, até fechares o separador.",
+            "Se o Smiley já te cumprimentou e quem lhe disseste que és, até fechares o separador.",
+            "Se fechaste o aviso sobre cookies.",
           ],
         },
         {

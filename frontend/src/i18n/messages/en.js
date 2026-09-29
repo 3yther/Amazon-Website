@@ -14,6 +14,13 @@ const en = {
       "Nine languages besides English, translated by machine. English is the version that counts.",
   },
 
+  cookieNotice: {
+    label: "Cookies",
+    text: "We only use the cookies the site needs to work. No tracking or adverts.",
+    link: "Cookie Policy",
+    ok: "OK",
+  },
+
   translation: {
     notice:
       "This page was translated into {language} by machine, so some wording may be off. " +
@@ -77,7 +84,7 @@ const en = {
       step: "Step",
       browse: { title: "Browse resources", text: "Guides, packs and videos for all five pathways.", link: "Browse resources" },
       register: { title: "Register interest", text: "Tell us which pathway you want to explore.", link: "Register interest" },
-      hearBack: { title: "Hear back", text: "We review each submission and reply by email." },
+      hearBack: { title: "Hear back", text: "We review each submission and reply by email.", link: "Contact us" },
       getInvolved: { title: "Get involved", text: "Sign up to ask and answer in the Community, and keep your settings on any device.", link: "Sign up" },
     },
   },
@@ -169,6 +176,12 @@ const en = {
     hero: { label: "Help", title: "Stuck? Start here.", lead: "Pick what you are trying to do." },
     site: { label: "On this site", title: "Where to go" },
     services: { label: "Elsewhere", title: "Free services", lead: "Run by the government, not by us." },
+    faq: {
+      label: "Questions",
+      title: "More questions?",
+      text: "The About page answers the common ones, like placements, grades and costs.",
+      link: "Read the FAQ",
+    },
     questions: { label: "Before you choose", title: "Ask your school or college" },
     person: {
       label: "Still stuck",
@@ -246,6 +259,7 @@ const en = {
     "Accessibility help": "Accessibility help",
     "Report an issue": "Report an issue",
     Accessibility: "Accessibility",
+    Settings: "Settings",
     "Contact us": "Contact us",
     Feedback: "Feedback",
     "Admin Portal": "Admin Portal",
@@ -1064,11 +1078,12 @@ const en = {
 
   settings: {
     label: "Settings",
-    title: "Accessibility",
+    eyebrow: "Accessibility and account",
+    title: "Settings",
     lead: "Change how T-SMILE looks and behaves for you. Signed in, these settings follow you to any device; signed out, they stay on this browser.",
     signInPrompt: "Log in to manage this.",
     tabs: {
-      sightLoss: "Sight and vision",
+      sightLoss: "Accessibility",
       display: "Display",
       language: "Language",
       security: "Security",
@@ -1120,6 +1135,7 @@ const en = {
     },
     security: {
       lastChanged: "Password last changed {date}.",
+      note: "Changing your password signs you out on your other devices.",
       changed: "Password changed.",
       current: "Current password",
       new: "New password",
@@ -1154,6 +1170,13 @@ const en = {
       dangerText: "Deactivating your account deletes it for good: it signs you out and removes your account and everything you wrote. This cannot be undone.",
       deactivate: "Deactivate account",
       confirmText: "Enter your password to confirm. This deletes your account and signs you out immediately.",
+      editNote: "Changing your email changes where password reset emails go.",
+      confirmTitle: "Deactivate your account?",
+      confirmIntro: "Here's what happens:",
+      whatSignOut: "You're signed out straight away.",
+      whatDeleted: "Your account is deleted for good, and this can't be undone.",
+      whatPosts: "Your Community posts, settings and chat history are deleted too.",
+      continue: "Continue",
       password: "Password",
       deactivating: "Deactivating",
       wrongPassword: "Incorrect password.",
