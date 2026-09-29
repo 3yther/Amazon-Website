@@ -2,6 +2,7 @@ from django.urls import path
 
 from .admin_actions import (
     BadgeCountsView,
+    BulkActionView,
     ChangeRoleView,
     FeedbackHandleView,
     PersonDetailView,
@@ -98,6 +99,7 @@ urlpatterns = [
         name="admin-portal-feedback-handle",
     ),
     path("admin-portal/badges/", BadgeCountsView.as_view(), name="admin-portal-badges"),
+    path("admin-portal/bulk/", BulkActionView.as_view(), name="admin-portal-bulk"),
     path("admin-portal/audit-log/", AuditLogView.as_view(), name="admin-portal-audit-log"),
     path(
         "admin-portal/audit-log/export/",

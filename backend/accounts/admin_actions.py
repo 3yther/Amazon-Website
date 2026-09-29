@@ -252,3 +252,166 @@ class PersonDetailView(generics.RetrieveAPIView):
             ),
             feedback_sent=Count("feedback_submissions", distinct=True),
         )
+
+
+# The most rows one request may act on.
+#
+# Not a performance limit: it is there so a mistake is survivable. Selecting
+# everything on a page is one click, and "delete 12 posts" and "delete 4,000
+# posts" should not be the same amount of effort to ask for by accident.
+BULK_LIMIT = 100
+
+
+class BulkActionView(AdminActionView):
+    """POST /api/accounts/admin-portal/bulk/
+
+    Body: { "action": "posts_delete", "ids": [1, 2, 3] }
+
+    PER-ITEM RESULTS, NOT ALL-OR-NOTHING. Twelve selected posts where one has
+    already been deleted by somebody else should delete the other eleven and
+    say so, not fail the lot. Every item comes back with whether it worked and
+    why not, and the response is 200 even when some failed, because the
+    request itself was fine; the page reads the results.
+
+    ONE AUDIT ENTRY PER ITEM. A batch entry with a list of ids in it would be
+    invisible when somebody later filters the log by the account they are
+    looking for, which is the question the log usually gets asked.
+    """
+
+    def post(self, request):
+        action = request.data.get("action")
+        ids = request.data.get("ids")
+
+        handler = BULK_ACTIONS.get(action)
+        if handler is None:
+            return Response(
+                {"action": ["Unknown action."]}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not isinstance(ids, list) or not ids:
+            return Response({"ids": ["Choose at least one."]}, status=status.HTTP_400_BAD_REQUEST)
+
+        if len(ids) > BULK_LIMIT:
+            return Response(
+                {"ids": [f"That is more than {BULK_LIMIT} at once."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        results = []
+        for item_id in ids:
+            try:
+                ok, reason = handler(request, item_id)
+            except Exception:  # noqa: BLE001 - one bad row must not stop the rest
+                ok, reason = False, "failed"
+            results.append({"id": item_id, "ok": ok, "reason": "" if ok else reason})
+
+        return Response(
+            {
+                "results": results,
+                "done": sum(1 for row in results if row["ok"]),
+                "failed": sum(1 for row in results if not row["ok"]),
+            }
+        )
+
+
+def _bulk_feedback_handled(request, item_id):
+    feedback = Feedback.objects.filter(pk=item_id).first()
+    if feedback is None:
+        return False, "gone"
+
+    feedback.handled = True
+    feedback.handled_by = request.user
+    feedback.handled_at = timezone.now()
+    feedback.save(update_fields=["handled", "handled_by", "handled_at"])
+
+    record(
+        request,
+        AdminAuditLog.Action.FEEDBACK_HANDLED,
+        target=feedback,
+        target_label=feedback.get_category_display(),
+        detail={"handled": True, "bulk": True},
+    )
+    return True, ""
+
+
+def _bulk_report(request, item_id, dismiss=False):
+    report = Report.objects.filter(pk=item_id).first()
+    if report is None:
+        return False, "gone"
+
+    report.resolved = True
+    report.save(update_fields=["resolved"])
+
+    record(
+        request,
+        AdminAuditLog.Action.REPORT_DISMISSED if dismiss else AdminAuditLog.Action.REPORT_RESOLVED,
+        target=report,
+        target_label=report.reason or str(report.pk),
+        detail={"bulk": True},
+    )
+    return True, ""
+
+
+def _bulk_post_deleted(request, item_id):
+    """Deletes the post a report points at, the same as the single action."""
+    from community.models import Question
+
+    report = Report.objects.filter(pk=item_id).select_related("question", "answer").first()
+    if report is None:
+        return False, "gone"
+
+    post = report.question or report.answer
+    if post is None:
+        return False, "gone"
+
+    label = (getattr(post, "title", "") or getattr(post, "body", ""))[:80]
+    answers = post.answers.count() if isinstance(post, Question) else 0
+    post.delete()
+
+    record(
+        request,
+        AdminAuditLog.Action.POST_DELETED,
+        target_label=label,
+        detail={"bulk": True, "answers_deleted": answers},
+    )
+    return True, ""
+
+
+def _bulk_account_removed(request, item_id):
+    """
+    The same three refusals the single removal has, checked per item.
+
+    A bulk control is exactly where these matter most: the whole point of one
+    is that nobody reads every row before pressing the button.
+    """
+    person = User.objects.filter(pk=item_id).select_related("profile").first()
+    if person is None:
+        return False, "gone"
+
+    if person == request.user:
+        return False, "yourself"
+
+    if person.is_superuser or getattr(
+        getattr(person, "profile", None), "user_type", None
+    ) == Profile.UserType.AMAZON_STAFF:
+        return False, "staff"
+
+    username = person.username
+    person.delete()
+
+    record(
+        request,
+        AdminAuditLog.Action.ACCOUNT_REMOVED,
+        target_label=username,
+        detail={"bulk": True, "username": username},
+    )
+    return True, ""
+
+
+BULK_ACTIONS = {
+    "feedback_handled": _bulk_feedback_handled,
+    "reports_resolve": lambda request, item_id: _bulk_report(request, item_id),
+    "reports_dismiss": lambda request, item_id: _bulk_report(request, item_id, dismiss=True),
+    "posts_delete": _bulk_post_deleted,
+    "people_remove": _bulk_account_removed,
+}

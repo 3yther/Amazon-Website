@@ -344,6 +344,17 @@ export function adminHandleFeedback(id, { handled, adminNote }) {
   });
 }
 
+/**
+ * Do one thing to several rows.
+ *
+ * Answers 200 even when some items failed: the request was fine, and each
+ * item comes back with whether it worked and why not. The page reads
+ * `results` rather than assuming all or nothing.
+ */
+export function adminBulk(action, ids) {
+  return postJson("/api/accounts/admin-portal/bulk/", { action, ids });
+}
+
 /** Everything the People drawer shows about one account. Never an email. */
 export function adminPerson(id, options) {
   return request(`/api/accounts/admin-portal/people/${id}/`, options);

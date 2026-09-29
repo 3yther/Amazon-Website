@@ -17,8 +17,10 @@ import { useAuth } from "../../auth.jsx";
 import { FormError } from "../FormFields.jsx";
 import { formatDate, formatNumber } from "../../formats.js";
 import { useT } from "../../i18n/I18nProvider.jsx";
+import BulkBar from "./BulkBar.jsx";
 import ConfirmDialog from "./ConfirmDialog.jsx";
 import PersonDrawer from "./PersonDrawer.jsx";
+import useSelection from "./useSelection.js";
 import { Folded, Nothing, StaffList, known, useStaffList } from "./StaffList.jsx";
 
 // The Admin Portal's data tabs. Everything they call needs Amazon staff and
@@ -27,6 +29,37 @@ import { Folded, Nothing, StaffList, known, useStaffList } from "./StaffList.jsx
 
 /** The three types somebody can sign themselves up as. Staff is not one. */
 const USER_TYPES = ["student", "parent", "teacher"];
+
+/**
+ * The tick in a row, and the one in the header that takes the whole page.
+ *
+ * Each has a real label rather than a bare box: a column of unlabelled
+ * checkboxes is unusable with a screen reader, because there is nothing to
+ * say WHICH row each one belongs to.
+ */
+function SelectRow({ selection, id, label }) {
+  const t = useT();
+  return (
+    <label className="admin-select">
+      <input
+        type="checkbox"
+        checked={selection.has(id)}
+        onChange={() => selection.toggle(id)}
+      />
+      <span className="sr-only">{t("admin.bulk.choose", { name: String(label).slice(0, 40) })}</span>
+    </label>
+  );
+}
+
+function SelectAll({ selection }) {
+  const t = useT();
+  return (
+    <label className="admin-select">
+      <input type="checkbox" checked={selection.allOnPage} onChange={selection.toggleAll} />
+      <span className="sr-only">{t("admin.bulk.chooseAll")}</span>
+    </label>
+  );
+}
 
 /* ---------- Interest ---------- */
 
@@ -280,6 +313,7 @@ export function FeedbackTab({ onCountsChanged }) {
   const rowsWithChanges = (list.data?.results ?? []).map((row) =>
     changed[row.id] ? { ...row, ...changed[row.id] } : row,
   );
+  const selection = useSelection(rowsWithChanges);
 
   function applyChange(updated) {
     setChanged((current) => ({ ...current, [updated.id]: updated }));
@@ -323,6 +357,15 @@ export function FeedbackTab({ onCountsChanged }) {
         </div>
       </div>
 
+      <BulkBar
+        actions={["feedback_handled"]}
+        selection={selection}
+        onDone={() => {
+          list.reload();
+          onCountsChanged?.();
+        }}
+      />
+
       <StaffList
         label={t("admin.tabs.feedback")}
         caption={t("admin.feedback.caption")}
@@ -331,6 +374,9 @@ export function FeedbackTab({ onCountsChanged }) {
       >
         <thead>
           <tr>
+            <th scope="col" className="admin-select__cell">
+              <SelectAll selection={selection} />
+            </th>
             {["category", "message", "from", "submitted", "status", "actions"].map((column) => (
               <th key={column} scope="col">
                 {t(`admin.feedback.columns.${column}`)}
@@ -341,6 +387,9 @@ export function FeedbackTab({ onCountsChanged }) {
         <tbody>
           {rowsWithChanges.map((row) => (
             <tr key={row.id}>
+              <td className="admin-select__cell">
+                <SelectRow selection={selection} id={row.id} label={row.message} />
+              </td>
               <td>{known(t, `feedbackPage.categories.${row.category}`, row.category)}</td>
               <td>
                 <Folded text={row.message} />

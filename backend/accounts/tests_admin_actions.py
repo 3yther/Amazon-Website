@@ -321,3 +321,135 @@ class SendPasswordResetTests(AdminActionTestCase):
 
         self.as_locked_staff()
         self.assertEqual(self.client.post(self.url(person)).status_code, 403)
+
+
+BULK_URL = "/api/accounts/admin-portal/bulk/"
+
+
+class BulkActionTests(AdminActionTestCase):
+    def bulk(self, action, ids):
+        return self.client.post(BULK_URL, {"action": action, "ids": ids}, format="json")
+
+    def test_the_four_ways_in(self):
+        self.client.logout()
+        self.assertIn(self.client.post(BULK_URL).status_code, (401, 403))
+
+        self.as_student()
+        self.assertEqual(self.client.post(BULK_URL).status_code, 403)
+
+        self.as_locked_staff()
+        self.assertEqual(self.client.post(BULK_URL).status_code, 403)
+
+    def test_it_refuses_an_action_it_does_not_know(self):
+        self.assertEqual(self.bulk("drop_database", [1]).status_code, 400)
+
+    def test_it_refuses_an_empty_selection(self):
+        self.assertEqual(self.bulk("feedback_handled", []).status_code, 400)
+
+    def test_it_caps_the_batch(self):
+        """
+        Not a performance limit. Selecting a page is one click, and "delete
+        12" and "delete 4,000" should not be the same amount of effort to ask
+        for by accident.
+        """
+        response = self.bulk("feedback_handled", list(range(200)))
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_it_marks_several_pieces_of_feedback_handled(self):
+        ids = [Feedback.objects.create(category="bug", message=f"m{i}").id for i in range(3)]
+
+        response = self.bulk("feedback_handled", ids)
+
+        self.assertEqual(response.data["done"], 3)
+        self.assertEqual(Feedback.objects.filter(handled=True).count(), 3)
+
+    def test_one_missing_row_does_not_fail_the_rest(self):
+        """
+        Twelve selected where one has already gone should do the other eleven
+        and say so, not fail the lot.
+        """
+        alive = Feedback.objects.create(category="bug", message="still here")
+
+        response = self.bulk("feedback_handled", [alive.id, 999999])
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["done"], 1)
+        self.assertEqual(response.data["failed"], 1)
+        results = {row["id"]: row for row in response.data["results"]}
+        self.assertTrue(results[alive.id]["ok"])
+        self.assertEqual(results[999999]["reason"], "gone")
+
+    def test_bulk_removal_still_refuses_you(self):
+        ada = make_user("ada")
+
+        response = self.bulk("people_remove", [ada.id, self.staff.id])
+
+        results = {row["id"]: row for row in response.data["results"]}
+        self.assertTrue(results[ada.id]["ok"])
+        self.assertEqual(results[self.staff.id]["reason"], "yourself")
+        self.assertTrue(User.objects.filter(pk=self.staff.pk).exists())
+
+    def test_bulk_removal_still_refuses_staff_and_superusers(self):
+        """
+        A bulk control is exactly where these matter most: the whole point of
+        one is that nobody reads every row before pressing the button.
+        """
+        other = make_user("otherstaff", "amazon_staff")
+        root = User.objects.create_superuser("root", password=PASSWORD)
+        Profile.objects.create(user=root, user_type="student")
+        ada = make_user("ada")
+
+        response = self.bulk("people_remove", [ada.id, other.id, root.id])
+
+        results = {row["id"]: row for row in response.data["results"]}
+        self.assertTrue(results[ada.id]["ok"])
+        self.assertEqual(results[other.id]["reason"], "staff")
+        self.assertEqual(results[root.id]["reason"], "staff")
+        self.assertTrue(User.objects.filter(pk=other.pk).exists())
+        self.assertTrue(User.objects.filter(pk=root.pk).exists())
+
+    def test_every_removal_gets_its_own_audit_entry(self):
+        """
+        One entry per item, not one per batch: a batch entry with a list of
+        ids in it is invisible when somebody later filters the log by the
+        account they are looking for.
+        """
+        ada = make_user("ada")
+        tom = make_user("tom")
+
+        self.bulk("people_remove", [ada.id, tom.id])
+
+        entries = AdminAuditLog.objects.filter(action=AdminAuditLog.Action.ACCOUNT_REMOVED)
+        self.assertEqual(entries.count(), 2)
+        self.assertEqual({entry.target_label for entry in entries}, {"ada", "tom"})
+        self.assertTrue(all(entry.detail["bulk"] for entry in entries))
+
+    def test_it_resolves_and_dismisses_reports(self):
+        asker = make_user("asker")
+        # One reporter can only report a given post once, so this needs two.
+        other = make_user("other")
+        question = Question.objects.create(author=asker, title="q", body="b")
+        one = Report.objects.create(reporter=asker, question=question, reason="spam")
+        two = Report.objects.create(reporter=other, question=question, reason="rude")
+
+        self.assertEqual(self.bulk("reports_resolve", [one.id]).data["done"], 1)
+        self.assertEqual(self.bulk("reports_dismiss", [two.id]).data["done"], 1)
+
+        self.assertEqual(Report.objects.filter(resolved=True).count(), 2)
+        self.assertTrue(
+            AdminAuditLog.objects.filter(action=AdminAuditLog.Action.REPORT_DISMISSED).exists()
+        )
+
+    def test_it_deletes_the_posts_behind_reports(self):
+        asker = make_user("asker")
+        question = Question.objects.create(author=asker, title="rude one", body="b")
+        report = Report.objects.create(reporter=asker, question=question, reason="rude")
+
+        response = self.bulk("posts_delete", [report.id])
+
+        self.assertEqual(response.data["done"], 1)
+        self.assertFalse(Question.objects.filter(pk=question.pk).exists())
+        self.assertTrue(
+            AdminAuditLog.objects.filter(action=AdminAuditLog.Action.POST_DELETED).exists()
+        )

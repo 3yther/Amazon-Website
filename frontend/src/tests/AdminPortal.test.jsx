@@ -269,6 +269,18 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
         );
         return Response.json({ count: rows.length, next: null, previous: null, results: rows });
       }
+      if (path.endsWith("/admin-portal/bulk/")) {
+        const body = JSON.parse(options.body ?? "{}");
+        // One id is always refused, so the per-item reporting gets exercised.
+        const results = body.ids.map((id, index) => ({
+          id,
+          ok: index !== 0 || body.ids.length === 1,
+          reason: index === 0 && body.ids.length > 1 ? "staff" : "",
+        }));
+        const done = results.filter((r) => r.ok).length;
+        if (body.action === "feedback_handled") unhandledFeedback -= done;
+        return Response.json({ results, done, failed: results.length - done });
+      }
       if (path.endsWith("/admin-portal/badges/")) {
         return Response.json({ unhandled_feedback: unhandledFeedback, open_reports: 2 });
       }
@@ -1225,6 +1237,88 @@ describe("Admin Portal: the person drawer", () => {
 
     await user.click(await screen.findByRole("button", { name: "ada" }));
     await screen.findByRole("dialog");
+
+    await expectNoAxeViolations(container);
+  });
+});
+
+describe("Admin Portal: bulk actions", () => {
+  async function openFeedbackTab(user) {
+    renderPortal();
+    await openSection(user, "Feedback");
+    return screen.findByText("The map does not load");
+  }
+
+  it("shows nothing until something is ticked", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    expect(screen.queryByRole("group", { name: "Bulk actions" })).not.toBeInTheDocument();
+  });
+
+  it("counts what is ticked", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    await user.click(screen.getByLabelText(/^Choose The map does not load/));
+
+    expect(await screen.findByText("1 chosen")).toBeInTheDocument();
+  });
+
+  it("takes the whole page in one click", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    await user.click(screen.getByLabelText("Choose everything on this page"));
+
+    expect(await screen.findByText("2 chosen")).toBeInTheDocument();
+  });
+
+  it("reports per-item results rather than swallowing them", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+    await user.click(screen.getByLabelText("Choose everything on this page"));
+
+    // Scoped to the bar: each row has its own button with the same words,
+    // which is right, because it is the same action.
+    const bar = screen.getByRole("group", { name: "Bulk actions" });
+    await user.click(within(bar).getByRole("button", { name: "Mark dealt with" }));
+
+    // One of the two is refused by the fake server, and the bar has to say so
+    // rather than claiming it did both.
+    expect(await screen.findByText(/1 done\./)).toBeInTheDocument();
+    expect(screen.getByText(/were staff accounts/)).toBeInTheDocument();
+  });
+
+  it("each checkbox says which row it is for", async () => {
+    // A column of unlabelled boxes is unusable with a screen reader: there is
+    // nothing to say WHICH row each one belongs to.
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    expect(screen.getByLabelText(/^Choose The map does not load/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Choose Lovely site/)).toBeInTheDocument();
+  });
+
+  it("has no WCAG 2.2 AA problems with the bar open", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const { container } = render(
+      <MemoryRouter initialEntries={["/admin-portal?tab=feedback"]}>
+        <Routes>
+          <Route path="/admin-portal" element={<AdminPortal />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    await screen.findByText("The map does not load");
+
+    await user.click(screen.getByLabelText("Choose everything on this page"));
+    await screen.findByText("2 chosen");
 
     await expectNoAxeViolations(container);
   });
