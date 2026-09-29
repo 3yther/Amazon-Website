@@ -993,6 +993,10 @@ const es = {
       feedback: "Comentarios por categoría",
       feedbackCaption: "Comentarios enviados, por categoría.",
     },
+    signedOut: {
+      title: "Inicia sesión para abrir el Portal de administración",
+      lead: "Esta página es para el personal de Amazon. Inicia sesión con tu cuenta de personal para continuar.",
+    },
     pin: {
       title: "Introduce el PIN del portal",
       lead: "Un paso más. Esto bloquea el portal en un ordenador compartido, además de tu sesión de personal.",

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { login } from "../api.js";
 import { useAuth } from "../auth.jsx";
 import { formErrors } from "../formErrors.js";
@@ -7,9 +7,24 @@ import AuthPanel from "../components/AuthPanel.jsx";
 import { FormError, TextField } from "../components/FormFields.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
+/**
+ * Where to go once the login works. A page that needs an account sends the
+ * visitor here with ?next=, so they carry on where they were instead of
+ * landing on the homepage.
+ *
+ * Only our own paths are allowed. "//elsewhere.example" and
+ * "https://elsewhere.example" are addresses off this site, and following one
+ * would turn our login page into a way of making a link to somewhere else look
+ * like it belongs to us. Anything but a single leading slash goes home.
+ */
+function destinationFrom(next) {
+  return next && /^\/(?![/\\])/.test(next) ? next : "/";
+}
+
 export default function Login() {
   const t = useT();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { refresh } = useAuth();
   const [fields, setFields] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -27,7 +42,7 @@ export default function Login() {
     try {
       await login(fields.username, fields.password);
       await refresh();
-      navigate("/", { replace: true });
+      navigate(destinationFrom(searchParams.get("next")), { replace: true });
     } catch (error) {
       setErrors(formErrors(error, t)); // what the user typed stays in place
       setStatus("idle");

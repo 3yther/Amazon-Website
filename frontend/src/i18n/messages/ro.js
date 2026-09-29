@@ -993,6 +993,10 @@ const ro = {
       feedback: "Feedback după categorie",
       feedbackCaption: "Feedback trimis, după categorie.",
     },
+    signedOut: {
+      title: "Conectează-te pentru a deschide Panoul de administrare",
+      lead: "Această pagină este pentru personalul Amazon. Conectează-te cu contul tău de personal pentru a continua.",
+    },
     pin: {
       title: "Introdu PIN-ul panoului",
       lead: "Încă un pas. Asta blochează panoul pe un computer comun, peste autentificarea ta de personal.",
