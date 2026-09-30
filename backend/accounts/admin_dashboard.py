@@ -272,6 +272,7 @@ class DashboardChartsView(APIView):
                 "interest_by_pathway": self.interest_by_pathway(window),
                 "community_activity": self.community_activity(window),
                 "answer_rate": self.answer_rate(window),
+                "feedback_handled": self.feedback_handled(window),
                 "active_topics": self.active_topics(window),
                 "feedback_over_time": self.feedback_over_time(window),
                 "reports_activity": self.reports_activity(window),
@@ -370,6 +371,18 @@ class DashboardChartsView(APIView):
         return [
             {"label": "Answered", "value": answered},
             {"label": "Still waiting", "value": max(asked - answered, 0)},
+        ]
+
+    def feedback_handled(self, window):
+        """How much of the window's feedback anybody has dealt with."""
+        row = Feedback.objects.filter(**window.filter_for("created_at")).aggregate(
+            total=Count("id"),
+            handled=Count("id", filter=Q(handled=True)),
+        )
+        handled = row["handled"] or 0
+        return [
+            {"label": "Dealt with", "value": handled},
+            {"label": "Still waiting", "value": max((row["total"] or 0) - handled, 0)},
         ]
 
     def active_topics(self, window):

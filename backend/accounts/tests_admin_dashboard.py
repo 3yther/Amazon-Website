@@ -407,12 +407,25 @@ class DashboardNumbersTests(APITestCase):
             self.client.get(DASHBOARD_URL, {"range": "30d"})
 
     def test_the_charts_do_not_grow_a_query_per_row_either(self):
+        """
+        Same guard as the cards above. The pinned number moves when a series
+        is added (it went 19 to 20 when the feedback share arrived, which is
+        this test doing its job); what must never move is the count between
+        10 rows and 60.
+        """
         asker = make_user("asker")
-        for index in range(30):
+        for index in range(10):
             question = Question.objects.create(author=asker, title=f"q{index}", body="b")
             Answer.objects.create(author=asker, question=question, body="a")
 
-        with self.assertNumQueries(19):
+        with self.assertNumQueries(20):
+            self.client.get(CHARTS_URL, {"range": "30d"})
+
+        for index in range(50):
+            question = Question.objects.create(author=asker, title=f"more{index}", body="b")
+            Answer.objects.create(author=asker, question=question, body="a")
+
+        with self.assertNumQueries(20):
             self.client.get(CHARTS_URL, {"range": "30d"})
 
 
