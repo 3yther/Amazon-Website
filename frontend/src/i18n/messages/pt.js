@@ -7,7 +7,7 @@ const pt = {
     label: "Idioma",
     choose: "Escolhe um idioma",
     settingLabel: "Idioma da interface",
-    settingHint: "Nove idiomas além do inglês, traduzidos automaticamente. A versão em inglês é a que conta.",
+    settingHint: "17 idiomas além do inglês, traduzidos automaticamente. A versão em inglês é a que conta.",
   },
 
   cookieNotice: {
@@ -746,7 +746,7 @@ const pt = {
       accessibility:
         "Podes mudar o tamanho do texto, as cores, o modo escuro, o movimento e a leitura em voz alta nas definições de Acessibilidade.",
       language:
-        "Sim! Usa o menu de idioma por baixo do botão da conta, no topo da página, ou o do menu lateral. Há dez idiomas à escolha.",
+        "Sim! Usa o botão de idioma ao lado do botão do menu, no topo da página, ou o separador Idioma nas Definições. Há 18 idiomas à escolha.",
       privacy:
         "Só guardo as perguntas que tenho de consultar, para podermos continuar onde ficámos. O que respondo sozinho, e a forma como " +
         "navegas no site, fica no teu navegador. A Política de Privacidade tem os detalhes.",

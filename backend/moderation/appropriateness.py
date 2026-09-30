@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 # It is English on purpose: the front end matches it in
 # frontend/src/i18n/serverMessages.js and shows the visitor's own language.
 # TEAM: reword this and you must reword it there too, or it shows in English
-# in all ten languages.
+# in every language.
 INAPPROPRIATE_MESSAGE = "This contains language that isn't appropriate for the site."
 
 # WHY 0.8 AND NOT 0.5.

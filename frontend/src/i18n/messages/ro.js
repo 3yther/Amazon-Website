@@ -6,7 +6,7 @@ const ro = {
     label: "Limbă",
     choose: "Alege o limbă",
     settingLabel: "Limba interfeței",
-    settingHint: "Nouă limbi pe lângă engleză, traduse automat. Versiunea în engleză este cea care contează.",
+    settingHint: "17 limbi pe lângă engleză, traduse automat. Versiunea în engleză este cea care contează.",
   },
 
   cookieNotice: {
@@ -745,7 +745,7 @@ const ro = {
       accessibility:
         "Poți schimba mărimea textului, culorile, modul întunecat, animațiile și citirea cu voce tare din setările de Accesibilitate.",
       language:
-        "Da! Folosește meniul de limbă de sub butonul contului, sus pe pagină, sau pe cel din meniul lateral. Poți alege dintre zece limbi.",
+        "Da! Folosește butonul de limbă de lângă butonul de meniu, sus pe pagină, sau fila Limbă din Setări. Poți alege dintre 18 limbi.",
       privacy:
         "Salvez doar întrebările pe care trebuie să le caut, ca să putem continua de unde am rămas. Ce răspund singur și felul în care " +
         "te miști pe site rămân în browserul tău. Politica de confidențialitate are detaliile.",

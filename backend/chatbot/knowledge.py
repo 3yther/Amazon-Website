@@ -427,6 +427,14 @@ LANGUAGES = {
     "ar": "Modern Standard Arabic",
     "bn": "Bengali",
     "gu": "Gujarati",
+    "zh": "Mandarin Chinese, written in simplified characters",
+    "fr": "French",
+    "de": "German",
+    "ha": "Hausa, written in the Latin alphabet with its hooked letters",
+    "hi": "Hindi, written in Devanagari script",
+    "it": "Italian",
+    "ru": "Russian",
+    "yo": "Yoruba, written with its tone marks and underdots",
 }
 
 

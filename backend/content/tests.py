@@ -132,3 +132,29 @@ class StarterResourcesTests(APITestCase):
     def test_digital_filter_returns_more_than_three(self):
         response = self.client.get("/api/content/", {"pathway": "digital"})
         self.assertGreater(response.data["count"], 3)
+
+
+class BrowserLanguageTests(APITestCase):
+    """Django reads the browser's Accept-Language header (LocaleMiddleware) on
+    every request. It must cope with all eighteen site languages, including the
+    two Django has no translations for.
+    """
+
+    def get(self, header):
+        return self.client.get("/api/pathways/", HTTP_ACCEPT_LANGUAGE=header)
+
+    def test_hausa_and_yoruba_fall_back_to_english_without_an_error(self):
+        for header in ["ha", "yo", "ha-NG", "yo-NG,yo;q=0.9"]:
+            with self.subTest(header=header):
+                response = self.get(header)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.headers["Content-Language"], "en-gb")
+
+    def test_the_other_new_languages_are_recognised(self):
+        expected = {"zh-CN": "zh-hans", "zh-Hans": "zh-hans", "fr-FR": "fr", "de": "de",
+                    "hi": "hi", "it": "it", "ru": "ru"}
+        for header, language in expected.items():
+            with self.subTest(header=header):
+                response = self.get(header)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.headers["Content-Language"], language)

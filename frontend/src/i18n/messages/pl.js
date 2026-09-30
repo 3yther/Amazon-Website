@@ -6,7 +6,7 @@ const pl = {
     label: "Język",
     choose: "Wybierz język",
     settingLabel: "Język interfejsu",
-    settingHint: "Dziewięć języków oprócz angielskiego, tłumaczonych maszynowo. Wiążąca jest wersja angielska.",
+    settingHint: "17 języków oprócz angielskiego, tłumaczonych maszynowo. Wiążąca jest wersja angielska.",
   },
 
   cookieNotice: {
@@ -745,7 +745,7 @@ const pl = {
       accessibility:
         "W ustawieniach Dostępności możesz zmienić rozmiar tekstu, kolory, tryb ciemny, animacje i czytanie na głos.",
       language:
-        "Tak! Użyj menu języka pod przyciskiem konta u góry strony albo tego w menu bocznym. Do wyboru jest dziesięć języków.",
+        "Tak! Użyj przycisku języka obok przycisku menu u góry strony albo karty Język w Ustawieniach. Do wyboru jest 18 języków.",
       privacy:
         "Zapisuję tylko pytania, które muszę sprawdzić, żebyśmy mogli wrócić do rozmowy. To, na co odpowiadam sam, i to, jak " +
         "poruszasz się po stronie, zostaje w twojej przeglądarce. Szczegóły są w Polityce prywatności.",

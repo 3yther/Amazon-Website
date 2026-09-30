@@ -3,7 +3,7 @@
 
 /* --- the language menu ------------------------------------------------------ */
 
-/* The globe button next to the menu button (LanguageMenu.jsx). */
+/* The language button next to the menu button (LanguageMenu.jsx). */
 .language-menu {
   position: relative;
 }
@@ -29,7 +29,11 @@
   inset-inline-start: 0;
   top: calc(100% + 8px);
   z-index: 5;
+  /* As wide as the longest name (中文（普通话） would wrap otherwise), but never
+     wider than a phone screen. */
+  width: max-content;
   min-width: 12rem;
+  max-width: calc(100vw - 32px);
   margin: 0;
   padding: 6px;
   list-style: none;
@@ -37,10 +41,16 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
   color: var(--blue);
+  /* Eighteen languages: scroll inside the menu on short screens. */
+  max-height: min(26rem, 70vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .language-menu__option {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   min-height: 44px;
   padding: 8px 12px;
@@ -57,10 +67,48 @@
   background: var(--paper);
 }
 
-/* The chosen language: bold and a dark blue edge, not colour alone. */
+/* The chosen language: bold and a dark blue edge on the reading side, not
+   colour alone. */
 .language-menu__option[aria-current="true"] {
   font-weight: 700;
-  box-shadow: inset 3px 0 0 var(--blue);
+  border-inline-start: 3px solid var(--blue);
+  padding-inline-start: 9px;
+}
+
+/* A flag (flags.jsx) or, for a language with no single country, a globe.
+   Always the same box, so nothing moves when the language changes, and a thin
+   edge so mostly-white flags (Poland) don't disappear into a white menu. */
+.flag {
+  display: inline-block;
+  flex: none;
+  width: 21px;
+  height: 14px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.flag--globe {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.language-menu .flag--globe .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* On the dark header the edge has to be light to show. */
+.site-header .language-menu__button .flag:not(.flag--globe) {
+  box-shadow: 0 0 0 1px rgb(250 250 247 / 0.5);
+}
+
+/* Chinese pages use each system's own simplified Chinese font (nothing is
+   downloaded). Other scripts, like Devanagari for Hindi, already fall back to
+   the system's fonts for them. */
+:root:lang(zh-Hans) {
+  --font-sans: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif;
 }
 
 /* The header's third column: the settings gear and the account menu. */
