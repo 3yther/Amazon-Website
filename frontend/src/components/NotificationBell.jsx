@@ -7,7 +7,7 @@ import { useT } from "../i18n/I18nProvider.jsx";
 import { BellIcon } from "./Icons.jsx";
 
 // Checks for new notifications this often while the page is open.
-const CHECK_EVERY_MS = 10000;
+const CHECK_EVERY_MS = 5000;
 
 // The bell in the header. Only shown when signed in. Which kinds of
 // notification arrive is set on the Notifications tab in Settings.
