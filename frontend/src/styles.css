@@ -137,17 +137,25 @@ html[data-motion="reduced"] *::after {
   scroll-behavior: auto !important;
 }
 
-/* Colour blindness filter. It's on <html> so it covers the menu and chat too.
+/* Colour blindness filter. It's on <html> so it covers the whole page. The
+   menu drawer is a modal <dialog>, which the browser draws on top of the page
+   where the <html> filter doesn't reach, so it gets the filter as well.
    The filters are in components/ColourVisionFilters.jsx. */
-html[data-colour-vision="protanopia"] {
+html[data-colour-vision="protanopia"],
+html[data-colour-vision="protanopia"] :modal,
+html[data-colour-vision="protanopia"] ::backdrop {
   filter: url("#colour-vision-protanopia");
 }
 
-html[data-colour-vision="deuteranopia"] {
+html[data-colour-vision="deuteranopia"],
+html[data-colour-vision="deuteranopia"] :modal,
+html[data-colour-vision="deuteranopia"] ::backdrop {
   filter: url("#colour-vision-deuteranopia");
 }
 
-html[data-colour-vision="tritanopia"] {
+html[data-colour-vision="tritanopia"],
+html[data-colour-vision="tritanopia"] :modal,
+html[data-colour-vision="tritanopia"] ::backdrop {
   filter: url("#colour-vision-tritanopia");
 }
 
