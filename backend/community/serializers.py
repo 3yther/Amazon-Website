@@ -132,8 +132,9 @@ class QuestionSerializer(CountsMixin, serializers.ModelSerializer):
             "found_helpful",
             "is_mine",
             "hidden",
+            "is_starter",
         ]
-        read_only_fields = ["id", "author", "created_at", "hidden"]
+        read_only_fields = ["id", "author", "created_at", "hidden", "is_starter"]
         # The title is the question; the body is optional detail. The list
         # sends an excerpt instead, so the full body is only in the detail.
         extra_kwargs = {

@@ -23,6 +23,7 @@ We agreed this as a team before building features. Only change a model if the te
 - theme: light, dark or system
 - button_outline_style, page_background
 - language (default "en")
+- notify_announcements, notify_community, notify_interest: true/false (which notifications go in the bell, all on by default)
 - created_at, updated_at
 
 **Feedback** (from the Feedback, Contact and Report an issue pages)
@@ -79,6 +80,7 @@ Loaded from `backend/providers/fixtures/providers.json`, built from the Departme
 - message (optional)
 - user (optional, set if they were signed in)
 - submitted_at
+- seen_at (when staff marked it as seen; the person gets a notification)
 
 ## chatbot
 
@@ -113,6 +115,17 @@ Loaded from `backend/providers/fixtures/providers.json`, built from the Departme
 - note (optional)
 - resolved (ticked by staff)
 - created_at
+
+## notifications
+
+**Notification** (one message in someone's bell)
+- user, kind: announcement, community or interest
+- event: announcement, answered, accepted or interest_seen (the words are made on the site, in the reader's language)
+- text (e.g. the question's title), link (where clicking it goes)
+- read, created_at
+
+**Announcement** (written by staff in Django admin; a new one goes to everyone with announcements on)
+- title, message, link, created_at
 
 ## What happens when something is deleted
 

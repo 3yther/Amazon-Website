@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useSearchParams } from "react-router-dom";
 import AdminPortal from "../pages/AdminPortal.jsx";
 import { expectNoAxeViolations } from "./axe.js";
 
@@ -58,6 +58,138 @@ const PERSON = {
   answers: 2,
 };
 
+/** The KPI cards, as the dashboard endpoint sends them. */
+const DASHBOARD = {
+  range: { preset: "30d", from: "2026-08-30", to: "2026-09-29" },
+  kpis: [
+    { key: "accounts", value: 40, unit: "count", spark: [1, 2, 3], previous: 32, change: 8, percent: 25 },
+    { key: "signups", value: 8, unit: "count", spark: [1, 2, 5], previous: 4, change: 4, percent: 100 },
+    // A card with nothing before it: the page must say so, not divide by zero.
+    { key: "active", value: 6, unit: "count", spark: [], previous: 0, change: 6, percent: null },
+    { key: "interest", value: 10, unit: "count", spark: [], previous: 10, change: 0, percent: 0 },
+    { key: "questions", value: 3, unit: "count", spark: [], previous: 1, change: 2, percent: 200 },
+    { key: "answers", value: 5, unit: "count", spark: [], previous: 5, change: 0, percent: 0 },
+    { key: "unanswered", value: 1, unit: "count", spark: [], previous: 2, change: -1, percent: -50 },
+    { key: "feedback", value: 4, unit: "count", spark: [], previous: 2, change: 2, percent: 100 },
+    { key: "open_reports", value: 2, unit: "count", spark: [], previous: 1, change: 1, percent: 100 },
+    {
+      key: "time_to_first_answer",
+      value: 3.5,
+      unit: "hours",
+      spark: [],
+      previous: 5,
+      change: -1.5,
+      percent: -30,
+      lower_is_better: true,
+    },
+  ],
+};
+
+const DASHBOARD_CHARTS = {
+  range: { preset: "30d", from: "2026-08-30", to: "2026-09-29" },
+  signups_over_time: [
+    { label: "2026-09-14", values: { student: 3, parent: 1, teacher: 0 } },
+    { label: "2026-09-21", values: { student: 4, parent: 0, teacher: 1 } },
+  ],
+  users_by_type: [
+    { label: "student", value: 30 },
+    { label: "parent", value: 6 },
+    { label: "teacher", value: 3 },
+    { label: "amazon_staff", value: 1 },
+  ],
+  interest_by_pathway: [
+    { label: "Digital", value: 7 },
+    { label: "Business", value: 3 },
+  ],
+  community_activity: [{ label: "2026-09-21", values: { questions: 2, answers: 5 } }],
+  answer_rate: [
+    { label: "Answered", value: 2 },
+    { label: "Still waiting", value: 1 },
+  ],
+  active_topics: [{ label: "tlevels", value: 4 }],
+  feedback_over_time: [
+    { label: "2026-09-14", values: { bug: 1, feature: 0, general: 2, accessibility: 0 } },
+    { label: "2026-09-21", values: { bug: 0, feature: 1, general: 1, accessibility: 1 } },
+  ],
+  reports_activity: [{ label: "2026-09-21", values: { opened: 2, resolved: 1 } }],
+  languages: [
+    { label: "en", value: 38 },
+    { label: "pl", value: 2 },
+  ],
+  provider_coverage: [{ label: "North West", values: { placed: 12, unplaced: 2 } }],
+};
+
+const PERSON_DETAIL = {
+  id: 2,
+  username: "ada",
+  user_type: "student",
+  pathway: "Digital",
+  date_joined: "2026-03-01T10:00:00Z",
+  last_login: "2026-09-20T10:00:00Z",
+  is_active: true,
+  is_superuser: false,
+  questions: 4,
+  answers: 7,
+  reports_made: 1,
+  feedback_sent: 2,
+};
+
+const AUDIT_ROWS = [
+  {
+    id: 1,
+    actor: "staffer",
+    action: "post_deleted",
+    action_label: "Deleted a post",
+    target_type: "Question",
+    target_label: "a rude post",
+    detail: { kind: "question" },
+    created_at: "2026-09-28T09:00:00Z",
+  },
+  {
+    id: 2,
+    // No actor account any more: the copied name is what makes this readable.
+    actor: "goneaway",
+    action: "role_changed",
+    action_label: "Changed an account's role",
+    target_type: "User",
+    target_label: "ada",
+    detail: { from: "student", to: "teacher" },
+    created_at: "2026-09-27T09:00:00Z",
+  },
+];
+
+const PROVIDER_ROWS = [
+  { id: 1, name: "Placed College", postcode: "M1 1AA", region: "North West", provider_type: "FE college", placed: true },
+  { id: 2, name: "Lost College", postcode: "XX1 1XX", region: "London", provider_type: "FE college", placed: false },
+];
+
+const FEEDBACK_ROWS = [
+  {
+    id: 9,
+    category: "bug",
+    message: "The map does not load",
+    email: "",
+    username: "ada",
+    created_at: "2026-09-20T10:00:00Z",
+    handled: false,
+    handled_by: "",
+    handled_at: null,
+    admin_note: "",
+  },
+  {
+    id: 10,
+    category: "general",
+    message: "Lovely site",
+    email: "",
+    username: "tom",
+    created_at: "2026-09-19T10:00:00Z",
+    handled: true,
+    handled_by: "otherstaff",
+    handled_at: "2026-09-21T10:00:00Z",
+    admin_note: "said thanks",
+  },
+];
+
 const POST = {
   kind: "question",
   id: 5,
@@ -75,6 +207,7 @@ const OTHER_ADMIN = { ...PERSON, id: 3, username: "otheradmin", user_type: "amaz
 function fakeServer({ unlocked = true, configured = true, wrongPin = false, people = [PERSON] } = {}) {
   const calls = [];
   let open = unlocked;
+  let unhandledFeedback = 3;
 
   vi.stubGlobal(
     "fetch",
@@ -92,6 +225,8 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
         return Response.json({ unlocked: true });
       }
       if (path.endsWith("/admin-portal/overview/")) return Response.json(OVERVIEW);
+      if (path.endsWith("/admin-portal/dashboard/")) return Response.json(DASHBOARD);
+      if (path.endsWith("/admin-portal/dashboard/charts/")) return Response.json(DASHBOARD_CHARTS);
       // The list first: an action path contains the list path, so matching
       // the action loosely would swallow the list too.
       if (path.endsWith("/api/community/admin-portal/reports/")) {
@@ -104,11 +239,68 @@ function fakeServer({ unlocked = true, configured = true, wrongPin = false, peop
         return Response.json({ count: 1, next: null, previous: null, results: [POST] });
       }
       if (path.includes("/admin-portal/posts/")) return Response.json({ deleted: true });
+      if (path.includes("/admin-portal/people/") && path.endsWith("/role/")) {
+        const body = JSON.parse(options.body ?? "{}");
+        return Response.json({ id: 2, user_type: body.user_type });
+      }
+      if (path.includes("/admin-portal/people/") && path.endsWith("/password-reset/")) {
+        return Response.json({ id: 2, sent: true });
+      }
+      if (/\/admin-portal\/people\/\d+\/$/.test(path)) {
+        const id = Number(path.match(/\/people\/(\d+)\//)[1]);
+        return Response.json(
+          id === OTHER_ADMIN.id
+            ? { ...PERSON_DETAIL, id, username: "otheradmin", user_type: "amazon_staff" }
+            : PERSON_DETAIL,
+        );
+      }
       if (path.endsWith("/admin-portal/people/")) {
         return Response.json({ count: people.length, next: null, previous: null, results: people });
       }
+      if (path.endsWith("/admin-portal/audit-log/")) {
+        const wanted = new URL(url, "http://localhost").searchParams.get("action");
+        const rows = AUDIT_ROWS.filter((row) => !wanted || row.action === wanted);
+        return Response.json({ count: rows.length, next: null, previous: null, results: rows });
+      }
+      if (path.endsWith("/admin-portal/providers/")) {
+        const wanted = new URL(url, "http://localhost").searchParams.get("placed");
+        const rows = PROVIDER_ROWS.filter(
+          (row) => !wanted || String(row.placed) === wanted,
+        );
+        return Response.json({ count: rows.length, next: null, previous: null, results: rows });
+      }
+      if (path.endsWith("/admin-portal/bulk/")) {
+        const body = JSON.parse(options.body ?? "{}");
+        // One id is always refused, so the per-item reporting gets exercised.
+        const results = body.ids.map((id, index) => ({
+          id,
+          ok: index !== 0 || body.ids.length === 1,
+          reason: index === 0 && body.ids.length > 1 ? "staff" : "",
+        }));
+        const done = results.filter((r) => r.ok).length;
+        if (body.action === "feedback_handled") unhandledFeedback -= done;
+        return Response.json({ results, done, failed: results.length - done });
+      }
+      if (path.endsWith("/admin-portal/badges/")) {
+        return Response.json({ unhandled_feedback: unhandledFeedback, open_reports: 2 });
+      }
+      if (path.includes("/admin-portal/feedback/") && path.endsWith("/handle/")) {
+        const body = JSON.parse(options.body ?? "{}");
+        unhandledFeedback += body.handled ? -1 : 1;
+        return Response.json({
+          id: 9,
+          handled: body.handled,
+          handled_by: body.handled ? "staffer" : "",
+          handled_at: body.handled ? "2026-09-29T10:00:00Z" : null,
+          admin_note: body.admin_note ?? "",
+        });
+      }
       if (path.endsWith("/admin-portal/feedback/")) {
-        return Response.json({ count: 0, next: null, previous: null, results: [] });
+        const wanted = new URL(url, "http://localhost").searchParams.get("handled");
+        const rows = FEEDBACK_ROWS.filter(
+          (row) => wanted === null || wanted === "" || String(row.handled) === wanted,
+        );
+        return Response.json({ count: rows.length, next: null, previous: null, results: rows });
       }
       if (path.endsWith("/api/interest/submissions/")) {
         return Response.json({ count: 0, next: null, previous: null, results: [] });
@@ -124,11 +316,50 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+/**
+ * The sidebar, once the shell has rendered.
+ *
+ * Navigation, not a tablist: these change what the whole page is about and
+ * they are in the URL, so they are announced as navigation and carry
+ * aria-current rather than aria-selected. There are two in the document (the
+ * phone drawer and the desktop column, one of which CSS hides), so this takes
+ * the first.
+ */
+async function sidebar() {
+  const navs = await screen.findAllByRole("navigation");
+  return navs[0];
+}
+
+/**
+ * Move to a section the way a staff member would.
+ *
+ * Matched loosely, because a section with a badge has the count and its
+ * hidden words in its accessible name ("Feedback 3 not dealt with yet").
+ */
+async function openSection(user, name) {
+  const nav = await sidebar();
+  await user.click(await within(nav).findByRole("button", { name: new RegExp(`^${name}`) }));
+}
+
+/** Prints the router's current query string, so a test can assert on it. */
+function ShowsTheUrl() {
+  const [params] = useSearchParams();
+  return <output data-testid="url">{params.toString()}</output>;
+}
+
 function renderPortal(path = "/admin-portal") {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <Routes>
-        <Route path="/admin-portal" element={<AdminPortal />} />
+        <Route
+          path="/admin-portal"
+          element={
+            <>
+              <AdminPortal />
+              <ShowsTheUrl />
+            </>
+          }
+        />
         <Route path="/" element={<h1>Home</h1>} />
       </Routes>
     </MemoryRouter>,
@@ -148,6 +379,28 @@ describe("Admin Portal: who gets in", () => {
   // Signed out is not the same as signed in and not staff. A student needs no
   // explanation, but somebody with no session at all may just be a staff
   // member who has not signed in yet, so they get told rather than bounced.
+  it("greets staff by their first name, like the header does", async () => {
+    auth = { user: { ...STAFF, first_name: "Ada" }, checked: true, refresh: vi.fn() };
+    fakeServer();
+
+    renderPortal();
+
+    expect(
+      await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), Ada/, level: 1 }),
+    ).toBeInTheDocument();
+  });
+
+  it("falls back to the username when the account has no first name", async () => {
+    auth = { user: { ...STAFF, first_name: "" }, checked: true, refresh: vi.fn() };
+    fakeServer();
+
+    renderPortal();
+
+    expect(
+      await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), staffer/, level: 1 }),
+    ).toBeInTheDocument();
+  });
+
   it("asks a signed-out visitor to sign in instead of bouncing them home", async () => {
     auth = { user: null, checked: true, refresh: vi.fn() };
     fakeServer();
@@ -219,7 +472,9 @@ describe("Admin Portal: the PIN gate", () => {
     await user.type(await screen.findByLabelText("PIN"), "4821");
     await user.click(screen.getByRole("button", { name: "Unlock" }));
 
-    expect(await screen.findByRole("heading", { name: "Admin Portal", level: 1 })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), staffer/, level: 1 }),
+    ).toBeInTheDocument();
   });
 
   it("rejects a wrong PIN without saying how many tries are left", async () => {
@@ -270,35 +525,93 @@ describe("Admin Portal: the PIN gate", () => {
   });
 });
 
-describe("Admin Portal: the tabs", () => {
-  it("shows all five", async () => {
+describe("Admin Portal: the sidebar", () => {
+
+  it("shows every section", async () => {
     fakeServer();
 
     renderPortal();
 
+    const nav = await sidebar();
     for (const name of ["Overview", "Interest", "Reported posts", "Feedback", "People"]) {
-      expect(await screen.findByRole("tab", { name })).toBeInTheDocument();
+      expect(within(nav).getByRole("button", { name: new RegExp(`^${name}`) })).toBeInTheDocument();
     }
   });
 
-  it("opens the tab named in the address", async () => {
+  it("opens the section named in the address", async () => {
     fakeServer();
 
     renderPortal("/admin-portal?tab=people");
 
-    expect(await screen.findByRole("tab", { name: "People", selected: true })).toBeInTheDocument();
+    const link = await within(await sidebar()).findByRole("button", { name: "People" });
+    expect(link).toHaveAttribute("aria-current", "page");
+  });
+
+  it("keeps the chosen date range when you move between sections", async () => {
+    // A range narrowed on the Overview should still mean the same thing on
+    // People, which is the whole reason the filters live in the URL.
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal("/admin-portal?range=90d");
+
+    await openSection(user, "People");
+
+    const url = screen.getByTestId("url").textContent;
+    expect(url).toContain("range=90d");
+    expect(url).toContain("tab=people");
   });
 });
 
 describe("Admin Portal: Overview", () => {
-  it("shows the totals and the charts", async () => {
+  it("shows a card for every key number, and the charts", async () => {
     fakeServer();
 
     renderPortal();
 
-    expect(await screen.findByText("40")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Interest by pathway" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Sign-ups by week" })).toBeInTheDocument();
+    const accounts = (await screen.findByText("Accounts")).closest("article");
+    expect(within(accounts).getByText("40")).toBeInTheDocument();
+
+    for (const name of ["Sign-ups by week", "Accounts by type", "Interest by pathway"]) {
+      expect(screen.getByRole("heading", { name })).toBeInTheDocument();
+    }
+  });
+
+  it("shows a change against the period before, with an arrow and a sign", async () => {
+    // Colour is never the only signal: the sign and the arrow have to carry
+    // it on their own for greyscale and the colour-vision filters.
+    fakeServer();
+
+    renderPortal();
+
+    const accounts = (await screen.findByText("Accounts")).closest("article");
+    expect(within(accounts).getByText(/\+8 \(\+25%\)/)).toBeInTheDocument();
+    // The arrow is decorative and has no role on purpose, so it is found as
+    // an element rather than by role.
+    expect(accounts.querySelector(".admin-kpi__arrow")).not.toBeNull();
+
+    // And the whole thing as one sentence for a screen reader.
+    expect(
+      within(accounts).getByText(/up 8 \(25%\) on the period before/),
+    ).toBeInTheDocument();
+  });
+
+  it("says so rather than dividing by zero when nothing came before", async () => {
+    fakeServer();
+
+    renderPortal();
+
+    const active = (await screen.findByText("Signed in")).closest("article");
+    expect(within(active).getByText(/no earlier figure/)).toBeInTheDocument();
+  });
+
+  it("does not call a faster answer time a loss", async () => {
+    // Down is good here, and a dashboard that paints it red is lying.
+    fakeServer();
+
+    renderPortal();
+
+    const card = (await screen.findByText("Time to first answer")).closest("article");
+    expect(card.querySelector(".admin-kpi__change--good")).not.toBeNull();
   });
 
   it("gives every chart the same numbers as text", async () => {
@@ -308,22 +621,30 @@ describe("Admin Portal: Overview", () => {
     const user = userEvent.setup({ delay: null });
     renderPortal();
 
-    const chart = (await screen.findByRole("heading", { name: "Interest by pathway" })).closest(
+    const ring = (await screen.findByRole("heading", { name: "Accounts by type" })).closest(
       "section",
     );
-    await user.click(within(chart).getByText("Show the numbers"));
+    await user.click(within(ring).getByText("Show the numbers"));
 
-    const table = within(chart).getByRole("table");
-    expect(within(table).getByRole("rowheader", { name: "Digital" })).toBeInTheDocument();
-    // 7 of 10 is 70%.
-    expect(within(table).getByText("70%")).toBeInTheDocument();
+    const ringTable = within(ring).getByRole("table");
+    expect(within(ringTable).getByRole("rowheader", { name: "Student" })).toBeInTheDocument();
+    // 30 of 40 is 75%.
+    expect(within(ringTable).getByText("75%")).toBeInTheDocument();
+
+    // The bars carry the same guarantee, with counts rather than shares.
+    const bars = screen.getByRole("heading", { name: "Interest by pathway" }).closest("section");
+    await user.click(within(bars).getByText("Show the numbers"));
+
+    const barTable = within(bars).getByRole("table");
+    expect(within(barTable).getByRole("rowheader", { name: "Digital" })).toBeInTheDocument();
+    expect(within(barTable).getByText("7")).toBeInTheDocument();
   });
 });
 
 describe("Admin Portal: deleting a reported post", () => {
   async function openReports(user) {
     renderPortal();
-    await user.click(await screen.findByRole("tab", { name: "Reported posts" }));
+    await openSection(user, "Reported posts");
     return screen.findByText("A reported question");
   }
 
@@ -547,7 +868,459 @@ describe("Admin Portal: accessibility", () => {
     fakeServer();
     renderPortal();
 
-    await screen.findByRole("heading", { name: "Admin Portal", level: 1 });
+    await screen.findByRole("heading", { name: /Good (morning|afternoon|evening), staffer/, level: 1 });
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
   });
 });
+
+describe("Admin Portal: exporting a CSV", () => {
+  /** The export fetches directly, so it is watched separately from the API. */
+  function watchDownloads() {
+    const asked = [];
+    const realFetch = window.fetch;
+    vi.stubGlobal("fetch", async (url, options) => {
+      if (String(url).includes("/export/")) {
+        asked.push(String(url));
+        return new Response("\ufeffID,Username\n1,ada\n", {
+          status: 200,
+          headers: {
+            "Content-Type": "text/csv; charset=utf-8",
+            "Content-Disposition": 'attachment; filename="tsmile-people-2026-09-29.csv"',
+          },
+        });
+      }
+      return realFetch(url, options);
+    });
+    // jsdom has neither of these, and the button uses both.
+    URL.createObjectURL = vi.fn(() => "blob:test");
+    URL.revokeObjectURL = vi.fn();
+    return asked;
+  }
+
+  it("asks for the export with the filters that are on screen", async () => {
+    fakeServer();
+    const asked = watchDownloads();
+    const user = userEvent.setup({ delay: null });
+    renderPortal("/admin-portal?range=90d");
+
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    await waitFor(() => expect(asked).toHaveLength(1));
+    expect(asked[0]).toContain("/admin-portal/dashboard/export/");
+    expect(asked[0]).toContain("range=90d");
+  });
+
+  it("exports the section you are looking at", async () => {
+    fakeServer();
+    const asked = watchDownloads();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await openSection(user, "People");
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    await waitFor(() => expect(asked).toHaveLength(1));
+    expect(asked[0]).toContain("/admin-portal/people/export/");
+  });
+
+  it("uses the filename the server chose", async () => {
+    fakeServer();
+    watchDownloads();
+    const user = userEvent.setup({ delay: null });
+    const clicked = [];
+    // Catch the temporary <a> the button makes rather than the download.
+    const realClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function stub() {
+      clicked.push(this.download);
+    };
+    renderPortal();
+
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    await waitFor(() => expect(clicked).toContain("tsmile-people-2026-09-29.csv"));
+    HTMLAnchorElement.prototype.click = realClick;
+  });
+
+  it("says so when the download fails, rather than failing silently", async () => {
+    fakeServer();
+    const realFetch = window.fetch;
+    vi.stubGlobal("fetch", async (url, options) =>
+      String(url).includes("/export/")
+        ? new Response("no", { status: 403 })
+        : realFetch(url, options),
+    );
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/did not work/);
+  });
+});
+
+describe("Admin Portal: handling feedback", () => {
+  async function openFeedback(user) {
+    renderPortal();
+    await openSection(user, "Feedback");
+    return screen.findByText("The map does not load");
+  }
+
+  it("says who dealt with a piece of feedback, and when", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+
+    await openFeedback(user);
+
+    // Not just a tick: "handled" with nobody's name against it is the same
+    // as not knowing.
+    expect(screen.getByText(/otherstaff on/)).toBeInTheDocument();
+  });
+
+  it("marks one dealt with and keeps the rest of the list still", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    await user.click(screen.getAllByRole("button", { name: "Mark dealt with" })[0]);
+
+    await waitFor(() => expect(screen.getAllByText(/staffer on/).length).toBeGreaterThan(0));
+    // The other row is untouched, because the row is patched rather than the
+    // whole page refetched.
+    expect(screen.getByText("Lovely site")).toBeInTheDocument();
+  });
+
+  it("saves a staff-only note", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    // Scoped to the row: <details> elements elsewhere on the page (the phone
+    // nav drawer, the chart tables) are groups too.
+    const row = screen.getByText("The map does not load").closest("tr");
+    // The summary and the textarea's own hidden label share their words,
+    // so this asks for the summary itself rather than the text.
+    await user.click(row.querySelector("summary"));
+    await user.type(within(row).getByLabelText("Staff note"), "replied by email");
+    await user.click(within(row).getByRole("button", { name: "Save note" }));
+
+    // The saved note under the message, not the textarea still holding it.
+    await waitFor(() =>
+      expect(
+        screen.getByText("The map does not load").closest("tr").querySelector(".admin-feedback__saved-note"),
+      ).toHaveTextContent("replied by email"),
+    );
+  });
+
+  it("filters to the ones still waiting", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    await user.selectOptions(screen.getByLabelText("Status"), "false");
+
+    await waitFor(() => expect(screen.queryByText("Lovely site")).not.toBeInTheDocument());
+    expect(screen.getByText("The map does not load")).toBeInTheDocument();
+  });
+
+  it("shows the unhandled count in the sidebar, with words for a screen reader", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    const nav = await sidebar();
+    const feedback = await within(nav).findByRole("button", { name: /Feedback/ });
+    await waitFor(() => expect(feedback).toHaveTextContent("3"));
+    // A bare number beside a word is meaningless read aloud.
+    expect(feedback).toHaveTextContent("not dealt with yet");
+  });
+
+  it("refreshes the count after something is dealt with", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedback(user);
+
+    const nav = await sidebar();
+    const feedback = within(nav).getByRole("button", { name: /Feedback/ });
+    await waitFor(() => expect(feedback).toHaveTextContent("3"));
+
+    await user.click(screen.getAllByRole("button", { name: "Mark dealt with" })[0]);
+
+    await waitFor(() => expect(feedback).toHaveTextContent("2"));
+  });
+});
+
+describe("Admin Portal: the audit log and providers tabs", () => {
+  it("shows who did what, and still names somebody whose account has gone", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await openSection(user, "Audit log");
+
+    expect(await screen.findByText("a rude post")).toBeInTheDocument();
+    // The copied username is the whole reason it is stored apart from the
+    // foreign key, so this is the case worth naming.
+    expect(screen.getByText("goneaway")).toBeInTheDocument();
+  });
+
+  it("filters the audit log by action", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "Audit log");
+    await screen.findByText("a rude post");
+
+    await user.selectOptions(screen.getByLabelText("Action"), "role_changed");
+
+    await waitFor(() => expect(screen.queryByText("a rude post")).not.toBeInTheDocument());
+    expect(screen.getByText("ada")).toBeInTheDocument();
+  });
+
+  it("says in words which providers need a postcode fixing", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    await openSection(user, "Providers");
+
+    // Words, not a tick or a colour: this column is why the tab exists.
+    expect(await screen.findByText("Postcode needs fixing")).toBeInTheDocument();
+    expect(screen.getAllByText("On the map").length).toBeGreaterThan(0);
+  });
+
+  it("filters providers to the ones that need fixing", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "Providers");
+    await screen.findByText("Placed College");
+
+    await user.selectOptions(screen.getByLabelText("On the map"), "false");
+
+    await waitFor(() => expect(screen.queryByText("Placed College")).not.toBeInTheDocument());
+    expect(screen.getByText("Lost College")).toBeInTheDocument();
+  });
+
+  it("offers an export on every data section", async () => {
+    fakeServer();
+    const asked = [];
+    const realFetch = window.fetch;
+    vi.stubGlobal("fetch", async (url, options) => {
+      if (String(url).includes("/export/")) {
+        asked.push(String(url));
+        return new Response("\ufeffA\n1\n", {
+          status: 200,
+          headers: { "Content-Disposition": 'attachment; filename="tsmile-x-2026-09-29.csv"' },
+        });
+      }
+      return realFetch(url, options);
+    });
+    URL.createObjectURL = vi.fn(() => "blob:test");
+    URL.revokeObjectURL = vi.fn();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+
+    for (const [section, endpoint] of [
+      ["Interest", "/admin-portal/interest/export/"],
+      ["Feedback", "/admin-portal/feedback/export/"],
+      ["Providers", "/admin-portal/providers/export/"],
+      ["Audit log", "/admin-portal/audit-log/export/"],
+      ["People", "/admin-portal/people/export/"],
+    ]) {
+      await openSection(user, section);
+      await user.click(await screen.findByRole("button", { name: "Export CSV" }));
+      await waitFor(() => expect(asked.at(-1)).toContain(endpoint));
+    }
+  });
+});
+
+describe("Admin Portal: the person drawer", () => {
+  async function openDrawer(user) {
+    renderPortal();
+    await openSection(user, "People");
+    await user.click(await screen.findByRole("button", { name: "ada" }));
+    const drawer = await screen.findByRole("dialog");
+    // Its controls, not just the panel: a skeleton has nothing to trap.
+    await within(drawer).findByRole("button", { name: "Send a password reset email" });
+    return drawer;
+  }
+
+  it("shows what the account has done, and never an email", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+
+    const drawer = await openDrawer(user);
+
+    expect(within(drawer).getByText("Digital")).toBeInTheDocument();
+    expect(within(drawer).getByText("4")).toBeInTheDocument(); // questions
+    // The People table deliberately shows none, and a drawer is not a reason
+    // to widen what the site hands out about people aged 16 to 18.
+    expect(drawer.textContent).not.toMatch(/@/);
+  });
+
+  it("is a real dialog: focus goes in, Escape closes it, focus comes back", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "People");
+
+    const opener = await screen.findByRole("button", { name: "ada" });
+    await user.click(opener);
+
+    const drawer = await screen.findByRole("dialog");
+    await waitFor(() => expect(drawer).toHaveFocus());
+
+    await user.keyboard("{Escape}");
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    // Without this, focus falls to the top of the document and a keyboard
+    // user has to tab the whole page again.
+    expect(opener).toHaveFocus();
+  });
+
+  it("keeps Tab inside while it is open", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const drawer = await openDrawer(user);
+
+    // Round the loop more times than it has controls: focus must never leave.
+    for (let step = 0; step < 12; step += 1) {
+      await user.tab();
+      expect(drawer.contains(document.activeElement)).toBe(true);
+    }
+  });
+
+  it("changes the account type", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const drawer = await openDrawer(user);
+
+    await user.selectOptions(within(drawer).getByLabelText("Change account type"), "teacher");
+
+    expect(await within(drawer).findByText("Account type changed.")).toBeInTheDocument();
+  });
+
+  it("will not offer a type change for a staff account", async () => {
+    fakeServer({ people: [PERSON, OTHER_ADMIN] });
+    const user = userEvent.setup({ delay: null });
+    renderPortal();
+    await openSection(user, "People");
+    await user.click(await screen.findByRole("button", { name: "otheradmin" }));
+
+    const drawer = await screen.findByRole("dialog");
+    expect(within(drawer).queryByLabelText("Change account type")).not.toBeInTheDocument();
+    expect(within(drawer).getByText(/Take their admin access away first/)).toBeInTheDocument();
+  });
+
+  it("sends a reset without saying whether an address exists", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const drawer = await openDrawer(user);
+
+    await user.click(within(drawer).getByRole("button", { name: "Send a password reset email" }));
+
+    // "If that account has an email address" and never "no email on file":
+    // the server does not tell us, on purpose, so neither does this.
+    expect(await within(drawer).findByText(/If that account has an email address/)).toBeInTheDocument();
+  });
+
+  it("has no WCAG 2.2 AA problems", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const { container } = render(
+      <MemoryRouter initialEntries={["/admin-portal?tab=people"]}>
+        <Routes>
+          <Route path="/admin-portal" element={<AdminPortal />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await user.click(await screen.findByRole("button", { name: "ada" }));
+    await screen.findByRole("dialog");
+
+    await expectNoAxeViolations(container);
+  });
+});
+
+describe("Admin Portal: bulk actions", () => {
+  async function openFeedbackTab(user) {
+    renderPortal();
+    await openSection(user, "Feedback");
+    return screen.findByText("The map does not load");
+  }
+
+  it("shows nothing until something is ticked", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    expect(screen.queryByRole("group", { name: "Bulk actions" })).not.toBeInTheDocument();
+  });
+
+  it("counts what is ticked", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    await user.click(screen.getByLabelText(/^Choose The map does not load/));
+
+    expect(await screen.findByText("1 chosen")).toBeInTheDocument();
+  });
+
+  it("takes the whole page in one click", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    await user.click(screen.getByLabelText("Choose everything on this page"));
+
+    expect(await screen.findByText("2 chosen")).toBeInTheDocument();
+  });
+
+  it("reports per-item results rather than swallowing them", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+    await user.click(screen.getByLabelText("Choose everything on this page"));
+
+    // Scoped to the bar: each row has its own button with the same words,
+    // which is right, because it is the same action.
+    const bar = screen.getByRole("group", { name: "Bulk actions" });
+    await user.click(within(bar).getByRole("button", { name: "Mark dealt with" }));
+
+    // One of the two is refused by the fake server, and the bar has to say so
+    // rather than claiming it did both.
+    expect(await screen.findByText(/1 done\./)).toBeInTheDocument();
+    expect(screen.getByText(/were staff accounts/)).toBeInTheDocument();
+  });
+
+  it("each checkbox says which row it is for", async () => {
+    // A column of unlabelled boxes is unusable with a screen reader: there is
+    // nothing to say WHICH row each one belongs to.
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    await openFeedbackTab(user);
+
+    expect(screen.getByLabelText(/^Choose The map does not load/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Choose Lovely site/)).toBeInTheDocument();
+  });
+
+  it("has no WCAG 2.2 AA problems with the bar open", async () => {
+    fakeServer();
+    const user = userEvent.setup({ delay: null });
+    const { container } = render(
+      <MemoryRouter initialEntries={["/admin-portal?tab=feedback"]}>
+        <Routes>
+          <Route path="/admin-portal" element={<AdminPortal />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    await screen.findByText("The map does not load");
+
+    await user.click(screen.getByLabelText("Choose everything on this page"));
+    await screen.findByText("2 chosen");
+
+    await expectNoAxeViolations(container);
+  });
+});
+

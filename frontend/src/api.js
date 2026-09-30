@@ -287,9 +287,17 @@ export function adminPortalLock() {
   return postJson("/api/accounts/admin-portal/lock/", {});
 }
 
-/** The Overview tab's numbers, already aggregated by the database. */
-export function adminOverview(options) {
-  return request("/api/accounts/admin-portal/overview/", options);
+/**
+ * The dashboard's KPI cards, each with the period before it and a sparkline.
+ * filters: range (7d/30d/90d/12m/all/custom), from, to.
+ */
+export function adminDashboard(filters, options) {
+  return request("/api/accounts/admin-portal/dashboard/", { ...options, params: filters });
+}
+
+/** The series behind the dashboard's charts. Same filters as adminDashboard. */
+export function adminDashboardCharts(filters, options) {
+  return request("/api/accounts/admin-portal/dashboard/charts/", { ...options, params: filters });
 }
 
 /** One page of accounts. filters: user_type, q, page. */
@@ -313,7 +321,61 @@ export function adminRevokeStaff(id) {
   return postJson(`/api/accounts/admin-portal/people/${id}/revoke-staff/`, {});
 }
 
-/** One page of site feedback. filters: category, page. */
+/** One page of the audit log. filters: actor, action, range, page. */
+export function adminAuditLog(filters, options) {
+  return request("/api/accounts/admin-portal/audit-log/", { ...options, params: filters });
+}
+
+/** One page of providers. filters: region, placed, page. */
+export function adminProviders(filters, options) {
+  return request("/api/accounts/admin-portal/providers/", { ...options, params: filters });
+}
+
+/** The small counts beside the sidebar's sections: unhandled feedback, open reports. */
+export function adminBadges(options) {
+  return request("/api/accounts/admin-portal/badges/", options);
+}
+
+/** Mark one piece of feedback dealt with, or put it back. Note is staff-only. */
+export function adminHandleFeedback(id, { handled, adminNote }) {
+  return postJson(`/api/accounts/admin-portal/feedback/${id}/handle/`, {
+    handled,
+    ...(adminNote === undefined ? {} : { admin_note: adminNote }),
+  });
+}
+
+/**
+ * Do one thing to several rows.
+ *
+ * Answers 200 even when some items failed: the request was fine, and each
+ * item comes back with whether it worked and why not. The page reads
+ * `results` rather than assuming all or nothing.
+ */
+export function adminBulk(action, ids) {
+  return postJson("/api/accounts/admin-portal/bulk/", { action, ids });
+}
+
+/** Everything the People drawer shows about one account. Never an email. */
+export function adminPerson(id, options) {
+  return request(`/api/accounts/admin-portal/people/${id}/`, options);
+}
+
+/** Move somebody between student, parent and teacher. Never to or from staff. */
+export function adminChangeRole(id, userType) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/role/`, { user_type: userType });
+}
+
+/**
+ * Send the ordinary password reset email.
+ *
+ * The answer is the same whether the account has an address or not, on
+ * purpose, so this can never be used to find out which addresses exist.
+ */
+export function adminSendPasswordReset(id) {
+  return postJson(`/api/accounts/admin-portal/people/${id}/password-reset/`, {});
+}
+
+/** One page of site feedback. filters: category, handled, page. */
 export function adminFeedback(filters, options) {
   return request("/api/accounts/admin-portal/feedback/", { ...options, params: filters });
 }
@@ -336,4 +398,19 @@ export function adminPosts(filters, options) {
 /** Delete a post for good. kind: "question" | "answer". A question takes its answers. */
 export function adminDeletePost(kind, id) {
   return postJson(`/api/community/admin-portal/posts/${kind}/${id}/delete/`, {});
+}
+
+// --- notifications (the bell) ----------------------------------------------------
+
+/** The latest 20 notifications and how many are unread: { unread, results }. */
+export function getNotifications(options) {
+  return request("/api/notifications/", options);
+}
+
+export function markAllNotificationsRead() {
+  return postJson("/api/notifications/read/");
+}
+
+export function markNotificationRead(id) {
+  return postJson(`/api/notifications/${id}/read/`);
 }

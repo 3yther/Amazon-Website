@@ -3,13 +3,14 @@ import TabNav from "../components/TabNav.jsx";
 import AccountSettings from "../components/accessibility/AccountSettings.jsx";
 import DisplaySettings from "../components/accessibility/DisplaySettings.jsx";
 import LanguageSettings from "../components/accessibility/LanguageSettings.jsx";
+import NotificationSettings from "../components/accessibility/NotificationSettings.jsx";
 import SecuritySettings from "../components/accessibility/SecuritySettings.jsx";
 import SightLossSettings from "../components/accessibility/SightLossSettings.jsx";
 import { useAuth } from "../auth.jsx";
 import { useAccessibilityPreferences } from "../hooks/useAccessibilityPreferences.jsx";
 import { useT } from "../i18n/I18nProvider.jsx";
 
-const TAB_IDS = ["sight-loss", "display", "language", "security", "account"];
+const TAB_IDS = ["sight-loss", "display", "language", "notifications", "security", "account"];
 
 function SignInPrompt() {
   const t = useT();
@@ -52,6 +53,11 @@ export default function Accessibility() {
       id: "language",
       label: t("settings.tabs.language"),
       content: <LanguageSettings />,
+    },
+    {
+      id: "notifications",
+      label: t("settings.tabs.notifications"),
+      content: signedIn ? <NotificationSettings /> : <SignInPrompt />,
     },
     {
       id: "security",

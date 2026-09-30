@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "chatbot",
     "providers",
     "community",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -247,6 +248,10 @@ REST_FRAMEWORK = {
         # guesser and the portal. Tight enough to make guessing hopeless,
         # loose enough that a staff member fumbling the keypad is fine.
         "admin_portal_pin": "10/hour",
+        # CSV exports. Generous enough for a morning of real work,
+        # tight enough that the whole accounts table cannot be pulled
+        # in a loop.
+        "admin_export": "30/hour",
     },
 }
 

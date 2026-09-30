@@ -608,6 +608,129 @@ main {
   box-shadow: inset 0 -3px 0 var(--orange);
 }
 
+/* The notifications bell (NotificationBell.jsx), beside the settings gear. */
+.notification-bell {
+  position: relative;
+}
+
+.notification-bell__button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-inverse);
+  cursor: pointer;
+}
+
+.notification-bell__button .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.notification-bell__button:hover,
+.notification-bell__button[aria-expanded="true"] {
+  color: var(--orange);
+}
+
+/* How many are unread, on an orange dot. */
+.notification-bell__count {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--orange);
+  color: var(--ink-on-orange);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+}
+
+.notification-bell__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-end: 0;
+  z-index: 5;
+  width: min(22rem, calc(100vw - 32px));
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--blue);
+}
+
+.notification-bell__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 4px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-bell__mark {
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.notification-bell__empty {
+  padding: 16px 4px 8px;
+  color: var(--ink-muted);
+}
+
+.notification-bell__list {
+  max-height: 22rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.notification-bell__item {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.notification-bell__item:hover {
+  background: var(--paper);
+}
+
+/* Unread ones are bold with a dark blue edge, so it isn't colour alone. */
+.notification-bell__item--unread {
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 var(--blue);
+}
+
+.notification-bell__date {
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
 /* On narrow screens hide the greeting so the brand stays centred. */
 @media (max-width: 720px) {
   .account-button__greeting {
@@ -2247,7 +2370,11 @@ input[type="range"] {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 30; /* above the sticky header, so the dim covers it too */
+  /* Above the sticky header so the dim covers it too, AND above Smiley
+     (.assistant is 50). A confirmation for something irreversible must
+     not end up behind the chat helper, which is where it was until the
+     Admin Portal put a typed confirmation on deleting twelve posts. */
+  z-index: 60;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2330,6 +2457,168 @@ input[type="range"] {
 }
 
 /* ---------- Admin Portal (pages/AdminPortal.jsx) ---------- */
+
+/* THE ADMIN DATA PALETTE: a deliberate, scoped exception to CONTEXT.md.
+   ---------------------------------------------------------------------
+   The site is Amazon orange and dark blue, and every public page still is.
+   A dashboard is the one place that rule cannot hold: a chart with six
+   series in two colours is a chart nobody can read. So these seven exist,
+   they are defined only under .admin-shell, and no public page can reach
+   them. Still no purple and still no gradients: these are solid fills, with
+   a pale tint of each for area fills only.
+
+   ORDERED BY LIGHTNESS, NOT BY HUE. Adjacent series alternate dark and
+   light, so the chart survives being seen in greyscale or through any of the
+   colour-vision filters in ColourVisionFilters.jsx. Hue alone would put
+   teal next to green and lose both. Run `npm run check:palette` to see the
+   measured gaps.
+
+   COLOUR IS NEVER THE ONLY SIGNAL. Every series also carries a label in the
+   key and its own row in the ChartTable underneath, and every KPI change
+   carries an arrow and a sign as well as its colour. Losing the colour
+   entirely must lose nothing but the prettiness.
+
+   Text stays dark blue everywhere. Orange is about 2:1 on paper, so it is a
+   fill and a decoration here, never a text colour. */
+.admin-shell {
+  --admin-1: #ff9900; /* Amazon orange */
+  --admin-2: #232f3e; /* Amazon dark blue */
+  --admin-3: #7fc4e8; /* sky */
+  --admin-4: #0f6e6b; /* teal */
+  --admin-5: #f0c05a; /* amber */
+  --admin-6: #2e7d32; /* green */
+  --admin-7: #8a94a0; /* the soft neutral, always last */
+
+  /* Pale tints, for the area under a line only. Never for a bar or a ring
+     segment, which need the solid colour to stay distinguishable. */
+  --admin-1-fill: rgb(255 153 0 / 0.16);
+  --admin-2-fill: rgb(35 47 62 / 0.14);
+  --admin-3-fill: rgb(127 196 232 / 0.28);
+  --admin-4-fill: rgb(15 110 107 / 0.16);
+  --admin-5-fill: rgb(240 192 90 / 0.24);
+  --admin-6-fill: rgb(46 125 50 / 0.16);
+  --admin-7-fill: rgb(138 148 160 / 0.20);
+
+  /* A KPI that went up or down. Paired with an arrow and a sign in the
+     markup, never shown alone: see KpiCard in Overview.jsx. "Up" is not
+     always good (open reports going up is bad), so these are only ever the
+     direction, and the card says what the direction means. */
+  --admin-up: #2e7d32;
+  --admin-down: #b3261e;
+
+  /* Every bar, swatch and ring segment is drawn with this edge. Amazon
+     orange is 2.14:1 on white and amber and sky are fainter still, so a
+     pale series would otherwise be a shape you cannot find. The edge is
+     what makes the mark visible; the fill is what tells it apart from
+     its neighbours. */
+  --admin-mark-edge: rgb(35 47 62 / 0.55);
+}
+
+/* Dark mode. The navy series would vanish into the dark page, so it becomes
+   a light slate and the light series darken to keep the same alternation. */
+html.dark-mode .admin-shell {
+  --admin-1: #ffb142;
+  --admin-2: #6e8cae;
+  --admin-3: #9fd6f5;
+  --admin-4: #2e9c98;
+  --admin-5: #f5d07a;
+  --admin-6: #5fb865;
+  --admin-7: #cdd5de;
+
+  --admin-1-fill: rgb(255 177 66 / 0.20);
+  --admin-2-fill: rgb(110 140 174 / 0.26);
+  --admin-3-fill: rgb(159 214 245 / 0.22);
+  --admin-4-fill: rgb(46 156 152 / 0.24);
+  --admin-5-fill: rgb(245 208 122 / 0.20);
+  --admin-6-fill: rgb(95 184 101 / 0.24);
+  --admin-7-fill: rgb(205 213 222 / 0.26);
+
+  --admin-up: #5fb865;
+  --admin-down: #f2857a;
+  --admin-mark-edge: rgb(250 250 247 / 0.55);
+}
+
+/* Before the JavaScript has run, on a dark system. Same values. */
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) .admin-shell {
+    --admin-1: #ffb142;
+    --admin-2: #6e8cae;
+    --admin-3: #9fd6f5;
+    --admin-4: #2e9c98;
+    --admin-5: #f5d07a;
+    --admin-6: #5fb865;
+    --admin-7: #cdd5de;
+
+    --admin-1-fill: rgb(255 177 66 / 0.20);
+    --admin-2-fill: rgb(110 140 174 / 0.26);
+    --admin-3-fill: rgb(159 214 245 / 0.22);
+    --admin-4-fill: rgb(46 156 152 / 0.24);
+    --admin-5-fill: rgb(245 208 122 / 0.20);
+    --admin-6-fill: rgb(95 184 101 / 0.24);
+    --admin-7-fill: rgb(205 213 222 / 0.26);
+
+    --admin-up: #5fb865;
+    --admin-down: #f2857a;
+    --admin-mark-edge: rgb(250 250 247 / 0.55);
+  }
+}
+
+/* High contrast pushes the lightness gaps as wide as they go and drops the
+   tints to near-solid, because a 16% wash is exactly what this setting
+   exists to get rid of. */
+body.high-contrast .admin-shell {
+  --admin-1: #ff9900;
+  --admin-2: #14202e;
+  --admin-3: #a8dcff;
+  --admin-4: #0a5754;
+  --admin-5: #ffd166;
+  --admin-6: #1b5e20;
+  --admin-7: #9aa6b4;
+
+  --admin-1-fill: rgb(255 153 0 / 0.45);
+  --admin-2-fill: rgb(20 32 46 / 0.35);
+  --admin-3-fill: rgb(168 220 255 / 0.55);
+  --admin-4-fill: rgb(10 87 84 / 0.40);
+  --admin-5-fill: rgb(255 209 102 / 0.50);
+  --admin-6-fill: rgb(27 94 32 / 0.40);
+  --admin-7-fill: rgb(154 166 180 / 0.45);
+
+  --admin-up: #1b5e20;
+  --admin-down: #8c1d18;
+  --admin-mark-edge: #14202e;
+}
+
+html.dark-mode body.high-contrast .admin-shell,
+body.high-contrast html.dark-mode .admin-shell {
+  --admin-1: #ffc061;
+  --admin-2: #8fb0d6;
+  --admin-3: #c9e9ff;
+  --admin-4: #45b8b3;
+  --admin-5: #ffe08a;
+  --admin-6: #7fd685;
+  --admin-7: #98a3b1;
+
+  --admin-up: #7fd685;
+  --admin-down: #ff9d92;
+  --admin-mark-edge: #fafaf7;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) body.high-contrast .admin-shell {
+    --admin-1: #ffc061;
+    --admin-2: #8fb0d6;
+    --admin-3: #c9e9ff;
+    --admin-4: #45b8b3;
+    --admin-5: #ffe08a;
+    --admin-6: #7fd685;
+    --admin-7: #98a3b1;
+
+    --admin-up: #7fd685;
+    --admin-down: #ff9d92;
+    --admin-mark-edge: #fafaf7;
+  }
+}
+
 
 /* The PIN screen. Narrow on purpose: it is one field, and a full-width form
    for four digits looks like something has failed to load. */
@@ -2448,20 +2737,19 @@ input.admin-pin__input {
   flex: 1;
   min-height: 2px;
   border-radius: var(--radius) var(--radius) 0 0;
-  /* Orange and dark blue only (CONTEXT.md). The third series borrows the
-     header's own navy, which reads as a third tone in both themes without
-     inventing a colour. */
-  background: var(--orange);
+  /* The edge, not the fill, is what makes a bar findable: the palest series
+     are under 2:1 on white. See --admin-mark-edge. */
+  border: 1px solid var(--admin-mark-edge);
+  background: var(--admin-1);
 }
 
-.admin-bars__bar--parent,
-.admin-bars__bar--answers {
-  background: var(--blue);
-}
-
-.admin-bars__bar--teacher {
-  background: var(--ink-muted);
-}
+.admin-bars__bar--s1 { background: var(--admin-1); }
+.admin-bars__bar--s2 { background: var(--admin-2); }
+.admin-bars__bar--s3 { background: var(--admin-3); }
+.admin-bars__bar--s4 { background: var(--admin-4); }
+.admin-bars__bar--s5 { background: var(--admin-5); }
+.admin-bars__bar--s6 { background: var(--admin-6); }
+.admin-bars__bar--s7 { background: var(--admin-7); }
 
 .admin-bars__label {
   position: absolute;
@@ -2498,18 +2786,17 @@ input.admin-pin__input {
   width: 12px;
   height: 12px;
   border-radius: 2px;
-  background: var(--orange);
+  border: 1px solid var(--admin-mark-edge);
+  background: var(--admin-1);
 }
 
-.admin-key__swatch--blue,
-.admin-key__swatch--parent,
-.admin-key__swatch--answers {
-  background: var(--blue);
-}
-
-.admin-key__swatch--teacher {
-  background: var(--ink-muted);
-}
+.admin-key__swatch--s1 { background: var(--admin-1); }
+.admin-key__swatch--s2 { background: var(--admin-2); }
+.admin-key__swatch--s3 { background: var(--admin-3); }
+.admin-key__swatch--s4 { background: var(--admin-4); }
+.admin-key__swatch--s5 { background: var(--admin-5); }
+.admin-key__swatch--s6 { background: var(--admin-6); }
+.admin-key__swatch--s7 { background: var(--admin-7); }
 
 .admin-donut {
   display: flex;
@@ -2531,13 +2818,13 @@ input.admin-pin__input {
   stroke-width: 22;
 }
 
-.admin-donut__segment--orange {
-  stroke: var(--orange);
-}
-
-.admin-donut__segment--blue {
-  stroke: var(--blue);
-}
+.admin-donut__segment--s1 { stroke: var(--admin-1); }
+.admin-donut__segment--s2 { stroke: var(--admin-2); }
+.admin-donut__segment--s3 { stroke: var(--admin-3); }
+.admin-donut__segment--s4 { stroke: var(--admin-4); }
+.admin-donut__segment--s5 { stroke: var(--admin-5); }
+.admin-donut__segment--s6 { stroke: var(--admin-6); }
+.admin-donut__segment--s7 { stroke: var(--admin-7); }
 
 .admin-donut__total {
   fill: var(--blue);
@@ -2592,4 +2879,805 @@ input.admin-pin__input {
   .language-menu__code {
     display: none;
   }
+}
+
+/* ---------- Admin dashboard shell (pages/AdminPortal.jsx) ---------- */
+
+/* Sidebar beside content on desktop, stacked on a phone. The palette lives on
+   this element (see the data palette block above), so everything inside can
+   reach --admin-1..7 and nothing outside can. */
+.admin-shell {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.admin-main {
+  min-width: 0; /* or a wide chart stretches the grid instead of scrolling */
+}
+
+.admin-head h1 {
+  margin: 4px 0 8px;
+}
+
+/* ---- navigation ---- */
+
+.admin-nav__group + .admin-nav__group {
+  margin-top: 24px;
+}
+
+.admin-nav__heading {
+  margin: 0 0 8px;
+}
+
+.admin-nav ul,
+.admin-nav__drawer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-inline-start: 3px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.admin-nav__link:hover {
+  background: var(--surface);
+}
+
+/* The current section is marked by a bar and a weight, not by colour alone. */
+.admin-nav__link[aria-current="page"] {
+  border-inline-start-color: var(--orange);
+  background: var(--surface);
+  font-weight: 700;
+}
+
+.admin-nav__badge {
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: 11px;
+  background: var(--blue);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* The phone drawer. Hidden on desktop, where the column is shown instead. */
+.admin-nav__drawer {
+  display: none;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-nav__drawer > summary {
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-nav__drawer nav {
+  padding: 0 8px 12px;
+}
+
+/* ---- filter bar ---- */
+
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px 16px;
+  margin: 16px 0 24px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-filters__field select,
+.admin-filters__field input {
+  min-height: var(--control-h);
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+}
+
+.admin-filters__clear {
+  min-height: var(--control-h);
+}
+
+/* ---- KPI cards ---- */
+
+.admin-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.admin-kpi {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-kpi__label {
+  margin: 0 0 4px;
+}
+
+.admin-kpi__value {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.admin-kpi__change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* The colour is the third signal here, after the arrow and the sign. */
+.admin-kpi__change--good {
+  color: var(--admin-up);
+}
+
+.admin-kpi__change--bad {
+  color: var(--admin-down);
+}
+
+.admin-kpi__change--flat {
+  color: var(--ink-muted);
+}
+
+.admin-kpi__arrow {
+  flex: none;
+}
+
+.admin-kpi__spark {
+  display: block;
+  width: 100%;
+  height: 24px;
+  margin-top: 8px;
+}
+
+.admin-kpi__spark polyline {
+  fill: none;
+  stroke: var(--admin-mark-edge);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---- charts ---- */
+
+.admin-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.admin-line {
+  width: 100%;
+  height: 160px;
+}
+
+.admin-line__line {
+  fill: none;
+  stroke-width: 2;
+  /* Keeps the stroke an even weight despite the stretched viewBox. */
+  vector-effect: non-scaling-stroke;
+}
+
+.admin-line__area {
+  stroke: none;
+}
+
+.admin-line__line--s1 { stroke: var(--admin-1); }
+.admin-line__line--s2 { stroke: var(--admin-2); }
+.admin-line__line--s3 { stroke: var(--admin-3); }
+.admin-line__line--s4 { stroke: var(--admin-4); }
+.admin-line__line--s5 { stroke: var(--admin-5); }
+.admin-line__line--s6 { stroke: var(--admin-6); }
+.admin-line__line--s7 { stroke: var(--admin-7); }
+
+.admin-line__area--s1 { fill: var(--admin-1-fill); }
+.admin-line__area--s2 { fill: var(--admin-2-fill); }
+.admin-line__area--s3 { fill: var(--admin-3-fill); }
+.admin-line__area--s4 { fill: var(--admin-4-fill); }
+.admin-line__area--s5 { fill: var(--admin-5-fill); }
+.admin-line__area--s6 { fill: var(--admin-6-fill); }
+.admin-line__area--s7 { fill: var(--admin-7-fill); }
+
+/* Ranked bars: the value sits beside every bar, so the length is a
+   convenience rather than the only way to read it. */
+.admin-ranked {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-ranked__row {
+  display: grid;
+  grid-template-columns: minmax(80px, 30%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 0.9375rem;
+}
+
+.admin-ranked__track {
+  height: 14px;
+  background: var(--paper);
+}
+
+.admin-ranked__bar {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border: 1px solid var(--admin-mark-edge);
+}
+
+.admin-ranked__bar--s1 { background: var(--admin-1); }
+.admin-ranked__bar--s2 { background: var(--admin-2); }
+.admin-ranked__bar--s3 { background: var(--admin-3); }
+.admin-ranked__bar--s4 { background: var(--admin-4); }
+.admin-ranked__bar--s5 { background: var(--admin-5); }
+.admin-ranked__bar--s6 { background: var(--admin-6); }
+.admin-ranked__bar--s7 { background: var(--admin-7); }
+
+.admin-ranked__value {
+  font-family: var(--font-mono);
+}
+
+/* ---- loading and error ---- */
+
+/* No pulse. Every animation here has to stop under reduced motion, and a
+   skeleton that needs a media query to be safe is more trouble than a plain
+   block that never moves. */
+.admin-skeleton {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-skeleton__bar {
+  height: 56px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.admin-error {
+  padding: 16px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+}
+
+.admin-error p {
+  margin: 0 0 12px;
+}
+
+@media (max-width: 899px) {
+  .admin-shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  /* Swap the column for the drawer. */
+  .admin-nav {
+    display: none;
+  }
+
+  .admin-nav__drawer {
+    display: block;
+  }
+}
+
+.admin-kpi__change-visual {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---------- Feedback handling ---------- */
+
+.admin-feedback__actions {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.admin-feedback__note summary {
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+
+.admin-feedback__note textarea {
+  display: block;
+  width: 100%;
+  min-width: 14rem;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+}
+
+/* The note under a message, so staff can see it without opening anything. */
+.admin-feedback__saved-note {
+  margin: 8px 0 0;
+  padding-inline-start: 8px;
+  border-inline-start: 2px solid var(--orange);
+  font-size: 0.9375rem;
+}
+
+/* Words, not a colour: "dealt with" and "still waiting" have to survive
+   greyscale and a screen reader, like everything else here. */
+.admin-feedback__handled,
+.admin-feedback__waiting {
+  font-size: 0.9375rem;
+}
+
+.admin-feedback__waiting {
+  font-weight: 700;
+}
+
+.admin-audit__target {
+  display: block;
+}
+
+/* ---------- The People drawer ---------- */
+
+.admin-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  /* Above Smiley (.assistant is 50), like .modal-overlay: this is modal, and
+     a panel you cannot see past is worse than no panel. */
+  z-index: 60;
+  display: flex;
+  justify-content: flex-end;
+  background: var(--backdrop);
+}
+
+.admin-drawer {
+  width: min(28rem, 100%);
+  height: 100%;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--paper);
+  box-shadow: var(--shadow-raised);
+}
+
+/* The panel takes focus when it opens so a screen reader reads the heading,
+   and that focus must not be invisible. */
+.admin-drawer:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: -3px;
+}
+
+.admin-drawer__head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-drawer__head h2 {
+  margin: 0;
+}
+
+.admin-drawer__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 12px 16px;
+  margin: 0 0 24px;
+}
+
+.admin-drawer__facts dt {
+  margin-bottom: 2px;
+}
+
+.admin-drawer__facts dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.admin-drawer__action {
+  margin-bottom: 16px;
+}
+
+.admin-drawer__action select {
+  display: block;
+  min-height: var(--control-h);
+  margin-top: 4px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--blue);
+  font: inherit;
+}
+
+.admin-drawer__note,
+.admin-drawer__said {
+  font-size: 0.9375rem;
+}
+
+.admin-drawer__note {
+  padding-inline-start: 8px;
+  border-inline-start: 2px solid var(--orange);
+}
+
+/* The username, which is the way into the drawer: a button that reads as the
+   link it behaves like. */
+.admin-people__open {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: var(--underline-offset);
+  cursor: pointer;
+}
+
+/* ---------- Bulk actions ---------- */
+
+.admin-bulk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-inline-start: 3px solid var(--orange);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.admin-bulk__count {
+  margin: 0;
+  font-weight: 700;
+}
+
+.admin-bulk__outcome {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.admin-select__cell {
+  width: 2.5rem;
+}
+
+/* ---------- Dashboard visuals (components/admin/Charts.jsx) ---------- */
+
+/* A bento grid: the lead chart and the two widest cards span two columns,
+   everything else takes one, and the whole thing becomes a single column on a
+   phone. auto-fit rather than fixed columns, so it reflows at any width
+   instead of at three breakpoints somebody has to maintain. */
+.admin-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.admin-card {
+  min-width: 0; /* or a wide table stretches the grid instead of scrolling */
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+@media (min-width: 720px) {
+  .admin-card--lead,
+  .admin-card--wide {
+    grid-column: span 2;
+  }
+}
+
+.admin-card__controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+/* ---- the range toggle ---- */
+
+.admin-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.admin-toggle__option {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.admin-toggle__option + .admin-toggle__option {
+  border-inline-start: 1px solid var(--line);
+}
+
+/* The chosen one is marked by weight and an underline as well as its fill,
+   so it is not colour alone. */
+.admin-toggle__option[aria-checked="true"] {
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 var(--orange);
+}
+
+/* ---- the point readout ---- */
+
+.admin-plot {
+  position: relative;
+}
+
+.admin-plot:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.admin-readout {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  min-width: 10rem;
+  padding: 8px 10px;
+  border: 1px solid var(--admin-mark-edge);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.8125rem;
+  pointer-events: none; /* never gets between the pointer and the plot */
+}
+
+.admin-readout__label {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.admin-readout ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-readout li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-readout__value {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.admin-line__marker {
+  stroke: var(--surface);
+  stroke-width: 0.8;
+  /* The stretched viewBox would squash a circle into an ellipse. */
+  vector-effect: non-scaling-stroke;
+}
+
+.admin-line__marker--s1 { fill: var(--admin-1); }
+.admin-line__marker--s2 { fill: var(--admin-2); }
+.admin-line__marker--s3 { fill: var(--admin-3); }
+.admin-line__marker--s4 { fill: var(--admin-4); }
+.admin-line__marker--s5 { fill: var(--admin-5); }
+.admin-line__marker--s6 { fill: var(--admin-6); }
+.admin-line__marker--s7 { fill: var(--admin-7); }
+
+/* The selected column of bars, marked by a backing panel rather than by
+   changing the bars' own colours (which carry the series). */
+.admin-bars__group--chosen::before {
+  content: "";
+  position: absolute;
+  inset: -4px -2px -20px;
+  border-radius: var(--radius);
+  background: var(--admin-7-fill);
+}
+
+/* ---- the ring's centre figure ---- */
+
+.admin-donut__centre-label {
+  fill: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---- segmented bar ---- */
+
+.admin-segments {
+  display: flex;
+  gap: 3px; /* the visible gap, so two neighbours never merge into one block */
+  height: 28px;
+  margin-bottom: 16px;
+}
+
+.admin-segments__part {
+  min-width: 3px;
+  border: 1px solid var(--admin-mark-edge);
+  border-radius: var(--radius);
+}
+
+.admin-segments__part--s1 { background: var(--admin-1); }
+.admin-segments__part--s2 { background: var(--admin-2); }
+.admin-segments__part--s3 { background: var(--admin-3); }
+.admin-segments__part--s4 { background: var(--admin-4); }
+.admin-segments__part--s5 { background: var(--admin-5); }
+.admin-segments__part--s6 { background: var(--admin-6); }
+.admin-segments__part--s7 { background: var(--admin-7); }
+
+/* ---- dot matrix ---- */
+
+.admin-dots {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-dots__row {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 22%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 0.9375rem;
+}
+
+.admin-dots__track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+
+/* FOUR STEPS, AND NOT BY LIGHTNESS ALONE. Each step also changes the dot's
+   size and whether it is filled or hollow, so the pattern still reads in
+   greyscale and through every colour-vision filter. A heat grid that only
+   varies opacity is the chart that vanishes for exactly the people this site
+   is built for. */
+.admin-dots__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--admin-mark-edge);
+  background: transparent;
+}
+
+.admin-dots__dot--0 {
+  width: 5px;
+  height: 5px;
+  border-style: dotted;
+}
+
+.admin-dots__dot--1 {
+  width: 7px;
+  height: 7px;
+  background: var(--admin-3-fill);
+}
+
+.admin-dots__dot--2 {
+  width: 9px;
+  height: 9px;
+  background: var(--admin-3);
+}
+
+.admin-dots__dot--3 {
+  width: 11px;
+  height: 11px;
+  background: var(--admin-4);
+}
+
+.admin-dots__dot--4 {
+  width: 13px;
+  height: 13px;
+  background: var(--admin-2);
+}
+
+.admin-dots__total {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* ---- region tiles ---- */
+
+.admin-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The number is always text on the tile: the shading is the second signal,
+   never the only one. */
+.admin-tiles__tile {
+  display: grid;
+  gap: 2px;
+  padding: 12px;
+  border: 1px solid var(--admin-mark-edge);
+  border-radius: var(--radius);
+}
+
+.admin-tiles__tile--0 { background: transparent; }
+.admin-tiles__tile--1 { background: var(--admin-3-fill); }
+.admin-tiles__tile--2 { background: var(--admin-5-fill); }
+.admin-tiles__tile--3 { background: var(--admin-1-fill); }
+.admin-tiles__tile--4 { background: var(--admin-4-fill); }
+
+.admin-tiles__value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.admin-tiles__name {
+  font-size: 0.8125rem;
+}
+
+.admin-tiles__note {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-muted);
+}
+
+/* A starter question, put there by the T-SMILE team so the Community page is
+   not empty for a first visitor. Marked with an outline rather than a fill so
+   it reads as a note about the post rather than as another topic. */
+.tag--starter {
+  border: 1px solid var(--orange);
+  background: transparent;
+  font-weight: 700;
 }
