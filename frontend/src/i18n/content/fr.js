@@ -305,8 +305,8 @@ export default {
           "Non, tout est ouvert à tous",
           "Seulement si vous êtes enseignant",
         ],
-        correctAnswer: "Non, tout est ouvert à tous",
-        explanation: "Tout le monde peut parcourir la bibliothèque et tout y ouvrir. Un compte gratuit sert à poser des questions et à répondre dans la Communauté, et à garder vos réglages.",
+        correctAnswer: "Non, mais certaines ressources nécessitent un compte gratuit",
+        explanation: "Tout le monde peut parcourir la bibliothèque et ouvrir les ressources en lien. Un compte gratuit sert à télécharger des fichiers, à poser des questions et à répondre dans la Communauté, et à garder vos réglages.",
       },
     ],
   },
@@ -320,7 +320,7 @@ export default {
         {
           heading: "Utiliser le site",
           paragraphs: [
-            "Tout le monde peut lire toutes les pages, ouvrir toutes les ressources, faire les quiz et parler à Smiley sans compte. Un compte gratuit vous permet de poser des questions et de répondre dans la Communauté.",
+            "Tout le monde peut lire toutes les pages, ouvrir les ressources en lien, faire les quiz et parler à Smiley sans compte. Un compte gratuit vous permet de télécharger des fichiers depuis la page Ressources, et de poser des questions et de répondre dans la Communauté.",
             "Vous devez avoir 16 ans ou plus pour créer un compte.",
           ],
         },

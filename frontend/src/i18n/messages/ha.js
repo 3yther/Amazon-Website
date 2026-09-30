@@ -20,10 +20,22 @@ const ha = {
     ok: "To",
   },
 
+  notifications: {
+    label: "Sanarwa",
+    open: "Sanarwa, {count} ba a karanta ba",
+    none: "Babu sanarwa tukuna.",
+    markAll: "Nuna duka an karanta",
+    unread: "Ba a karanta ba",
+    events: {
+      announcement: "Sanarwa daga ƙungiya: {text}",
+      answered: "Wani ya amsa tambayarku: {text}",
+      accepted: "An nuna amsarku a matsayin wadda ta taimaka: {text}",
+      interest_seen: "Ƙungiyar Amazon Emerging Talent ta ga sha'awarku.",
+    },
+  },
+
   translation: {
-    notice:
-      "Na'ura ce ta fassara wannan shafi ({language}), don haka wasu kalmomi ba za su yi daidai sosai ba. " +
-      "Sigar Turanci ita ce abin dogaro.",
+    notice: "Na'ura ce ta fassara wannan shafi ({language}), don haka wasu kalmomi ba za su yi daidai sosai ba. Sigar Turanci ita ce abin dogaro.",
     showEnglish: "Karanta da Turanci",
     englishOnly: "Wannan shafi yana cikin Turanci ne kawai.",
   },
@@ -80,10 +92,26 @@ const ha = {
       label: "Yadda yake aiki",
       title: "Fara cikin matakai huɗu",
       step: "Mataki",
-      browse: { title: "Duba kayan karatu", text: "Jagorori, fakitin kayan karatu da bidiyo don dukkan fannoni biyar.", link: "Duba kayan karatu" },
-      register: { title: "Nuna sha'awa", text: "Ku faɗa mana fannin da kuke son bincikawa.", link: "Nuna sha'awa" },
-      hearBack: { title: "Samun amsa", text: "Muna duba kowace takarda da aka aiko, kuma muna amsawa ta imel.", link: "Tuntuɓe mu" },
-      getInvolved: { title: "Shiga ciki", text: "Ku yi rajista don yin tambayoyi da amsawa a cikin al'umma, da kuma adana saitunanku a kowace na'ura.", link: "Yi rajista" },
+      browse: {
+        title: "Duba kayan karatu",
+        text: "Jagorori, fakitin kayan karatu da bidiyo don dukkan fannoni biyar.",
+        link: "Duba kayan karatu",
+      },
+      register: {
+        title: "Nuna sha'awa",
+        text: "Ku faɗa mana fannin da kuke son bincikawa.",
+        link: "Nuna sha'awa",
+      },
+      hearBack: {
+        title: "Samun amsa",
+        text: "Muna duba kowace takarda da aka aiko, kuma muna amsawa ta imel.",
+        link: "Tuntuɓe mu",
+      },
+      getInvolved: {
+        title: "Shiga ciki",
+        text: "Ku yi rajista don yin tambayoyi da amsawa a cikin al'umma, da kuma adana saitunanku a kowace na'ura.",
+        link: "Yi rajista",
+      },
     },
   },
 
@@ -93,7 +121,11 @@ const ha = {
       title: "Shekaru biyu. Masana'anta ɗaya. Ainihin horon aiki.",
       lead: "Shaidar ƙwarewar sana'a da ake yi bayan GCSEs. Galibi karatu ne, wani ɓangare kuma aiki.",
     },
-    what: { label: "Yadda yake aiki", title: "Menene T-Level", split: "Yadda aka raba shekarun biyu" },
+    what: {
+      label: "Yadda yake aiki",
+      title: "Menene T-Level",
+      split: "Yadda aka raba shekarun biyu",
+    },
     placement: {
       label: "Horon aiki",
       title: "Duba cikin horon aiki",
@@ -121,9 +153,18 @@ const ha = {
       points: "Makin UCAS",
       note: "Ba kowace jami'a ce ke amfani da makin UCAS ba, don haka ku duba kwas ɗinku. Idan ba ku ci wani ɓangare ba, za ku sami takardar shaidar abin da kuka ci.",
     },
-    who: { label: "Wa aka yi domin sa", title: "Zai iya dacewa da ku idan" },
-    why: { label: "Me yasa za a yi shi", title: "Abin da za ku samu" },
-    cost: { label: "Kuɗi", title: "Nawa ne kuɗinsa" },
+    who: {
+      label: "Wa aka yi domin sa",
+      title: "Zai iya dacewa da ku idan",
+    },
+    why: {
+      label: "Me yasa za a yi shi",
+      title: "Abin da za ku samu",
+    },
+    cost: {
+      label: "Kuɗi",
+      title: "Nawa ne kuɗinsa",
+    },
     quiz: {
       label: "Gwaji",
       title: "Shin T-Level ya dace da ni?",
@@ -152,8 +193,14 @@ const ha = {
       title: "Makonni tara a cikin ƙungiya.",
       lead: "Amazon yana karɓar ɗaliban T-Level don horon aiki. Za ku shiga ainihin ƙungiya ku yi ainihin aiki.",
     },
-    shape: { label: "Horon aiki", title: "Yadda makonni taran suke" },
-    support: { label: "Tallafi", title: "Mutane uku ne za su kula da ku" },
+    shape: {
+      label: "Horon aiki",
+      title: "Yadda makonni taran suke",
+    },
+    support: {
+      label: "Tallafi",
+      title: "Mutane uku ne za su kula da ku",
+    },
     pathways: {
       label: "Fannoni",
       title: "Darussan da Amazon yake karɓa",
@@ -161,22 +208,43 @@ const ha = {
       leadLink: "Game da T-Levels",
       leadAfter: ".",
     },
-    route: { label: "Yadda za a shiga", title: "Yadda ake samun horon aiki" },
-    growth: { label: "Shirin", title: "Yana ƙaruwa", lead: "Daga ɗalibai shida zuwa 100 a cikin shekaru uku na farko, kuma ana shirin ƙarin. Alƙaluma daga Department for Education." },
+    route: {
+      label: "Yadda za a shiga",
+      title: "Yadda ake samun horon aiki",
+    },
+    growth: {
+      label: "Shirin",
+      title: "Yana ƙaruwa",
+      lead: "Daga ɗalibai shida zuwa 100 a cikin shekaru uku na farko, kuma ana shirin ƙarin. Alƙaluma daga Department for Education.",
+    },
     sourcesNote: "An duba a Satumba 2026.",
   },
 
   help: {
-    hero: { label: "Taimako", title: "Kun makale? Ku fara a nan.", lead: "Zaɓi abin da kuke ƙoƙarin yi." },
-    site: { label: "A wannan shafin", title: "Inda za a je" },
-    services: { label: "A wasu wurare", title: "Ayyuka kyauta", lead: "Gwamnati ce ke gudanar da su, ba mu ba." },
+    hero: {
+      label: "Taimako",
+      title: "Kun makale? Ku fara a nan.",
+      lead: "Zaɓi abin da kuke ƙoƙarin yi.",
+    },
+    site: {
+      label: "A wannan shafin",
+      title: "Inda za a je",
+    },
+    services: {
+      label: "A wasu wurare",
+      title: "Ayyuka kyauta",
+      lead: "Gwamnati ce ke gudanar da su, ba mu ba.",
+    },
     faq: {
       label: "Tambayoyi",
       title: "Akwai ƙarin tambayoyi?",
       text: "Shafin Game da T-Levels yana amsa tambayoyin da aka fi yi, kamar horon aiki, maki da kuɗi.",
       link: "Karanta tambayoyin da aka fi yi",
     },
-    questions: { label: "Kafin ku zaɓa", title: "Ku tambayi makarantarku ko kwalejinku" },
+    questions: {
+      label: "Kafin ku zaɓa",
+      title: "Ku tambayi makarantarku ko kwalejinku",
+    },
     person: {
       label: "Har yanzu kun makale",
       title: "Ku tambayi mutum",
@@ -258,8 +326,7 @@ const ha = {
 
   footer: {
     about: "Game da mu",
-    aboutText:
-      "Bayani mai sauƙi kan T-Levels da horon aiki a Amazon, don ɗalibai, iyaye da malamai. Aikin ɗalibai ne don Amazon Emerging Talent, ba shafin Amazon na hukuma ba.",
+    aboutText: "Bayani mai sauƙi kan T-Levels da horon aiki a Amazon, don ɗalibai, iyaye da malamai. Aikin ɗalibai ne don Amazon Emerging Talent, ba shafin Amazon na hukuma ba.",
     navigation: "Kewayawa",
     support: "Tallafi",
     legal: "Doka da bin ƙa'ida",
@@ -471,12 +538,12 @@ const ha = {
   },
 
   community: {
+    starterQuestion: "Tambayar farawa",
     moderationNote: "Ku tsaya kan batun kuma ku kasance masu ladabi. Ana ƙin kalamai marasa dacewa, kuma mai kula da al'umma zai iya cire duk wani abu daban.",
     label: "Tambaya da amsa",
     title: "Al'umma",
     lead: "Tambayoyi game da T-Levels da horon aiki a Amazon, waɗanda ɗalibai, iyaye, malamai da ma'aikatan Amazon suke amsawa.",
-    notChecked:
-      "Amsoshin da ke nan ƙwarewa da ra'ayoyin mutane ne, ba gaskiyar da aka tabbatar ba. Don bayanin hukuma, ku duba shafukan Game da T-Levels da T-Levels a Amazon, ko ku tambayi Smiley.",
+    notChecked: "Amsoshin da ke nan ƙwarewa da ra'ayoyin mutane ne, ba gaskiyar da aka tabbatar ba. Don bayanin hukuma, ku duba shafukan Game da T-Levels da T-Levels a Amazon, ko ku tambayi Smiley.",
     ask: "Yi tambaya",
     signInToAsk: "Ku shiga don yin tambaya",
     signInToAnswer: "Ku shiga don amsawa",
@@ -573,13 +640,10 @@ const ha = {
       "Idan wani abu ya damu ku, ku kai rahoto kuma ƙungiya za ta duba.",
     ],
     blocked: {
-      personal_details:
-        "Ba a wallafa wannan ba saboda yana kama da yana da bayanan sirri, kamar imel, lambar waya, lambar gidan waya ko sunan kafofin sada zumunta. Ku cire su ku sake gwadawa.",
+      personal_details: "Ba a wallafa wannan ba saboda yana kama da yana da bayanan sirri, kamar imel, lambar waya, lambar gidan waya ko sunan kafofin sada zumunta. Ku cire su ku sake gwadawa.",
       link: "Ba a wallafa wannan ba saboda yana da hanyar haɗi. Hanyoyin haɗi zuwa shafukan hukuma kamar gov.uk da UCAS ne kawai aka yarda.",
       strong_language: "Ba a wallafa wannan ba saboda kalaman da aka yi amfani da su. Ku gwada faɗar shi ta wata hanya.",
-      wellbeing:
-        "Ba mu wallafa wannan ba saboda da alama kuna fama da wani abu mai wahala sosai. Don Allah ku yi magana da wanda zai iya taimakawa: " +
-        "ku kira Childline kyauta a 0800 1111, ku tura SHOUT zuwa 85258, ko ku kira Samaritans a 116 123. Idan kuna cikin haɗari yanzu, ku kira 999.",
+      wellbeing: "Ba mu wallafa wannan ba saboda da alama kuna fama da wani abu mai wahala sosai. Don Allah ku yi magana da wanda zai iya taimakawa: ku kira Childline kyauta a 0800 1111, ku tura SHOUT zuwa 85258, ko ku kira Samaritans a 116 123. Idan kuna cikin haɗari yanzu, ku kira 999.",
     },
     somethingWrong: "An samu matsala. Ku sake gwadawa nan ba da jimawa ba.",
   },
@@ -599,41 +663,42 @@ const ha = {
     inputLabel: "Tambayarku ga Smiley",
     placeholder: "Ku tambayi Smiley komai",
     send: "Aika",
-    disclosure:
-      "Zan iya gaishe ku idan shafi ya yi shiru na ɗan lokaci. Ana lissafa wannan a cikin burauzarku kuma ba a taɓa adana shi ba. " +
-      "Tambayoyin da zan iya amsawa da kaina suma suna zama a burauzarku. Duk abin da zan duba ana adana shi, don mu ci gaba daga inda muka tsaya.",
+    disclosure: "Zan iya gaishe ku idan shafi ya yi shiru na ɗan lokaci. Ana lissafa wannan a cikin burauzarku kuma ba a taɓa adana shi ba. Tambayoyin da zan iya amsawa da kaina suma suna zama a burauzarku. Duk abin da zan duba ana adana shi, don mu ci gaba daga inda muka tsaya.",
     tags: {
       checkingIn: "Gaisuwa",
       quizHelp: "Taimako da gwaji",
       private: "Yana zama a burauzarku",
     },
-
     greetings: {
       morning: "Barka da safiya!",
       afternoon: "Barka da rana!",
       evening: "Barka da yamma!",
       lateNight: "Sannu, mai kwana a farke!",
     },
-    intro:
-      "Ni ne Smiley, jagoranku na T-Level. Ku tambaye ni komai game da T-Levels ko horon aiki a Amazon. " +
-      "Idan ban sani ba, zan faɗa muku maimakon in ƙirƙira wani abu.",
+    intro: "Ni ne Smiley, jagoranku na T-Level. Ku tambaye ni komai game da T-Levels ko horon aiki a Amazon. Idan ban sani ba, zan faɗa muku maimakon in ƙirƙira wani abu.",
     welcomeBack: "Barka da dawowa. Ku ci gaba daga inda kuka tsaya, ko ku tambaye ni sabon abu.",
     whoQuestion: "Da farko: wa ya kawo ziyara yau?",
-
     audience: {
       student: "Ni ɗalibi ne",
       parent: "Ni mahaifi ne ko mai kula",
       teacher: "Ni malami ne",
       replies: {
-        student: { opener: "Madalla.", text: "Wane irin aiki ne ya fi burge ku?" },
-        parent: { opener: "Mun gode da zuwanku.", text: "Me zai fi taimaka muku?" },
-        teacher: { opener: "Barka da zuwa.", text: "Me kuke nema yau?" },
+        student: {
+          opener: "Madalla.",
+          text: "Wane irin aiki ne ya fi burge ku?",
+        },
+        parent: {
+          opener: "Mun gode da zuwanku.",
+          text: "Me zai fi taimaka muku?",
+        },
+        teacher: {
+          opener: "Barka da zuwa.",
+          text: "Me kuke nema yau?",
+        },
       },
       notSure: "Ban tabbata ba tukuna",
-      notSureReply:
-        "Ba laifi, a nan ne yawancin mutane suke farawa. Gwajin hanya ce mai sauri ta yin tunani a kai, ko zan iya nuna muku fannonin.",
+      notSureReply: "Ba laifi, a nan ne yawancin mutane suke farawa. Gwajin hanya ce mai sauri ta yin tunani a kai, ko zan iya nuna muku fannonin.",
     },
-
     afterAi: {
       simpler: "Ku bayyana a sauƙaƙe",
       simplerAsk: "Za ku iya bayyana wannan a sauƙaƙe?",
@@ -642,7 +707,6 @@ const ha = {
     },
     retry: "Sake gwadawa",
     fallback: "Ba zan iya isa ga bayanaina yanzu ba, don haka ba zan iya amsa wannan ba. Ku sake gwadawa nan ba da jimawa ba, ko ku duba waɗannan:",
-
     quizNudge: "Kai, wannan tambaya tana rikitar da mutane da yawa. In bayyana muku “{question}”?",
     quizExplain: "E, ku bayyana",
     quizExplainAsk: "Za ku iya bayyana min wannan tambaya?",
@@ -650,7 +714,6 @@ const ha = {
     quizWhyWrongAsk: "Me yasa amsata ba daidai ba ce?",
     quizLocal: "Amsar da ta dace ga “{question}” ita ce {correct}. {explanation}",
     quizLocalChosen: "Kun zaɓi “{chosen}”. Amsar da ta dace ga “{question}” ita ce {correct}. {explanation}",
-
     nudges: {
       home: "Har yanzu ba ku san inda za ku fara ba? Zan iya bayyana menene T-Level ko yadda horon aiki a Amazon yake.",
       about: "Akwai wani abu a wannan shafi da bai fito fili ba? Ku tambaye ni, zan gwada bayyana shi ta wata hanya.",
@@ -663,7 +726,6 @@ const ha = {
       register: "Ba ku da tabbas ko kuna buƙatar asusu? Zan iya faɗa muku amfaninsa.",
       other: "Har yanzu kuna nan? Ku tambaye ni komai game da T-Levels, zan amsa idan na sani.",
     },
-
     teasers: {
       hello: "Sannu, ni ne Smiley! Ku tambaye ni komai game da T-Levels.",
       perfect: "Cikakken maki! Kun yi kyau.",
@@ -677,7 +739,6 @@ const ha = {
       lateNight: "Dare ya yi! Kada ku manta ku yi barci.",
       peek: "Ga ni!",
     },
-
     topics: {
       whatIsTLevel: "Menene T-Level?",
       courseLength: "Tsawon wane lokaci T-Level yake ɗauka?",
@@ -726,36 +787,26 @@ const ha = {
       whatIsESP: "Menene ma'anar ESP?",
       joke: "Ku ba ni wani barkwanci",
     },
-
     answers: {
       whatIsTLevel: "T-Level a matakai uku:",
       amazonNotConfirmed: "Amazon bai tabbatar da horon aiki a wannan fanni ba tukuna, don haka ba zan iya yin alkawari ba.",
       pathway: "{name}: {summary}\nT-Levels: {tLevels}.\nA lokacin horon aiki: {placement}\nYa dace da: {suits}\nA Amazon: {amazon}",
       whoSuits: "T-Level yakan dace da ku idan:",
-      decideWithAdult:
-        "Ku kaɗai ne za ku iya yanke wannan shawara, don haka ku yi magana da malami ko mai ba da shawarar sana'a ma. Gwajin zai iya taimaka muku yin tunani a kai.",
+      decideWithAdult: "Ku kaɗai ne za ku iya yanke wannan shawara, don haka ku yi magana da malami ko mai ba da shawarar sana'a ma. Gwajin zai iya taimaka muku yin tunani a kai.",
       amazonPathways: "Ga abin da Amazon ya faɗa game da kowane fanni:",
       pathwaysList: "Akwai fannoni biyar:",
       providerQuestions: "Kyawawan tambayoyi ga makaranta ko kwaleji:",
       resources: "Shafin Kayan karatu yana da jagorori, fakitin kayan karatu da bidiyo, duk kyauta ne a buɗe.",
       quiz: "Gwajin yana yin gajerun tambayoyi game da T-Levels, kuma zan taimaka da duk wadda kuka kuskure.",
-      community:
-        "A cikin al'umma za ku iya yin tambaya, kuma wasu ɗalibai, iyaye, malamai da ma'aikatan Amazon za su iya amsawa. " +
-        "Duk abin da ban sani ba tambaya ce mai kyau a can.",
-      account:
-        "Za ku iya duba shafin, buɗe kowane kayan karatu da magana da ni ba tare da asusu ba. Asusu na kyauta yana ba ku damar tambaya da amsawa a cikin al'umma, kuma yana adana saitunanku a kowace na'ura.",
+      community: "A cikin al'umma za ku iya yin tambaya, kuma wasu ɗalibai, iyaye, malamai da ma'aikatan Amazon za su iya amsawa. Duk abin da ban sani ba tambaya ce mai kyau a can.",
+      account: "Za ku iya duba shafin, buɗe kayan karatun da aka haɗa da magana da ni ba tare da asusu ba. Asusu na kyauta yana ba ku damar sauke fayiloli daga shafin Kayan karatu, tambaya da amsawa a cikin al'umma, kuma yana adana saitunanku a kowace na'ura.",
       contact: "Za ku iya tuntuɓar ƙungiyar T-SMILE ta shafin Tuntuɓe mu.",
-      accessibility:
-        "Saitunan sauƙin amfani suna ba ku damar canza girman rubutu, launuka, yanayin duhu, motsi da karanta rubutu da murya.",
-      language:
-        "E! Ku yi amfani da maɓallin harshe kusa da maɓallin menu a saman shafin, ko shafin Harshe a cikin Saituna. Akwai harsuna 18 da za a zaɓa.",
-      privacy:
-        "Ina adana tambayoyin da nake buƙatar dubawa ne kawai, don mu ci gaba daga inda muka tsaya. Duk abin da na amsa da kaina, da duk abin " +
-        "da ya shafi yadda kuke zagayawa a shafin, yana zama a burauzarku. Manufar sirri tana da cikakken bayani.",
+      accessibility: "Saitunan sauƙin amfani suna ba ku damar canza girman rubutu, launuka, yanayin duhu, motsi da karanta rubutu da murya.",
+      language: "E! Ku yi amfani da maɓallin harshe kusa da maɓallin menu a saman shafin, ko shafin Harshe a cikin Saituna. Akwai harsuna 18 da za a zaɓa.",
+      privacy: "Ina adana tambayoyin da nake buƙatar dubawa ne kawai, don mu ci gaba daga inda muka tsaya. Duk abin da na amsa da kaina, da duk abin da ya shafi yadda kuke zagayawa a shafin, yana zama a burauzarku. Manufar sirri tana da cikakken bayani.",
       dontKnow: "Ban san wannan ba tukuna, kuma ba na son in yi hasashe. Ga abin da zan iya taimakawa da shi:",
       closest: "Ban tabbata abin da kuke nufi ba, amma ga abin da ya fi kusa da shi:",
     },
-
     links: {
       about: "Game da T-Levels",
       amazon: "T-Levels a Amazon",
@@ -773,20 +824,15 @@ const ha = {
       privacy: "Manufar sirri",
       help: "Shafin taimako",
     },
-
     chat: {
       greeting: "Sannu! Ni ne Smiley. Ku tambaye ni komai game da T-Levels ko horon aiki a Amazon, ko ku zaɓi tambaya a ƙasa.",
       howAreYou: "Lafiya lau, mun gode da tambaya! Eriyata tana samun sigina mai kyau yau. Ta yaya zan taimaka?",
       thanks: "Babu komai! Akwai wani abu da kuke son sani?",
       bye: "Sai anjima! Ina nan a kusurwa idan kuna buƙata ta.",
-      whoAreYou:
-        "Ni ne Smiley, jagoran T-SMILE. Ina amsa tambayoyi game da T-Levels da horon aiki a Amazon, ta amfani da gaskiyar da ƙungiyar ta tabbatar kawai.",
-      areYouBot:
-        "E, ni mutum-mutumi ne na kwamfuta. Mai fara'a, mai eriya. Duk abin da ba zan iya amsawa ba, malami, mai ba da shawarar sana'a ko al'umma za su iya taimakawa.",
+      whoAreYou: "Ni ne Smiley, jagoran T-SMILE. Ina amsa tambayoyi game da T-Levels da horon aiki a Amazon, ta amfani da gaskiyar da ƙungiyar ta tabbatar kawai.",
+      areYouBot: "E, ni mutum-mutumi ne na kwamfuta. Mai fara'a, mai eriya. Duk abin da ba zan iya amsawa ba, malami, mai ba da shawarar sana'a ko al'umma za su iya taimakawa.",
       whoMadeYou: "Ƙungiyar T-SMILE ce ta gina ni don aikin T-Level na Amazon Emerging Talent. Ni ne mai T a kansa.",
-      whatCanYouDo:
-        "Zan iya bayyana menene T-Level, yadda horon aiki a masana'anta yake aiki, abin da horon aiki a Amazon ya ƙunsa, fannoni biyar, " +
-        "kuɗi, sharuɗɗan shiga da sauransu. Ku tambaye ni da kalmominku, ko ku taɓa tambaya.",
+      whatCanYouDo: "Zan iya bayyana menene T-Level, yadda horon aiki a masana'anta yake aiki, abin da horon aiki a Amazon ya ƙunsa, fannoni biyar, kuɗi, sharuɗɗan shiga da sauransu. Ku tambaye ni da kalmominku, ko ku taɓa tambaya.",
       jokes: [
         "Awanni nawa na T-Level ake buƙata don canza kwan fitila? Aƙalla 315, amma za ku koyi abubuwa da yawa.",
         "Me yasa masu shirye-shiryen kwamfuta suke son yanayin duhu? Domin haske yana jawo ƙwari (bugs).",
@@ -796,8 +842,7 @@ const ha = {
         "Me yasa ɗalibar ta ɗauki tsani zuwa horon aiki? Ta ji cewa matakin ci gaba ne a sana'a.",
       ],
       compliment: "Kai, mun gode! Eriyata tana rawa.",
-      rude:
-        "Na fahimta idan ban taimaka sosai ba. Abin da ƙungiyar ta tabbatar ne kawai na sani. Ku gwada tambaya ta wata hanya, ko ku zaɓi ɗaya daga cikin waɗannan.",
+      rude: "Na fahimta idan ban taimaka sosai ba. Abin da ƙungiyar ta tabbatar ne kawai na sani. Ku gwada tambaya ta wata hanya, ko ku zaɓi ɗaya daga cikin waɗannan.",
       acknowledge: "Akwai wani abu da kuke son sani?",
       confused: "Yi haƙuri, laifina ne. Mu sake gwadawa. Ku zaɓi batu a ƙasa, ko ku tambaya ta wata hanya.",
       howOld: "An kunna ni a Satumba 2026, don haka sabo ne ni sosai. Har yanzu ina koyo, kamar ku.",
@@ -816,25 +861,12 @@ const ha = {
       outfits: "Oh, nunin kayan sawa! Ga kayana.",
       time: "A wurinku yanzu {time} ne, ranar {day}.",
     },
-
     safety: {
-      atRisk:
-        "Na yi farin ciki sosai da kuka faɗa min. Ni mataimaki ne kawai a shafin intanet, don haka don Allah ku yi magana da wanda zai iya taimakawa yanzu. " +
-        "Ku kira Childline kyauta a 0800 1111, a kowane lokaci, kuma kiran ba zai bayyana a lissafin wayarku ba. " +
-        "Za ku iya tura SHOUT zuwa 85258, ko ku kira Samaritans a 116 123. Idan kuna cikin haɗari yanzu, ku kira 999.",
-      harmed:
-        "Mun gode da kuka faɗa min. Babu wanda ya kamata ya sa ku ji ba ku da tsaro. Don Allah ku faɗa wa babban mutum da kuka amince da shi, kamar malami, " +
-        "mahaifi ko mai kula. Za ku iya kiran Childline kyauta a 0800 1111, a kowane lokaci, kuma kiran ba zai bayyana a lissafin wayarku ba. " +
-        "Idan kuna cikin haɗari yanzu, ku kira 999.",
-      struggling:
-        "Da alama kuna ɗauke da nauyi mai yawa, kuma ba dole ku magance shi ku kaɗai ba. Yin magana da wanda kuka amince da shi yana taimakawa sosai, " +
-        "kamar malami, mahaifi ko mai kula. Childline kyauta ne a 0800 1111, ko ku tura SHOUT zuwa 85258, a kowane lokaci. " +
-        "Har yanzu ina nan don tambayoyinku game da T-Levels a duk lokacin da kuke so.",
-      personal:
-        "Ƙaramar shawara: ba dole ku ba ni bayanan sirri kamar imel, lambar waya ko adireshinku ba, kuma ya fi aminci " +
-        "kada ku bayar. Ban aika wannan saƙo ko'ina ba. Me kuke son sani game da T-Levels?",
+      atRisk: "Na yi farin ciki sosai da kuka faɗa min. Ni mataimaki ne kawai a shafin intanet, don haka don Allah ku yi magana da wanda zai iya taimakawa yanzu. Ku kira Childline kyauta a 0800 1111, a kowane lokaci, kuma kiran ba zai bayyana a lissafin wayarku ba. Za ku iya tura SHOUT zuwa 85258, ko ku kira Samaritans a 116 123. Idan kuna cikin haɗari yanzu, ku kira 999.",
+      harmed: "Mun gode da kuka faɗa min. Babu wanda ya kamata ya sa ku ji ba ku da tsaro. Don Allah ku faɗa wa babban mutum da kuka amince da shi, kamar malami, mahaifi ko mai kula. Za ku iya kiran Childline kyauta a 0800 1111, a kowane lokaci, kuma kiran ba zai bayyana a lissafin wayarku ba. Idan kuna cikin haɗari yanzu, ku kira 999.",
+      struggling: "Da alama kuna ɗauke da nauyi mai yawa, kuma ba dole ku magance shi ku kaɗai ba. Yin magana da wanda kuka amince da shi yana taimakawa sosai, kamar malami, mahaifi ko mai kula. Childline kyauta ne a 0800 1111, ko ku tura SHOUT zuwa 85258, a kowane lokaci. Har yanzu ina nan don tambayoyinku game da T-Levels a duk lokacin da kuke so.",
+      personal: "Ƙaramar shawara: ba dole ku ba ni bayanan sirri kamar imel, lambar waya ko adireshinku ba, kuma ya fi aminci kada ku bayar. Ban aika wannan saƙo ko'ina ba. Me kuke son sani game da T-Levels?",
     },
-
     keywords: {
       whatIsTLevel: "menene t level, mene ne t level, menene t levels, t level",
       courseLength: "tsawon lokaci, shekaru nawa, zai ɗauki tsawon",
@@ -985,6 +1017,8 @@ const ha = {
     typeToConfirm: "Ku rubuta {text} don tabbatarwa",
     actionFailed: "Hakan bai yi aiki ba. Ku sake gwadawa.",
     tabs: {
+      providers: "Cibiyoyin ilimi",
+      audit: "Tarihin ayyuka",
       overview: "Taƙaitawa",
       interest: "Sha'awa",
       reports: "Rubuce-rubucen da aka kai rahoto",
@@ -1001,18 +1035,190 @@ const ha = {
       openReports: "Rahotannin da ke buɗe",
     },
     charts: {
+      answered: "an amsa",
+      dealtWith: "an magance",
+      feedbackHandled: "Ra'ayoyin da aka magance",
+      feedbackHandledCaption: "Ra'ayoyin wannan lokaci da ma'aikata suka magance.",
+      feedbackByCategory: "Ra'ayi bisa rukuni",
+      activity: "Ayyukan rajista",
+      activityCaption: "Rajistoci a kowane lokaci, ɗigo ɗaya a kowane lokaci da layi ɗaya a kowane nau'in asusu.",
+      dotRow: "{name}: {total} a cikin lokuta {buckets}",
+      region: "Yanki",
+      needFixing: "{count} za a gyara",
+      plotLabel: "{title}. Ku yi amfani da maɓallan kibiya don karanta kowane ɗigo.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "Tsawon kwanaki na {title}",
+      title: "Jadawalai",
+      loading: "Ana loda jadawalai",
+      usersByType: "Asusu bisa nau'i",
+      usersByTypeCaption: "Asusun da aka ƙirƙira a wannan lokaci, bisa nau'in asusu.",
+      answerRate: "Adadin amsawa",
+      answerRateCaption: "Tambayoyin wannan lokaci da suka sami aƙalla amsa ɗaya.",
+      topics: "Batutuwan da aka fi yawan tambaya",
+      topicsCaption: "Tambayoyin wannan lokaci, bisa batu.",
+      feedbackOverTime: "Ra'ayi a tsawon lokaci",
+      feedbackOverTimeCaption: "Ra'ayoyin da aka aiko a kowane lokaci, bisa rukuni.",
+      reports: "Rahotannin da aka buɗe da waɗanda aka magance",
+      reportsCaption: "Rahotannin rubuce-rubuce da aka buɗe idan aka kwatanta da waɗanda aka magance, a kowane lokaci.",
+      opened: "An buɗe",
+      resolved: "An magance",
+      languages: "Asusu bisa harshe",
+      languagesCaption: "Asusu bisa harshen da suke karanta shafin da shi.",
+      language: "Harshe",
+      providers: "Cibiyoyin ilimi a taswira",
+      providersCaption: "Cibiyoyin ilimi a kowane yanki, da nawa ne ba su da wurin nunawa.",
+      placed: "A taswira",
+      unplaced: "Babu wuri",
       signups: "Rajistoci kowane mako",
       signupsCaption: "Sabbin asusu kowane mako, bisa nau'in asusu.",
       interest: "Sha'awa bisa fanni",
       interestCaption: "Nuna sha'awa, bisa fannin da ke cikin asusu.",
       community: "Ayyukan al'umma",
       communityCaption: "Tambayoyi da amsoshin da aka wallafa kowane mako.",
-      feedback: "Ra'ayi bisa rukuni",
-      feedbackCaption: "Ra'ayoyin da aka aiko, bisa rukuni.",
+    },
+    greeting: {
+      morning: "Barka da safiya, {name}",
+      afternoon: "Barka da rana, {name}",
+      evening: "Barka da yamma, {name}",
+    },
+    nav: {
+      site: "Shafin",
+      label: "Sassan shafin masu gudanarwa",
+      menu: "Sassa",
+      measure: "Ƙididdiga",
+      people: "Mutane",
+      community: "Al'umma",
+      session: "Wannan zama",
+      unhandled: "ba a magance ba tukuna",
+    },
+    filters: {
+      title: "Matattara",
+      range: "Tsawon kwanaki",
+      from: "Daga",
+      to: "Zuwa",
+      userType: "Nau'in asusu",
+      pathway: "Fanni",
+      clear: "Share matattara",
+      updating: "Ana sabunta lambobi",
+      ranges: {
+        "7d": "Kwanaki 7 da suka wuce",
+        "30d": "Kwanaki 30 da suka wuce",
+        "90d": "Kwanaki 90 da suka wuce",
+        "12m": "Watanni 12 da suka wuce",
+        all: "Duk lokaci",
+        custom: "Na musamman",
+      },
+    },
+    kpis: {
+      title: "Muhimman lambobi",
+      loading: "Ana loda muhimman lambobi",
+      signups: "Sabbin rajistoci",
+      active: "Sun shiga",
+      unanswered: "Tambayoyin da ba a amsa ba",
+      time_to_first_answer: "Lokacin zuwa amsa ta farko",
+      hoursValue: "awanni {hours}",
+      upBy: "{label}: ya ƙaru da {change} ({percent}) idan aka kwatanta da lokacin da ya gabata",
+      downBy: "{label}: ya ragu da {change} ({percent}) idan aka kwatanta da lokacin da ya gabata",
+      noPercent: "babu adadi na baya",
+      noComparison: "Babu abin kwatantawa",
+      noChange: "Babu canji",
+    },
+    states: {
+      loading: "Ana lodawa",
+      failed: "Waɗannan lambobin ba su loda ba.",
+      retry: "Sake gwadawa",
+    },
+    export: {
+      button: "Fitar da CSV",
+      working: "Ana shiryawa",
+      done: "An sauke fayil ɗin.",
+      failed: "Saukewar ba ta yi aiki ba. Ku sake gwadawa.",
     },
     signedOut: {
       title: "Ku shiga don buɗe shafin masu gudanarwa",
       lead: "Wannan shafi na ma'aikatan Amazon ne. Ku shiga da asusun ma'aikaci don ci gaba.",
+    },
+    audit: {
+      actor: "Ma'aikaci",
+      action: "Aiki",
+      caption: "Duk abin da ma'aikata suka yi a shafin",
+      empty: "Ba a rubuta komai ba tukuna.",
+      columns: {
+        when: "Yaushe",
+        who: "Wa",
+        what: "Me",
+        target: "Abin da aka shafa",
+      },
+      actions: {
+        account_removed: "Ya cire asusu",
+        staff_revoked: "Ya janye damar gudanarwa",
+        role_changed: "Ya canza nau'in asusu",
+        password_reset_sent: "Ya aika imel na sake saita kalmar sirri",
+        post_deleted: "Ya goge rubutu",
+        report_resolved: "Ya magance rahoto",
+        report_dismissed: "Ya yi watsi da rahoto",
+        feedback_handled: "Ya nuna an magance ra'ayi",
+        csv_exported: "Ya fitar da CSV",
+      },
+    },
+    providers: {
+      filter: "A taswira",
+      unplacedOnly: "Lambar gidan waya tana buƙatar gyara",
+      placedOnly: "Tuni a taswira",
+      caption: "Cibiyoyin ilimin da neman na kusa zai iya nunawa",
+      empty: "Ba a loda cibiyoyin ilimi ba.",
+      onMap: "A taswira",
+      needsPostcode: "Lambar gidan waya tana buƙatar gyara",
+      columns: {
+        name: "Suna",
+        postcode: "Lambar gidan waya",
+        region: "Yanki",
+        type: "Nau'i",
+        map: "Taswira",
+      },
+    },
+    person: {
+      title: "Asusu",
+      close: "Rufe",
+      type: "Nau'in asusu",
+      pathway: "Fanni",
+      joined: "Ranar shiga",
+      lastLogin: "Shiga na ƙarshe",
+      questions: "Tambayoyin da aka yi",
+      answers: "Amsoshin da aka bayar",
+      reports: "Rubuce-rubucen da suka kai rahoto",
+      feedback: "Ra'ayoyin da suka aiko",
+      none: "Ba a bayar ba",
+      never: "Ba a taɓa ba",
+      actions: "Ayyuka",
+      changeRole: "Canza nau'in asusu",
+      roleChanged: "An canza nau'in asusu.",
+      sendReset: "Aika imel na sake saita kalmar sirri",
+      resetSent: "Idan wannan asusu yana da adireshin imel, hanyar sake saitawa tana kan hanya.",
+      staffNote: "Ku fara janye damar gudanarwarsu a cikin jerin, kafin ku canza nau'in asusunsu.",
+    },
+    bulk: {
+      title: "Ayyuka a tare",
+      chosen: "An zaɓi {count}",
+      choose: "Zaɓi {name}",
+      chooseAll: "Zaɓi komai a wannan shafi",
+      clear: "Share zaɓi",
+      markHandled: "Nuna an magance",
+      resolve: "Magance",
+      dismiss: "Yi watsi",
+      deletePosts: "Goge rubuce-rubuce",
+      removePeople: "Cire asusu",
+      posts: "rubuce-rubuce",
+      people: "asusu",
+      confirmText: "GOGE {count} {noun}",
+      confirmBody: "Wannan zai cire {count} daga cikinsu har abada kuma ba za a iya mayar da shi ba. Ku rubuta kalmomin da ke ƙasa daidai don tabbatarwa.",
+      done: "An gama {count}.",
+      reasons: {
+        gone: "{count} sun riga sun tafi.",
+        staff: "{count} asusun ma'aikata ne kuma ba a taɓa su ba.",
+        yourself: "{count} asusunku ne.",
+        failed: "{count} ba su yi aiki ba.",
+      },
     },
     pin: {
       title: "Shigar da PIN na shafin",
@@ -1051,10 +1257,21 @@ const ha = {
       },
     },
     feedback: {
+      status: "Matsayi",
+      handled: "An magance",
+      unhandled: "Har yanzu ana jira",
+      markHandled: "Nuna an magance",
+      markUnhandled: "Mayar da shi",
+      note: "Bayanin ma'aikaci",
+      saveNote: "Adana bayani",
+      handledBy: "{name} a {date}",
+      someone: "wani ma'aikaci",
       filter: "Rukuni",
       caption: "Ra'ayoyin da aka aiko ta shafin",
       empty: "Babu ra'ayi tukuna.",
       columns: {
+        status: "Matsayi",
+        actions: "Ayyuka",
         category: "Rukuni",
         message: "Saƙo",
         from: "Daga",
@@ -1113,6 +1330,7 @@ const ha = {
       language: "Harshe",
       security: "Tsaro",
       account: "Asusu",
+      notifications: "Sanarwa",
     },
     sight: {
       fontSize: "Girman rubutu",
@@ -1205,6 +1423,13 @@ const ha = {
       password: "Kalmar sirri",
       deactivating: "Ana gogewa",
       wrongPassword: "Kalmar sirri ba daidai ba ce.",
+    },
+    notifications: {
+      lead: "Zaɓi abin da zai bayyana a cikin ƙararrawa a saman shafin.",
+      announcements: "Sanarwa daga ƙungiyar T-SMILE",
+      community: "Amsoshi ga tambayoyinku da amsoshinku a cikin al'umma",
+      interest: "Labarai game da sha'awar da kuka nuna",
+      saved: "An adana.",
     },
   },
 

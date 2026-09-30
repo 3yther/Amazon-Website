@@ -305,8 +305,8 @@ export default {
           "No, tutto è aperto a tutti",
           "Solo se è un insegnante",
         ],
-        correctAnswer: "No, tutto è aperto a tutti",
-        explanation: "Chiunque può sfogliare la raccolta e aprire tutto ciò che contiene. Un account gratuito serve per fare domande e rispondere nella Community, e per conservare le Sue impostazioni.",
+        correctAnswer: "No, ma alcune risorse richiedono un account gratuito per essere aperte",
+        explanation: "Chiunque può sfogliare la raccolta e aprire le risorse collegate. Un account gratuito serve per scaricare file, fare domande e rispondere nella Community, e per conservare le Sue impostazioni.",
       },
     ],
   },
@@ -320,7 +320,7 @@ export default {
         {
           heading: "Usare il sito",
           paragraphs: [
-            "Chiunque può leggere ogni pagina, aprire ogni risorsa, fare i quiz e parlare con Smiley senza account. Un account gratuito Le permette di fare domande e rispondere nella Community.",
+            "Chiunque può leggere ogni pagina, aprire le risorse collegate, fare i quiz e parlare con Smiley senza account. Un account gratuito Le permette di scaricare file dalla pagina Risorse, e di fare domande e rispondere nella Community.",
             "Per creare un account deve avere almeno 16 anni.",
           ],
         },

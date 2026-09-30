@@ -306,8 +306,8 @@ export default {
           "Rárá, gbogbo nǹkan wà ní ṣíṣí fún gbogbo ènìyàn",
           "Bí ẹ bá jẹ́ olùkọ́ nìkan",
         ],
-        correctAnswer: "Rárá, gbogbo nǹkan wà ní ṣíṣí fún gbogbo ènìyàn",
-        explanation: "Ẹnikẹ́ni lè wo ibi ìkó náà kí ó sì ṣí gbogbo ohun tí ó wà nínú rẹ̀. Àkọọ́lẹ̀ ọ̀fẹ́ wà fún bíbéèrè àti dídáhùn nínú àwùjọ, àti fún pípa ètò yín mọ́.",
+        correctAnswer: "Rárá, ṣùgbọ́n àwọn ohun èlò kan nílò àkọọ́lẹ̀ ọ̀fẹ́ kí a tó ṣí wọn",
+        explanation: "Ẹnikẹ́ni lè wo ibi ìkó náà kí ó sì ṣí àwọn ohun èlò tí a so mọ́ ọn. Àkọọ́lẹ̀ ọ̀fẹ́ wà fún gbígba fáìlì sílẹ̀, bíbéèrè àti dídáhùn nínú àwùjọ, àti fún pípa ètò yín mọ́.",
       },
     ],
   },
@@ -321,7 +321,7 @@ export default {
         {
           heading: "Lílo ojú-ìwé yìí",
           paragraphs: [
-            "Ẹnikẹ́ni lè ka gbogbo ojú-ìwé, ṣí gbogbo ohun èlò, ṣe àwọn ìdánwò kí ó sì bá Smiley sọ̀rọ̀ láìsí àkọọ́lẹ̀. Àkọọ́lẹ̀ ọ̀fẹ́ ń jẹ́ kí ẹ béèrè kí ẹ sì dáhùn nínú àwùjọ.",
+            "Ẹnikẹ́ni lè ka gbogbo ojú-ìwé, ṣí àwọn ohun èlò tí a so mọ́ ọn, ṣe àwọn ìdánwò kí ó sì bá Smiley sọ̀rọ̀ láìsí àkọọ́lẹ̀. Àkọọ́lẹ̀ ọ̀fẹ́ ń jẹ́ kí ẹ gba fáìlì sílẹ̀ láti ojú-ìwé Ohun èlò, kí ẹ sì béèrè kí ẹ dáhùn nínú àwùjọ.",
             "Ẹ gbọ́dọ̀ jẹ́ ọmọ ọdún 16 tàbí jù bẹ́ẹ̀ lọ láti ṣẹ̀dá àkọọ́lẹ̀.",
           ],
         },

@@ -306,8 +306,8 @@ export default {
           "A'a, komai a buɗe yake ga kowa",
           "Sai dai idan ku malami ne",
         ],
-        correctAnswer: "A'a, komai a buɗe yake ga kowa",
-        explanation: "Kowa zai iya duba ɗakin kuma ya buɗe komai da ke ciki. Asusu na kyauta don tambaya da amsawa a cikin al'umma ne, da adana saitunanku.",
+        correctAnswer: "A'a, amma wasu kayan karatu suna buƙatar asusu na kyauta don buɗewa",
+        explanation: "Kowa zai iya duba ɗakin kuma ya buɗe kayan karatun da aka haɗa. Asusu na kyauta don sauke fayiloli ne, tambaya da amsawa a cikin al'umma, da adana saitunanku.",
       },
     ],
   },
@@ -321,7 +321,7 @@ export default {
         {
           heading: "Amfani da shafin",
           paragraphs: [
-            "Kowa zai iya karanta kowane shafi, buɗe kowane kayan karatu, yin gwaje-gwajen da magana da Smiley ba tare da asusu ba. Asusu na kyauta yana ba ku damar tambaya da amsawa a cikin al'umma.",
+            "Kowa zai iya karanta kowane shafi, buɗe kayan karatun da aka haɗa, yin gwaje-gwajen da magana da Smiley ba tare da asusu ba. Asusu na kyauta yana ba ku damar sauke fayiloli daga shafin Kayan karatu, da tambaya da amsawa a cikin al'umma.",
             "Dole ne shekarunku su kai 16 ko sama don ƙirƙirar asusu.",
           ],
         },

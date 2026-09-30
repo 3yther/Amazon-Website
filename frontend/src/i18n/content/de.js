@@ -305,8 +305,8 @@ export default {
           "Nein, alles ist für alle offen",
           "Nur wenn Sie Lehrkraft sind",
         ],
-        correctAnswer: "Nein, alles ist für alle offen",
-        explanation: "Alle können die Materialsammlung durchsehen und alles darin öffnen. Ein kostenloses Konto brauchen Sie, um in der Community zu fragen und zu antworten und Ihre Einstellungen zu behalten.",
+        correctAnswer: "Nein, aber manche Materialien brauchen zum Öffnen ein kostenloses Konto",
+        explanation: "Alle können die Materialsammlung durchsehen und die verlinkten Materialien öffnen. Ein kostenloses Konto brauchen Sie, um Dateien herunterzuladen, in der Community zu fragen und zu antworten und Ihre Einstellungen zu behalten.",
       },
     ],
   },
@@ -320,7 +320,7 @@ export default {
         {
           heading: "Die Website nutzen",
           paragraphs: [
-            "Alle können jede Seite lesen, jedes Material öffnen, die Quiz machen und ohne Konto mit Smiley sprechen. Mit einem kostenlosen Konto können Sie in der Community fragen und antworten.",
+            "Alle können jede Seite lesen, die verlinkten Materialien öffnen, die Quiz machen und ohne Konto mit Smiley sprechen. Mit einem kostenlosen Konto können Sie Dateien von der Seite Materialien herunterladen sowie in der Community fragen und antworten.",
             "Sie müssen 16 Jahre oder älter sein, um ein Konto zu erstellen.",
           ],
         },

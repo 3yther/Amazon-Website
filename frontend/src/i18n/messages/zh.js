@@ -9,8 +9,7 @@ const zh = {
     label: "语言",
     choose: "选择语言",
     settingLabel: "界面语言",
-    settingHint:
-      "除英语外还有17种语言，均为机器翻译。以英文版本为准。",
+    settingHint: "除英语外还有17种语言，均为机器翻译。以英文版本为准。",
   },
 
   cookieNotice: {
@@ -20,10 +19,22 @@ const zh = {
     ok: "好的",
   },
 
+  notifications: {
+    label: "通知",
+    open: "通知，{count}条未读",
+    none: "还没有通知。",
+    markAll: "全部标为已读",
+    unread: "未读",
+    events: {
+      announcement: "公告：{text}",
+      answered: "有人回答了您的问题：{text}",
+      accepted: "您的回答被标记为有帮助的回答：{text}",
+      interest_seen: "Amazon Emerging Talent团队已看到您的意向。",
+    },
+  },
+
   translation: {
-    notice:
-      "本页面由机器翻译成{language}，部分措辞可能不够准确。" +
-      "以英文版本为准。",
+    notice: "本页面由机器翻译成{language}，部分措辞可能不够准确。以英文版本为准。",
     showEnglish: "阅读英文版",
     englishOnly: "本页面仅提供英文版。",
   },
@@ -80,10 +91,26 @@ const zh = {
       label: "如何开始",
       title: "四步开始",
       step: "步骤",
-      browse: { title: "浏览资源", text: "涵盖全部五个方向的指南、资料包和视频。", link: "浏览资源" },
-      register: { title: "登记意向", text: "告诉我们您想探索哪个方向。", link: "登记意向" },
-      hearBack: { title: "等待回复", text: "我们会查看每一份提交，并通过电子邮件回复。", link: "联系我们" },
-      getInvolved: { title: "参与进来", text: "注册后即可在社区提问和回答，并在任何设备上保留您的设置。", link: "注册" },
+      browse: {
+        title: "浏览资源",
+        text: "涵盖全部五个方向的指南、资料包和视频。",
+        link: "浏览资源",
+      },
+      register: {
+        title: "登记意向",
+        text: "告诉我们您想探索哪个方向。",
+        link: "登记意向",
+      },
+      hearBack: {
+        title: "等待回复",
+        text: "我们会查看每一份提交，并通过电子邮件回复。",
+        link: "联系我们",
+      },
+      getInvolved: {
+        title: "参与进来",
+        text: "注册后即可在社区提问和回答，并在任何设备上保留您的设置。",
+        link: "注册",
+      },
     },
   },
 
@@ -93,7 +120,11 @@ const zh = {
       title: "两年。一个行业。一次真正的实习。",
       lead: "GCSE之后攻读的一种职业资格。以学习为主，部分时间工作。",
     },
-    what: { label: "如何运作", title: "什么是T-Level", split: "两年时间如何分配" },
+    what: {
+      label: "如何运作",
+      title: "什么是T-Level",
+      split: "两年时间如何分配",
+    },
     placement: {
       label: "实习",
       title: "实习一览",
@@ -121,9 +152,18 @@ const zh = {
       points: "UCAS分数",
       note: "并非所有大学都使用UCAS分数，请核实您想读的课程。如果某一部分没有通过，您仍会得到一份已通过部分的证明。",
     },
-    who: { label: "适合谁", title: "如果符合以下情况，可能适合您" },
-    why: { label: "为什么选择", title: "您能得到什么" },
-    cost: { label: "费用", title: "需要花多少钱" },
+    who: {
+      label: "适合谁",
+      title: "如果符合以下情况，可能适合您",
+    },
+    why: {
+      label: "为什么选择",
+      title: "您能得到什么",
+    },
+    cost: {
+      label: "费用",
+      title: "需要花多少钱",
+    },
     quiz: {
       label: "测验",
       title: "T-Level适合我吗？",
@@ -152,8 +192,14 @@ const zh = {
       title: "在团队中度过九周。",
       lead: "Amazon接收T-Level学生实习。您将加入真正的团队，做真正的工作。",
     },
-    shape: { label: "实习", title: "九周是怎样安排的" },
-    support: { label: "支持", title: "三个人会照顾您" },
+    shape: {
+      label: "实习",
+      title: "九周是怎样安排的",
+    },
+    support: {
+      label: "支持",
+      title: "三个人会照顾您",
+    },
     pathways: {
       label: "方向",
       title: "Amazon接收哪些科目",
@@ -161,22 +207,43 @@ const zh = {
       leadLink: "关于T-Level",
       leadAfter: "页面。",
     },
-    route: { label: "如何进入", title: "如何获得实习机会" },
-    growth: { label: "项目", title: "规模在增长", lead: "前三年从六名学生增加到100名，而且还计划增加更多。数据来自Department for Education。" },
+    route: {
+      label: "如何进入",
+      title: "如何获得实习机会",
+    },
+    growth: {
+      label: "项目",
+      title: "规模在增长",
+      lead: "前三年从六名学生增加到100名，而且还计划增加更多。数据来自Department for Education。",
+    },
     sourcesNote: "于2026年九月核实。",
   },
 
   help: {
-    hero: { label: "帮助", title: "遇到困难？从这里开始。", lead: "选择您想做的事。" },
-    site: { label: "本网站", title: "可以去哪里" },
-    services: { label: "其他地方", title: "免费服务", lead: "由政府运营，不是我们。" },
+    hero: {
+      label: "帮助",
+      title: "遇到困难？从这里开始。",
+      lead: "选择您想做的事。",
+    },
+    site: {
+      label: "本网站",
+      title: "可以去哪里",
+    },
+    services: {
+      label: "其他地方",
+      title: "免费服务",
+      lead: "由政府运营，不是我们。",
+    },
     faq: {
       label: "问题",
       title: "还有更多问题？",
       text: "“关于T-Level”页面回答了最常见的问题，比如实习、成绩和费用。",
       link: "阅读常见问题",
     },
-    questions: { label: "选择之前", title: "请询问您的学校或学院" },
+    questions: {
+      label: "选择之前",
+      title: "请询问您的学校或学院",
+    },
     person: {
       label: "仍然不清楚",
       title: "问问真人",
@@ -258,8 +325,7 @@ const zh = {
 
   footer: {
     about: "关于我们",
-    aboutText:
-      "为学生、家长和教师讲解T-Level和Amazon实习。这是为Amazon Emerging Talent制作的学生项目，不是Amazon官方网站。",
+    aboutText: "为学生、家长和教师讲解T-Level和Amazon实习。这是为Amazon Emerging Talent制作的学生项目，不是Amazon官方网站。",
     navigation: "导航",
     support: "支持",
     legal: "法律与合规",
@@ -471,12 +537,12 @@ const zh = {
   },
 
   community: {
+    starterQuestion: "入门问题",
     moderationNote: "请围绕主题并文明发言。不当言论会被拒绝，其他内容也可能被版主删除。",
     label: "提问与回答",
     title: "社区",
     lead: "关于T-Level和Amazon实习的问题，由学生、家长、教师和Amazon员工回答。",
-    notChecked:
-      "这里的回答是个人经验和观点，不是经过核实的事实。官方信息请查看“关于T-Level”和“Amazon的T-Level”页面，或问问Smiley。",
+    notChecked: "这里的回答是个人经验和观点，不是经过核实的事实。官方信息请查看“关于T-Level”和“Amazon的T-Level”页面，或问问Smiley。",
     ask: "提问",
     signInToAsk: "登录后提问",
     signInToAnswer: "登录后回答",
@@ -573,13 +639,10 @@ const zh = {
       "如果有什么让您担心，请举报，团队会查看。",
     ],
     blocked: {
-      personal_details:
-        "未发布，因为其中似乎包含个人信息，比如电子邮件、电话号码、邮政编码或社交媒体账号。请删除后重试。",
+      personal_details: "未发布，因为其中似乎包含个人信息，比如电子邮件、电话号码、邮政编码或社交媒体账号。请删除后重试。",
       link: "未发布，因为其中包含链接。只允许链接到gov.uk和UCAS等官方网站。",
       strong_language: "由于用词不当，未能发布。请换一种说法试试。",
-      wellbeing:
-        "我们没有发布这条内容，因为听起来您正在经历非常艰难的事情。请和能帮助您的人谈谈：" +
-        "免费拨打Childline电话0800 1111，发短信SHOUT到85258，或拨打Samaritans电话116 123。如果您现在有危险，请拨打999。",
+      wellbeing: "我们没有发布这条内容，因为听起来您正在经历非常艰难的事情。请和能帮助您的人谈谈：免费拨打Childline电话0800 1111，发短信SHOUT到85258，或拨打Samaritans电话116 123。如果您现在有危险，请拨打999。",
     },
     somethingWrong: "出了点问题。请稍后再试。",
   },
@@ -599,41 +662,42 @@ const zh = {
     inputLabel: "您想问Smiley的问题",
     placeholder: "问Smiley任何问题",
     send: "发送",
-    disclosure:
-      "如果页面一段时间没有动静，我可能会来打个招呼。这是在您的浏览器中计算的，从不保存。" +
-      "我自己能回答的问题也只留在您的浏览器中。需要我查找的内容会被保存，这样我们可以接着上次继续聊。",
+    disclosure: "如果页面一段时间没有动静，我可能会来打个招呼。这是在您的浏览器中计算的，从不保存。我自己能回答的问题也只留在您的浏览器中。需要我查找的内容会被保存，这样我们可以接着上次继续聊。",
     tags: {
       checkingIn: "打个招呼",
       quizHelp: "测验帮助",
       private: "只留在您的浏览器中",
     },
-
     greetings: {
       morning: "早上好！",
       afternoon: "下午好！",
       evening: "晚上好！",
       lateNight: "您好，夜猫子！",
     },
-    intro:
-      "我是Smiley，您的T-Level向导。关于T-Level或Amazon实习，您可以问我任何问题。" +
-      "如果我不知道，我会直接告诉您，而不是编造答案。",
+    intro: "我是Smiley，您的T-Level向导。关于T-Level或Amazon实习，您可以问我任何问题。如果我不知道，我会直接告诉您，而不是编造答案。",
     welcomeBack: "欢迎回来。您可以接着上次继续，也可以问我新问题。",
     whoQuestion: "先问一下：今天是谁来访问？",
-
     audience: {
       student: "我是学生",
       parent: "我是家长或监护人",
       teacher: "我是教师",
       replies: {
-        student: { opener: "太好了。", text: "哪种工作最吸引您？" },
-        parent: { opener: "感谢您的到访。", text: "什么对您最有帮助？" },
-        teacher: { opener: "欢迎。", text: "您今天在找什么？" },
+        student: {
+          opener: "太好了。",
+          text: "哪种工作最吸引您？",
+        },
+        parent: {
+          opener: "感谢您的到访。",
+          text: "什么对您最有帮助？",
+        },
+        teacher: {
+          opener: "欢迎。",
+          text: "您今天在找什么？",
+        },
       },
       notSure: "还不确定",
-      notSureReply:
-        "这很正常，大多数人都是这样开始的。测验可以帮您快速思考，或者我可以带您了解各个方向。",
+      notSureReply: "这很正常，大多数人都是这样开始的。测验可以帮您快速思考，或者我可以带您了解各个方向。",
     },
-
     afterAi: {
       simpler: "说得简单一点",
       simplerAsk: "能说得简单一点吗？",
@@ -642,7 +706,6 @@ const zh = {
     },
     retry: "重试",
     fallback: "我现在查不到我的笔记，所以没法回答这个问题。请稍后再试，或者看看这些：",
-
     quizNudge: "哦，这道题难住了很多人。要我为您解释“{question}”吗？",
     quizExplain: "好的，请解释",
     quizExplainAsk: "能给我解释一下这道题吗？",
@@ -650,7 +713,6 @@ const zh = {
     quizWhyWrongAsk: "为什么我的答案错了？",
     quizLocal: "“{question}”的正确答案是{correct}。{explanation}",
     quizLocalChosen: "您选择了“{chosen}”。“{question}”的正确答案是{correct}。{explanation}",
-
     nudges: {
       home: "还不确定从哪里开始？我可以解释什么是T-Level，或者在Amazon实习是什么样。",
       about: "这个页面有什么不清楚的地方吗？问我，我会试着换种方式解释。",
@@ -663,7 +725,6 @@ const zh = {
       register: "不确定是否需要账户？我可以告诉您它有什么用。",
       other: "还在吗？关于T-Level的任何问题都可以问我，我知道的话就会回答。",
     },
-
     teasers: {
       hello: "您好，我是Smiley！关于T-Level的任何问题都可以问我。",
       perfect: "满分！干得好。",
@@ -677,7 +738,6 @@ const zh = {
       lateNight: "很晚了！别忘了睡觉。",
       peek: "躲猫猫！",
     },
-
     topics: {
       whatIsTLevel: "什么是T-Level？",
       courseLength: "T-Level要读多久？",
@@ -726,36 +786,26 @@ const zh = {
       whatIsESP: "ESP是什么意思？",
       joke: "再讲一个笑话",
     },
-
     answers: {
       whatIsTLevel: "三步了解T-Level：",
       amazonNotConfirmed: "Amazon还没有确认这个方向的实习，所以我无法保证有实习机会。",
       pathway: "{name}：{summary}\nT-Level：{tLevels}。\n实习内容：{placement}\n适合：{suits}\n在Amazon：{amazon}",
       whoSuits: "如果符合以下情况，T-Level通常适合您：",
-      decideWithAdult:
-        "只有您自己能做决定，所以也请和老师或升学就业顾问谈谈。测验可以帮助您思考。",
+      decideWithAdult: "只有您自己能做决定，所以也请和老师或升学就业顾问谈谈。测验可以帮助您思考。",
       amazonPathways: "以下是Amazon对每个方向的说明：",
       pathwaysList: "共有五个方向：",
       providerQuestions: "可以问学校或学院的好问题：",
       resources: "“资源”页面有指南、资料包和视频，全部免费开放。",
       quiz: "测验会问一些关于T-Level的简短问题，您答错的题我都会帮您讲解。",
-      community:
-        "在社区里您可以提问，其他学生、家长、教师和Amazon员工都可以回答。" +
-        "我不知道的问题，都很适合去那里问。",
-      account:
-        "不用账户您也可以浏览网站、打开所有资源并和我聊天。免费账户可以让您在社区提问和回答，并在任何设备上保留您的设置。",
+      community: "在社区里您可以提问，其他学生、家长、教师和Amazon员工都可以回答。我不知道的问题，都很适合去那里问。",
+      account: "不用账户您也可以浏览网站、打开链接的资源并和我聊天。免费账户可以让您从“资源”页面下载文件、在社区提问和回答，并在任何设备上保留您的设置。",
       contact: "您可以通过“联系我们”页面联系T-SMILE团队。",
-      accessibility:
-        "无障碍设置可以让您更改文字大小、颜色、深色模式、动画和朗读。",
-      language:
-        "可以！使用页面顶部菜单按钮旁边的语言按钮，或者“设置”中的“语言”标签。共有18种语言可选。",
-      privacy:
-        "我只保存需要查找的问题，这样我们可以接着上次继续。我自己回答的内容，以及" +
-        "与您如何浏览网站有关的一切，都只留在您的浏览器中。详情请见隐私政策。",
+      accessibility: "无障碍设置可以让您更改文字大小、颜色、深色模式、动画和朗读。",
+      language: "可以！使用页面顶部菜单按钮旁边的语言按钮，或者“设置”中的“语言”标签。共有18种语言可选。",
+      privacy: "我只保存需要查找的问题，这样我们可以接着上次继续。我自己回答的内容，以及与您如何浏览网站有关的一切，都只留在您的浏览器中。详情请见隐私政策。",
       dontKnow: "这个我还不知道，我宁可不乱猜。以下是我能帮忙的：",
       closest: "我不太确定您的意思，但这是我能找到的最接近的内容：",
     },
-
     links: {
       about: "关于T-Level",
       amazon: "Amazon的T-Level",
@@ -773,20 +823,15 @@ const zh = {
       privacy: "隐私政策",
       help: "帮助页面",
     },
-
     chat: {
       greeting: "您好！我是Smiley。关于T-Level或Amazon实习，您可以问我任何问题，或者从下面选一个问题。",
       howAreYou: "我很好，谢谢关心！今天我的天线信号很好。有什么可以帮您？",
       thanks: "不客气！还有什么想了解的吗？",
       bye: "再见！需要我的时候，我就在角落里。",
-      whoAreYou:
-        "我是Smiley，T-SMILE的向导。我回答关于T-Level和Amazon实习的问题，只使用团队核实过的事实。",
-      areYouBot:
-        "是的，我是机器人。一个友好的、带天线的机器人。我回答不了的问题，可以请教老师、升学就业顾问或社区。",
+      whoAreYou: "我是Smiley，T-SMILE的向导。我回答关于T-Level和Amazon实习的问题，只使用团队核实过的事实。",
+      areYouBot: "是的，我是机器人。一个友好的、带天线的机器人。我回答不了的问题，可以请教老师、升学就业顾问或社区。",
       whoMadeYou: "T-SMILE团队为Amazon Emerging Talent的T-Level项目制作了我。我就是头上顶着T的那个。",
-      whatCanYouDo:
-        "我可以解释什么是T-Level、行业实习如何运作、Amazon实习包含什么、五个方向、" +
-        "费用、入学要求等等。用您自己的话问我，或者点一个问题。",
+      whatCanYouDo: "我可以解释什么是T-Level、行业实习如何运作、Amazon实习包含什么、五个方向、费用、入学要求等等。用您自己的话问我，或者点一个问题。",
       jokes: [
         "换一个灯泡需要多少T-Level学时？至少315个，不过能学到很多东西。",
         "为什么程序员喜欢深色模式？因为光会招来虫子（bug）。",
@@ -796,8 +841,7 @@ const zh = {
         "为什么那位学生带着梯子去实习？因为听说那是职业的阶梯。",
       ],
       compliment: "哦，谢谢！我的天线都在发颤了。",
-      rude:
-        "如果我没帮上什么忙，我理解。我只知道团队核实过的内容。换个方式问问，或者从这些里面选一个。",
+      rude: "如果我没帮上什么忙，我理解。我只知道团队核实过的内容。换个方式问问，或者从这些里面选一个。",
       acknowledge: "还有什么想了解的吗？",
       confused: "抱歉，是我的问题。我们再试一次。从下面选一个话题，或者换种方式问。",
       howOld: "我是2026年九月启动的，所以我还很新。我还在学习，就像您一样。",
@@ -816,25 +860,12 @@ const zh = {
       outfits: "哦，时装秀！这是我的衣橱。",
       time: "您那里现在是{day}，{time}。",
     },
-
     safety: {
-      atRisk:
-        "我真的很高兴您告诉了我。我只是网站上的一个助手，所以请马上和能帮助您的人谈谈。" +
-        "免费拨打Childline电话0800 1111，任何时间都可以，电话账单上不会显示。" +
-        "您也可以发短信SHOUT到85258，或拨打Samaritans电话116 123。如果您现在有危险，请拨打999。",
-      harmed:
-        "谢谢您告诉我。没有人应该让您感到不安全。请告诉一位您信任的成年人，比如老师、" +
-        "家长或照顾您的人。您也可以免费拨打Childline电话0800 1111，任何时间都可以，电话账单上不会显示。" +
-        "如果您现在有危险，请拨打999。",
-      struggling:
-        "听起来您承受了很多，您不必独自面对。和信任的人谈谈真的会有帮助，" +
-        "比如老师、家长或照顾您的人。Childline免费电话0800 1111，或发短信SHOUT到85258，任何时间都可以。" +
-        "关于T-Level的问题，您随时都可以来问我。",
-      personal:
-        "小提示：您不需要告诉我电子邮件、电话号码或地址等个人信息，" +
-        "不提供会更安全。我没有把那条消息发送到任何地方。关于T-Level，您想了解什么？",
+      atRisk: "我真的很高兴您告诉了我。我只是网站上的一个助手，所以请马上和能帮助您的人谈谈。免费拨打Childline电话0800 1111，任何时间都可以，电话账单上不会显示。您也可以发短信SHOUT到85258，或拨打Samaritans电话116 123。如果您现在有危险，请拨打999。",
+      harmed: "谢谢您告诉我。没有人应该让您感到不安全。请告诉一位您信任的成年人，比如老师、家长或照顾您的人。您也可以免费拨打Childline电话0800 1111，任何时间都可以，电话账单上不会显示。如果您现在有危险，请拨打999。",
+      struggling: "听起来您承受了很多，您不必独自面对。和信任的人谈谈真的会有帮助，比如老师、家长或照顾您的人。Childline免费电话0800 1111，或发短信SHOUT到85258，任何时间都可以。关于T-Level的问题，您随时都可以来问我。",
+      personal: "小提示：您不需要告诉我电子邮件、电话号码或地址等个人信息，不提供会更安全。我没有把那条消息发送到任何地方。关于T-Level，您想了解什么？",
     },
-
     keywords: {
       whatIsTLevel: "什么是t level, t level是什么, t level是啥, t level指什么",
       courseLength: "读多久, 多长时间, 几年, 要多久",
@@ -985,6 +1016,8 @@ const zh = {
     typeToConfirm: "输入{text}以确认",
     actionFailed: "操作没有成功。请重试。",
     tabs: {
+      providers: "教育机构",
+      audit: "操作记录",
       overview: "概览",
       interest: "意向",
       reports: "被举报的帖子",
@@ -1001,18 +1034,190 @@ const zh = {
       openReports: "待处理举报",
     },
     charts: {
+      answered: "已回答",
+      dealtWith: "已处理",
+      feedbackHandled: "已处理的反馈",
+      feedbackHandledCaption: "本期间内员工已处理的反馈。",
+      feedbackByCategory: "按类别的反馈",
+      activity: "注册活动",
+      activityCaption: "每个期间的注册数，每个期间一个点，每种账户类型一行。",
+      dotRow: "{name}：{buckets}个期间共{total}",
+      region: "地区",
+      needFixing: "{count}个需要修正",
+      plotLabel: "{title}。用方向键逐点读取。",
+      pointReadout: "{label}。{values}",
+      rangeFor: "{title}的日期范围",
+      title: "图表",
+      loading: "正在加载图表",
+      usersByType: "按类型的账户",
+      usersByTypeCaption: "本期间内创建的账户，按账户类型。",
+      answerRate: "回答率",
+      answerRateCaption: "本期间内提出并至少得到一个回答的问题。",
+      topics: "最热门的话题",
+      topicsCaption: "本期间内提出的问题，按话题。",
+      feedbackOverTime: "反馈随时间的变化",
+      feedbackOverTimeCaption: "每个期间提交的反馈，按类别。",
+      reports: "新开与已处理的举报",
+      reportsCaption: "每个期间新开的帖子举报与已处理的举报对比。",
+      opened: "新开",
+      resolved: "已处理",
+      languages: "按语言的账户",
+      languagesCaption: "按阅读网站所用语言的账户。",
+      language: "语言",
+      providers: "地图上的教育机构",
+      providersCaption: "各地区的教育机构，以及有多少没有可显示的位置。",
+      placed: "在地图上",
+      unplaced: "没有位置",
       signups: "每周注册",
       signupsCaption: "每周新账户数，按账户类型。",
       interest: "按方向的意向",
       interestCaption: "意向登记数，按账户中的方向。",
       community: "社区活动",
       communityCaption: "每周发布的问题和回答。",
-      feedback: "按类别的反馈",
-      feedbackCaption: "已发送的反馈，按类别。",
+    },
+    greeting: {
+      morning: "早上好，{name}",
+      afternoon: "下午好，{name}",
+      evening: "晚上好，{name}",
+    },
+    nav: {
+      site: "网站",
+      label: "管理门户的栏目",
+      menu: "栏目",
+      measure: "统计",
+      people: "用户",
+      community: "社区",
+      session: "本次会话",
+      unhandled: "尚未处理",
+    },
+    filters: {
+      title: "筛选",
+      range: "日期范围",
+      from: "从",
+      to: "到",
+      userType: "账户类型",
+      pathway: "方向",
+      clear: "清除筛选",
+      updating: "正在更新数字",
+      ranges: {
+        "7d": "最近7天",
+        "30d": "最近30天",
+        "90d": "最近90天",
+        "12m": "最近12个月",
+        all: "全部时间",
+        custom: "自定义",
+      },
+    },
+    kpis: {
+      title: "关键数字",
+      loading: "正在加载关键数字",
+      signups: "新注册",
+      active: "已登录",
+      unanswered: "未回答的问题",
+      time_to_first_answer: "首次回答所需时间",
+      hoursValue: "{hours}小时",
+      upBy: "{label}：比上一期间增加{change}（{percent}）",
+      downBy: "{label}：比上一期间减少{change}（{percent}）",
+      noPercent: "没有之前的数字",
+      noComparison: "没有可比较的数据",
+      noChange: "没有变化",
+    },
+    states: {
+      loading: "加载中",
+      failed: "这些数字没有加载出来。",
+      retry: "重试",
+    },
+    export: {
+      button: "导出CSV",
+      working: "正在准备",
+      done: "文件已下载。",
+      failed: "下载没有成功。请重试。",
     },
     signedOut: {
       title: "登录以打开管理门户",
       lead: "此页面供Amazon员工使用。请使用员工账户登录以继续。",
+    },
+    audit: {
+      actor: "员工",
+      action: "操作",
+      caption: "员工在门户中做过的所有操作",
+      empty: "还没有任何记录。",
+      columns: {
+        when: "时间",
+        who: "人员",
+        what: "内容",
+        target: "对象",
+      },
+      actions: {
+        account_removed: "删除了一个账户",
+        staff_revoked: "撤销了管理员权限",
+        role_changed: "更改了账户类型",
+        password_reset_sent: "发送了重置密码的邮件",
+        post_deleted: "删除了一个帖子",
+        report_resolved: "处理了一个举报",
+        report_dismissed: "驳回了一个举报",
+        feedback_handled: "将反馈标记为已处理",
+        csv_exported: "导出了CSV",
+      },
+    },
+    providers: {
+      filter: "在地图上",
+      unplacedOnly: "邮政编码需要修正",
+      placedOnly: "已在地图上",
+      caption: "附近搜索可以显示的教育机构",
+      empty: "没有加载任何教育机构。",
+      onMap: "在地图上",
+      needsPostcode: "邮政编码需要修正",
+      columns: {
+        name: "名称",
+        postcode: "邮政编码",
+        region: "地区",
+        type: "类型",
+        map: "地图",
+      },
+    },
+    person: {
+      title: "账户",
+      close: "关闭",
+      type: "账户类型",
+      pathway: "方向",
+      joined: "加入时间",
+      lastLogin: "上次登录",
+      questions: "提出的问题",
+      answers: "给出的回答",
+      reports: "此人举报的帖子",
+      feedback: "此人发送的反馈",
+      none: "未填写",
+      never: "从未",
+      actions: "操作",
+      changeRole: "更改账户类型",
+      roleChanged: "账户类型已更改。",
+      sendReset: "发送重置密码的邮件",
+      resetSent: "如果该账户有电子邮件地址，重置链接正在发送中。",
+      staffNote: "请先在列表中撤销此人的管理员权限，再更改账户类型。",
+    },
+    bulk: {
+      title: "批量操作",
+      chosen: "已选择{count}个",
+      choose: "选择{name}",
+      chooseAll: "选择本页全部",
+      clear: "清除选择",
+      markHandled: "标记为已处理",
+      resolve: "处理",
+      dismiss: "驳回",
+      deletePosts: "删除帖子",
+      removePeople: "删除账户",
+      posts: "个帖子",
+      people: "个账户",
+      confirmText: "删除 {count} {noun}",
+      confirmBody: "这会永久删除其中{count}个，无法撤销。请准确输入下面的文字以确认。",
+      done: "已完成{count}个。",
+      reasons: {
+        gone: "{count}个已经不存在。",
+        staff: "{count}个是员工账户，未作更改。",
+        yourself: "{count}个是您自己的账户。",
+        failed: "{count}个没有成功。",
+      },
     },
     pin: {
       title: "输入门户PIN码",
@@ -1051,10 +1256,21 @@ const zh = {
       },
     },
     feedback: {
+      status: "状态",
+      handled: "已处理",
+      unhandled: "待处理",
+      markHandled: "标记为已处理",
+      markUnhandled: "改回待处理",
+      note: "员工备注",
+      saveNote: "保存备注",
+      handledBy: "{name}，{date}",
+      someone: "一位员工",
       filter: "类别",
       caption: "通过网站发送的反馈",
       empty: "还没有反馈。",
       columns: {
+        status: "状态",
+        actions: "操作",
         category: "类别",
         message: "消息",
         from: "来自",
@@ -1113,6 +1329,7 @@ const zh = {
       language: "语言",
       security: "安全",
       account: "账户",
+      notifications: "通知",
     },
     sight: {
       fontSize: "字号",
@@ -1205,6 +1422,13 @@ const zh = {
       password: "密码",
       deactivating: "正在删除",
       wrongPassword: "密码不正确。",
+    },
+    notifications: {
+      lead: "选择页面顶部铃铛中显示的内容。",
+      announcements: "T-SMILE团队的公告",
+      community: "对您在社区的问题和回答的回复",
+      interest: "关于您登记意向的更新",
+      saved: "已保存。",
     },
   },
 

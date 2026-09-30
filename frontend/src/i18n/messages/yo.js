@@ -20,10 +20,22 @@ const yo = {
     ok: "Ó dáa",
   },
 
+  notifications: {
+    label: "Ìfitónilétí",
+    open: "Ìfitónilétí, {count} tí a kò tíì kà",
+    none: "Kò sí ìfitónilétí síbẹ̀.",
+    markAll: "Sàmì sí gbogbo rẹ̀ pé a ti kà á",
+    unread: "A kò tíì kà á",
+    events: {
+      announcement: "Ìkéde: {text}",
+      answered: "Ẹnì kan dáhùn ìbéèrè yín: {text}",
+      accepted: "A sàmì sí ìdáhùn yín gẹ́gẹ́ bí èyí tí ó ṣèrànwọ́: {text}",
+      interest_seen: "Ẹgbẹ́ Amazon Emerging Talent ti rí ìfẹ́ yín.",
+    },
+  },
+
   translation: {
-    notice:
-      "Ẹ̀rọ ló túmọ̀ ojú-ìwé yìí ({language}), nítorí náà àwọn ọ̀rọ̀ kan lè má péye. " +
-      "Ẹ̀dà Gẹ̀ẹ́sì ni ó ṣe pàtàkì jù.",
+    notice: "Ẹ̀rọ ló túmọ̀ ojú-ìwé yìí ({language}), nítorí náà àwọn ọ̀rọ̀ kan lè má péye. Ẹ̀dà Gẹ̀ẹ́sì ni ó ṣe pàtàkì jù.",
     showEnglish: "Ka ní Gẹ̀ẹ́sì",
     englishOnly: "Ojú-ìwé yìí wà ní Gẹ̀ẹ́sì nìkan.",
   },
@@ -80,10 +92,26 @@ const yo = {
       label: "Bí ó ṣe ń ṣiṣẹ́",
       title: "Ẹ bẹ̀rẹ̀ ní ìgbésẹ̀ mẹ́rin",
       step: "Ìgbésẹ̀",
-      browse: { title: "Wo àwọn ohun èlò", text: "Ìtọ́sọ́nà, àkójọ ohun èlò àti fídíò fún gbogbo ẹ̀ka márùn-ún.", link: "Wo àwọn ohun èlò" },
-      register: { title: "Fi ìfẹ́ hàn", text: "Ẹ sọ fún wa ẹ̀ka tí ẹ fẹ́ ṣàwárí.", link: "Fi ìfẹ́ hàn" },
-      hearBack: { title: "Gba èsì", text: "A ń wo gbogbo ohun tí a fi ránṣẹ́, a sì ń fèsì nípasẹ̀ ímeèlì.", link: "Kàn sí wa" },
-      getInvolved: { title: "Ẹ darapọ̀", text: "Ẹ forúkọsílẹ̀ láti béèrè ìbéèrè àti láti dáhùn nínú àwùjọ, kí ẹ sì pa ètò yín mọ́ lórí gbogbo ẹ̀rọ.", link: "Forúkọsílẹ̀" },
+      browse: {
+        title: "Wo àwọn ohun èlò",
+        text: "Ìtọ́sọ́nà, àkójọ ohun èlò àti fídíò fún gbogbo ẹ̀ka márùn-ún.",
+        link: "Wo àwọn ohun èlò",
+      },
+      register: {
+        title: "Fi ìfẹ́ hàn",
+        text: "Ẹ sọ fún wa ẹ̀ka tí ẹ fẹ́ ṣàwárí.",
+        link: "Fi ìfẹ́ hàn",
+      },
+      hearBack: {
+        title: "Gba èsì",
+        text: "A ń wo gbogbo ohun tí a fi ránṣẹ́, a sì ń fèsì nípasẹ̀ ímeèlì.",
+        link: "Kàn sí wa",
+      },
+      getInvolved: {
+        title: "Ẹ darapọ̀",
+        text: "Ẹ forúkọsílẹ̀ láti béèrè ìbéèrè àti láti dáhùn nínú àwùjọ, kí ẹ sì pa ètò yín mọ́ lórí gbogbo ẹ̀rọ.",
+        link: "Forúkọsílẹ̀",
+      },
     },
   },
 
@@ -93,7 +121,11 @@ const yo = {
       title: "Ọdún méjì. Ilé-iṣẹ́ kan. Ìrírí iṣẹ́ gidi.",
       lead: "Ìwé-ẹ̀rí iṣẹ́-ọwọ́ tí a ń ṣe lẹ́yìn GCSEs. Ẹ̀kọ́ ló pọ̀ jù, iṣẹ́ sì jẹ́ apá kan.",
     },
-    what: { label: "Bí ó ṣe ń ṣiṣẹ́", title: "Kí ni T-Level", split: "Bí a ṣe pín ọdún méjèèjì" },
+    what: {
+      label: "Bí ó ṣe ń ṣiṣẹ́",
+      title: "Kí ni T-Level",
+      split: "Bí a ṣe pín ọdún méjèèjì",
+    },
     placement: {
       label: "Ìrírí iṣẹ́",
       title: "Ìwòye ìrírí iṣẹ́",
@@ -121,9 +153,18 @@ const yo = {
       points: "Àmì UCAS",
       note: "Kì í ṣe gbogbo yunifásítì ló ń lo àmì UCAS, nítorí náà ẹ ṣàyẹ̀wò fún ẹ̀kọ́ yín. Bí ẹ kò bá yege apá kan, ẹ ó ṣì gba ìwé tí ó fi ohun tí ẹ yege hàn.",
     },
-    who: { label: "Fún ta ni", title: "Ó lè bá yín mu bí" },
-    why: { label: "Kí ló dé tí ẹ fi ń ṣe é", title: "Ohun tí ẹ ó rí gbà" },
-    cost: { label: "Owó", title: "Iye tí ó ń ná" },
+    who: {
+      label: "Fún ta ni",
+      title: "Ó lè bá yín mu bí",
+    },
+    why: {
+      label: "Kí ló dé tí ẹ fi ń ṣe é",
+      title: "Ohun tí ẹ ó rí gbà",
+    },
+    cost: {
+      label: "Owó",
+      title: "Iye tí ó ń ná",
+    },
     quiz: {
       label: "Ìdánwò",
       title: "Ṣé T-Level bá mi mu?",
@@ -152,8 +193,14 @@ const yo = {
       title: "Ọ̀sẹ̀ mẹ́sàn-án nínú ẹgbẹ́ kan.",
       lead: "Amazon ń gba àwọn akẹ́kọ̀ọ́ T-Level fún ìrírí iṣẹ́. Ẹ ó darapọ̀ mọ́ ẹgbẹ́ gidi, ẹ ó sì ṣe iṣẹ́ gidi.",
     },
-    shape: { label: "Ìrírí iṣẹ́", title: "Bí ọ̀sẹ̀ mẹ́sàn-án náà ṣe rí" },
-    support: { label: "Àtìlẹ́yìn", title: "Ènìyàn mẹ́ta ló ń tọ́jú yín" },
+    shape: {
+      label: "Ìrírí iṣẹ́",
+      title: "Bí ọ̀sẹ̀ mẹ́sàn-án náà ṣe rí",
+    },
+    support: {
+      label: "Àtìlẹ́yìn",
+      title: "Ènìyàn mẹ́ta ló ń tọ́jú yín",
+    },
     pathways: {
       label: "Àwọn ẹ̀ka",
       title: "Àwọn ẹ̀kọ́ tí Amazon ń gbà",
@@ -161,22 +208,43 @@ const yo = {
       leadLink: "Nípa T-Levels",
       leadAfter: ".",
     },
-    route: { label: "Bí a ṣe ń wọlé", title: "Bí a ṣe ń rí ìrírí iṣẹ́" },
-    growth: { label: "Ètò náà", title: "Ó ń dàgbà", lead: "Láti akẹ́kọ̀ọ́ mẹ́fà sí 100 ní ọdún mẹ́ta àkọ́kọ́, a sì ń gbèrò fún púpọ̀ sí i. Òǹkà láti Department for Education." },
+    route: {
+      label: "Bí a ṣe ń wọlé",
+      title: "Bí a ṣe ń rí ìrírí iṣẹ́",
+    },
+    growth: {
+      label: "Ètò náà",
+      title: "Ó ń dàgbà",
+      lead: "Láti akẹ́kọ̀ọ́ mẹ́fà sí 100 ní ọdún mẹ́ta àkọ́kọ́, a sì ń gbèrò fún púpọ̀ sí i. Òǹkà láti Department for Education.",
+    },
     sourcesNote: "A ṣàyẹ̀wò rẹ̀ ní Oṣù Kẹsàn-án 2026.",
   },
 
   help: {
-    hero: { label: "Ìrànlọ́wọ́", title: "Ṣé ó ti há yín? Ẹ bẹ̀rẹ̀ níbí.", lead: "Yan ohun tí ẹ ń gbìyànjú láti ṣe." },
-    site: { label: "Lórí ojú-ìwé yìí", title: "Ibi tí ẹ lè lọ" },
-    services: { label: "Níbòmíràn", title: "Iṣẹ́ ọ̀fẹ́", lead: "Ìjọba ló ń ṣe wọ́n, kì í ṣe àwa." },
+    hero: {
+      label: "Ìrànlọ́wọ́",
+      title: "Ṣé ó ti há yín? Ẹ bẹ̀rẹ̀ níbí.",
+      lead: "Yan ohun tí ẹ ń gbìyànjú láti ṣe.",
+    },
+    site: {
+      label: "Lórí ojú-ìwé yìí",
+      title: "Ibi tí ẹ lè lọ",
+    },
+    services: {
+      label: "Níbòmíràn",
+      title: "Iṣẹ́ ọ̀fẹ́",
+      lead: "Ìjọba ló ń ṣe wọ́n, kì í ṣe àwa.",
+    },
     faq: {
       label: "Ìbéèrè",
       title: "Ìbéèrè míràn?",
       text: "Ojú-ìwé Nípa T-Levels dáhùn àwọn ìbéèrè tí a ń béèrè jù, bíi ìrírí iṣẹ́, máàkì àti owó.",
       link: "Ka àwọn ìbéèrè tí a ń béèrè jù",
     },
-    questions: { label: "Kí ẹ tó yàn", title: "Ẹ béèrè lọ́wọ́ ilé-ìwé tàbí kọ́lẹ́ẹ̀jì yín" },
+    questions: {
+      label: "Kí ẹ tó yàn",
+      title: "Ẹ béèrè lọ́wọ́ ilé-ìwé tàbí kọ́lẹ́ẹ̀jì yín",
+    },
     person: {
       label: "Ó ṣì há yín",
       title: "Ẹ béèrè lọ́wọ́ ènìyàn",
@@ -258,8 +326,7 @@ const yo = {
 
   footer: {
     about: "Nípa wa",
-    aboutText:
-      "T-Levels àti ìrírí iṣẹ́ ní Amazon, tí a ṣàlàyé fún akẹ́kọ̀ọ́, òbí àti olùkọ́. Iṣẹ́ akẹ́kọ̀ọ́ fún Amazon Emerging Talent, kì í ṣe ojú-ìwé Amazon ti ìjọba.",
+    aboutText: "T-Levels àti ìrírí iṣẹ́ ní Amazon, tí a ṣàlàyé fún akẹ́kọ̀ọ́, òbí àti olùkọ́. Iṣẹ́ akẹ́kọ̀ọ́ fún Amazon Emerging Talent, kì í ṣe ojú-ìwé Amazon ti ìjọba.",
     navigation: "Ìrìnkiri",
     support: "Àtìlẹ́yìn",
     legal: "Òfin àti ìtẹ̀lé ìlànà",
@@ -471,12 +538,12 @@ const yo = {
   },
 
   community: {
+    starterQuestion: "Ìbéèrè ìbẹ̀rẹ̀",
     moderationNote: "Ẹ dúró lórí kókó ọ̀rọ̀ kí ẹ sì jẹ́ onírẹ̀lẹ̀. A kì í gba ọ̀rọ̀ tí kò bójú mu, alábòójútó sì lè yọ ohunkóhun míràn kúrò.",
     label: "Béèrè kí o sì dáhùn",
     title: "Àwùjọ",
     lead: "Ìbéèrè nípa T-Levels àti ìrírí iṣẹ́ ní Amazon, tí akẹ́kọ̀ọ́, òbí, olùkọ́ àti òṣìṣẹ́ Amazon ń dáhùn.",
-    notChecked:
-      "Àwọn ìdáhùn tí ó wà níbí jẹ́ ìrírí àti èrò ara ẹni, kì í ṣe òótọ́ tí a ti ṣàyẹ̀wò. Fún ìsọfúnni ti ìjọba, ẹ wo àwọn ojú-ìwé Nípa T-Levels àti T-Levels ní Amazon, tàbí ẹ béèrè lọ́wọ́ Smiley.",
+    notChecked: "Àwọn ìdáhùn tí ó wà níbí jẹ́ ìrírí àti èrò ara ẹni, kì í ṣe òótọ́ tí a ti ṣàyẹ̀wò. Fún ìsọfúnni ti ìjọba, ẹ wo àwọn ojú-ìwé Nípa T-Levels àti T-Levels ní Amazon, tàbí ẹ béèrè lọ́wọ́ Smiley.",
     ask: "Béèrè ìbéèrè",
     signInToAsk: "Ẹ wọlé láti béèrè ìbéèrè",
     signInToAnswer: "Ẹ wọlé láti dáhùn",
@@ -573,13 +640,10 @@ const yo = {
       "Bí nǹkan kan bá ń dà yín láàmú, ẹ jábọ̀ rẹ̀, ẹgbẹ́ náà yóò sì wò ó.",
     ],
     blocked: {
-      personal_details:
-        "A kò tẹ èyí jáde nítorí ó dà bíi pé ó ní ìsọfúnni ara ẹni, bíi ímeèlì, nọ́ńbà fóònù, kóòdù ìfìwéránṣẹ́ tàbí orúkọ ìkànnì àjọlò. Ẹ yọ wọ́n kúrò kí ẹ sì tún gbìyànjú.",
+      personal_details: "A kò tẹ èyí jáde nítorí ó dà bíi pé ó ní ìsọfúnni ara ẹni, bíi ímeèlì, nọ́ńbà fóònù, kóòdù ìfìwéránṣẹ́ tàbí orúkọ ìkànnì àjọlò. Ẹ yọ wọ́n kúrò kí ẹ sì tún gbìyànjú.",
       link: "A kò tẹ èyí jáde nítorí ó ní líǹkì. Líǹkì sí àwọn ojú-ìwé ti ìjọba bíi gov.uk àti UCAS nìkan la gbà láàyè.",
       strong_language: "A kò tẹ èyí jáde nítorí èdè tí a lò. Ẹ gbìyànjú láti sọ ọ́ lọ́nà míràn.",
-      wellbeing:
-        "A kò tẹ èyí jáde nítorí ó dà bíi pé ẹ ń la nǹkan tí ó le gan-an kọjá. Ẹ jọ̀wọ́ ẹ bá ẹni tí ó lè ṣèrànwọ́ sọ̀rọ̀: " +
-        "ẹ pe Childline lọ́fẹ̀ẹ́ ní 0800 1111, ẹ fi SHOUT ránṣẹ́ sí 85258, tàbí ẹ pe Samaritans ní 116 123. Bí ẹ bá wà nínú ewu báyìí, ẹ pe 999.",
+      wellbeing: "A kò tẹ èyí jáde nítorí ó dà bíi pé ẹ ń la nǹkan tí ó le gan-an kọjá. Ẹ jọ̀wọ́ ẹ bá ẹni tí ó lè ṣèrànwọ́ sọ̀rọ̀: ẹ pe Childline lọ́fẹ̀ẹ́ ní 0800 1111, ẹ fi SHOUT ránṣẹ́ sí 85258, tàbí ẹ pe Samaritans ní 116 123. Bí ẹ bá wà nínú ewu báyìí, ẹ pe 999.",
     },
     somethingWrong: "Nǹkan kan ṣẹlẹ̀. Ẹ tún gbìyànjú láìpẹ́.",
   },
@@ -599,41 +663,42 @@ const yo = {
     inputLabel: "Ìbéèrè yín fún Smiley",
     placeholder: "Ẹ béèrè ohunkóhun lọ́wọ́ Smiley",
     send: "Firánṣẹ́",
-    disclosure:
-      "Mo lè kí yín bí ojú-ìwé kan bá dákẹ́ fún ìgbà díẹ̀. Inú aṣàwákiri yín ni a ti ń ṣírò èyí, a kì í sì fi pamọ́. " +
-      "Àwọn ìbéèrè tí mo lè dáhùn fúnra mi náà máa ń wà nínú aṣàwákiri yín. Ohunkóhun tí mo bá ní láti wá ni a ń fi pamọ́, kí a lè máa bá a lọ láti ibi tí a dúró sí.",
+    disclosure: "Mo lè kí yín bí ojú-ìwé kan bá dákẹ́ fún ìgbà díẹ̀. Inú aṣàwákiri yín ni a ti ń ṣírò èyí, a kì í sì fi pamọ́. Àwọn ìbéèrè tí mo lè dáhùn fúnra mi náà máa ń wà nínú aṣàwákiri yín. Ohunkóhun tí mo bá ní láti wá ni a ń fi pamọ́, kí a lè máa bá a lọ láti ibi tí a dúró sí.",
     tags: {
       checkingIn: "Ìkíni",
       quizHelp: "Ìrànlọ́wọ́ ìdánwò",
       private: "Ó ń wà nínú aṣàwákiri yín",
     },
-
     greetings: {
       morning: "Ẹ káàárọ̀!",
       afternoon: "Ẹ káàsán!",
       evening: "Ẹ kúùrọ̀lẹ́!",
       lateNight: "Ẹ n lẹ́, ẹ̀yin tí kò sùn!",
     },
-    intro:
-      "Èmi ni Smiley, atọ́nà T-Level yín. Ẹ béèrè ohunkóhun lọ́wọ́ mi nípa T-Levels tàbí ìrírí iṣẹ́ ní Amazon. " +
-      "Bí n kò bá mọ nǹkan kan, màá sọ fún yín dípò kí n hùmọ̀ nǹkan.",
+    intro: "Èmi ni Smiley, atọ́nà T-Level yín. Ẹ béèrè ohunkóhun lọ́wọ́ mi nípa T-Levels tàbí ìrírí iṣẹ́ ní Amazon. Bí n kò bá mọ nǹkan kan, màá sọ fún yín dípò kí n hùmọ̀ nǹkan.",
     welcomeBack: "Ẹ káàbọ̀ padà. Ẹ máa bá a lọ láti ibi tí ẹ dúró sí, tàbí kí ẹ béèrè nǹkan tuntun lọ́wọ́ mi.",
     whoQuestion: "Ní àkọ́kọ́: ta ló wá ṣèbẹ̀wò lónìí?",
-
     audience: {
       student: "Akẹ́kọ̀ọ́ ni mí",
       parent: "Òbí tàbí alágbàtọ́ ni mí",
       teacher: "Olùkọ́ ni mí",
       replies: {
-        student: { opener: "Ó dára gan-an.", text: "Irú iṣẹ́ wo ló wù yín jù?" },
-        parent: { opener: "Ẹ ṣé tí ẹ wá.", text: "Kí ni yóò ràn yín lọ́wọ́ jù?" },
-        teacher: { opener: "Ẹ káàbọ̀.", text: "Kí ni ẹ ń wá lónìí?" },
+        student: {
+          opener: "Ó dára gan-an.",
+          text: "Irú iṣẹ́ wo ló wù yín jù?",
+        },
+        parent: {
+          opener: "Ẹ ṣé tí ẹ wá.",
+          text: "Kí ni yóò ràn yín lọ́wọ́ jù?",
+        },
+        teacher: {
+          opener: "Ẹ káàbọ̀.",
+          text: "Kí ni ẹ ń wá lónìí?",
+        },
       },
       notSure: "N kò tíì mọ̀",
-      notSureReply:
-        "Kò burú rárá, ibẹ̀ ni ọ̀pọ̀ ènìyàn ti ń bẹ̀rẹ̀. Ìdánwò náà jẹ́ ọ̀nà kíákíá láti ronú nípa rẹ̀, tàbí mo lè fi àwọn ẹ̀ka hàn yín.",
+      notSureReply: "Kò burú rárá, ibẹ̀ ni ọ̀pọ̀ ènìyàn ti ń bẹ̀rẹ̀. Ìdánwò náà jẹ́ ọ̀nà kíákíá láti ronú nípa rẹ̀, tàbí mo lè fi àwọn ẹ̀ka hàn yín.",
     },
-
     afterAi: {
       simpler: "Ẹ ṣàlàyé rẹ̀ ní ìrọ̀rùn",
       simplerAsk: "Ṣé ẹ lè ṣàlàyé èyí ní ìrọ̀rùn?",
@@ -642,7 +707,6 @@ const yo = {
     },
     retry: "Tún gbìyànjú",
     fallback: "N kò lè dé ọ̀dọ̀ àkọsílẹ̀ mi báyìí, nítorí náà n kò lè dáhùn èyí. Ẹ tún gbìyànjú láìpẹ́, tàbí kí ẹ wo ìwọ̀nyí:",
-
     quizNudge: "Háà, ìbéèrè yìí máa ń da ọ̀pọ̀ ènìyàn rú. Ṣé kí n ṣàlàyé “{question}” fún yín?",
     quizExplain: "Bẹ́ẹ̀ni, ẹ ṣàlàyé",
     quizExplainAsk: "Ṣé ẹ lè ṣàlàyé ìbéèrè yìí fún mi?",
@@ -650,7 +714,6 @@ const yo = {
     quizWhyWrongAsk: "Kí ló dé tí ìdáhùn mi kò fi tọ̀nà?",
     quizLocal: "Ìdáhùn tí ó tọ̀nà sí “{question}” ni {correct}. {explanation}",
     quizLocalChosen: "Ẹ yan “{chosen}”. Ìdáhùn tí ó tọ̀nà sí “{question}” ni {correct}. {explanation}",
-
     nudges: {
       home: "Ẹ ṣì ń ronú ibi tí ẹ ó ti bẹ̀rẹ̀? Mo lè ṣàlàyé ohun tí T-Level jẹ́ tàbí bí ìrírí iṣẹ́ ní Amazon ṣe rí.",
       about: "Ṣé nǹkan kan lórí ojú-ìwé yìí kò yé yín? Ẹ béèrè lọ́wọ́ mi, màá gbìyànjú láti ṣàlàyé rẹ̀ lọ́nà míràn.",
@@ -663,7 +726,6 @@ const yo = {
       register: "Ẹ kò dá a lójú bóyá ẹ nílò àkọọ́lẹ̀? Mo lè sọ ohun tí ó ń ṣe fún yín.",
       other: "Ẹ ṣì wà níbí? Ẹ béèrè ohunkóhun nípa T-Levels, màá sì dáhùn bí mo bá mọ̀.",
     },
-
     teasers: {
       hello: "Ẹ n lẹ́, èmi ni Smiley! Ẹ béèrè ohunkóhun nípa T-Levels lọ́wọ́ mi.",
       perfect: "Máàkì kíkún! Ẹ kú iṣẹ́.",
@@ -677,7 +739,6 @@ const yo = {
       lateNight: "Alẹ́ ti lẹ́! Ẹ má gbàgbé láti sùn.",
       peek: "Kúkú!",
     },
-
     topics: {
       whatIsTLevel: "Kí ni T-Level?",
       courseLength: "Báwo ni T-Level ṣe gùn tó?",
@@ -726,36 +787,26 @@ const yo = {
       whatIsESP: "Kí ni ESP túmọ̀ sí?",
       joke: "Ẹ sọ àwàdà míràn fún mi",
     },
-
     answers: {
       whatIsTLevel: "T-Level ní ìgbésẹ̀ mẹ́ta:",
       amazonNotConfirmed: "Amazon kò tíì fìdí ìrírí iṣẹ́ múlẹ̀ nínú ẹ̀ka yìí, nítorí náà n kò lè ṣèlérí.",
       pathway: "{name}: {summary}\nT-Levels: {tLevels}.\nNígbà ìrírí iṣẹ́: {placement}\nÓ bá: {suits}\nNí Amazon: {amazon}",
       whoSuits: "T-Level sábà máa ń bá yín mu bí:",
-      decideWithAdult:
-        "Ẹ̀yin nìkan ló lè pinnu èyí, nítorí náà ẹ bá olùkọ́ tàbí olùdámọ̀ràn iṣẹ́ sọ̀rọ̀ pẹ̀lú. Ìdánwò náà lè ràn yín lọ́wọ́ láti ronú nípa rẹ̀.",
+      decideWithAdult: "Ẹ̀yin nìkan ló lè pinnu èyí, nítorí náà ẹ bá olùkọ́ tàbí olùdámọ̀ràn iṣẹ́ sọ̀rọ̀ pẹ̀lú. Ìdánwò náà lè ràn yín lọ́wọ́ láti ronú nípa rẹ̀.",
       amazonPathways: "Ohun tí Amazon sọ nípa ẹ̀ka kọ̀ọ̀kan nìyí:",
       pathwaysList: "Ẹ̀ka márùn-ún ló wà:",
       providerQuestions: "Ìbéèrè tí ó dára láti béèrè lọ́wọ́ ilé-ìwé tàbí kọ́lẹ́ẹ̀jì:",
       resources: "Ojú-ìwé Ohun èlò ní ìtọ́sọ́nà, àkójọ ohun èlò àti fídíò, gbogbo rẹ̀ ṣí sílẹ̀ lọ́fẹ̀ẹ́.",
       quiz: "Ìdánwò náà ń béèrè àwọn ìbéèrè kúkúrú nípa T-Levels, màá sì ṣèrànwọ́ pẹ̀lú èyíkéyìí tí ẹ bá ṣì.",
-      community:
-        "Nínú àwùjọ ẹ lè béèrè ìbéèrè, àwọn akẹ́kọ̀ọ́ míràn, òbí, olùkọ́ àti òṣìṣẹ́ Amazon sì lè dáhùn. " +
-        "Ohunkóhun tí n kò mọ̀ jẹ́ ìbéèrè tí ó dára láti béèrè níbẹ̀.",
-      account:
-        "Ẹ lè wo ojú-ìwé yìí, ṣí gbogbo ohun èlò kí ẹ sì bá mi sọ̀rọ̀ láìsí àkọọ́lẹ̀. Àkọọ́lẹ̀ ọ̀fẹ́ ń jẹ́ kí ẹ béèrè kí ẹ sì dáhùn nínú àwùjọ, ó sì ń pa ètò yín mọ́ lórí gbogbo ẹ̀rọ.",
+      community: "Nínú àwùjọ ẹ lè béèrè ìbéèrè, àwọn akẹ́kọ̀ọ́ míràn, òbí, olùkọ́ àti òṣìṣẹ́ Amazon sì lè dáhùn. Ohunkóhun tí n kò mọ̀ jẹ́ ìbéèrè tí ó dára láti béèrè níbẹ̀.",
+      account: "Ẹ lè wo ojú-ìwé yìí, ṣí àwọn ohun èlò tí a so mọ́ ọn kí ẹ sì bá mi sọ̀rọ̀ láìsí àkọọ́lẹ̀. Àkọọ́lẹ̀ ọ̀fẹ́ ń jẹ́ kí ẹ gba fáìlì sílẹ̀ láti ojú-ìwé Ohun èlò, béèrè kí ẹ sì dáhùn nínú àwùjọ, ó sì ń pa ètò yín mọ́ lórí gbogbo ẹ̀rọ.",
       contact: "Ẹ lè kàn sí ẹgbẹ́ T-SMILE nípasẹ̀ ojú-ìwé Kàn sí wa.",
-      accessibility:
-        "Ètò ìrọ̀rùn lílò ń jẹ́ kí ẹ yí ìwọ̀n ọ̀rọ̀, àwọ̀, ipò òkùnkùn, ìṣípòpadà àti kíkà sókè padà.",
-      language:
-        "Bẹ́ẹ̀ni! Ẹ lo bọ́tìnnì èdè tí ó wà lẹ́gbẹ̀ẹ́ bọ́tìnnì àkójọ àṣàyàn lókè ojú-ìwé, tàbí táàbù Èdè nínú Ètò. Èdè 18 ló wà láti yàn nínú rẹ̀.",
-      privacy:
-        "Àwọn ìbéèrè tí mo ní láti wá nìkan ni mo ń fi pamọ́, kí a lè máa bá a lọ láti ibi tí a dúró sí. Ohunkóhun tí mo dáhùn fúnra mi, àti ohunkóhun " +
-        "tí ó jẹ mọ́ bí ẹ ṣe ń rìn kiri lórí ojú-ìwé, máa ń wà nínú aṣàwákiri yín. Ìlànà àṣírí ní gbogbo àlàyé.",
+      accessibility: "Ètò ìrọ̀rùn lílò ń jẹ́ kí ẹ yí ìwọ̀n ọ̀rọ̀, àwọ̀, ipò òkùnkùn, ìṣípòpadà àti kíkà sókè padà.",
+      language: "Bẹ́ẹ̀ni! Ẹ lo bọ́tìnnì èdè tí ó wà lẹ́gbẹ̀ẹ́ bọ́tìnnì àkójọ àṣàyàn lókè ojú-ìwé, tàbí táàbù Èdè nínú Ètò. Èdè 18 ló wà láti yàn nínú rẹ̀.",
+      privacy: "Àwọn ìbéèrè tí mo ní láti wá nìkan ni mo ń fi pamọ́, kí a lè máa bá a lọ láti ibi tí a dúró sí. Ohunkóhun tí mo dáhùn fúnra mi, àti ohunkóhun tí ó jẹ mọ́ bí ẹ ṣe ń rìn kiri lórí ojú-ìwé, máa ń wà nínú aṣàwákiri yín. Ìlànà àṣírí ní gbogbo àlàyé.",
       dontKnow: "N kò mọ ìyẹn síbẹ̀, n kò sì fẹ́ fojú dá a. Ohun tí mo lè ṣèrànwọ́ pẹ̀lú nìyí:",
       closest: "Kò dá mi lójú ohun tí ẹ ń sọ, ṣùgbọ́n èyí ló sún mọ́ ọn jù:",
     },
-
     links: {
       about: "Nípa T-Levels",
       amazon: "T-Levels ní Amazon",
@@ -773,20 +824,15 @@ const yo = {
       privacy: "Ìlànà àṣírí",
       help: "Ojú-ìwé ìrànlọ́wọ́",
     },
-
     chat: {
       greeting: "Ẹ n lẹ́! Èmi ni Smiley. Ẹ béèrè ohunkóhun lọ́wọ́ mi nípa T-Levels tàbí ìrírí iṣẹ́ ní Amazon, tàbí kí ẹ yan ìbéèrè kan nísàlẹ̀.",
       howAreYou: "Mo wà dáadáa, ẹ ṣé tí ẹ béèrè! Eriali mi ń gba àmì dáadáa lónìí. Báwo ni mo ṣe lè ràn yín lọ́wọ́?",
       thanks: "Kò tọ́pẹ́! Ṣé nǹkan míràn wà tí ẹ fẹ́ mọ̀?",
       bye: "Ó dìgbà! Mo wà níbí ní igun bí ẹ bá nílò mi.",
-      whoAreYou:
-        "Èmi ni Smiley, atọ́nà T-SMILE. Mo ń dáhùn ìbéèrè nípa T-Levels àti ìrírí iṣẹ́ ní Amazon, ní lílo òótọ́ tí ẹgbẹ́ náà ti ṣàyẹ̀wò nìkan.",
-      areYouBot:
-        "Bẹ́ẹ̀ni, rọ́bọ́ọ̀tì ni mí. Èyí tí ó ní inúure, pẹ̀lú eriali. Fún ohunkóhun tí n kò lè dáhùn, olùkọ́, olùdámọ̀ràn iṣẹ́ tàbí àwùjọ lè ṣèrànwọ́.",
+      whoAreYou: "Èmi ni Smiley, atọ́nà T-SMILE. Mo ń dáhùn ìbéèrè nípa T-Levels àti ìrírí iṣẹ́ ní Amazon, ní lílo òótọ́ tí ẹgbẹ́ náà ti ṣàyẹ̀wò nìkan.",
+      areYouBot: "Bẹ́ẹ̀ni, rọ́bọ́ọ̀tì ni mí. Èyí tí ó ní inúure, pẹ̀lú eriali. Fún ohunkóhun tí n kò lè dáhùn, olùkọ́, olùdámọ̀ràn iṣẹ́ tàbí àwùjọ lè ṣèrànwọ́.",
       whoMadeYou: "Ẹgbẹ́ T-SMILE ló kọ́ mi fún iṣẹ́ T-Level ti Amazon Emerging Talent. Èmi ni ẹni tí T wà lórí rẹ̀.",
-      whatCanYouDo:
-        "Mo lè ṣàlàyé ohun tí T-Level jẹ́, bí ìrírí iṣẹ́ ní ilé-iṣẹ́ ṣe ń ṣiṣẹ́, ohun tí ìrírí iṣẹ́ ní Amazon ní nínú, ẹ̀ka márùn-ún, " +
-        "owó, ohun tí a ń béèrè fún ìwọlé àti bẹ́ẹ̀ bẹ́ẹ̀ lọ. Ẹ béèrè lọ́wọ́ mi ní ọ̀rọ̀ ara yín, tàbí kí ẹ tẹ ìbéèrè kan.",
+      whatCanYouDo: "Mo lè ṣàlàyé ohun tí T-Level jẹ́, bí ìrírí iṣẹ́ ní ilé-iṣẹ́ ṣe ń ṣiṣẹ́, ohun tí ìrírí iṣẹ́ ní Amazon ní nínú, ẹ̀ka márùn-ún, owó, ohun tí a ń béèrè fún ìwọlé àti bẹ́ẹ̀ bẹ́ẹ̀ lọ. Ẹ béèrè lọ́wọ́ mi ní ọ̀rọ̀ ara yín, tàbí kí ẹ tẹ ìbéèrè kan.",
       jokes: [
         "Wákàtí T-Level mélòó ni ó gbà láti pààrọ̀ gílóòbù iná? Ó kéré tán 315, ṣùgbọ́n ẹ ó kọ́ nǹkan púpọ̀.",
         "Kí ló dé tí àwọn olùṣètò kọ̀ǹpútà fi fẹ́ràn ipò òkùnkùn? Nítorí ìmọ́lẹ̀ ń fa kòkòrò (bugs) mọ́ra.",
@@ -796,8 +842,7 @@ const yo = {
         "Kí ló dé tí akẹ́kọ̀ọ́bìnrin náà fi gbé àkàsọ̀ lọ sí ìrírí iṣẹ́? Wọ́n sọ fún un pé ó jẹ́ àtẹ̀gùn iṣẹ́ ọjọ́ iwájú.",
       ],
       compliment: "Háà, ẹ ṣé! Eriali mi ń mì tìtì.",
-      rude:
-        "Ó yé mi bí n kò bá ṣèrànwọ́ tó. Ohun tí ẹgbẹ́ náà ti ṣàyẹ̀wò nìkan ni mo mọ̀. Ẹ gbìyànjú láti béèrè lọ́nà míràn, tàbí kí ẹ yan ọ̀kan nínú ìwọ̀nyí.",
+      rude: "Ó yé mi bí n kò bá ṣèrànwọ́ tó. Ohun tí ẹgbẹ́ náà ti ṣàyẹ̀wò nìkan ni mo mọ̀. Ẹ gbìyànjú láti béèrè lọ́nà míràn, tàbí kí ẹ yan ọ̀kan nínú ìwọ̀nyí.",
       acknowledge: "Ṣé nǹkan míràn wà tí ẹ fẹ́ mọ̀?",
       confused: "Ẹ má bínú, èmi ló jẹ̀bi. Ẹ jẹ́ kí a tún gbìyànjú. Ẹ yan kókó ọ̀rọ̀ kan nísàlẹ̀, tàbí kí ẹ béèrè lọ́nà míràn.",
       howOld: "Wọ́n tàn mí ní Oṣù Kẹsàn-án 2026, nítorí náà tuntun ni mí. Mo ṣì ń kẹ́kọ̀ọ́, gẹ́gẹ́ bí ẹ̀yin.",
@@ -816,25 +861,12 @@ const yo = {
       outfits: "Háà, ìfihàn aṣọ! Àwọn aṣọ mi nìyí.",
       time: "Ó jẹ́ {time} lọ́dọ̀ yín báyìí, ní ọjọ́ {day}.",
     },
-
     safety: {
-      atRisk:
-        "Inú mi dùn gan-an pé ẹ sọ fún mi. Olùrànlọ́wọ́ lórí ojú-ìwé ayélujára nìkan ni mí, nítorí náà ẹ jọ̀wọ́ ẹ bá ẹni tí ó lè ṣèrànwọ́ sọ̀rọ̀ báyìí. " +
-        "Ẹ pe Childline lọ́fẹ̀ẹ́ ní 0800 1111, nígbàkúùgbà, ìpè náà kò sì ní hàn lórí owó fóònù yín. " +
-        "Ẹ tún lè fi SHOUT ránṣẹ́ sí 85258, tàbí kí ẹ pe Samaritans ní 116 123. Bí ẹ bá wà nínú ewu báyìí, ẹ pe 999.",
-      harmed:
-        "Ẹ ṣé tí ẹ sọ fún mi. Kò sí ẹni tí ó yẹ kí ó mú kí ẹ nímọ̀lára pé ẹ kò ní ààbò. Ẹ jọ̀wọ́ ẹ sọ fún àgbàlagbà tí ẹ gbẹ́kẹ̀lé, bíi olùkọ́, " +
-        "òbí tàbí alágbàtọ́. Ẹ tún lè pe Childline lọ́fẹ̀ẹ́ ní 0800 1111, nígbàkúùgbà, ìpè náà kò sì ní hàn lórí owó fóònù yín. " +
-        "Bí ẹ bá wà nínú ewu báyìí, ẹ pe 999.",
-      struggling:
-        "Ó dà bíi pé ẹrù púpọ̀ ló wà lọ́rùn yín, ẹ kò sì ní láti dá a gbé. Bíbá ẹni tí ẹ gbẹ́kẹ̀lé sọ̀rọ̀ ń ṣèrànwọ́ gan-an, " +
-        "bíi olùkọ́, òbí tàbí alágbàtọ́. Childline jẹ́ ọ̀fẹ́ ní 0800 1111, tàbí ẹ fi SHOUT ránṣẹ́ sí 85258, nígbàkúùgbà. " +
-        "Mo ṣì wà níbí fún ìbéèrè yín nípa T-Levels nígbàkúùgbà tí ẹ bá fẹ́.",
-      personal:
-        "Ìmọ̀ràn kékeré kan: ẹ kò ní láti fún mi ní ìsọfúnni ara ẹni bíi ímeèlì, nọ́ńbà fóònù tàbí àdírẹ́sì yín, ó sì láàbò jù " +
-        "kí ẹ má fi fúnni. N kò fi ọ̀rọ̀ yẹn ránṣẹ́ sí ibikíbi. Kí ni ẹ fẹ́ mọ̀ nípa T-Levels?",
+      atRisk: "Inú mi dùn gan-an pé ẹ sọ fún mi. Olùrànlọ́wọ́ lórí ojú-ìwé ayélujára nìkan ni mí, nítorí náà ẹ jọ̀wọ́ ẹ bá ẹni tí ó lè ṣèrànwọ́ sọ̀rọ̀ báyìí. Ẹ pe Childline lọ́fẹ̀ẹ́ ní 0800 1111, nígbàkúùgbà, ìpè náà kò sì ní hàn lórí owó fóònù yín. Ẹ tún lè fi SHOUT ránṣẹ́ sí 85258, tàbí kí ẹ pe Samaritans ní 116 123. Bí ẹ bá wà nínú ewu báyìí, ẹ pe 999.",
+      harmed: "Ẹ ṣé tí ẹ sọ fún mi. Kò sí ẹni tí ó yẹ kí ó mú kí ẹ nímọ̀lára pé ẹ kò ní ààbò. Ẹ jọ̀wọ́ ẹ sọ fún àgbàlagbà tí ẹ gbẹ́kẹ̀lé, bíi olùkọ́, òbí tàbí alágbàtọ́. Ẹ tún lè pe Childline lọ́fẹ̀ẹ́ ní 0800 1111, nígbàkúùgbà, ìpè náà kò sì ní hàn lórí owó fóònù yín. Bí ẹ bá wà nínú ewu báyìí, ẹ pe 999.",
+      struggling: "Ó dà bíi pé ẹrù púpọ̀ ló wà lọ́rùn yín, ẹ kò sì ní láti dá a gbé. Bíbá ẹni tí ẹ gbẹ́kẹ̀lé sọ̀rọ̀ ń ṣèrànwọ́ gan-an, bíi olùkọ́, òbí tàbí alágbàtọ́. Childline jẹ́ ọ̀fẹ́ ní 0800 1111, tàbí ẹ fi SHOUT ránṣẹ́ sí 85258, nígbàkúùgbà. Mo ṣì wà níbí fún ìbéèrè yín nípa T-Levels nígbàkúùgbà tí ẹ bá fẹ́.",
+      personal: "Ìmọ̀ràn kékeré kan: ẹ kò ní láti fún mi ní ìsọfúnni ara ẹni bíi ímeèlì, nọ́ńbà fóònù tàbí àdírẹ́sì yín, ó sì láàbò jù kí ẹ má fi fúnni. N kò fi ọ̀rọ̀ yẹn ránṣẹ́ sí ibikíbi. Kí ni ẹ fẹ́ mọ̀ nípa T-Levels?",
     },
-
     keywords: {
       whatIsTLevel: "kí ni t level, kini t level, kí ni t levels, t level",
       courseLength: "báwo ló ṣe gùn tó, ọdún mélòó, ìgbà mélòó",
@@ -985,6 +1017,8 @@ const yo = {
     typeToConfirm: "Ẹ tẹ {text} láti jẹ́rìí",
     actionFailed: "Ìyẹn kò ṣiṣẹ́. Ẹ tún gbìyànjú.",
     tabs: {
+      providers: "Ilé-ẹ̀kọ́",
+      audit: "Àkọsílẹ̀ ìṣe",
       overview: "Àkópọ̀",
       interest: "Ìfẹ́",
       reports: "Àwọn ìfìwéránṣẹ́ tí a jábọ̀",
@@ -1001,18 +1035,190 @@ const yo = {
       openReports: "Ìjábọ̀ tí ó ṣí sílẹ̀",
     },
     charts: {
+      answered: "tí a dáhùn",
+      dealtWith: "tí a ti bójú tó",
+      feedbackHandled: "Èsì tí a ti bójú tó",
+      feedbackHandledCaption: "Èsì àkókò yìí tí àwọn òṣìṣẹ́ ti bójú tó.",
+      feedbackByCategory: "Èsì ní ẹ̀ka",
+      activity: "Ìgbòkègbodò ìforúkọsílẹ̀",
+      activityCaption: "Ìforúkọsílẹ̀ ní àkókò kọ̀ọ̀kan, àmì kan fún àkókò kọ̀ọ̀kan àti ìlà kan fún irú àkọọ́lẹ̀ kọ̀ọ̀kan.",
+      dotRow: "{name}: {total} ní àkókò {buckets}",
+      region: "Agbègbè",
+      needFixing: "{count} tí ó nílò àtúnṣe",
+      plotLabel: "{title}. Ẹ lo àwọn bọ́tìnnì ọfà láti ka àmì kọ̀ọ̀kan.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "Àkókò fún {title}",
+      title: "Àwòrán ìṣirò",
+      loading: "Ó ń gbé àwọn àwòrán ìṣirò wá",
+      usersByType: "Àkọọ́lẹ̀ ní irú",
+      usersByTypeCaption: "Àkọọ́lẹ̀ tí a ṣẹ̀dá ní àkókò yìí, ní irú àkọọ́lẹ̀.",
+      answerRate: "Ìwọ̀n ìdáhùn",
+      answerRateCaption: "Ìbéèrè àkókò yìí tí ó rí ó kéré tán ìdáhùn kan.",
+      topics: "Kókó ọ̀rọ̀ tí ó gbòòrò jù",
+      topicsCaption: "Ìbéèrè àkókò yìí, ní kókó ọ̀rọ̀.",
+      feedbackOverTime: "Èsì ní ìgbà dé ìgbà",
+      feedbackOverTimeCaption: "Èsì tí a fi ránṣẹ́ ní àkókò kọ̀ọ̀kan, ní ẹ̀ka.",
+      reports: "Ìjábọ̀ tí a ṣí àti tí a yanjú",
+      reportsCaption: "Ìjábọ̀ ìfìwéránṣẹ́ tí a ṣí ní ìfiwéra pẹ̀lú èyí tí a yanjú, ní àkókò kọ̀ọ̀kan.",
+      opened: "A ṣí i",
+      resolved: "A yanjú",
+      languages: "Àkọọ́lẹ̀ ní èdè",
+      languagesCaption: "Àkọọ́lẹ̀ ní èdè tí wọ́n fi ń ka ojú-ìwé yìí.",
+      language: "Èdè",
+      providers: "Ilé-ẹ̀kọ́ lórí máàpù",
+      providersCaption: "Ilé-ẹ̀kọ́ ní agbègbè kọ̀ọ̀kan, àti iye tí kò ní ibi tí a lè fihàn.",
+      placed: "Lórí máàpù",
+      unplaced: "Kò sí ibi",
       signups: "Ìforúkọsílẹ̀ lọ́sẹ̀",
       signupsCaption: "Àkọọ́lẹ̀ tuntun lọ́sẹ̀ kọ̀ọ̀kan, ní irú àkọọ́lẹ̀.",
       interest: "Ìfẹ́ ní ẹ̀ka",
       interestCaption: "Ìfihàn ìfẹ́, ní ẹ̀ka tí ó wà nínú àkọọ́lẹ̀.",
       community: "Ìgbòkègbodò àwùjọ",
       communityCaption: "Ìbéèrè àti ìdáhùn tí a tẹ̀ jáde lọ́sẹ̀ kọ̀ọ̀kan.",
-      feedback: "Èsì ní ẹ̀ka",
-      feedbackCaption: "Èsì tí a fi ránṣẹ́, ní ẹ̀ka.",
+    },
+    greeting: {
+      morning: "Ẹ káàárọ̀, {name}",
+      afternoon: "Ẹ káàsán, {name}",
+      evening: "Ẹ kúùrọ̀lẹ́, {name}",
+    },
+    nav: {
+      site: "Ojú-ìwé náà",
+      label: "Àwọn apá ojú-ọ̀nà alábòójútó",
+      menu: "Àwọn apá",
+      measure: "Òǹkà",
+      people: "Ènìyàn",
+      community: "Àwùjọ",
+      session: "Ìgbà yìí",
+      unhandled: "tí a kò tíì bójú tó",
+    },
+    filters: {
+      title: "Àṣẹ́",
+      range: "Àkókò",
+      from: "Láti",
+      to: "Sí",
+      userType: "Irú àkọọ́lẹ̀",
+      pathway: "Ẹ̀ka",
+      clear: "Pa àwọn àṣẹ́ rẹ́",
+      updating: "Ó ń ṣe àtúnṣe òǹkà",
+      ranges: {
+        "7d": "Ọjọ́ 7 tí ó kọjá",
+        "30d": "Ọjọ́ 30 tí ó kọjá",
+        "90d": "Ọjọ́ 90 tí ó kọjá",
+        "12m": "Oṣù 12 tí ó kọjá",
+        all: "Gbogbo àkókò",
+        custom: "Tí ẹ yàn fúnra yín",
+      },
+    },
+    kpis: {
+      title: "Òǹkà pàtàkì",
+      loading: "Ó ń gbé òǹkà pàtàkì wá",
+      signups: "Ìforúkọsílẹ̀ tuntun",
+      active: "Tí ó wọlé",
+      unanswered: "Ìbéèrè tí a kò tíì dáhùn",
+      time_to_first_answer: "Àkókò títí dé ìdáhùn àkọ́kọ́",
+      hoursValue: "wákàtí {hours}",
+      upBy: "{label}: ó lọ sókè ní {change} ({percent}) ní ìfiwéra pẹ̀lú àkókò tí ó ṣáájú",
+      downBy: "{label}: ó wálẹ̀ ní {change} ({percent}) ní ìfiwéra pẹ̀lú àkókò tí ó ṣáájú",
+      noPercent: "kò sí òǹkà tẹ́lẹ̀",
+      noComparison: "Kò sí nǹkan láti fi wéra",
+      noChange: "Kò sí àyípadà",
+    },
+    states: {
+      loading: "Ó ń bọ̀",
+      failed: "Àwọn òǹkà wọ̀nyẹn kò ṣí.",
+      retry: "Tún gbìyànjú",
+    },
+    export: {
+      button: "Gbé CSV jáde",
+      working: "Ó ń múra sílẹ̀",
+      done: "Fáìlì náà ti wọlé sórí ẹ̀rọ yín.",
+      failed: "Gbígba fáìlì náà sílẹ̀ kò ṣiṣẹ́. Ẹ tún gbìyànjú.",
     },
     signedOut: {
       title: "Ẹ wọlé láti ṣí ojú-ọ̀nà alábòójútó",
       lead: "Ojú-ìwé yìí wà fún òṣìṣẹ́ Amazon. Ẹ wọlé pẹ̀lú àkọọ́lẹ̀ òṣìṣẹ́ yín láti tẹ̀síwájú.",
+    },
+    audit: {
+      actor: "Òṣìṣẹ́",
+      action: "Ìṣe",
+      caption: "Gbogbo ohun tí àwọn òṣìṣẹ́ ti ṣe nínú ojú-ọ̀nà náà",
+      empty: "Kò sí ohun tí a kọ sílẹ̀ síbẹ̀.",
+      columns: {
+        when: "Ìgbà wo",
+        who: "Ta ni",
+        what: "Kí ni",
+        target: "Lórí kí ni",
+      },
+      actions: {
+        account_removed: "Ó yọ àkọọ́lẹ̀ kan kúrò",
+        staff_revoked: "Ó gba àṣẹ alábòójútó padà",
+        role_changed: "Ó yí irú àkọọ́lẹ̀ kan padà",
+        password_reset_sent: "Ó fi ímeèlì àtúntò ọ̀rọ̀ aṣínà ránṣẹ́",
+        post_deleted: "Ó pa ìfìwéránṣẹ́ kan rẹ́",
+        report_resolved: "Ó yanjú ìjábọ̀ kan",
+        report_dismissed: "Ó kọ ìjábọ̀ kan sílẹ̀",
+        feedback_handled: "Ó sàmì sí èsì pé a ti bójú tó o",
+        csv_exported: "Ó gbé CSV kan jáde",
+      },
+    },
+    providers: {
+      filter: "Lórí máàpù",
+      unplacedOnly: "Kóòdù ìfìwéránṣẹ́ nílò àtúnṣe",
+      placedOnly: "Ó ti wà lórí máàpù",
+      caption: "Ilé-ẹ̀kọ́ tí wíwá nítòsí lè fihàn",
+      empty: "A kò gbé ilé-ẹ̀kọ́ kankan wọlé.",
+      onMap: "Lórí máàpù",
+      needsPostcode: "Kóòdù ìfìwéránṣẹ́ nílò àtúnṣe",
+      columns: {
+        name: "Orúkọ",
+        postcode: "Kóòdù ìfìwéránṣẹ́",
+        region: "Agbègbè",
+        type: "Irú",
+        map: "Máàpù",
+      },
+    },
+    person: {
+      title: "Àkọọ́lẹ̀",
+      close: "Pa á dé",
+      type: "Irú àkọọ́lẹ̀",
+      pathway: "Ẹ̀ka",
+      joined: "Ọjọ́ ìdarapọ̀",
+      lastLogin: "Ìgbà tí ó wọlé kẹ́yìn",
+      questions: "Ìbéèrè tí ó béèrè",
+      answers: "Ìdáhùn tí ó fún",
+      reports: "Ìfìwéránṣẹ́ tí ó jábọ̀",
+      feedback: "Èsì tí ó fi ránṣẹ́",
+      none: "Kò fi sílẹ̀",
+      never: "Rárá",
+      actions: "Ìṣe",
+      changeRole: "Yí irú àkọọ́lẹ̀ padà",
+      roleChanged: "A ti yí irú àkọọ́lẹ̀ padà.",
+      sendReset: "Fi ímeèlì àtúntò ọ̀rọ̀ aṣínà ránṣẹ́",
+      resetSent: "Bí àkọọ́lẹ̀ yẹn bá ní àdírẹ́sì ímeèlì, líǹkì àtúntò ti ń lọ.",
+      staffNote: "Ẹ kọ́kọ́ gba àṣẹ alábòójútó wọn padà nínú àkójọ, kí ẹ tó yí irú àkọọ́lẹ̀ wọn padà.",
+    },
+    bulk: {
+      title: "Ìṣe lápapọ̀",
+      chosen: "A yan {count}",
+      choose: "Yan {name}",
+      chooseAll: "Yan gbogbo nǹkan lórí ojú-ìwé yìí",
+      clear: "Pa àṣàyàn rẹ́",
+      markHandled: "Sàmì sí pé a ti bójú tó o",
+      resolve: "Yanjú",
+      dismiss: "Kọ̀ ọ́ sílẹ̀",
+      deletePosts: "Pa àwọn ìfìwéránṣẹ́ rẹ́",
+      removePeople: "Yọ àwọn àkọọ́lẹ̀ kúrò",
+      posts: "ìfìwéránṣẹ́",
+      people: "àkọọ́lẹ̀",
+      confirmText: "PA {count} {noun} RẸ́",
+      confirmBody: "Èyí yóò yọ {count} nínú wọn kúrò pátápátá, a kò sì lè dá a padà. Ẹ tẹ àwọn ọ̀rọ̀ tí ó wà nísàlẹ̀ gẹ́lẹ́ láti jẹ́rìí.",
+      done: "A ti ṣe {count}.",
+      reasons: {
+        gone: "{count} ti lọ tẹ́lẹ̀.",
+        staff: "{count} jẹ́ àkọọ́lẹ̀ òṣìṣẹ́, a sì fi wọ́n sílẹ̀.",
+        yourself: "{count} jẹ́ àkọọ́lẹ̀ tiyín.",
+        failed: "{count} kò ṣiṣẹ́.",
+      },
     },
     pin: {
       title: "Tẹ PIN ojú-ọ̀nà",
@@ -1051,10 +1257,21 @@ const yo = {
       },
     },
     feedback: {
+      status: "Ipò",
+      handled: "A ti bójú tó o",
+      unhandled: "Ó ṣì ń dúró",
+      markHandled: "Sàmì sí pé a ti bójú tó o",
+      markUnhandled: "Dá a padà",
+      note: "Àkọsílẹ̀ òṣìṣẹ́",
+      saveNote: "Fi àkọsílẹ̀ pamọ́",
+      handledBy: "{name} ní {date}",
+      someone: "òṣìṣẹ́ kan",
       filter: "Ẹ̀ka",
       caption: "Èsì tí a fi ránṣẹ́ láti ojú-ìwé",
       empty: "Kò sí èsì síbẹ̀.",
       columns: {
+        status: "Ipò",
+        actions: "Ìṣe",
         category: "Ẹ̀ka",
         message: "Ọ̀rọ̀",
         from: "Láti ọ̀dọ̀",
@@ -1113,6 +1330,7 @@ const yo = {
       language: "Èdè",
       security: "Ààbò",
       account: "Àkọọ́lẹ̀",
+      notifications: "Ìfitónilétí",
     },
     sight: {
       fontSize: "Ìwọ̀n ọ̀rọ̀",
@@ -1205,6 +1423,13 @@ const yo = {
       password: "Ọ̀rọ̀ aṣínà",
       deactivating: "Ó ń pa á rẹ́",
       wrongPassword: "Ọ̀rọ̀ aṣínà kò tọ̀nà.",
+    },
+    notifications: {
+      lead: "Ẹ yan ohun tí yóò hàn nínú agogo tí ó wà lókè ojú-ìwé.",
+      announcements: "Ìkéde láti ọ̀dọ̀ ẹgbẹ́ T-SMILE",
+      community: "Èsì sí àwọn ìbéèrè àti ìdáhùn yín nínú àwùjọ",
+      interest: "Ìròyìn nípa ìfẹ́ tí ẹ fi hàn",
+      saved: "A ti fi pamọ́.",
     },
   },
 

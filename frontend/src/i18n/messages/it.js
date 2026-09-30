@@ -10,8 +10,7 @@ const it = {
     label: "Lingua",
     choose: "Scelta della lingua",
     settingLabel: "Lingua dell'interfaccia",
-    settingHint:
-      "17 lingue oltre all'inglese, tradotte automaticamente. Fa fede la versione inglese.",
+    settingHint: "17 lingue oltre all'inglese, tradotte automaticamente. Fa fede la versione inglese.",
   },
 
   cookieNotice: {
@@ -21,10 +20,22 @@ const it = {
     ok: "OK",
   },
 
+  notifications: {
+    label: "Notifiche",
+    open: "Notifiche, {count} da leggere",
+    none: "Ancora nessuna notifica.",
+    markAll: "Segna tutte come lette",
+    unread: "Da leggere",
+    events: {
+      announcement: "Avviso: {text}",
+      answered: "Qualcuno ha risposto alla Sua domanda: {text}",
+      accepted: "La Sua risposta è stata indicata come quella che ha aiutato: {text}",
+      interest_seen: "Il team di Amazon Emerging Talent ha visto il Suo interesse.",
+    },
+  },
+
   translation: {
-    notice:
-      "Questa pagina è stata tradotta automaticamente ({language}), quindi alcune formulazioni potrebbero essere imprecise. " +
-      "Fa fede la versione inglese.",
+    notice: "Questa pagina è stata tradotta automaticamente ({language}), quindi alcune formulazioni potrebbero essere imprecise. Fa fede la versione inglese.",
     showEnglish: "Leggi in inglese",
     englishOnly: "Questa pagina è disponibile solo in inglese.",
   },
@@ -81,10 +92,26 @@ const it = {
       label: "Come funziona",
       title: "Inizi in quattro passi",
       step: "Passo",
-      browse: { title: "Sfogli le risorse", text: "Guide, pacchetti di materiali e video per tutti e cinque i percorsi.", link: "Sfoglia le risorse" },
-      register: { title: "Manifesti il Suo interesse", text: "Ci dica quale percorso vorrebbe esplorare.", link: "Manifesta interesse" },
-      hearBack: { title: "Riceva una risposta", text: "Esaminiamo ogni invio e rispondiamo via e-mail.", link: "Contattaci" },
-      getInvolved: { title: "Partecipi", text: "Si registri per fare domande e rispondere nella Community, e per conservare le Sue impostazioni su ogni dispositivo.", link: "Registrati" },
+      browse: {
+        title: "Sfogli le risorse",
+        text: "Guide, pacchetti di materiali e video per tutti e cinque i percorsi.",
+        link: "Sfoglia le risorse",
+      },
+      register: {
+        title: "Manifesti il Suo interesse",
+        text: "Ci dica quale percorso vorrebbe esplorare.",
+        link: "Manifesta interesse",
+      },
+      hearBack: {
+        title: "Riceva una risposta",
+        text: "Esaminiamo ogni invio e rispondiamo via e-mail.",
+        link: "Contattaci",
+      },
+      getInvolved: {
+        title: "Partecipi",
+        text: "Si registri per fare domande e rispondere nella Community, e per conservare le Sue impostazioni su ogni dispositivo.",
+        link: "Registrati",
+      },
     },
   },
 
@@ -94,7 +121,11 @@ const it = {
       title: "Due anni. Un settore. Un vero tirocinio.",
       lead: "Una qualifica professionale che si consegue dopo i GCSE. Per lo più studio, in parte lavoro.",
     },
-    what: { label: "Come funziona", title: "Che cos'è un T-Level", split: "Come sono suddivisi i due anni" },
+    what: {
+      label: "Come funziona",
+      title: "Che cos'è un T-Level",
+      split: "Come sono suddivisi i due anni",
+    },
     placement: {
       label: "Il tirocinio",
       title: "Uno sguardo al tirocinio",
@@ -122,9 +153,18 @@ const it = {
       points: "Punti UCAS",
       note: "Non tutte le università usano i punti UCAS, quindi lo verifichi per il Suo corso. Se non supera una parte, riceve comunque un attestato di ciò che ha superato.",
     },
-    who: { label: "Per chi è", title: "Potrebbe fare per Lei se" },
-    why: { label: "Perché sceglierlo", title: "Che cosa ne ricava" },
-    cost: { label: "Soldi", title: "Quanto costa" },
+    who: {
+      label: "Per chi è",
+      title: "Potrebbe fare per Lei se",
+    },
+    why: {
+      label: "Perché sceglierlo",
+      title: "Che cosa ne ricava",
+    },
+    cost: {
+      label: "Soldi",
+      title: "Quanto costa",
+    },
     quiz: {
       label: "Quiz",
       title: "Un T-Level fa per me?",
@@ -153,8 +193,14 @@ const it = {
       title: "Nove settimane in un team.",
       lead: "Amazon accoglie studenti di T-Level come tirocinanti. Entrerà in un vero team e farà un vero lavoro.",
     },
-    shape: { label: "Il tirocinio", title: "Come sono le nove settimane" },
-    support: { label: "Supporto", title: "Tre persone si occupano di Lei" },
+    shape: {
+      label: "Il tirocinio",
+      title: "Come sono le nove settimane",
+    },
+    support: {
+      label: "Supporto",
+      title: "Tre persone si occupano di Lei",
+    },
     pathways: {
       label: "Percorsi",
       title: "Quali materie accoglie Amazon",
@@ -162,22 +208,43 @@ const it = {
       leadLink: "Informazioni sui T-Level",
       leadAfter: ".",
     },
-    route: { label: "Come arrivarci", title: "Come ottenere un tirocinio" },
-    growth: { label: "Il programma", title: "È in crescita", lead: "Da sei studenti a 100 nei primi tre anni, con altri in programma. Dati del Department for Education." },
+    route: {
+      label: "Come arrivarci",
+      title: "Come ottenere un tirocinio",
+    },
+    growth: {
+      label: "Il programma",
+      title: "È in crescita",
+      lead: "Da sei studenti a 100 nei primi tre anni, con altri in programma. Dati del Department for Education.",
+    },
     sourcesNote: "Verificato a settembre 2026.",
   },
 
   help: {
-    hero: { label: "Aiuto", title: "In difficoltà? Parta da qui.", lead: "Scelga che cosa sta cercando di fare." },
-    site: { label: "Su questo sito", title: "Dove andare" },
-    services: { label: "Altrove", title: "Servizi gratuiti", lead: "Gestiti dal governo, non da noi." },
+    hero: {
+      label: "Aiuto",
+      title: "In difficoltà? Parta da qui.",
+      lead: "Scelga che cosa sta cercando di fare.",
+    },
+    site: {
+      label: "Su questo sito",
+      title: "Dove andare",
+    },
+    services: {
+      label: "Altrove",
+      title: "Servizi gratuiti",
+      lead: "Gestiti dal governo, non da noi.",
+    },
     faq: {
       label: "Domande",
       title: "Altre domande?",
       text: "La pagina Informazioni sui T-Level risponde alle più comuni, come tirocini, voti e costi.",
       link: "Leggi le FAQ",
     },
-    questions: { label: "Prima di scegliere", title: "Chieda alla Sua scuola o al Suo college" },
+    questions: {
+      label: "Prima di scegliere",
+      title: "Chieda alla Sua scuola o al Suo college",
+    },
     person: {
       label: "Ancora in difficoltà",
       title: "Chieda a una persona",
@@ -259,8 +326,7 @@ const it = {
 
   footer: {
     about: "Chi siamo",
-    aboutText:
-      "I T-Level e i tirocini in Amazon, spiegati a studenti, genitori e insegnanti. Un progetto studentesco per Amazon Emerging Talent, non un sito ufficiale di Amazon.",
+    aboutText: "I T-Level e i tirocini in Amazon, spiegati a studenti, genitori e insegnanti. Un progetto studentesco per Amazon Emerging Talent, non un sito ufficiale di Amazon.",
     navigation: "Navigazione",
     support: "Supporto",
     legal: "Note legali e conformità",
@@ -472,12 +538,12 @@ const it = {
   },
 
   community: {
+    starterQuestion: "Domanda di partenza",
     moderationNote: "Resti in tema e mantenga un tono corretto. Il linguaggio inappropriato viene rifiutato, e un moderatore può rimuovere qualsiasi altra cosa.",
     label: "Domande e risposte",
     title: "Community",
     lead: "Domande sui T-Level e sui tirocini in Amazon, a cui rispondono studenti, genitori, insegnanti e personale Amazon.",
-    notChecked:
-      "Le risposte qui sono esperienze e opinioni personali, non fatti verificati. Per le informazioni ufficiali consulti le pagine Informazioni sui T-Level e I T-Level in Amazon, oppure chieda a Smiley.",
+    notChecked: "Le risposte qui sono esperienze e opinioni personali, non fatti verificati. Per le informazioni ufficiali consulti le pagine Informazioni sui T-Level e I T-Level in Amazon, oppure chieda a Smiley.",
     ask: "Fai una domanda",
     signInToAsk: "Acceda per fare una domanda",
     signInToAnswer: "Acceda per rispondere",
@@ -574,13 +640,10 @@ const it = {
       "Se qualcosa La preoccupa, lo segnali e il team darà un'occhiata.",
     ],
     blocked: {
-      personal_details:
-        "Non è stato pubblicato perché sembra contenere dati personali, come un'e-mail, un numero di telefono, un codice postale o un nome sui social media. Li tolga e riprovi.",
+      personal_details: "Non è stato pubblicato perché sembra contenere dati personali, come un'e-mail, un numero di telefono, un codice postale o un nome sui social media. Li tolga e riprovi.",
       link: "Non è stato pubblicato perché contiene un link. Sono ammessi solo link a siti ufficiali come gov.uk e UCAS.",
       strong_language: "Non è stato pubblicato a causa del linguaggio. Provi a riformularlo.",
-      wellbeing:
-        "Non l'abbiamo pubblicato perché sembra che stia attraversando qualcosa di davvero difficile. Parli con qualcuno che può aiutarLa: " +
-        "chiami gratuitamente Childline al 0800 1111, scriva SHOUT al 85258 o chiami i Samaritans al 116 123. Se è in pericolo in questo momento, chiami il 999.",
+      wellbeing: "Non l'abbiamo pubblicato perché sembra che stia attraversando qualcosa di davvero difficile. Parli con qualcuno che può aiutarLa: chiami gratuitamente Childline al 0800 1111, scriva SHOUT al 85258 o chiami i Samaritans al 116 123. Se è in pericolo in questo momento, chiami il 999.",
     },
     somethingWrong: "Qualcosa è andato storto. Riprovi tra poco.",
   },
@@ -600,41 +663,42 @@ const it = {
     inputLabel: "La Sua domanda per Smiley",
     placeholder: "Chieda qualcosa a Smiley",
     send: "Invia",
-    disclosure:
-      "Potrei farmi vivo se una pagina resta ferma per un po'. Viene calcolato nel Suo browser e non viene mai salvato. " +
-      "Anche le domande a cui so rispondere da solo restano nel Suo browser. Tutto ciò che devo cercare viene salvato, così possiamo riprendere da dove ci eravamo fermati.",
+    disclosure: "Potrei farmi vivo se una pagina resta ferma per un po'. Viene calcolato nel Suo browser e non viene mai salvato. Anche le domande a cui so rispondere da solo restano nel Suo browser. Tutto ciò che devo cercare viene salvato, così possiamo riprendere da dove ci eravamo fermati.",
     tags: {
       checkingIn: "Un saluto",
       quizHelp: "Aiuto con il quiz",
       private: "Resta nel Suo browser",
     },
-
     greetings: {
       morning: "Buongiorno!",
       afternoon: "Buon pomeriggio!",
       evening: "Buonasera!",
       lateNight: "Salve, nottambulo!",
     },
-    intro:
-      "Sono Smiley, la Sua guida ai T-Level. Mi chieda qualsiasi cosa sui T-Level o sui tirocini in Amazon. " +
-      "Se non so qualcosa, glielo dico invece di inventare.",
+    intro: "Sono Smiley, la Sua guida ai T-Level. Mi chieda qualsiasi cosa sui T-Level o sui tirocini in Amazon. Se non so qualcosa, glielo dico invece di inventare.",
     welcomeBack: "Bentornato. Riprenda da dove si era fermato, oppure mi chieda qualcosa di nuovo.",
     whoQuestion: "Prima di tutto: chi ci fa visita oggi?",
-
     audience: {
       student: "Sono uno studente",
       parent: "Sono un genitore o un tutore",
       teacher: "Sono un insegnante",
       replies: {
-        student: { opener: "Benissimo.", text: "Che tipo di lavoro La attira di più?" },
-        parent: { opener: "Grazie per essere passato.", text: "Che cosa Le sarebbe più utile?" },
-        teacher: { opener: "Benvenuto.", text: "Che cosa sta cercando oggi?" },
+        student: {
+          opener: "Benissimo.",
+          text: "Che tipo di lavoro La attira di più?",
+        },
+        parent: {
+          opener: "Grazie per essere passato.",
+          text: "Che cosa Le sarebbe più utile?",
+        },
+        teacher: {
+          opener: "Benvenuto.",
+          text: "Che cosa sta cercando oggi?",
+        },
       },
       notSure: "Non lo so ancora",
-      notSureReply:
-        "È normale, quasi tutti partono da qui. Il quiz è un modo rapido per rifletterci, oppure posso presentarLe i percorsi.",
+      notSureReply: "È normale, quasi tutti partono da qui. Il quiz è un modo rapido per rifletterci, oppure posso presentarLe i percorsi.",
     },
-
     afterAi: {
       simpler: "Lo spieghi in modo più semplice",
       simplerAsk: "Può spiegarlo in modo più semplice?",
@@ -643,7 +707,6 @@ const it = {
     },
     retry: "Riprova",
     fallback: "Al momento non riesco a consultare i miei appunti, quindi non posso rispondere. Riprovi tra poco, oppure dia un'occhiata a questi:",
-
     quizNudge: "Oh, questa domanda inganna molti. Vuole che Le spieghi «{question}»?",
     quizExplain: "Sì, me la spieghi",
     quizExplainAsk: "Può spiegarmi questa domanda?",
@@ -651,7 +714,6 @@ const it = {
     quizWhyWrongAsk: "Perché la mia risposta era sbagliata?",
     quizLocal: "La risposta corretta a «{question}» è {correct}. {explanation}",
     quizLocalChosen: "Ha scelto «{chosen}». La risposta corretta a «{question}» è {correct}. {explanation}",
-
     nudges: {
       home: "Non sa ancora da dove iniziare? Posso spiegarLe che cos'è un T-Level o com'è un tirocinio in Amazon.",
       about: "Qualcosa in questa pagina non è chiaro? Me lo chieda e proverò a spiegarlo in un altro modo.",
@@ -664,7 +726,6 @@ const it = {
       register: "Non sa se Le serve un account? Posso dirLe a che cosa serve.",
       other: "È ancora qui? Mi chieda qualsiasi cosa sui T-Level e risponderò se lo so.",
     },
-
     teasers: {
       hello: "Salve, sono Smiley! Mi chieda qualsiasi cosa sui T-Level.",
       perfect: "Punteggio pieno! Complimenti.",
@@ -678,7 +739,6 @@ const it = {
       lateNight: "È tardi! Non dimentichi di dormire.",
       peek: "Cucù!",
     },
-
     topics: {
       whatIsTLevel: "Che cos'è un T-Level?",
       courseLength: "Quanto dura un T-Level?",
@@ -727,36 +787,26 @@ const it = {
       whatIsESP: "Che cosa significa ESP?",
       joke: "Mi racconti un'altra barzelletta",
     },
-
     answers: {
       whatIsTLevel: "Un T-Level in tre passi:",
       amazonNotConfirmed: "Amazon non ha ancora confermato tirocini in questo percorso, quindi non posso prometterne uno.",
       pathway: "{name}: {summary}\nT-Level: {tLevels}.\nDurante il tirocinio: {placement}\nAdatto a: {suits}\nIn Amazon: {amazon}",
       whoSuits: "Un T-Level di solito fa per Lei se:",
-      decideWithAdult:
-        "Solo Lei può deciderlo, quindi ne parli anche con un insegnante o un consulente di orientamento. Il quiz può aiutarLa a rifletterci.",
+      decideWithAdult: "Solo Lei può deciderlo, quindi ne parli anche con un insegnante o un consulente di orientamento. Il quiz può aiutarLa a rifletterci.",
       amazonPathways: "Ecco che cosa ha detto Amazon su ciascun percorso:",
       pathwaysList: "Ci sono cinque percorsi:",
       providerQuestions: "Buone domande da fare a una scuola o a un college:",
       resources: "La pagina Risorse ha guide, pacchetti di materiali e video, tutti liberamente accessibili.",
       quiz: "Il quiz fa domande brevi sui T-Level, e io La aiuterò con quelle che sbaglia.",
-      community:
-        "Nella Community può fare una domanda, e altri studenti, genitori, insegnanti e personale Amazon possono rispondere. " +
-        "Tutto ciò che io non so è una buona domanda da fare lì.",
-      account:
-        "Può sfogliare il sito, aprire ogni risorsa e parlare con me senza account. Un account gratuito Le permette di fare domande e rispondere nella Community e conserva le Sue impostazioni su ogni dispositivo.",
+      community: "Nella Community può fare una domanda, e altri studenti, genitori, insegnanti e personale Amazon possono rispondere. Tutto ciò che io non so è una buona domanda da fare lì.",
+      account: "Può sfogliare il sito, aprire le risorse collegate e parlare con me senza account. Un account gratuito Le permette di scaricare file dalla pagina Risorse, fare domande e rispondere nella Community, e conserva le Sue impostazioni su ogni dispositivo.",
       contact: "Può contattare il team T-SMILE tramite la pagina Contattaci.",
-      accessibility:
-        "Le impostazioni di accessibilità Le permettono di cambiare dimensione del testo, colori, modalità scura, animazioni e lettura ad alta voce.",
-      language:
-        "Sì! Usi il pulsante della lingua accanto al pulsante del menu, in cima alla pagina, oppure la scheda Lingua nelle Impostazioni. Ci sono 18 lingue tra cui scegliere.",
-      privacy:
-        "Salvo solo le domande che devo cercare, così possiamo riprendere da dove ci eravamo fermati. Tutto ciò a cui rispondo da solo, e tutto ciò " +
-        "che riguarda come si muove nel sito, resta nel Suo browser. L'Informativa sulla privacy contiene tutti i dettagli.",
+      accessibility: "Le impostazioni di accessibilità Le permettono di cambiare dimensione del testo, colori, modalità scura, animazioni e lettura ad alta voce.",
+      language: "Sì! Usi il pulsante della lingua accanto al pulsante del menu, in cima alla pagina, oppure la scheda Lingua nelle Impostazioni. Ci sono 18 lingue tra cui scegliere.",
+      privacy: "Salvo solo le domande che devo cercare, così possiamo riprendere da dove ci eravamo fermati. Tutto ciò a cui rispondo da solo, e tutto ciò che riguarda come si muove nel sito, resta nel Suo browser. L'Informativa sulla privacy contiene tutti i dettagli.",
       dontKnow: "Questo non lo so ancora, e preferisco non tirare a indovinare. Ecco in che cosa posso aiutarLa:",
       closest: "Non sono sicuro di che cosa intende, ma questa è la risposta più vicina che ho:",
     },
-
     links: {
       about: "Informazioni sui T-Level",
       amazon: "I T-Level in Amazon",
@@ -774,20 +824,15 @@ const it = {
       privacy: "Informativa sulla privacy",
       help: "Pagina di aiuto",
     },
-
     chat: {
       greeting: "Salve! Sono Smiley. Mi chieda qualsiasi cosa sui T-Level o sui tirocini in Amazon, oppure scelga una domanda qui sotto.",
       howAreYou: "Sto bene, grazie per averlo chiesto! La mia antenna oggi prende benissimo. Come posso aiutarLa?",
       thanks: "Prego! C'è altro che vorrebbe sapere?",
       bye: "A presto! Sono qui nell'angolo se ha bisogno di me.",
-      whoAreYou:
-        "Sono Smiley, la guida di T-SMILE. Rispondo a domande sui T-Level e sui tirocini in Amazon, usando solo fatti che il team ha verificato.",
-      areYouBot:
-        "Sì, sono un bot. Uno simpatico, con un'antenna. Per tutto ciò a cui non so rispondere, possono aiutarLa un insegnante, un consulente di orientamento o la Community.",
+      whoAreYou: "Sono Smiley, la guida di T-SMILE. Rispondo a domande sui T-Level e sui tirocini in Amazon, usando solo fatti che il team ha verificato.",
+      areYouBot: "Sì, sono un bot. Uno simpatico, con un'antenna. Per tutto ciò a cui non so rispondere, possono aiutarLa un insegnante, un consulente di orientamento o la Community.",
       whoMadeYou: "Mi ha costruito il team T-SMILE per il progetto T-Level di Amazon Emerging Talent. Sono quello con la T in testa.",
-      whatCanYouDo:
-        "Posso spiegarLe che cos'è un T-Level, come funziona il tirocinio in azienda, che cosa comprende un tirocinio in Amazon, i cinque percorsi, " +
-        "i costi, i requisiti di ammissione e altro. Mi chieda con parole Sue, oppure tocchi una domanda.",
+      whatCanYouDo: "Posso spiegarLe che cos'è un T-Level, come funziona il tirocinio in azienda, che cosa comprende un tirocinio in Amazon, i cinque percorsi, i costi, i requisiti di ammissione e altro. Mi chieda con parole Sue, oppure tocchi una domanda.",
       jokes: [
         "Quante ore di T-Level servono per cambiare una lampadina? Almeno 315, ma si impara un sacco.",
         "Perché ai programmatori piace la modalità scura? Perché la luce attira i bug.",
@@ -797,8 +842,7 @@ const it = {
         "Perché la studentessa ha portato una scala al tirocinio? Le avevano detto che era un salto di carriera.",
       ],
       compliment: "Oh, grazie! Mi fa vibrare l'antenna.",
-      rude:
-        "Capisco, se non Le sono stato molto utile. So solo ciò che il team ha verificato. Provi a chiederlo in un altro modo, oppure scelga una di queste.",
+      rude: "Capisco, se non Le sono stato molto utile. So solo ciò che il team ha verificato. Provi a chiederlo in un altro modo, oppure scelga una di queste.",
       acknowledge: "C'è altro che vorrebbe sapere?",
       confused: "Mi scusi, colpa mia. Riproviamo. Scelga un argomento qui sotto, oppure lo chieda in un altro modo.",
       howOld: "Sono stato acceso a settembre 2026, quindi sono nuovissimo. Sto ancora imparando, proprio come Lei.",
@@ -817,25 +861,12 @@ const it = {
       outfits: "Oh, una sfilata! Ecco il mio guardaroba.",
       time: "Da Lei sono le {time}, di {day}.",
     },
-
     safety: {
-      atRisk:
-        "Sono davvero contento che me l'abbia detto. Sono solo un aiuto su un sito web, quindi per favore parli subito con qualcuno che può aiutarLa. " +
-        "Chiami Childline gratuitamente al 0800 1111, a qualsiasi ora, e la chiamata non compare sulla bolletta. " +
-        "Può anche scrivere SHOUT al 85258 o chiamare i Samaritans al 116 123. Se è in pericolo in questo momento, chiami il 999.",
-      harmed:
-        "Grazie per avermelo detto. Nessuno dovrebbe farLa sentire in pericolo. Per favore lo dica a un adulto di cui si fida, come un insegnante, " +
-        "un genitore o chi si prende cura di Lei. Può anche chiamare Childline gratuitamente al 0800 1111, a qualsiasi ora, e la chiamata non compare sulla bolletta. " +
-        "Se è in pericolo in questo momento, chiami il 999.",
-      struggling:
-        "Sembra un grosso peso, e non deve affrontarlo da solo. Parlare con qualcuno di cui si fida aiuta davvero, " +
-        "come un insegnante, un genitore o chi si prende cura di Lei. Childline è gratuito al 0800 1111, oppure può scrivere SHOUT al 85258, a qualsiasi ora. " +
-        "Sono sempre qui per le Sue domande sui T-Level, quando vuole.",
-      personal:
-        "Un consiglio: non deve darmi dati personali come la Sua e-mail, il Suo numero di telefono o il Suo indirizzo, ed è più sicuro " +
-        "non farlo. Non ho inviato quel messaggio da nessuna parte. Che cosa vorrebbe sapere sui T-Level?",
+      atRisk: "Sono davvero contento che me l'abbia detto. Sono solo un aiuto su un sito web, quindi per favore parli subito con qualcuno che può aiutarLa. Chiami Childline gratuitamente al 0800 1111, a qualsiasi ora, e la chiamata non compare sulla bolletta. Può anche scrivere SHOUT al 85258 o chiamare i Samaritans al 116 123. Se è in pericolo in questo momento, chiami il 999.",
+      harmed: "Grazie per avermelo detto. Nessuno dovrebbe farLa sentire in pericolo. Per favore lo dica a un adulto di cui si fida, come un insegnante, un genitore o chi si prende cura di Lei. Può anche chiamare Childline gratuitamente al 0800 1111, a qualsiasi ora, e la chiamata non compare sulla bolletta. Se è in pericolo in questo momento, chiami il 999.",
+      struggling: "Sembra un grosso peso, e non deve affrontarlo da solo. Parlare con qualcuno di cui si fida aiuta davvero, come un insegnante, un genitore o chi si prende cura di Lei. Childline è gratuito al 0800 1111, oppure può scrivere SHOUT al 85258, a qualsiasi ora. Sono sempre qui per le Sue domande sui T-Level, quando vuole.",
+      personal: "Un consiglio: non deve darmi dati personali come la Sua e-mail, il Suo numero di telefono o il Suo indirizzo, ed è più sicuro non farlo. Non ho inviato quel messaggio da nessuna parte. Che cosa vorrebbe sapere sui T-Level?",
     },
-
     keywords: {
       whatIsTLevel: "che cos'è un t level, cos'è un t level, cosa sono i t level, che cosa sono i t level",
       courseLength: "quanto dura, durata, quanti anni",
@@ -986,6 +1017,8 @@ const it = {
     typeToConfirm: "Scriva {text} per confermare",
     actionFailed: "Non ha funzionato. Riprovi.",
     tabs: {
+      providers: "Istituti di formazione",
+      audit: "Registro attività",
       overview: "Panoramica",
       interest: "Interesse",
       reports: "Post segnalati",
@@ -1002,18 +1035,190 @@ const it = {
       openReports: "Segnalazioni aperte",
     },
     charts: {
+      answered: "con risposta",
+      dealtWith: "gestiti",
+      feedbackHandled: "Feedback gestito",
+      feedbackHandledCaption: "Feedback di questo periodo che il personale ha gestito.",
+      feedbackByCategory: "Feedback per categoria",
+      activity: "Attività delle registrazioni",
+      activityCaption: "Registrazioni per periodo, un punto per periodo e una riga per tipo di account.",
+      dotRow: "{name}: {total} in {buckets} periodi",
+      region: "Regione",
+      needFixing: "{count} da correggere",
+      plotLabel: "{title}. Usi i tasti freccia per leggere ogni punto.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "Intervallo di date per {title}",
+      title: "Grafici",
+      loading: "Caricamento dei grafici",
+      usersByType: "Account per tipo",
+      usersByTypeCaption: "Account creati in questo periodo, per tipo di account.",
+      answerRate: "Tasso di risposta",
+      answerRateCaption: "Domande fatte in questo periodo che hanno ricevuto almeno una risposta.",
+      topics: "Argomenti più attivi",
+      topicsCaption: "Domande fatte in questo periodo, per argomento.",
+      feedbackOverTime: "Feedback nel tempo",
+      feedbackOverTimeCaption: "Feedback inviato per periodo, per categoria.",
+      reports: "Segnalazioni aperte e risolte",
+      reportsCaption: "Segnalazioni di post aperte rispetto a quelle risolte, per periodo.",
+      opened: "Aperte",
+      resolved: "Risolte",
+      languages: "Account per lingua",
+      languagesCaption: "Account in base alla lingua in cui leggono il sito.",
+      language: "Lingua",
+      providers: "Istituti di formazione sulla mappa",
+      providersCaption: "Istituti di formazione per regione, e quanti non hanno una posizione da mostrare.",
+      placed: "Sulla mappa",
+      unplaced: "Senza posizione",
       signups: "Registrazioni a settimana",
       signupsCaption: "Nuovi account ogni settimana, per tipo di account.",
       interest: "Interesse per percorso",
       interestCaption: "Manifestazioni di interesse, per il percorso indicato nell'account.",
       community: "Attività nella Community",
       communityCaption: "Domande e risposte pubblicate ogni settimana.",
-      feedback: "Feedback per categoria",
-      feedbackCaption: "Feedback inviato, per categoria.",
+    },
+    greeting: {
+      morning: "Buongiorno, {name}",
+      afternoon: "Buon pomeriggio, {name}",
+      evening: "Buonasera, {name}",
+    },
+    nav: {
+      site: "Il sito",
+      label: "Sezioni del portale di amministrazione",
+      menu: "Sezioni",
+      measure: "Misure",
+      people: "Persone",
+      community: "Community",
+      session: "Questa sessione",
+      unhandled: "non ancora gestiti",
+    },
+    filters: {
+      title: "Filtri",
+      range: "Intervallo di date",
+      from: "Dal",
+      to: "Al",
+      userType: "Tipo di account",
+      pathway: "Percorso",
+      clear: "Azzera i filtri",
+      updating: "Aggiornamento dei numeri",
+      ranges: {
+        "7d": "Ultimi 7 giorni",
+        "30d": "Ultimi 30 giorni",
+        "90d": "Ultimi 90 giorni",
+        "12m": "Ultimi 12 mesi",
+        all: "Da sempre",
+        custom: "Personalizzato",
+      },
+    },
+    kpis: {
+      title: "Numeri chiave",
+      loading: "Caricamento dei numeri chiave",
+      signups: "Nuove registrazioni",
+      active: "Accessi effettuati",
+      unanswered: "Domande senza risposta",
+      time_to_first_answer: "Tempo alla prima risposta",
+      hoursValue: "{hours} ore",
+      upBy: "{label}: in aumento di {change} ({percent}) rispetto al periodo precedente",
+      downBy: "{label}: in calo di {change} ({percent}) rispetto al periodo precedente",
+      noPercent: "nessun dato precedente",
+      noComparison: "Niente con cui confrontare",
+      noChange: "Nessuna variazione",
+    },
+    states: {
+      loading: "Caricamento",
+      failed: "Questi numeri non si sono caricati.",
+      retry: "Riprova",
+    },
+    export: {
+      button: "Esporta CSV",
+      working: "Preparazione",
+      done: "Il file è stato scaricato.",
+      failed: "Il download non ha funzionato. Riprovi.",
     },
     signedOut: {
       title: "Acceda per aprire il portale di amministrazione",
       lead: "Questa pagina è per il personale Amazon. Acceda con il Suo account del personale per continuare.",
+    },
+    audit: {
+      actor: "Membro del personale",
+      action: "Azione",
+      caption: "Tutto ciò che il personale ha fatto nel portale",
+      empty: "Ancora niente di registrato.",
+      columns: {
+        when: "Quando",
+        who: "Chi",
+        what: "Cosa",
+        target: "Oggetto",
+      },
+      actions: {
+        account_removed: "Ha rimosso un account",
+        staff_revoked: "Ha revocato l'accesso di amministratore",
+        role_changed: "Ha cambiato il tipo di un account",
+        password_reset_sent: "Ha inviato un'e-mail per reimpostare la password",
+        post_deleted: "Ha eliminato un post",
+        report_resolved: "Ha risolto una segnalazione",
+        report_dismissed: "Ha respinto una segnalazione",
+        feedback_handled: "Ha segnato un feedback come gestito",
+        csv_exported: "Ha esportato un CSV",
+      },
+    },
+    providers: {
+      filter: "Sulla mappa",
+      unplacedOnly: "Codice postale da correggere",
+      placedOnly: "Già sulla mappa",
+      caption: "Istituti di formazione che la ricerca nelle vicinanze può mostrare",
+      empty: "Nessun istituto di formazione caricato.",
+      onMap: "Sulla mappa",
+      needsPostcode: "Codice postale da correggere",
+      columns: {
+        name: "Nome",
+        postcode: "Codice postale",
+        region: "Regione",
+        type: "Tipo",
+        map: "Mappa",
+      },
+    },
+    person: {
+      title: "Account",
+      close: "Chiudi",
+      type: "Tipo di account",
+      pathway: "Percorso",
+      joined: "Iscrizione",
+      lastLogin: "Ultimo accesso",
+      questions: "Domande fatte",
+      answers: "Risposte date",
+      reports: "Post che ha segnalato",
+      feedback: "Feedback che ha inviato",
+      none: "Non indicato",
+      never: "Mai",
+      actions: "Azioni",
+      changeRole: "Cambia tipo di account",
+      roleChanged: "Tipo di account cambiato.",
+      sendReset: "Invia un'e-mail per reimpostare la password",
+      resetSent: "Se l'account ha un indirizzo e-mail, un link per reimpostare la password è in arrivo.",
+      staffNote: "Revochi prima l'accesso di amministratore, nell'elenco, e poi cambi il tipo di account.",
+    },
+    bulk: {
+      title: "Azioni di gruppo",
+      chosen: "{count} selezionati",
+      choose: "Seleziona {name}",
+      chooseAll: "Seleziona tutto in questa pagina",
+      clear: "Annulla la selezione",
+      markHandled: "Segna come gestito",
+      resolve: "Risolvi",
+      dismiss: "Respingi",
+      deletePosts: "Elimina i post",
+      removePeople: "Rimuovi gli account",
+      posts: "post",
+      people: "account",
+      confirmText: "ELIMINA {count} {noun}",
+      confirmBody: "Questo ne rimuove {count} definitivamente e non si può annullare. Scriva esattamente le parole qui sotto per confermare.",
+      done: "{count} completati.",
+      reasons: {
+        gone: "{count} non c'erano già più.",
+        staff: "{count} erano account del personale e sono stati lasciati così.",
+        yourself: "{count} era il Suo account.",
+        failed: "{count} non hanno funzionato.",
+      },
     },
     pin: {
       title: "Inserisca il PIN del portale",
@@ -1052,10 +1257,21 @@ const it = {
       },
     },
     feedback: {
+      status: "Stato",
+      handled: "Gestito",
+      unhandled: "In attesa",
+      markHandled: "Segna come gestito",
+      markUnhandled: "Rimetti in attesa",
+      note: "Nota del personale",
+      saveNote: "Salva la nota",
+      handledBy: "{name} il {date}",
+      someone: "un membro del personale",
       filter: "Categoria",
       caption: "Feedback inviato tramite il sito",
       empty: "Ancora nessun feedback.",
       columns: {
+        status: "Stato",
+        actions: "Azioni",
         category: "Categoria",
         message: "Messaggio",
         from: "Da",
@@ -1114,6 +1330,7 @@ const it = {
       language: "Lingua",
       security: "Sicurezza",
       account: "Account",
+      notifications: "Notifiche",
     },
     sight: {
       fontSize: "Dimensione del carattere",
@@ -1206,6 +1423,13 @@ const it = {
       password: "Password",
       deactivating: "Eliminazione in corso",
       wrongPassword: "Password non corretta.",
+    },
+    notifications: {
+      lead: "Scelga che cosa compare nella campanella in cima alla pagina.",
+      announcements: "Avvisi dal team T-SMILE",
+      community: "Risposte alle Sue domande e risposte nella Community",
+      interest: "Aggiornamenti sulla Sua manifestazione di interesse",
+      saved: "Salvato.",
     },
   },
 
