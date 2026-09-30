@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, Navigate, useLocation, useSearchParams } from "react-router-dom";
-import { adminPortalLock, adminPortalStatus, adminPortalUnlock } from "../api.js";
+import { adminBadges, adminPortalLock, adminPortalStatus, adminPortalUnlock } from "../api.js";
 import { useAuth } from "../auth.jsx";
-import TabNav from "../components/TabNav.jsx";
+import FilterBar from "../components/admin/FilterBar.jsx";
+import Overview from "../components/admin/Overview.jsx";
+import Sidebar, { NAV_IDS } from "../components/admin/Sidebar.jsx";
+import useDashboardFilters from "../components/admin/useDashboardFilters.js";
 import { FormError } from "../components/FormFields.jsx";
 import {
+  AuditLogTab,
   FeedbackTab,
   InterestTab,
-  OverviewTab,
   PeopleTab,
   PostsTab,
+  ProvidersTab,
   ReportsTab,
 } from "../components/admin/Tabs.jsx";
 import { formErrors } from "../formErrors.js";
@@ -33,15 +37,53 @@ import { useT } from "../i18n/I18nProvider.jsx";
 // thing keeping anybody out: a correct PIN on a student account still gets
 // 403 from every endpoint behind it.
 
-const TAB_IDS = ["overview", "interest", "reports", "posts", "feedback", "people"];
+/** Which sections can be exported, and from where. */
+const EXPORTS = {
+  overview: "/api/accounts/admin-portal/dashboard/export/",
+  people: "/api/accounts/admin-portal/people/export/",
+  interest: "/api/accounts/admin-portal/interest/export/",
+  feedback: "/api/accounts/admin-portal/feedback/export/",
+  providers: "/api/accounts/admin-portal/providers/export/",
+  audit: "/api/accounts/admin-portal/audit-log/export/",
+};
+
+/**
+ * Which part of the greeting to use. Split at 12 and 18, the same boundaries
+ * the words themselves imply; a dashboard opened at 02:00 says evening rather
+ * than guessing at something cleverer.
+ */
+function greetingKey(hour) {
+  if (hour < 12) return "admin.greeting.morning";
+  if (hour < 18) return "admin.greeting.afternoon";
+  return "admin.greeting.evening";
+}
+
+/**
+ * What to call somebody in the greeting: the first name, or the username when
+ * the account has not given one.
+ *
+ * The same rule and the same fallback as the header's "Hello, ..." band (see
+ * nameFor in AccountDropdown.jsx). Two greetings on one page calling the same
+ * person different things would look like a bug.
+ */
+function greetingNameOf(user) {
+  return user?.first_name || user?.username || "";
+}
 
 export default function AdminPortal() {
   const t = useT();
   const { user, checked } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { filters, range, setFilter, clearAll, anySet, asQueryString } = useDashboardFilters();
 
   const [lock, setLock] = useState(null); // { unlocked, configured, minutes }
   const [asking, setAsking] = useState(true);
+  // The small numbers beside the sidebar's sections. Refreshed after any
+  // action that could change them, which is why it is a counter rather
+  // than a one-off fetch.
+  const [badges, setBadges] = useState(null);
+  const [badgeAttempt, setBadgeAttempt] = useState(0);
+  const refreshBadges = useCallback(() => setBadgeAttempt((count) => count + 1), []);
 
   const isStaff = user?.user_type === "amazon_staff";
 
@@ -58,6 +100,22 @@ export default function AdminPortal() {
       cancelled = true;
     };
   }, [isStaff]);
+
+  // Only once the PIN is in: before that every portal endpoint answers 403,
+  // and asking anyway would just log a failure per page load.
+  const unlocked = Boolean(lock?.unlocked);
+  useEffect(() => {
+    if (!isStaff || !unlocked) return undefined;
+
+    let cancelled = false;
+    adminBadges()
+      .then((result) => !cancelled && setBadges(result))
+      .catch(() => !cancelled && setBadges(null));
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isStaff, unlocked, badgeAttempt]);
 
   const relock = useCallback(async () => {
     await adminPortalLock().catch(() => {});
@@ -76,34 +134,62 @@ export default function AdminPortal() {
   }
 
   const requested = searchParams.get("tab");
-  const activeId = TAB_IDS.includes(requested) ? requested : "overview";
-  const setActiveId = (id) =>
-    setSearchParams(id === "overview" ? {} : { tab: id }, { replace: true });
+  const activeId = NAV_IDS.includes(requested) ? requested : "overview";
+  const setActiveId = (id) => {
+    // The other filters survive a move between sections, so narrowing to 90
+    // days on the Overview and then opening People keeps the 90 days.
+    const next = new URLSearchParams(searchParams);
+    if (id === "overview") next.delete("tab");
+    else next.set("tab", id);
+    setSearchParams(next, { replace: true });
+  };
 
-  const tabs = [
-    { id: "overview", label: t("admin.tabs.overview"), content: <OverviewTab /> },
-    { id: "interest", label: t("admin.tabs.interest"), content: <InterestTab /> },
-    { id: "reports", label: t("admin.tabs.reports"), content: <ReportsTab /> },
-    { id: "posts", label: t("admin.tabs.posts"), content: <PostsTab /> },
-    { id: "feedback", label: t("admin.tabs.feedback"), content: <FeedbackTab /> },
-    { id: "people", label: t("admin.tabs.people"), content: <PeopleTab /> },
-  ];
+  const panels = {
+    overview: <Overview filters={filters} />,
+    interest: <InterestTab />,
+    reports: <ReportsTab />,
+    posts: <PostsTab />,
+    feedback: <FeedbackTab onCountsChanged={refreshBadges} />,
+    people: <PeopleTab />,
+    providers: <ProvidersTab />,
+    audit: <AuditLogTab />,
+  };
 
   return (
-    <>
-      <section className="intro" aria-labelledby="page-title">
-        <p className="label">{t("account.roles.amazon_staff")}</p>
-        <h1 id="page-title">{t("admin.title")}</h1>
-        <p className="lead">{t("admin.lead")}</p>
-        <p>
-          <button type="button" className="button" onClick={relock}>
-            {t("admin.lockAgain")}
-          </button>
-        </p>
-      </section>
+    <div className="admin-shell">
+      <Sidebar
+        activeId={activeId}
+        onChange={setActiveId}
+        onLock={relock}
+        badges={{ unhandledFeedback: badges?.unhandled_feedback ?? 0 }}
+      />
 
-      <TabNav tabs={tabs} activeId={activeId} onChange={setActiveId} />
-    </>
+      <div className="admin-main">
+        <header className="admin-head">
+          <p className="label">{t("account.roles.amazon_staff")}</p>
+          <h1 id="page-title">
+            {t(greetingKey(new Date().getHours()), { name: greetingNameOf(user) })}
+          </h1>
+          <p className="lead">{t("admin.lead")}</p>
+        </header>
+
+        {/* One filter bar for the whole dashboard, so a range chosen here
+            means the same thing on every section and in every export. */}
+        <FilterBar
+          filters={filters}
+          range={range}
+          setFilter={setFilter}
+          clearAll={clearAll}
+          anySet={anySet}
+          exportUrl={EXPORTS[activeId]}
+          exportQuery={asQueryString}
+        />
+
+        <main className="admin-panel" aria-labelledby="page-title">
+          {panels[activeId]}
+        </main>
+      </div>
+    </div>
   );
 }
 
