@@ -740,7 +740,7 @@ const es = {
         "En la Comunidad puedes hacer una pregunta y otros estudiantes, familias, docentes y personal de Amazon pueden responder. " +
         "Lo que yo no sepa es una buena pregunta para hacer allí.",
       account:
-        "Puedes navegar por la web, abrir todos los recursos y hablar conmigo sin cuenta. Una cuenta gratuita te permite preguntar y responder en la Comunidad y guarda tus ajustes en cualquier dispositivo.",
+        "Puedes navegar por la web, abrir los recursos enlazados y hablar conmigo sin cuenta. Una cuenta gratis te permite descargar archivos de la página Recursos, preguntar y responder en la Comunidad y guarda tus ajustes en cualquier dispositivo.",
       contact: "Puedes contactar con el equipo de T-SMILE desde la página de Contacto.",
       accessibility:
         "Puedes cambiar el tamaño del texto, los colores, el modo oscuro, el movimiento y la lectura en voz alta en los ajustes de Accesibilidad.",

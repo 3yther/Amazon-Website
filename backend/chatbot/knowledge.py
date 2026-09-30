@@ -98,14 +98,14 @@ VERIFIED_FACTS = (
     Fact(
         topic="Getting an account, and what needs one",
         text=(
-            "Anyone can browse the site, open every resource and talk to Smiley without "
-            "an account. A free account lets you ask and answer in the Community, and "
-            "keeps your settings on any device you sign in on. You can sign up at "
-            "/register and log in at /login."
+            "Anyone can browse the site, open the linked resources and talk to Smiley "
+            "without an account. A free account lets you download files from the "
+            "Resources page, ask and answer in the Community, and keeps your settings "
+            "on any device you sign in on. You can sign up at /register and log in at /login."
         ),
         source=(
-            "backend/content/fixtures/resources.json (every resource is free) and "
-            "the Community's permissions in backend/community/views.py, checked 2026-09-25."
+            "backend/content/views.py (downloads are only listed for signed-in users) and "
+            "the Community's permissions in backend/community/views.py, checked 2026-09-30."
         ),
     ),
     Fact(

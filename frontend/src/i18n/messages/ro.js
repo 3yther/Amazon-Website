@@ -740,7 +740,7 @@ const ro = {
         "În Comunitate poți pune o întrebare, iar alți elevi, părinți, profesori și angajați Amazon pot răspunde. " +
         "Tot ce nu știu eu merită întrebat acolo.",
       account:
-        "Poți naviga pe site, poți deschide orice resursă și poți vorbi cu mine fără cont. Un cont gratuit îți permite să pui întrebări și să răspunzi în Comunitate și îți păstrează setările pe orice dispozitiv.",
+        "Poți naviga pe site, deschide resursele cu link și vorbi cu mine fără cont. Un cont gratuit îți permite să descarci fișiere de pe pagina Resurse, să pui și să răspunzi la întrebări în Comunitate și îți păstrează setările pe orice dispozitiv.",
       contact: "Poți lua legătura cu echipa T-SMILE prin pagina de Contact.",
       accessibility:
         "Poți schimba mărimea textului, culorile, modul întunecat, animațiile și citirea cu voce tare din setările de Accesibilitate.",
