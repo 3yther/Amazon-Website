@@ -78,6 +78,17 @@ describe("Notification bell", () => {
     expect(screen.getByRole("button", { name: "Notifications, 0 unread" })).toBeInTheDocument();
   });
 
+  it("checks again when you come back to the tab", async () => {
+    const calls = fakeServer();
+    renderWith(<NotificationBell />);
+    await screen.findByRole("button", { name: /Notifications/ });
+    const before = calls.filter((c) => c.path === "/api/notifications/").length;
+
+    window.dispatchEvent(new Event("focus"));
+
+    await waitFor(() => expect(calls.filter((c) => c.path === "/api/notifications/").length).toBe(before + 1));
+  });
+
   it("isn't shown when signed out", async () => {
     const calls = fakeServer({ signedIn: false });
     renderWith(<NotificationBell />);
