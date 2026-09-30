@@ -1012,7 +1012,7 @@ const pl = {
       activityCaption: "Rejestracje w okresie, jedna kropka na okres i jeden wiersz na typ konta.",
       dotRow: "{name}: {total} w {buckets} okresach",
       region: "Region",
-      needFixing: "{count} wymaga kodu pocztowego",
+      needFixing: "{count} do poprawy",
       plotLabel: "{title}. Użyj strzałek, aby odczytać każdy punkt.",
       pointReadout: "{label}. {values}",
       rangeFor: "Zakres dat dla {title}",

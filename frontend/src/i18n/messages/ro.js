@@ -1012,7 +1012,7 @@ const ro = {
       activityCaption: "Înscrieri pe perioadă, un punct pe perioadă și un rând pe tip de cont.",
       dotRow: "{name}: {total} în {buckets} perioade",
       region: "Regiune",
-      needFixing: "{count} au nevoie de cod poștal",
+      needFixing: "{count} de corectat",
       plotLabel: "{title}. Folosește săgețile pentru a citi fiecare punct.",
       pointReadout: "{label}. {values}",
       rangeFor: "Interval de date pentru {title}",

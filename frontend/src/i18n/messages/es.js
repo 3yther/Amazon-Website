@@ -1012,7 +1012,7 @@ const es = {
       activityCaption: "Registros por periodo, un punto por periodo y una fila por tipo de cuenta.",
       dotRow: "{name}: {total} en {buckets} periodos",
       region: "Región",
-      needFixing: "{count} necesitan código postal",
+      needFixing: "{count} por corregir",
       plotLabel: "{title}. Usa las flechas para leer cada punto.",
       pointReadout: "{label}. {values}",
       rangeFor: "Intervalo de fechas para {title}",

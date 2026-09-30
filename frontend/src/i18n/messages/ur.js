@@ -1015,7 +1015,7 @@ const ur = {
       activityCaption: "ہر مدت میں سائن اپ، ہر مدت کے لیے ایک نقطہ اور ہر اکاؤنٹ قسم کے لیے ایک قطار۔",
       dotRow: "{name}: {buckets} مدتوں میں {total}",
       region: "علاقہ",
-      needFixing: "{count} کو پوسٹ کوڈ درکار",
+      needFixing: "{count} درست کرنے ہیں",
       plotLabel: "{title}۔ ہر نقطہ پڑھنے کے لیے تیر والے بٹن استعمال کریں۔",
       pointReadout: "{label}۔ {values}",
       rangeFor: "{title} کے لیے تاریخ کی حد",

@@ -1016,7 +1016,7 @@ const gu = {
       activityCaption: "દરેક સમયગાળામાં સાઇન-અપ, દરેક સમયગાળા માટે એક ટપકું અને દરેક ખાતા પ્રકાર માટે એક હરોળ.",
       dotRow: "{name}: {buckets} સમયગાળામાં {total}",
       region: "પ્રદેશ",
-      needFixing: "{count} ને પોસ્ટકોડ જોઈએ",
+      needFixing: "{count} સુધારવાના",
       plotLabel: "{title}. દરેક બિંદુ વાંચવા માટે તીર કી વાપરો.",
       pointReadout: "{label}. {values}",
       rangeFor: "{title} માટે તારીખ શ્રેણી",

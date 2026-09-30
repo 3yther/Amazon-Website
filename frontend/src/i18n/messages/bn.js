@@ -1016,7 +1016,7 @@ const bn = {
       activityCaption: "প্রতি সময়ে সাইন-আপ, প্রতি সময়ে একটি বিন্দু ও প্রতি অ্যাকাউন্ট ধরনে একটি সারি।",
       dotRow: "{name}: {buckets} সময়ে {total}",
       region: "অঞ্চল",
-      needFixing: "{count}টির পোস্টকোড দরকার",
+      needFixing: "{count}টি ঠিক করতে",
       plotLabel: "{title}। প্রতিটি বিন্দু পড়তে তীর কী ব্যবহার করুন।",
       pointReadout: "{label}। {values}",
       rangeFor: "{title}-এর তারিখের পরিসর",

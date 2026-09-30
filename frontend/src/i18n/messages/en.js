@@ -988,7 +988,7 @@ const en = {
       activityCaption: "Sign-ups per period, one dot per period and one row per account type.",
       dotRow: "{name}: {total} across {buckets} periods",
       region: "Region",
-      needFixing: "{count} need a postcode",
+      needFixing: "{count} to fix",
       plotLabel: "{title}. Use the arrow keys to read each point.",
       pointReadout: "{label}. {values}",
       rangeFor: "Date range for {title}",

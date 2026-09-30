@@ -1014,7 +1014,7 @@ const ar = {
       activityCaption: "التسجيلات لكل فترة، نقطة لكل فترة وصف لكل نوع حساب.",
       dotRow: "{name}: {total} خلال {buckets} فترات",
       region: "المنطقة",
-      needFixing: "{count} بحاجة إلى رمز بريدي",
+      needFixing: "{count} للتصحيح",
       plotLabel: "{title}. استخدم مفاتيح الأسهم لقراءة كل نقطة.",
       pointReadout: "{label}. {values}",
       rangeFor: "النطاق الزمني لـ {title}",

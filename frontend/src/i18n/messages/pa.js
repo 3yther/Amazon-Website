@@ -1016,7 +1016,7 @@ const pa = {
       activityCaption: "ਹਰ ਸਮੇਂ ਵਿੱਚ ਸਾਈਨ-ਅੱਪ, ਹਰ ਸਮੇਂ ਲਈ ਇੱਕ ਬਿੰਦੀ ਅਤੇ ਹਰ ਖਾਤਾ ਕਿਸਮ ਲਈ ਇੱਕ ਕਤਾਰ।",
       dotRow: "{name}: {buckets} ਸਮਿਆਂ ਵਿੱਚ {total}",
       region: "ਖੇਤਰ",
-      needFixing: "{count} ਨੂੰ ਪੋਸਟਕੋਡ ਚਾਹੀਦਾ",
+      needFixing: "{count} ਠੀਕ ਕਰਨੇ",
       plotLabel: "{title}। ਹਰ ਬਿੰਦੂ ਪੜ੍ਹਨ ਲਈ ਤੀਰ ਬਟਨ ਵਰਤੋ।",
       pointReadout: "{label}। {values}",
       rangeFor: "{title} ਲਈ ਮਿਤੀ ਸੀਮਾ",
