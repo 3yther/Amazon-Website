@@ -3549,3 +3549,12 @@ input.admin-pin__input {
   font-size: 0.6875rem;
   color: var(--ink-muted);
 }
+
+/* A starter question, put there by the T-SMILE team so the Community page is
+   not empty for a first visitor. Marked with an outline rather than a fill so
+   it reads as a note about the post rather than as another topic. */
+.tag--starter {
+  border: 1px solid var(--orange);
+  background: transparent;
+  font-weight: 700;
+}

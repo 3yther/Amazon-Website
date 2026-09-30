@@ -467,6 +467,7 @@ const ro = {
   },
 
   community: {
+    starterQuestion: "Întrebare de început",
     moderationNote: "Rămâi la subiect și păstrează un ton potrivit. Limbajul nepotrivit este respins, iar restul poate fi șters de un moderator.",
     label: "Întreabă și răspunde",
     title: "Comunitate",

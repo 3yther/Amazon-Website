@@ -488,6 +488,7 @@ const en = {
   // The Community: questions asked and answered by students, parents,
   // teachers and Amazon staff.
   community: {
+    starterQuestion: "Starter question",
     moderationNote: "Keep it on topic and appropriate. Inappropriate language is refused, and a moderator can remove anything else.",
     label: "Ask and answer",
     title: "Community",

@@ -467,6 +467,7 @@ const pl = {
   },
 
   community: {
+    starterQuestion: "Pytanie na start",
     moderationNote: "Trzymaj się tematu i zachowaj kulturę. Nieodpowiedni język jest odrzucany, a resztę może usunąć moderator.",
     label: "Pytaj i odpowiadaj",
     title: "Społeczność",

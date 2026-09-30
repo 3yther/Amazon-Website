@@ -467,6 +467,7 @@ const es = {
   },
 
   community: {
+    starterQuestion: "Pregunta inicial",
     moderationNote: "Cíñete al tema y usa un tono adecuado. El lenguaje inapropiado se rechaza, y un moderador puede eliminar lo demás.",
     label: "Pregunta y responde",
     title: "Comunidad",

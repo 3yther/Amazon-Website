@@ -30,6 +30,31 @@ People only use the frontend's address. Caddy passes `/api` to Django, like Vite
 4. Add a second service from the same repo called `frontend`: Root Directory `/frontend`, Config File Path `/frontend/railway.toml`, and generate a public domain.
 5. Set the variables below, then deploy `backend` and then `frontend`.
 6. To make an admin account: `railway ssh --service backend`, then `python manage.py createsuperuser`.
+7. Once, to give the Community page something to start from:
+   `railway ssh --service backend`, then `python manage.py seed_starter_questions`.
+
+## Starter questions (run once, by hand)
+
+An empty Community page tells a first visitor that nobody uses this. This
+posts twelve real questions for students to answer:
+
+```bash
+python manage.py seed_starter_questions
+```
+
+- **Once, by hand. NOT in the pre-deploy command**, which runs on every
+  deploy: these are content, and content does not need reapplying on each
+  push. Running it again is harmless (a question already there is skipped),
+  but it has no reason to be in the automatic path.
+- They are posted by a visible staff account, `tsmile.team`, and labelled
+  "Starter question" on the page. No invented students, no invented answers.
+- They are posted unanswered on purpose, so real students and teachers answer
+  them. Staff can delete any of them with the ordinary moderation tools.
+- `python manage.py seed_starter_questions --remove` takes them back out, and
+  only them.
+
+Not to be confused with `seed_demo_data`, which makes fake accounts and posts
+for local development and refuses to run when `DEBUG` is off.
 
 ## The pre-deploy command
 

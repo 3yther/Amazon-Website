@@ -468,6 +468,7 @@ const pt = {
   },
 
   community: {
+    starterQuestion: "Pergunta inicial",
     moderationNote: "Mantém-te no tema e com linguagem adequada. Linguagem inadequada é recusada, e um moderador pode remover o resto.",
     label: "Pergunta e responde",
     title: "Comunidade",
