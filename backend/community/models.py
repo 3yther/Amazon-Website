@@ -50,6 +50,12 @@ class Question(Post):
     )
     title = models.CharField(max_length=150)
     topic = models.CharField(max_length=20, choices=Topic.choices, default=Topic.TLEVELS)
+
+    # Put there by `manage.py seed_starter_questions` so the Community page is
+    # not empty for the first visitor. Marked, not disguised: these are posted
+    # by the T-SMILE team and the page says so, because a seeded question
+    # dressed up as a student's is a fake student.
+    is_starter = models.BooleanField(default=False)
     # Optional: which pathway it is about. Kept if a pathway is ever removed.
     pathway = models.ForeignKey(
         Pathway, on_delete=models.SET_NULL, null=True, blank=True, related_name="community_questions"

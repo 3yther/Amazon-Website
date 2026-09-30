@@ -3260,3 +3260,301 @@ input.admin-pin__input {
 .admin-select__cell {
   width: 2.5rem;
 }
+
+/* ---------- Dashboard visuals (components/admin/Charts.jsx) ---------- */
+
+/* A bento grid: the lead chart and the two widest cards span two columns,
+   everything else takes one, and the whole thing becomes a single column on a
+   phone. auto-fit rather than fixed columns, so it reflows at any width
+   instead of at three breakpoints somebody has to maintain. */
+.admin-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.admin-card {
+  min-width: 0; /* or a wide table stretches the grid instead of scrolling */
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+@media (min-width: 720px) {
+  .admin-card--lead,
+  .admin-card--wide {
+    grid-column: span 2;
+  }
+}
+
+.admin-card__controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+/* ---- the range toggle ---- */
+
+.admin-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.admin-toggle__option {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  background: var(--paper);
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.admin-toggle__option + .admin-toggle__option {
+  border-inline-start: 1px solid var(--line);
+}
+
+/* The chosen one is marked by weight and an underline as well as its fill,
+   so it is not colour alone. */
+.admin-toggle__option[aria-checked="true"] {
+  background: var(--surface-inverse);
+  color: var(--ink-inverse);
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 var(--orange);
+}
+
+/* ---- the point readout ---- */
+
+.admin-plot {
+  position: relative;
+}
+
+.admin-plot:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.admin-readout {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  z-index: 1;
+  min-width: 10rem;
+  padding: 8px 10px;
+  border: 1px solid var(--admin-mark-edge);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.8125rem;
+  pointer-events: none; /* never gets between the pointer and the plot */
+}
+
+.admin-readout__label {
+  margin: 0 0 4px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.admin-readout ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-readout li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-readout__value {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.admin-line__marker {
+  stroke: var(--surface);
+  stroke-width: 0.8;
+  /* The stretched viewBox would squash a circle into an ellipse. */
+  vector-effect: non-scaling-stroke;
+}
+
+.admin-line__marker--s1 { fill: var(--admin-1); }
+.admin-line__marker--s2 { fill: var(--admin-2); }
+.admin-line__marker--s3 { fill: var(--admin-3); }
+.admin-line__marker--s4 { fill: var(--admin-4); }
+.admin-line__marker--s5 { fill: var(--admin-5); }
+.admin-line__marker--s6 { fill: var(--admin-6); }
+.admin-line__marker--s7 { fill: var(--admin-7); }
+
+/* The selected column of bars, marked by a backing panel rather than by
+   changing the bars' own colours (which carry the series). */
+.admin-bars__group--chosen::before {
+  content: "";
+  position: absolute;
+  inset: -4px -2px -20px;
+  border-radius: var(--radius);
+  background: var(--admin-7-fill);
+}
+
+/* ---- the ring's centre figure ---- */
+
+.admin-donut__centre-label {
+  fill: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---- segmented bar ---- */
+
+.admin-segments {
+  display: flex;
+  gap: 3px; /* the visible gap, so two neighbours never merge into one block */
+  height: 28px;
+  margin-bottom: 16px;
+}
+
+.admin-segments__part {
+  min-width: 3px;
+  border: 1px solid var(--admin-mark-edge);
+  border-radius: var(--radius);
+}
+
+.admin-segments__part--s1 { background: var(--admin-1); }
+.admin-segments__part--s2 { background: var(--admin-2); }
+.admin-segments__part--s3 { background: var(--admin-3); }
+.admin-segments__part--s4 { background: var(--admin-4); }
+.admin-segments__part--s5 { background: var(--admin-5); }
+.admin-segments__part--s6 { background: var(--admin-6); }
+.admin-segments__part--s7 { background: var(--admin-7); }
+
+/* ---- dot matrix ---- */
+
+.admin-dots {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-dots__row {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 22%) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 0.9375rem;
+}
+
+.admin-dots__track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+
+/* FOUR STEPS, AND NOT BY LIGHTNESS ALONE. Each step also changes the dot's
+   size and whether it is filled or hollow, so the pattern still reads in
+   greyscale and through every colour-vision filter. A heat grid that only
+   varies opacity is the chart that vanishes for exactly the people this site
+   is built for. */
+.admin-dots__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid var(--admin-mark-edge);
+  background: transparent;
+}
+
+.admin-dots__dot--0 {
+  width: 5px;
+  height: 5px;
+  border-style: dotted;
+}
+
+.admin-dots__dot--1 {
+  width: 7px;
+  height: 7px;
+  background: var(--admin-3-fill);
+}
+
+.admin-dots__dot--2 {
+  width: 9px;
+  height: 9px;
+  background: var(--admin-3);
+}
+
+.admin-dots__dot--3 {
+  width: 11px;
+  height: 11px;
+  background: var(--admin-4);
+}
+
+.admin-dots__dot--4 {
+  width: 13px;
+  height: 13px;
+  background: var(--admin-2);
+}
+
+.admin-dots__total {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* ---- region tiles ---- */
+
+.admin-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The number is always text on the tile: the shading is the second signal,
+   never the only one. */
+.admin-tiles__tile {
+  display: grid;
+  gap: 2px;
+  padding: 12px;
+  border: 1px solid var(--admin-mark-edge);
+  border-radius: var(--radius);
+}
+
+.admin-tiles__tile--0 { background: transparent; }
+.admin-tiles__tile--1 { background: var(--admin-3-fill); }
+.admin-tiles__tile--2 { background: var(--admin-5-fill); }
+.admin-tiles__tile--3 { background: var(--admin-1-fill); }
+.admin-tiles__tile--4 { background: var(--admin-4-fill); }
+
+.admin-tiles__value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.admin-tiles__name {
+  font-size: 0.8125rem;
+}
+
+.admin-tiles__note {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ink-muted);
+}
+
+/* A starter question, put there by the T-SMILE team so the Community page is
+   not empty for a first visitor. Marked with an outline rather than a fill so
+   it reads as a note about the post rather than as another topic. */
+.tag--starter {
+  border: 1px solid var(--orange);
+  background: transparent;
+  font-weight: 700;
+}

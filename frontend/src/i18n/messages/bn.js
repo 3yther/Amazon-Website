@@ -470,6 +470,7 @@ const bn = {
   },
 
   community: {
+    starterQuestion: "শুরুর প্রশ্ন",
     moderationNote: "বিষয়ের মধ্যে ও শালীন রাখুন। অনুপযুক্ত ভাষা প্রত্যাখ্যান করা হয়, বাকিটা মডারেটর সরাতে পারেন।",
     label: "প্রশ্ন ও উত্তর",
     title: "কমিউনিটি",
@@ -1006,6 +1007,19 @@ const bn = {
       openReports: "খোলা রিপোর্ট",
     },
     charts: {
+      answered: "উত্তর পেয়েছে",
+      dealtWith: "সামলানো",
+      feedbackHandled: "সামলানো মতামত",
+      feedbackHandledCaption: "এই সময়ের মতামত যা স্টাফরা সামলেছেন।",
+      feedbackByCategory: "বিভাগ অনুযায়ী মতামত",
+      activity: "সাইন-আপ কার্যকলাপ",
+      activityCaption: "প্রতি সময়ে সাইন-আপ, প্রতি সময়ে একটি বিন্দু ও প্রতি অ্যাকাউন্ট ধরনে একটি সারি।",
+      dotRow: "{name}: {buckets} সময়ে {total}",
+      region: "অঞ্চল",
+      needFixing: "{count}টি ঠিক করতে",
+      plotLabel: "{title}। প্রতিটি বিন্দু পড়তে তীর কী ব্যবহার করুন।",
+      pointReadout: "{label}। {values}",
+      rangeFor: "{title}-এর তারিখের পরিসর",
       title: "চার্ট",
       loading: "চার্ট লোড হচ্ছে",
       usersByType: "ধরন অনুযায়ী অ্যাকাউন্ট",

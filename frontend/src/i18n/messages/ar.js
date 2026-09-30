@@ -468,6 +468,7 @@ const ar = {
   },
 
   community: {
+    starterQuestion: "سؤال للبدء",
     moderationNote: "التزم بالموضوع وبلغة مناسبة. اللغة غير اللائقة تُرفض، ويمكن للمشرف حذف ما عداها.",
     label: "اسأل وأجب",
     title: "المجتمع",
@@ -1004,6 +1005,19 @@ const ar = {
       openReports: "بلاغات مفتوحة",
     },
     charts: {
+      answered: "مُجاب",
+      dealtWith: "مُعالَجة",
+      feedbackHandled: "الملاحظات المُعالَجة",
+      feedbackHandledCaption: "ملاحظات هذه الفترة التي عالجها الموظفون.",
+      feedbackByCategory: "الملاحظات حسب الفئة",
+      activity: "نشاط التسجيل",
+      activityCaption: "التسجيلات لكل فترة، نقطة لكل فترة وصف لكل نوع حساب.",
+      dotRow: "{name}: {total} خلال {buckets} فترات",
+      region: "المنطقة",
+      needFixing: "{count} للتصحيح",
+      plotLabel: "{title}. استخدم مفاتيح الأسهم لقراءة كل نقطة.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "النطاق الزمني لـ {title}",
       title: "الرسوم البيانية",
       loading: "يجري تحميل الرسوم البيانية",
       usersByType: "الحسابات حسب النوع",
