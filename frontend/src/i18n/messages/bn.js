@@ -19,6 +19,20 @@ const bn = {
     ok: "ঠিক আছে",
   },
 
+  notifications: {
+    label: "বিজ্ঞপ্তি",
+    open: "বিজ্ঞপ্তি, {count}টি না-পড়া",
+    none: "এখনও কোনো বিজ্ঞপ্তি নেই।",
+    markAll: "সবগুলো পড়া হিসেবে চিহ্নিত করুন",
+    unread: "না-পড়া",
+    events: {
+      announcement: "ঘোষণা: {text}",
+      answered: "কেউ আপনার প্রশ্নের উত্তর দিয়েছে: {text}",
+      accepted: "আপনার উত্তরকে সহায়ক উত্তর হিসেবে চিহ্নিত করা হয়েছে: {text}",
+      interest_seen: "Amazon Emerging Talent টিম আপনার আগ্রহ দেখেছে।",
+    },
+  },
+
   translation: {
     notice:
       "এই পৃষ্ঠাটি মেশিনে অনুবাদ করা হয়েছে ({language}), তাই কিছু শব্দ পুরোপুরি ঠিক নাও হতে পারে। " +
@@ -1301,6 +1315,7 @@ const bn = {
       language: "ভাষা",
       security: "নিরাপত্তা",
       account: "অ্যাকাউন্ট",
+      notifications: "বিজ্ঞপ্তি",
     },
     sight: {
       fontSize: "লেখার আকার",
@@ -1395,6 +1410,13 @@ const bn = {
       continue: "চালিয়ে যান",
     },
     eyebrow: "অ্যাক্সেসিবিলিটি ও অ্যাকাউন্ট",
+    notifications: {
+      lead: "পেজের উপরের ঘণ্টায় কী দেখাবে তা বেছে নিন।",
+      announcements: "T-SMILE টিমের ঘোষণা",
+      community: "কমিউনিটিতে আপনার প্রশ্ন ও উত্তরের জবাব",
+      interest: "আপনার আগ্রহ জানানো নিয়ে আপডেট",
+      saved: "সেভ হয়েছে।",
+    },
   },
 
   resources: {

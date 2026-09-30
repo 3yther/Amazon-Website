@@ -64,6 +64,16 @@ export function CloseIcon() {
   );
 }
 
+// The notifications bell in the header.
+export function BellIcon() {
+  return (
+    <Icon>
+      <path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z" />
+      <path d="M10 20a2 2 0 0 0 4 0" />
+    </Icon>
+  );
+}
+
 export function GearIcon() {
   return (
     <Icon>

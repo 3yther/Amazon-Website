@@ -19,6 +19,20 @@ const gu = {
     ok: "ઠીક છે",
   },
 
+  notifications: {
+    label: "સૂચનાઓ",
+    open: "સૂચનાઓ, {count} ન વાંચેલી",
+    none: "હજી કોઈ સૂચના નથી.",
+    markAll: "બધાને વાંચેલા તરીકે ચિહ્નિત કરો",
+    unread: "ન વાંચેલી",
+    events: {
+      announcement: "જાહેરાત: {text}",
+      answered: "કોઈએ તમારા પ્રશ્નનો જવાબ આપ્યો: {text}",
+      accepted: "તમારા જવાબને મદદરૂપ જવાબ તરીકે ચિહ્નિત કરાયો: {text}",
+      interest_seen: "Amazon Emerging Talent ટીમે તમારો રસ જોયો છે.",
+    },
+  },
+
   translation: {
     notice:
       "આ પેજનો અનુવાદ મશીન દ્વારા થયો છે ({language}), તેથી કેટલાક શબ્દો બરાબર ન પણ હોય. " +
@@ -1301,6 +1315,7 @@ const gu = {
       language: "ભાષા",
       security: "સુરક્ષા",
       account: "એકાઉન્ટ",
+      notifications: "સૂચનાઓ",
     },
     sight: {
       fontSize: "અક્ષરોનું કદ",
@@ -1395,6 +1410,13 @@ const gu = {
       continue: "આગળ વધો",
     },
     eyebrow: "સુલભતા અને ખાતું",
+    notifications: {
+      lead: "પેજની ઉપરની ઘંટડીમાં શું દેખાય તે પસંદ કરો.",
+      announcements: "T-SMILE ટીમની જાહેરાતો",
+      community: "કોમ્યુનિટીમાં તમારા પ્રશ્નો અને જવાબો પરના જવાબ",
+      interest: "તમારા નોંધાવેલા રસ વિશેની અપડેટ",
+      saved: "સાચવ્યું.",
+    },
   },
 
   resources: {

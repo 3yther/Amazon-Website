@@ -6,6 +6,7 @@ import { reportEasterEgg } from "./assistant/assistantBus.js";
 import AccountDropdown from "./components/AccountDropdown.jsx";
 import CookieNotice from "./components/CookieNotice.jsx";
 import Footer from "./components/Footer.jsx";
+import NotificationBell from "./components/NotificationBell.jsx";
 import { GearIcon } from "./components/Icons.jsx";
 import PageTitle from "./components/PageTitle.jsx";
 import SiteNav from "./components/SiteNav.jsx";
@@ -97,6 +98,7 @@ export default function App() {
               language menu. The gear shows signed out too, because settings
               are saved in the browser until you sign in. */}
           <div className="site-header__end">
+            <NotificationBell />
             <NavLink className="settings-link" to="/accessibility" aria-label={t("settings.label")}>
               <GearIcon />
             </NavLink>

@@ -21,6 +21,20 @@ const en = {
     ok: "OK",
   },
 
+  notifications: {
+    label: "Notifications",
+    open: "Notifications, {count} unread",
+    none: "No notifications yet.",
+    markAll: "Mark all as read",
+    unread: "Unread",
+    events: {
+      announcement: "Announcement: {text}",
+      answered: "Someone answered your question: {text}",
+      accepted: "Your answer was marked as the one that helped: {text}",
+      interest_seen: "The Amazon Emerging Talent team has seen your interest.",
+    },
+  },
+
   translation: {
     notice:
       "This page was translated into {language} by machine, so some wording may be off. " +
@@ -1274,6 +1288,7 @@ const en = {
       language: "Language",
       security: "Security",
       account: "Account",
+      notifications: "Notifications",
     },
     sight: {
       fontSize: "Font size",
@@ -1366,6 +1381,13 @@ const en = {
       password: "Password",
       deactivating: "Deleting",
       wrongPassword: "Incorrect password.",
+    },
+    notifications: {
+      lead: "Choose what shows in the bell at the top of the page.",
+      announcements: "Announcements from the T-SMILE team",
+      community: "Replies to your Community questions and answers",
+      interest: "Updates about your Register interest",
+      saved: "Saved.",
     },
   },
 

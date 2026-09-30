@@ -17,6 +17,20 @@ const ar = {
     ok: "حسنًا",
   },
 
+  notifications: {
+    label: "الإشعارات",
+    open: "الإشعارات، {count} غير مقروءة",
+    none: "لا توجد إشعارات بعد.",
+    markAll: "تحديد الكل كمقروء",
+    unread: "غير مقروء",
+    events: {
+      announcement: "إعلان: {text}",
+      answered: "أجاب شخص عن سؤالك: {text}",
+      accepted: "تم تحديد إجابتك على أنها الإجابة المفيدة: {text}",
+      interest_seen: "اطّلع فريق Amazon Emerging Talent على اهتمامك.",
+    },
+  },
+
   translation: {
     notice:
       "تُرجمت هذه الصفحة آليًا ({language})، لذلك قد لا تكون بعض العبارات دقيقة. " +
@@ -1299,6 +1313,7 @@ const ar = {
       language: "اللغة",
       security: "الأمان",
       account: "الحساب",
+      notifications: "الإشعارات",
     },
     sight: {
       fontSize: "حجم الخط",
@@ -1393,6 +1408,13 @@ const ar = {
       continue: "متابعة",
     },
     eyebrow: "إمكانية الوصول والحساب",
+    notifications: {
+      lead: "اختر ما يظهر في الجرس أعلى الصفحة.",
+      announcements: "إعلانات من فريق T-SMILE",
+      community: "الردود على أسئلتك وإجاباتك في المجتمع",
+      interest: "تحديثات حول تسجيل اهتمامك",
+      saved: "تم الحفظ.",
+    },
   },
 
   resources: {

@@ -18,6 +18,20 @@ const ur = {
     ok: "ٹھیک ہے",
   },
 
+  notifications: {
+    label: "اطلاعات",
+    open: "اطلاعات، {count} بغیر پڑھی",
+    none: "ابھی کوئی اطلاع نہیں۔",
+    markAll: "سب کو پڑھا ہوا نشان زد کریں",
+    unread: "بغیر پڑھی",
+    events: {
+      announcement: "اعلان: {text}",
+      answered: "کسی نے آپ کے سوال کا جواب دیا: {text}",
+      accepted: "آپ کے جواب کو مددگار جواب قرار دیا گیا: {text}",
+      interest_seen: "Amazon Emerging Talent ٹیم نے آپ کی دلچسپی دیکھ لی ہے۔",
+    },
+  },
+
   translation: {
     notice:
       "اس صفحے کا ترجمہ مشین سے کیا گیا ہے ({language})، اس لیے کچھ الفاظ درست نہیں ہو سکتے۔ " +
@@ -1300,6 +1314,7 @@ const ur = {
       language: "زبان",
       security: "سیکیورٹی",
       account: "اکاؤنٹ",
+      notifications: "اطلاعات",
     },
     sight: {
       fontSize: "حروف کا سائز",
@@ -1394,6 +1409,13 @@ const ur = {
       continue: "جاری رکھیں",
     },
     eyebrow: "رسائی اور اکاؤنٹ",
+    notifications: {
+      lead: "منتخب کریں کہ صفحے کے اوپر گھنٹی میں کیا دکھے۔",
+      announcements: "T-SMILE ٹیم کے اعلانات",
+      community: "کمیونٹی میں آپ کے سوالوں اور جوابوں پر جوابات",
+      interest: "آپ کی درج کی گئی دلچسپی کے بارے میں اپ ڈیٹس",
+      saved: "محفوظ ہو گیا۔",
+    },
   },
 
   resources: {

@@ -19,6 +19,20 @@ const pa = {
     ok: "ਠੀਕ ਹੈ",
   },
 
+  notifications: {
+    label: "ਸੂਚਨਾਵਾਂ",
+    open: "ਸੂਚਨਾਵਾਂ, {count} ਨਾ ਪੜ੍ਹੀਆਂ",
+    none: "ਅਜੇ ਕੋਈ ਸੂਚਨਾ ਨਹੀਂ।",
+    markAll: "ਸਭ ਨੂੰ ਪੜ੍ਹਿਆ ਮਾਰਕ ਕਰੋ",
+    unread: "ਨਾ ਪੜ੍ਹੀ",
+    events: {
+      announcement: "ਐਲਾਨ: {text}",
+      answered: "ਕਿਸੇ ਨੇ ਤੁਹਾਡੇ ਸਵਾਲ ਦਾ ਜਵਾਬ ਦਿੱਤਾ: {text}",
+      accepted: "ਤੁਹਾਡੇ ਜਵਾਬ ਨੂੰ ਮਦਦਗਾਰ ਜਵਾਬ ਵਜੋਂ ਮਾਰਕ ਕੀਤਾ ਗਿਆ: {text}",
+      interest_seen: "Amazon Emerging Talent ਟੀਮ ਨੇ ਤੁਹਾਡੀ ਦਿਲਚਸਪੀ ਵੇਖ ਲਈ ਹੈ।",
+    },
+  },
+
   translation: {
     notice:
       "ਇਸ ਪੰਨੇ ਦਾ ਅਨੁਵਾਦ ਮਸ਼ੀਨ ਰਾਹੀਂ ਹੋਇਆ ਹੈ ({language}), ਇਸ ਲਈ ਕੁਝ ਸ਼ਬਦ ਬਿਲਕੁਲ ਠੀਕ ਨਾ ਵੀ ਹੋਣ। " +
@@ -1301,6 +1315,7 @@ const pa = {
       language: "ਭਾਸ਼ਾ",
       security: "ਸੁਰੱਖਿਆ",
       account: "ਖਾਤਾ",
+      notifications: "ਸੂਚਨਾਵਾਂ",
     },
     sight: {
       fontSize: "ਅੱਖਰਾਂ ਦਾ ਆਕਾਰ",
@@ -1395,6 +1410,13 @@ const pa = {
       continue: "ਜਾਰੀ ਰੱਖੋ",
     },
     eyebrow: "ਪਹੁੰਚਯੋਗਤਾ ਅਤੇ ਖਾਤਾ",
+    notifications: {
+      lead: "ਚੁਣੋ ਕਿ ਪੰਨੇ ਦੇ ਉੱਪਰ ਘੰਟੀ ਵਿੱਚ ਕੀ ਦਿਖੇ।",
+      announcements: "T-SMILE ਟੀਮ ਦੇ ਐਲਾਨ",
+      community: "ਕਮਿਊਨਿਟੀ ਵਿੱਚ ਤੁਹਾਡੇ ਸਵਾਲਾਂ ਅਤੇ ਜਵਾਬਾਂ 'ਤੇ ਜਵਾਬ",
+      interest: "ਤੁਹਾਡੀ ਦਰਜ ਕੀਤੀ ਦਿਲਚਸਪੀ ਬਾਰੇ ਅੱਪਡੇਟ",
+      saved: "ਸੇਵ ਹੋ ਗਿਆ।",
+    },
   },
 
   resources: {
