@@ -768,7 +768,7 @@ const en = {
         "In the Community you can ask a question and other students, parents, teachers and Amazon staff can answer. " +
         "Anything I don't know is a good one to ask there.",
       account:
-        "You can browse the site, open every resource and talk to me without an account. A free account lets you ask and answer in the Community, and keeps your settings on any device.",
+        "You can browse the site, open the linked resources and talk to me without an account. A free account lets you download files from the Resources page, ask and answer in the Community, and keeps your settings on any device.",
       contact: "You can reach the T-SMILE team through the Contact page.",
       accessibility:
         "You can change the text size, colours, dark mode, motion and text to speech in the Accessibility settings.",

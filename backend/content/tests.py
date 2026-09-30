@@ -41,12 +41,23 @@ class ContentApiTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["name"], "Digital")
 
-    def test_content_list_is_public(self):
+    def sign_in(self):
+        self.client.force_authenticate(User.objects.create_user("student1", password="x"))
+
+    def test_content_list_is_public_without_downloads(self):
+        # Signed out, the downloadable file (the prep pack) is left out.
         response = self.client.get("/api/content/")
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["count"], 2)
+        self.assertNotIn("digital-prep-pack", self.slugs(response))
+
+    def test_signed_in_users_see_downloads(self):
+        self.sign_in()
+        response = self.client.get("/api/content/")
         self.assertEqual(response.data["count"], 3)
 
     def test_filter_by_pathway_includes_general_items(self):
+        self.sign_in()
         response = self.client.get("/api/content/", {"pathway": "digital"})
         self.assertEqual(self.slugs(response), {"general-guide", "digital-prep-pack"})
 
@@ -55,6 +66,7 @@ class ContentApiTests(APITestCase):
         self.assertEqual(self.slugs(response), {"general-guide", "business-class-pack"})
 
     def test_filter_by_access_level(self):
+        self.sign_in()
         response = self.client.get("/api/content/", {"access_level": "signup"})
         self.assertEqual(self.slugs(response), {"digital-prep-pack"})
 
@@ -71,13 +83,12 @@ class ContentApiTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(set(response.data), {"pathway", "audience", "access_level"})
 
-    def test_signup_file_hidden_when_signed_out(self):
+    def test_download_hidden_when_signed_out(self):
         response = self.client.get("/api/content/digital-prep-pack/")
-        self.assertTrue(response.data["locked"])
-        self.assertIsNone(response.data["file"])
+        self.assertEqual(response.status_code, 404)
 
     def test_signup_file_shown_when_signed_in(self):
-        self.client.force_authenticate(User.objects.create_user("student1", password="x"))
+        self.sign_in()
         response = self.client.get("/api/content/digital-prep-pack/")
         self.assertFalse(response.data["locked"])
         self.assertTrue(response.data["file"].endswith("/media/content/digital-prep-pack.pdf"))

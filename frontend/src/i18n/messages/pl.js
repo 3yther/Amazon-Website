@@ -740,7 +740,7 @@ const pl = {
         "W Społeczności możesz zadać pytanie, a inni uczniowie, rodzice, nauczyciele i pracownicy Amazon mogą odpowiedzieć. " +
         "Wszystko, czego ja nie wiem, warto zapytać właśnie tam.",
       account:
-        "Bez konta możesz przeglądać stronę, otwierać wszystkie materiały i rozmawiać ze mną. Darmowe konto pozwala zadawać pytania i odpowiadać w Społeczności oraz zachowuje Twoje ustawienia na każdym urządzeniu.",
+        "Bez konta możesz przeglądać stronę, otwierać linkowane materiały i rozmawiać ze mną. Bezpłatne konto pozwala pobierać pliki ze strony Materiały, pytać i odpowiadać w Społeczności oraz zachowuje Twoje ustawienia na każdym urządzeniu.",
       contact: "Z zespołem T-SMILE skontaktujesz się przez stronę Kontakt.",
       accessibility:
         "W ustawieniach Dostępności możesz zmienić rozmiar tekstu, kolory, tryb ciemny, animacje i czytanie na głos.",

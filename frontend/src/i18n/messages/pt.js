@@ -741,7 +741,7 @@ const pt = {
         "Na Comunidade podes fazer uma pergunta e outros estudantes, pais, professores e a equipa da Amazon podem responder. " +
         "O que eu não souber é uma boa pergunta para fazer lá.",
       account:
-        "Podes navegar no site, abrir todos os recursos e falar comigo sem conta. Uma conta gratuita permite perguntar e responder na Comunidade e guarda as tuas definições em qualquer dispositivo.",
+        "Podes explorar o site, abrir os recursos com ligação e falar comigo sem conta. Uma conta gratuita permite descarregar ficheiros da página Recursos, perguntar e responder na Comunidade e guarda as tuas definições em qualquer dispositivo.",
       contact: "Podes falar com a equipa T-SMILE através da página de Contacto.",
       accessibility:
         "Podes mudar o tamanho do texto, as cores, o modo escuro, o movimento e a leitura em voz alta nas definições de Acessibilidade.",

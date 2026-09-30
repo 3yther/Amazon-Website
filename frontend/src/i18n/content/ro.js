@@ -354,9 +354,9 @@ export default {
           "Nu, totul este deschis tuturor",
           "Doar dacă ești profesor",
         ],
-        correctAnswer: "Nu, totul este deschis tuturor",
+        correctAnswer: "Nu, dar unele resurse au nevoie de un cont gratuit ca să se deschidă",
         explanation:
-          "Oricine poate naviga prin bibliotecă și poate deschide tot ce e în ea. Un cont gratuit e pentru a pune întrebări și a răspunde în Comunitate și pentru a-ți păstra setările.",
+          "Oricine poate răsfoi biblioteca și deschide resursele cu link. Un cont gratuit este pentru descărcarea fișierelor, întrebări și răspunsuri în Comunitate și păstrarea setărilor.",
       },
     ],
   },
@@ -370,7 +370,7 @@ export default {
         {
           heading: "Folosirea site-ului",
           paragraphs: [
-            "Oricine poate citi fiecare pagină, deschide orice resursă, face quiz-urile și vorbi cu Smiley fără cont. Un cont gratuit îți permite să pui întrebări și să răspunzi în Comunitate.",
+            "Oricine poate citi toate paginile, deschide resursele cu link, face chestionarele și vorbi cu Smiley fără cont. Un cont gratuit îți permite să descarci fișiere de pe pagina Resurse și să pui și să răspunzi la întrebări în Comunitate.",
             "Trebuie să ai cel puțin 16 ani ca să îți faci cont.",
           ],
         },

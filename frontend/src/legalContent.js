@@ -14,7 +14,7 @@ export const TERMS = {
     {
       heading: "Using the site",
       paragraphs: [
-        "Anyone can read every page, open every resource, take the quizzes and talk to Smiley without an account. A free account lets you ask and answer in the Community.",
+        "Anyone can read every page, open the linked resources, take the quizzes and talk to Smiley without an account. A free account lets you download files from the Resources page, and ask and answer in the Community.",
         "You need to be 16 or over to create an account.",
       ],
     },

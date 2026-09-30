@@ -354,9 +354,9 @@ export default {
           "Não, está tudo aberto a toda a gente",
           "Só se fores professor",
         ],
-        correctAnswer: "Não, está tudo aberto a toda a gente",
+        correctAnswer: "Não, mas alguns recursos precisam de uma conta gratuita para abrir",
         explanation:
-          "Qualquer pessoa pode navegar na biblioteca e abrir tudo o que lá está. Uma conta gratuita serve para perguntar e responder na Comunidade e guardar as tuas definições.",
+          "Qualquer pessoa pode explorar a biblioteca e abrir os recursos com ligação. Uma conta gratuita serve para descarregar ficheiros, perguntar e responder na Comunidade e guardar as tuas definições.",
       },
     ],
   },
@@ -370,7 +370,7 @@ export default {
         {
           heading: "Usar o site",
           paragraphs: [
-            "Qualquer pessoa pode ler todas as páginas, abrir todos os recursos, fazer os questionários e falar com o Smiley sem conta. Uma conta gratuita permite perguntar e responder na Comunidade.",
+            "Qualquer pessoa pode ler todas as páginas, abrir os recursos com ligação, fazer os questionários e falar com o Smiley sem conta. Uma conta gratuita permite descarregar ficheiros da página Recursos e perguntar e responder na Comunidade.",
             "Tens de ter 16 anos ou mais para criar uma conta.",
           ],
         },

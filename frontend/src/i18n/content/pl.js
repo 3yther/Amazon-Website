@@ -354,9 +354,9 @@ export default {
           "Nie, wszystko jest dostępne dla wszystkich",
           "Tylko jeśli jesteś nauczycielem",
         ],
-        correctAnswer: "Nie, wszystko jest dostępne dla wszystkich",
+        correctAnswer: "Nie, ale niektóre materiały wymagają darmowego konta",
         explanation:
-          "Każdy może przeglądać bibliotekę i otwierać wszystko, co w niej jest. Darmowe konto służy do zadawania pytań i odpowiadania w Społeczności oraz do zachowania ustawień.",
+          "Każdy może przeglądać bibliotekę i otwierać linkowane materiały. Bezpłatne konto służy do pobierania plików, zadawania pytań i odpowiadania w Społeczności oraz zapisywania ustawień.",
       },
     ],
   },
@@ -370,7 +370,7 @@ export default {
         {
           heading: "Korzystanie ze strony",
           paragraphs: [
-            "Każdy może czytać wszystkie strony, otwierać wszystkie materiały, rozwiązywać quizy i rozmawiać ze Smileyem bez konta. Darmowe konto pozwala zadawać pytania i odpowiadać w Społeczności.",
+            "Każdy może czytać wszystkie strony, otwierać linkowane materiały, rozwiązywać quizy i rozmawiać ze Smileyem bez konta. Bezpłatne konto pozwala pobierać pliki ze strony Materiały oraz zadawać pytania i odpowiadać w Społeczności.",
             "Aby założyć konto, musisz mieć co najmniej 16 lat.",
           ],
         },

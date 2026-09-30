@@ -25,6 +25,7 @@ class ContentItemViewSet(viewsets.ReadOnlyModelViewSet):
     GET /api/content/<slug>/   one item
 
     Filters: ?pathway=<slug>, ?audience=student|parent|teacher, ?access_level=free|signup
+    Downloadable files (items with an uploaded file) are only shown to signed-in users.
     """
 
     serializer_class = ContentItemSerializer
@@ -33,6 +34,9 @@ class ContentItemViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = ContentItem.objects.select_related("pathway")
+        if not self.request.user.is_authenticated:
+            # Signed out: hide downloads (items with a file). Link resources stay.
+            queryset = queryset.filter(Q(file="") | Q(file__isnull=True))
         if self.action == "list":
             queryset = self.filter_list(queryset)
         return queryset
