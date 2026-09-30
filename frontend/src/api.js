@@ -399,3 +399,18 @@ export function adminPosts(filters, options) {
 export function adminDeletePost(kind, id) {
   return postJson(`/api/community/admin-portal/posts/${kind}/${id}/delete/`, {});
 }
+
+// --- notifications (the bell) ----------------------------------------------------
+
+/** The latest 20 notifications and how many are unread: { unread, results }. */
+export function getNotifications(options) {
+  return request("/api/notifications/", options);
+}
+
+export function markAllNotificationsRead() {
+  return postJson("/api/notifications/read/");
+}
+
+export function markNotificationRead(id) {
+  return postJson(`/api/notifications/${id}/read/`);
+}

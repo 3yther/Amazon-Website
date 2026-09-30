@@ -16,6 +16,20 @@ const ro = {
     ok: "OK",
   },
 
+  notifications: {
+    label: "Notificări",
+    open: "Notificări, {count} necitite",
+    none: "Nu ai încă notificări.",
+    markAll: "Marchează-le pe toate ca citite",
+    unread: "Necitită",
+    events: {
+      announcement: "Anunț: {text}",
+      answered: "Cineva ți-a răspuns la întrebare: {text}",
+      accepted: "Răspunsul tău a fost marcat ca fiind cel care a ajutat: {text}",
+      interest_seen: "Echipa Amazon Emerging Talent ți-a văzut interesul.",
+    },
+  },
+
   translation: {
     notice:
       "Această pagină a fost tradusă automat ({language}), așa că unele formulări pot fi inexacte. " +
@@ -1283,6 +1297,7 @@ const ro = {
       language: "Limbă",
       security: "Securitate",
       account: "Cont",
+      notifications: "Notificări",
     },
     sight: {
       fontSize: "Mărimea fontului",
@@ -1377,6 +1392,13 @@ const ro = {
       continue: "Continuă",
     },
     eyebrow: "Accesibilitate și cont",
+    notifications: {
+      lead: "Alege ce apare în clopoțelul din partea de sus a paginii.",
+      announcements: "Anunțuri de la echipa T-SMILE",
+      community: "Răspunsuri la întrebările și răspunsurile tale din Comunitate",
+      interest: "Noutăți despre interesul tău înregistrat",
+      saved: "Salvat.",
+    },
   },
 
   resources: {

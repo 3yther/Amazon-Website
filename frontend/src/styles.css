@@ -608,6 +608,129 @@ main {
   box-shadow: inset 0 -3px 0 var(--orange);
 }
 
+/* The notifications bell (NotificationBell.jsx), beside the settings gear. */
+.notification-bell {
+  position: relative;
+}
+
+.notification-bell__button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink-inverse);
+  cursor: pointer;
+}
+
+.notification-bell__button .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.notification-bell__button:hover,
+.notification-bell__button[aria-expanded="true"] {
+  color: var(--orange);
+}
+
+/* How many are unread, on an orange dot. */
+.notification-bell__count {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--orange);
+  color: var(--ink-on-orange);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+}
+
+.notification-bell__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  inset-inline-end: 0;
+  z-index: 5;
+  width: min(22rem, calc(100vw - 32px));
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--blue);
+}
+
+.notification-bell__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 4px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notification-bell__mark {
+  border: 0;
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.notification-bell__empty {
+  padding: 16px 4px 8px;
+  color: var(--ink-muted);
+}
+
+.notification-bell__list {
+  max-height: 22rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.notification-bell__item {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--blue);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.notification-bell__item:hover {
+  background: var(--paper);
+}
+
+/* Unread ones are bold with a dark blue edge, so it isn't colour alone. */
+.notification-bell__item--unread {
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 var(--blue);
+}
+
+.notification-bell__date {
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
 /* On narrow screens hide the greeting so the brand stays centred. */
 @media (max-width: 720px) {
   .account-button__greeting {

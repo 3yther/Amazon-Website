@@ -42,6 +42,8 @@ class ExpressionOfInterest(models.Model):
     )
     message = models.TextField(blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
+    # When staff marked it as seen (Django admin action). The person gets a notification.
+    seen_at = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,

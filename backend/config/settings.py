@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "chatbot",
     "providers",
     "community",
+    "notifications",
 ]
 
 MIDDLEWARE = [

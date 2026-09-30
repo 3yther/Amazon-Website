@@ -85,6 +85,11 @@ class UserPreference(models.Model):
 
     language = models.CharField(max_length=10, default="en")
 
+    # Which notifications go in the bell (see notifications/notify.py). All on by default.
+    notify_announcements = models.BooleanField(default=True)
+    notify_community = models.BooleanField(default=True)
+    notify_interest = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

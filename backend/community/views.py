@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
+from notifications.models import Notification
+from notifications.notify import notify
+
 from .models import REPORTS_TO_HIDE, Answer, Helpful, Question, Report, Topic
 from .serializers import AnswerSerializer, QuestionDetailSerializer, QuestionSerializer, ReportSerializer
 
@@ -152,6 +155,9 @@ class AnswerCreateView(PostThrottle, generics.CreateAPIView):
         if question.hidden:
             raise PermissionDenied("This question is waiting for a staff review.")
         serializer.save(author=self.request.user, question=question)
+        if question.author_id != self.request.user.id:
+            notify(question.author, Notification.Kind.COMMUNITY, Notification.Event.ANSWERED,
+                   question.title, f"/community/{question.pk}")
 
 
 class AnswerDeleteView(generics.DestroyAPIView):
@@ -225,6 +231,10 @@ class AcceptView(PostActionView):
             answer.question.answers.filter(is_accepted=True).update(is_accepted=False)
         answer.is_accepted = accept
         answer.save(update_fields=["is_accepted"])
+        if accept and answer.author_id != request.user.id:
+            question = answer.question
+            notify(answer.author, Notification.Kind.COMMUNITY, Notification.Event.ACCEPTED,
+                   question.title, f"/community/{question.pk}")
         return Response({"is_accepted": accept})
 
 

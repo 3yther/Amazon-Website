@@ -56,6 +56,9 @@ class UserPreferenceSerializer(serializers.ModelSerializer):
             "button_outline_style",
             "page_background",
             "language",
+            "notify_announcements",
+            "notify_community",
+            "notify_interest",
             "updated_at",
         ]
         read_only_fields = ["updated_at"]

@@ -16,6 +16,20 @@ const es = {
     ok: "Vale",
   },
 
+  notifications: {
+    label: "Notificaciones",
+    open: "Notificaciones, {count} sin leer",
+    none: "Aún no tienes notificaciones.",
+    markAll: "Marcar todas como leídas",
+    unread: "Sin leer",
+    events: {
+      announcement: "Anuncio: {text}",
+      answered: "Alguien respondió a tu pregunta: {text}",
+      accepted: "Tu respuesta se marcó como la que ayudó: {text}",
+      interest_seen: "El equipo Amazon Emerging Talent ha visto tu interés.",
+    },
+  },
+
   translation: {
     notice:
       "Esta página se ha traducido automáticamente ({language}), así que puede que alguna palabra no sea exacta. " +
@@ -1283,6 +1297,7 @@ const es = {
       language: "Idioma",
       security: "Seguridad",
       account: "Cuenta",
+      notifications: "Notificaciones",
     },
     sight: {
       fontSize: "Tamaño de letra",
@@ -1377,6 +1392,13 @@ const es = {
       continue: "Continuar",
     },
     eyebrow: "Accesibilidad y cuenta",
+    notifications: {
+      lead: "Elige qué aparece en la campana de arriba de la página.",
+      announcements: "Anuncios del equipo T-SMILE",
+      community: "Respuestas a tus preguntas y respuestas en la Comunidad",
+      interest: "Novedades sobre tu registro de interés",
+      saved: "Guardado.",
+    },
   },
 
   resources: {
