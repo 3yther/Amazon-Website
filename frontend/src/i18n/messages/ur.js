@@ -483,6 +483,7 @@ const ur = {
   },
 
   community: {
+    starterQuestion: "ابتدائی سوال",
     moderationNote: "موضوع پر اور مناسب رکھیں۔ نامناسب زبان مسترد کر دی جاتی ہے، اور باقی ماڈریٹر ہٹا سکتا ہے۔",
     label: "پوچھیں اور جواب دیں",
     title: "کمیونٹی",
@@ -1019,6 +1020,19 @@ const ur = {
       openReports: "کھلی رپورٹس",
     },
     charts: {
+      answered: "جواب شدہ",
+      dealtWith: "نمٹائے",
+      feedbackHandled: "نمٹائی گئی رائے",
+      feedbackHandledCaption: "اس مدت کی رائے جسے عملے نے نمٹا دیا۔",
+      feedbackByCategory: "زمرے کے لحاظ سے رائے",
+      activity: "سائن اپ سرگرمی",
+      activityCaption: "ہر مدت میں سائن اپ، ہر مدت کے لیے ایک نقطہ اور ہر اکاؤنٹ قسم کے لیے ایک قطار۔",
+      dotRow: "{name}: {buckets} مدتوں میں {total}",
+      region: "علاقہ",
+      needFixing: "{count} درست کرنے ہیں",
+      plotLabel: "{title}۔ ہر نقطہ پڑھنے کے لیے تیر والے بٹن استعمال کریں۔",
+      pointReadout: "{label}۔ {values}",
+      rangeFor: "{title} کے لیے تاریخ کی حد",
       title: "چارٹس",
       loading: "چارٹس لوڈ ہو رہے ہیں",
       usersByType: "قسم کے لحاظ سے اکاؤنٹس",

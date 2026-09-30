@@ -177,6 +177,12 @@ export default function Community() {
             {question.excerpt && <p className="community-card__excerpt">{question.excerpt}</p>}
             {question.hidden && <p className="community-hidden">{t("community.hiddenNotice")}</p>}
             <p className="community-card__meta">
+              {/* Marked, not disguised. These are posted by the T-SMILE team
+                  to give the page somewhere to start, and saying so is the
+                  difference between a starter question and a fake student. */}
+              {question.is_starter && (
+                <span className="tag tag--starter">{t("community.starterQuestion")}</span>
+              )}
               <span className="tag">{t(`community.topics.${question.topic}`)}</span>
               {question.pathway && <span className="tag">{t(`pathways.${question.pathway.slug}`)}</span>}
               <Author author={question.author} />

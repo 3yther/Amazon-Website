@@ -481,6 +481,7 @@ const pl = {
   },
 
   community: {
+    starterQuestion: "Pytanie na start",
     moderationNote: "Trzymaj się tematu i zachowaj kulturę. Nieodpowiedni język jest odrzucany, a resztę może usunąć moderator.",
     label: "Pytaj i odpowiadaj",
     title: "Społeczność",
@@ -1016,6 +1017,19 @@ const pl = {
       openReports: "Otwarte zgłoszenia",
     },
     charts: {
+      answered: "z odpowiedzią",
+      dealtWith: "obsłużone",
+      feedbackHandled: "Obsłużone opinie",
+      feedbackHandledCaption: "Opinie z tego okresu obsłużone przez personel.",
+      feedbackByCategory: "Opinie według kategorii",
+      activity: "Aktywność rejestracji",
+      activityCaption: "Rejestracje w okresie, jedna kropka na okres i jeden wiersz na typ konta.",
+      dotRow: "{name}: {total} w {buckets} okresach",
+      region: "Region",
+      needFixing: "{count} do poprawy",
+      plotLabel: "{title}. Użyj strzałek, aby odczytać każdy punkt.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "Zakres dat dla {title}",
       title: "Wykresy",
       loading: "Wczytywanie wykresów",
       usersByType: "Konta według typu",

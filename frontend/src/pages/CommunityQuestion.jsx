@@ -181,6 +181,11 @@ export default function CommunityQuestion() {
         {question.hidden && <p className="community-hidden">{t("community.hiddenNotice")}</p>}
         {question.body && <p className="community-question__body">{question.body}</p>}
         <p className="community-card__meta">
+          {/* Same label as the list: whoever arrives straight on this page
+              from a link should see where the question came from too. */}
+          {question.is_starter && (
+            <span className="tag tag--starter">{t("community.starterQuestion")}</span>
+          )}
           {question.pathway && <span className="tag">{t(`pathways.${question.pathway.slug}`)}</span>}
           <Author author={question.author} />
           <span className="community-meta">{t("community.askedOn", { date: formatDate(question.created_at) })}</span>

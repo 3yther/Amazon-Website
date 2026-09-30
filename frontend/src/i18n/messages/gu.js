@@ -484,6 +484,7 @@ const gu = {
   },
 
   community: {
+    starterQuestion: "શરૂઆતનો પ્રશ્ન",
     moderationNote: "વિષય પર અને યોગ્ય રાખો. અયોગ્ય ભાષા નકારવામાં આવે છે, અને બાકીનું મોડરેટર દૂર કરી શકે છે.",
     label: "પૂછો અને જવાબ આપો",
     title: "કમ્યુનિટી",
@@ -1020,6 +1021,19 @@ const gu = {
       openReports: "ખુલ્લા રિપોર્ટ",
     },
     charts: {
+      answered: "જવાબ મળ્યા",
+      dealtWith: "સંભાળ્યા",
+      feedbackHandled: "સંભાળેલો પ્રતિસાદ",
+      feedbackHandledCaption: "આ સમયગાળાનો પ્રતિસાદ જે સ્ટાફે સંભાળ્યો.",
+      feedbackByCategory: "શ્રેણી પ્રમાણે પ્રતિસાદ",
+      activity: "સાઇન-અપ પ્રવૃત્તિ",
+      activityCaption: "દરેક સમયગાળામાં સાઇન-અપ, દરેક સમયગાળા માટે એક ટપકું અને દરેક ખાતા પ્રકાર માટે એક હરોળ.",
+      dotRow: "{name}: {buckets} સમયગાળામાં {total}",
+      region: "પ્રદેશ",
+      needFixing: "{count} સુધારવાના",
+      plotLabel: "{title}. દરેક બિંદુ વાંચવા માટે તીર કી વાપરો.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "{title} માટે તારીખ શ્રેણી",
       title: "ચાર્ટ",
       loading: "ચાર્ટ લોડ થઈ રહ્યા છે",
       usersByType: "પ્રકાર પ્રમાણે ખાતાં",

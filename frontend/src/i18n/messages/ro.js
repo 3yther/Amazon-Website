@@ -481,6 +481,7 @@ const ro = {
   },
 
   community: {
+    starterQuestion: "Întrebare de început",
     moderationNote: "Rămâi la subiect și păstrează un ton potrivit. Limbajul nepotrivit este respins, iar restul poate fi șters de un moderator.",
     label: "Întreabă și răspunde",
     title: "Comunitate",
@@ -1016,6 +1017,19 @@ const ro = {
       openReports: "Rapoarte deschise",
     },
     charts: {
+      answered: "cu răspuns",
+      dealtWith: "rezolvate",
+      feedbackHandled: "Feedback rezolvat",
+      feedbackHandledCaption: "Feedback din această perioadă rezolvat de personal.",
+      feedbackByCategory: "Feedback după categorie",
+      activity: "Activitatea de înscriere",
+      activityCaption: "Înscrieri pe perioadă, un punct pe perioadă și un rând pe tip de cont.",
+      dotRow: "{name}: {total} în {buckets} perioade",
+      region: "Regiune",
+      needFixing: "{count} de corectat",
+      plotLabel: "{title}. Folosește săgețile pentru a citi fiecare punct.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "Interval de date pentru {title}",
       title: "Grafice",
       loading: "Se încarcă graficele",
       usersByType: "Conturi după tip",

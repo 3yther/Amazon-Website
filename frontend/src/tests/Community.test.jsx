@@ -175,3 +175,31 @@ describe("asking a question", () => {
     expect(await screen.findByRole("heading", { name: "Log in" })).toBeInTheDocument();
   });
 });
+
+describe("starter questions", () => {
+  /**
+   * These are posted by the T-SMILE team so the page is not empty for a
+   * first visitor. The label is the whole point: a seeded question that
+   * looked like a student's would be a fake student.
+   */
+  it("labels a starter question", async () => {
+    api.getQuestions.mockResolvedValue({
+      count: 1,
+      next: null,
+      previous: null,
+      results: [{ ...QUESTION, is_starter: true }],
+    });
+
+    renderAt("/community");
+
+    expect(await screen.findByText("Starter question")).toBeInTheDocument();
+  });
+
+  it("says nothing on an ordinary question", async () => {
+    renderAt("/community");
+
+    await screen.findByText(QUESTION.title);
+    expect(screen.queryByText("Starter question")).not.toBeInTheDocument();
+  });
+});
+

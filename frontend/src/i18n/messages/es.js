@@ -481,6 +481,7 @@ const es = {
   },
 
   community: {
+    starterQuestion: "Pregunta inicial",
     moderationNote: "Cíñete al tema y usa un tono adecuado. El lenguaje inapropiado se rechaza, y un moderador puede eliminar lo demás.",
     label: "Pregunta y responde",
     title: "Comunidad",
@@ -1016,6 +1017,19 @@ const es = {
       openReports: "Denuncias sin resolver",
     },
     charts: {
+      answered: "respondidas",
+      dealtWith: "atendidos",
+      feedbackHandled: "Comentarios atendidos",
+      feedbackHandledCaption: "Comentarios de este periodo que el personal ha atendido.",
+      feedbackByCategory: "Comentarios por categoría",
+      activity: "Actividad de registros",
+      activityCaption: "Registros por periodo, un punto por periodo y una fila por tipo de cuenta.",
+      dotRow: "{name}: {total} en {buckets} periodos",
+      region: "Región",
+      needFixing: "{count} por corregir",
+      plotLabel: "{title}. Usa las flechas para leer cada punto.",
+      pointReadout: "{label}. {values}",
+      rangeFor: "Intervalo de fechas para {title}",
       title: "Gráficos",
       loading: "Cargando los gráficos",
       usersByType: "Cuentas por tipo",
