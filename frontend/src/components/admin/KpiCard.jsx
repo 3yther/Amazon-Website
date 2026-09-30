@@ -21,7 +21,7 @@ import { useT } from "../../i18n/I18nProvider.jsx";
 /**
  * What each card is called. Six of these already had names on the old
  * Overview's totals, and reusing them keeps one wording for one number across
- * ten languages rather than translating "Accounts" twice and letting the two
+ * every language rather than translating "Accounts" twice and letting the two
  * drift apart.
  */
 const KPI_LABELS = {

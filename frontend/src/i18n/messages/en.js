@@ -11,7 +11,7 @@ const en = {
     choose: "Choose a language",
     settingLabel: "Interface language",
     settingHint:
-      "Nine languages besides English, translated by machine. English is the version that counts.",
+      "17 languages besides English, translated by machine. English is the version that counts.",
   },
 
   cookieNotice: {
@@ -788,7 +788,7 @@ const en = {
       accessibility:
         "You can change the text size, colours, dark mode, motion and text to speech in the Accessibility settings.",
       language:
-        "Yes! Use the language menu under the account button at the top of the page, or the one in the side menu. There are ten languages to choose from.",
+        "Yes! Use the language button next to the menu button at the top of the page, or the Language tab in Settings. There are 18 languages to choose from.",
       privacy:
         "I only save questions I have to look up, so we can pick up where we left off. Anything I answer myself, and anything " +
         "about how you move around the site, stays in your browser. The Privacy Policy has the details.",

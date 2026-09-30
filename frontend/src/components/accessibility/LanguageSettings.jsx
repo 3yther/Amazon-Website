@@ -2,7 +2,9 @@ import { useI18n } from "../../i18n/I18nProvider.jsx";
 import { LANGUAGES } from "../../i18n/languages.js";
 import { SelectField } from "../FormFields.jsx";
 
-// Same setting as the language picker in the account menu and side menu.
+// Same setting as the language button in the header. A native select, so the
+// options are names only: an option cannot hold a flag, and the name is what
+// matters anyway.
 
 // Interface language. Dates and numbers are always UK style (see formats.js).
 export default function LanguageSettings() {

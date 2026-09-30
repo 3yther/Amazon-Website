@@ -9,9 +9,10 @@ from rest_framework.test import APITestCase
 
 from content.models import Pathway
 
-from .knowledge import VERIFIED_FACTS, build_system_prompt, content_gaps
+from .knowledge import LANGUAGES, VERIFIED_FACTS, build_system_prompt, content_gaps
 from .models import ChatMessage
 from .provider import AssistantUnavailable
+from .serializers import ChatRequestSerializer
 
 # Every test patches this. The real one calls Anthropic, which costs money and
 # needs the network, so no test ever reaches it.
@@ -174,6 +175,26 @@ class ChatApiTests(APITestCase):
     def test_an_unknown_language_is_rejected(self):
         response = self.post_message("Hello", language="klingon")
         self.assertEqual(response.status_code, 400)
+
+    def test_every_site_language_is_accepted(self):
+        # The same codes as frontend/src/i18n/languages.js.
+        codes = {"en", "pl", "ro", "pa", "ur", "pt", "es", "ar", "bn", "gu",
+                 "zh", "fr", "de", "ha", "hi", "it", "ru", "yo"}
+        self.assertEqual(set(LANGUAGES), codes)
+        for code in sorted(codes):
+            with self.subTest(code=code):
+                serializer = ChatRequestSerializer(data={"message": "Hello", "language": code})
+                self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_smiley_is_told_to_keep_yorubas_tone_marks(self):
+        with patch(PROVIDER, return_value="Bẹ́ẹ̀ni.") as provider:
+            response = self.post_message("Báwo ni ìrírí iṣẹ́ ṣe gùn tó?", language="yo")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "Reply in Yoruba, written with its tone marks and underdots",
+            provider.call_args.kwargs["context"],
+        )
 
     def test_the_widget_is_told_whether_an_ai_is_set_up(self):
         with self.settings(ANTHROPIC_API_KEY=""):

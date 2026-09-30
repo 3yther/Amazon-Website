@@ -181,4 +181,40 @@ describe("other languages", () => {
     expect(normalise("প্লেসমেন্টে বেতন?")).toBe("প্লেসমেন্টে বেতন");
     expect(ask("প্লেসমেন্টে বেতন পাব?", bengali).id).toBe("placementPay");
   });
+
+  const CATALOGS = import.meta.glob("../i18n/messages/*.js", { eager: true });
+  const inLanguage = (code) => ({
+    ...ctx,
+    language: code,
+    t: makeTranslate(CATALOGS[`../i18n/messages/${code}.js`].default),
+  });
+
+  // The word for "placement" is in all three placement topics, so the other
+  // words in the question decide between them.
+  it.each([
+    ["fr", "Est-ce que le stage est payé ?", "placementPay"],
+    ["fr", "Combien de temps dure le stage ?", "placementLength"],
+    ["de", "Wird das Praktikum bezahlt?", "placementPay"],
+    ["de", "Wie funktioniert das Praktikum?", "placementHow"],
+    ["it", "Il tirocinio è retribuito?", "placementPay"],
+    ["ru", "Платят ли на стажировке?", "placementPay"],
+    ["ru", "Сколько это стоит?", "tlevelCost"],
+    ["zh", "实习有工资吗？", "placementPay"],
+    ["zh", "实习多长时间？", "placementLength"],
+    ["hi", "क्या प्लेसमेंट में पैसे मिलते हैं?", "placementPay"],
+    ["ha", "Za a biya ni a lokacin horon aiki?", "placementPay"],
+    ["yo", "Ṣé wọn ń sanwó nígbà ìrírí iṣẹ́?", "placementPay"],
+  ])("answers in %s from that language's own words: %s", (code, question, id) => {
+    expect(ask(question, inLanguage(code)).id).toBe(id);
+  });
+
+  it("matches Chinese, which has no spaces between words", () => {
+    expect(ask("什么是T Level？", inLanguage("zh")).id).toBe("whatIsTLevel");
+  });
+
+  it("matches Yoruba however its tone marks were typed", () => {
+    const question = "Báwo ni ìrírí iṣẹ́ ṣe gùn tó?";
+    expect(ask(question.normalize("NFC"), inLanguage("yo")).id).toBe("placementLength");
+    expect(ask(question.normalize("NFD"), inLanguage("yo")).id).toBe("placementLength");
+  });
 });

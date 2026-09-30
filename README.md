@@ -20,7 +20,7 @@ Read [`CONTEXT.md`](CONTEXT.md) (rules and conventions) and [`MODELS.md`](MODELS
 - **Find T-Levels near you** by postcode
 - **Community** where people ask and answer questions (posts are checked first)
 - **Smiley**, a chat helper that answers from the site's own content, and uses the AI only for questions it can't match
-- **10 languages**: English plus Polish, Romanian, Panjabi, Urdu, Portuguese, Spanish, Arabic, Bengali and Gujarati (machine translated)
+- **18 languages**: English plus Polish, Romanian, Panjabi, Urdu, Portuguese, Spanish, Arabic, Bengali, Gujarati, Chinese (Mandarin), French, German, Hausa, Hindi, Italian, Russian and Yoruba (machine translated)
 - **Accessibility settings** like font size, high contrast, dark mode and reduce motion
 - **Staff page** where Amazon staff see interest submissions
 

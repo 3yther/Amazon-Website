@@ -22,7 +22,9 @@ const SPELLINGS = [
 
 /** Lower case, no punctuation, single spaces, common spellings folded. */
 export function normalise(text) {
-  let clean = ` ${String(text).toLowerCase()} `
+  // NFC first, so a Yoruba "ọ́" typed as one character or as "o" plus its two
+  // marks comes out the same.
+  let clean = ` ${String(text).normalize("NFC").toLowerCase()} `
     // Keep letters and numbers from any alphabet, drop everything else. \p{M}
     // keeps the vowel signs Bengali, Gujarati and Gurmukhi write words with.
     .replace(/[^\p{L}\p{M}\p{N}\s@.+']/gu, " ")

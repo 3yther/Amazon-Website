@@ -84,7 +84,7 @@ Things to know:
 - The colour blindness filter can't change the Amazon logo or photos.
 - The filter doesn't change much on most pages, because our colours already differ in lightness. That's normal.
 - Text to speech only reads Smiley's replies, not the whole page.
-- The site is in 10 languages. The translations are done by machine, so every page says so and has a "Read in English" button. English is the version that counts. The staff page is English only.
+- The site is in 18 languages. The translations are done by machine, so every page says so and has a "Read in English" button. English is the version that counts. The staff page is English only.
 
 ## Security
 

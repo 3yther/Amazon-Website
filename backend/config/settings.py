@@ -168,8 +168,10 @@ LANGUAGE_CODE = "en-gb"
 TIME_ZONE = "Europe/London"
 USE_I18N = True
 
-# The site's ten languages. Django uses this list to pick one from the
-# browser's Accept-Language header.
+# The site's eighteen languages (frontend/src/i18n/languages.js). Django uses
+# this list to pick one from the browser's Accept-Language header. Django has
+# no translations of its own for Hausa or Yoruba, so it answers those in
+# English, and the site's own words still come from the frontend.
 LANGUAGES = [
     ("en-gb", "English"),
     ("pl", "Polski"),
@@ -181,6 +183,14 @@ LANGUAGES = [
     ("ar", "العربية"),
     ("bn", "বাংলা"),
     ("gu", "ગુજરાતી"),
+    ("zh-hans", "中文（普通话）"),
+    ("fr", "Français"),
+    ("de", "Deutsch"),
+    ("ha", "Hausa"),
+    ("hi", "हिन्दी"),
+    ("it", "Italiano"),
+    ("ru", "Русский"),
+    ("yo", "Yorùbá"),
 ]
 USE_TZ = True
 
