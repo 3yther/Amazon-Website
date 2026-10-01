@@ -43,6 +43,9 @@ export default mergeConfig(
             name: "isolated",
             include: MOCKING,
             isolate: true,
+            // Separate processes, not threads: on a busy Windows laptop a
+            // fresh thread for each of these could time out before starting.
+            pool: "forks",
           },
         },
       ],

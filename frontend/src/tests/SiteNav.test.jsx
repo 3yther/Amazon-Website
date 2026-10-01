@@ -107,6 +107,18 @@ describe("Closing the drawer by clicking beside it", () => {
     expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();
   });
 
+  it("closes on Escape and gives focus back to Menu", async () => {
+    const user = await openDrawer();
+    const dialog = drawer();
+    // A real showModal moves focus into the drawer; the stand-in doesn't.
+    screen.getByRole("link", { name: "Home" }).focus();
+
+    await user.keyboard("{Escape}");
+
+    expect(dialog.open).toBe(false);
+    expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();
+  });
+
   it("stays open when the drawer itself is clicked", async () => {
     await openDrawer();
     const dialog = drawer();

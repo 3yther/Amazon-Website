@@ -183,11 +183,11 @@ Staff use `/admin/` to read interest submissions, manage resources, and hide or 
 
 Made by five T-Level students:
 
-- **Amir**: the framework for the whole site
-- **Aaron**: Smiley, the AI chatbot
-- **Micha**: About, Help and T-Levels at Amazon pages, and accessibility
-- **Jakub**: sign up and log in pages
-- **Lloyd**: Find T-Levels Near You page
+- **Aaron**: project manager, Smiley (the AI chatbot) and the languages
+- **Amir**: front end and back end
+- **Micha**: front end and back end
+- **Jakub**: testing and feedback
+- **Lloyd**: documentation
 
 ## Licence
 
