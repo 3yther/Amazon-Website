@@ -125,8 +125,8 @@ Things to know:
 
 ## Who did what
 
-- Amir: framework for the whole site (routing, layout, accounts, models, settings) and the Railway preview
-- Aaron: Smiley (`frontend/src/assistant/`, `backend/chatbot/`)
-- Micha: About, Help and T-Levels at Amazon pages, and accessibility
-- Jakub: sign up and log in pages
-- Lloyd: Find T-Levels Near You page
+- Aaron: project manager, Smiley (`frontend/src/assistant/`, `backend/chatbot/`) and the languages (`frontend/src/i18n/`)
+- Amir: front end and back end, and the Railway preview
+- Micha: front end and back end
+- Jakub: testing and feedback
+- Lloyd: documentation
